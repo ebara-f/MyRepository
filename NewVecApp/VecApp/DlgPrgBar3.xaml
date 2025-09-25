@@ -1,0 +1,24 @@
+﻿<Window x:Class="VecApp.DlgPrgBar3"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Closing="Terminate"
+        Loaded="Window_Loaded"
+        BorderThickness="1" BorderBrush="LightGray"
+        Title="暖機監視" Height="160" Width="400"
+        ResizeMode="NoResize">
+
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock   Grid.Row="0" Margin="10,4" VerticalAlignment="Center" Text="暖機中です。&#10;お待ちください。" />
+        <ProgressBar Grid.Row="1" Margin="10,4" Height="25" IsIndeterminate="true" Background="White" Foreground="Orange" x:Name="Prg"/>
+        <Button      Grid.Row="2" Width="120" Height="30" Content="キャンセル" Click="Button_Click_Btn01" Background="DarkGray" Foreground="Black"/>
+    </Grid>
+</Window>

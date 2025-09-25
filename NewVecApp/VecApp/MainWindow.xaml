@@ -1,0 +1,28 @@
+﻿<Window x:Class="VecApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VecApp"
+        xmlns:res="clr-namespace:VecApp.Properties"
+        mc:Ignorable="d"
+        Closing="Terminate"
+        Loaded="Window_Loaded"
+        BorderThickness="1" BorderBrush="LightGray"
+        ResizeMode="NoResize"
+        Title="BeakMater Plug-in SoftWare(beta)" Height="185" Width="486" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
+    <Grid Margin="5,5,5,5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="{x:Static res:Resources.String220}" Height="30" Margin="5,5,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn01"/>
+        <Button Content="{x:Static res:Resources.String228}" Height="30" Margin="5,40,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn02"/>
+        <Button Content="{x:Static res:Resources.String229}" Height="30" Margin="5,75,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn03"/>
+        <Button Content="{x:Static res:Resources.String64}" Height="20" Margin="5,110,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Close"/>
+        <TextBox Name="ValA" Grid.Row="0" Grid.Column="1" Height="20" Width="50" Margin="5,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Text="{Binding A,UpdateSourceTrigger=Explicit}"  Background="LightGray"  Foreground="Black"/>
+        <TextBox Name="ValB" Grid.Row="0" Grid.Column="1" Height="20" Width="50" Margin="5,30,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Text="{Binding B,UpdateSourceTrigger=Explicit}"  Background="LightGray"  Foreground="Black"/>
+        <TextBox Name="ValC" Grid.Row="0" Grid.Column="1" Height="20" Width="50" Margin="5,60,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Text="{Binding MODE,UpdateSourceTrigger=Explicit}"  Background="LightBlue"  Foreground="Black"/>
+        <TextBox Name="ValD" Grid.Row="0" Grid.Column="1" Height="20" Width="50" Margin="5,90,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Text="{Binding TMP1,UpdateSourceTrigger=Explicit}"  Background="LightBlue"  Foreground="Black"/>
+    </Grid>
+</Window>

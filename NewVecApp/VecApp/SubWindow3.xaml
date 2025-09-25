@@ -1,0 +1,31 @@
+﻿<local:SubWindowBase
+        x:Class="VecApp.SubWindow3"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VecApp"
+        xmlns:res="clr-namespace:VecApp.Properties"
+        mc:Ignorable="d"
+        Title="BeakMater Plug-in SoftWare(beta)" Height="550" Width="1100" Closing="Terminate">
+    <Grid Background="#2C3E50">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- 左側メニュー -->
+        <StackPanel Background="#2C3E50" VerticalAlignment="Stretch">
+            <TextBlock Text="{x:Static res:Resources.String226}" FontSize="20" FontWeight="Bold" Margin="20,20,0,10" Foreground="White" />
+
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String227}" Click="Click_Btn01"/>
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String72}" Click="Click_Btn02"/>
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String65}" Click="Click_Btn03"/>
+        </StackPanel>
+
+        <!-- 右側：メインパネル -->
+        <Grid Grid.Column="1" Background="#2C3E50" Margin="20">
+            <ContentControl x:Name="MainContent" Grid.Column="1"/>
+        </Grid>
+    </Grid>
+</local:SubWindowBase>

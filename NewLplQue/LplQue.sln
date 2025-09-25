@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LplQue", "LplQue.vcxproj", "{40ED5F7E-996C-449B-8C09-BB1FFF2C7438}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40ED5F7E-996C-449B-8C09-BB1FFF2C7438}.Debug|x64.ActiveCfg = Debug|x64
+		{40ED5F7E-996C-449B-8C09-BB1FFF2C7438}.Debug|x64.Build.0 = Debug|x64
+		{40ED5F7E-996C-449B-8C09-BB1FFF2C7438}.Release|x64.ActiveCfg = Release|x64
+		{40ED5F7E-996C-449B-8C09-BB1FFF2C7438}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4D06BF6-6C1D-46EA-BE0B-3F3438A7B6A1}
+	EndGlobalSection
+EndGlobal

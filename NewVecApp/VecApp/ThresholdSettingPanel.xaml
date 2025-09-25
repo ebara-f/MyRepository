@@ -1,0 +1,245 @@
+﻿<local:PanelBase
+        x:Class="VecApp.ThresholdSettingPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:VecApp"
+        xmlns:res="clr-namespace:VecApp.Properties"
+        mc:Ignorable="d"
+        d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Border Background="#2C3E50" CornerRadius="10" Padding="20">
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                <TextBlock Text="{x:Static res:Resources.String22}"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Margin="0,0,0,10"/>
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Height="396">
+                    <StackPanel>
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,10,0">
+                                <StackPanel>
+                                    <Border Background="Gray" Padding="5" CornerRadius="4" Margin="0,0,0,10">
+                                        <TextBlock Text="{x:Static res:Resources.String16}" Foreground="White" FontSize="12"/>
+                                    </Border>
+
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                        <TextBlock Text="{x:Static res:Resources.String24}" Foreground="White" FontSize="10" VerticalAlignment="Center"/>
+                                        <TextBox Width="70"
+                                            FontSize="10"
+                                            Margin="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Black"
+                                            Foreground="White"
+                                            Text="{Binding PreCheckMaxMinThreshold, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                        <TextBlock Text="{x:Static res:Resources.String25}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="33,0,0,0"/>
+                                        <TextBox Width="70"
+                                            FontSize="10"
+                                            Margin="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Black"
+                                            Foreground="White"
+                                            Text="{Binding PreCheckTwoSigmaThreshold, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                        <TextBlock Text="{x:Static res:Resources.String26}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                        <TextBox Width="70"
+                                            FontSize="10"
+                                            Margin="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Black"
+                                            Foreground="White"
+                                            Text="{Binding PreCheckDistanceThreshold, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="210,33,0,0">
+                                        <Button Content="初期値"
+                                             Click="Click_InitialValueBtn1" Width="120" Height="30" Style="{StaticResource PanelInitialValueButtonStyle}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Margin="10,0,0,0">
+                                <StackPanel>
+                                    <Border Background="Gray" Padding="5" CornerRadius="4" Margin="0,0,0,10">
+                                        <TextBlock Text="{x:Static res:Resources.String23}" Foreground="White" FontSize="12"/>
+                                    </Border>
+
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                        <TextBlock Text="{x:Static res:Resources.String24}" Foreground="White" FontSize="10" VerticalAlignment="Center"/>
+                                        <!-- TextBox有効無効追加(2025.9.22yori) -->
+                                        <TextBox Width="70"
+                                            FontSize="10"
+                                            Margin="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Black"
+                                            Foreground="White"
+                                            Text="{Binding ProbeCheckMaxMinThreshold, UpdateSourceTrigger=PropertyChanged}"
+                                            IsEnabled="{Binding IsTextBoxEnabled2}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                        <TextBlock Text="{x:Static res:Resources.String25}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="33,0,0,0"/>
+                                        <!-- TextBox有効無効追加(2025.9.22yori) -->
+                                        <TextBox Width="70"
+                                            FontSize="10"
+                                            Margin="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Black"
+                                            Foreground="White"
+                                            Text="{Binding ProbeCheckTwoSigmaThreshold, UpdateSourceTrigger=PropertyChanged}"
+                                            IsEnabled="{Binding IsTextBoxEnabled2}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                        <TextBlock Text="{x:Static res:Resources.String26}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                        <!-- TextBox有効無効追加(2025.9.22yori) -->
+                                        <TextBox Width="70"
+                                            FontSize="10"
+                                            Margin="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Black"
+                                            Foreground="White"
+                                            Text="{Binding ProbeCheckDistanceThreshold, UpdateSourceTrigger=PropertyChanged}"
+                                            IsEnabled="{Binding IsTextBoxEnabled2}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                        <TextBlock Text="{x:Static res:Resources.String27}" Foreground="White" FontSize="10" VerticalAlignment="Center"  Margin="11,0,0,0"/>
+                                        <!-- TextBox有効無効追加(2025.9.22yori) -->
+                                        <TextBox Width="70"
+                                            FontSize="10"
+                                            Margin="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Black"
+                                            Foreground="White"
+                                            Text="{Binding ProbeCheckBallCenter, UpdateSourceTrigger=PropertyChanged}"
+                                            IsEnabled="{Binding IsTextBoxEnabled2}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,-12">
+                                        <TextBlock Text="{x:Static res:Resources.String28}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="11,0,0,0"/>
+                                        <!-- TextBox有効無効追加(2025.9.22yori) -->
+                                        <TextBox Width="70"
+                                            FontSize="10"
+                                            Margin="10,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Black"
+                                            Foreground="White"
+                                            Text="{Binding ProbeCheckBallDiameter, UpdateSourceTrigger=PropertyChanged}"
+                                            IsEnabled="{Binding IsTextBoxEnabled2}"/>
+                                    </StackPanel>
+
+                                    <Grid Margin="15,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                                            <TextBlock Text="{x:Static res:Resources.String29}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="41.5,0,0,0"/>
+                                            <!-- TextBox→ComboBox変更(2025.8.1yori) -->
+                                            <ComboBox ItemsSource="{Binding ProbeCheckId}" SelectedIndex="{Binding ProbeCheckIdIndex}" Width="70" FontSize="10" Margin="10,0,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+                                        </StackPanel>
+
+                                        <Button Content="初期値"
+                                            Click="Click_InitialValueBtn2"
+                                            Width="120" Height="30"
+                                            Margin="30,0,0,0"
+                                            Grid.Column="1"
+                                            VerticalAlignment="Top"
+                                            Style="{StaticResource PanelInitialValueButtonStyle}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- TextBoxを有効無効に設定するコード追加(2025.8.6yori) -->
+                        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,10,0,0">
+                            <StackPanel>
+                                <Border Background="Gray" Padding="5" CornerRadius="4" Margin="0,0,0,10">
+                                    <TextBlock Text="{x:Static res:Resources.String30}" Foreground="White" FontSize="12"/>
+                                </Border>
+
+                                <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                    <TextBlock Text="{x:Static res:Resources.String31}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="51,0,0,0"/>
+                                    <TextBlock Text="{x:Static res:Resources.String32}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                                    <TextBox Width="70"
+                                        FontSize="10"
+                                        Margin="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        Background="Black"
+                                        Foreground="White"
+                                        Text="{Binding GaugeDistanceMax, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding IsTextBoxEnabled}"/>
+                                    <TextBlock Text="{x:Static res:Resources.String33}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                                    <TextBox Width="70"
+                                        FontSize="10"
+                                        Margin="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        Background="Black"
+                                        Foreground="White"
+                                        Text="{Binding GaugeDistanceMin, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding IsTextBoxEnabled}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                    <TextBlock Text="{x:Static res:Resources.String34}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="54,0,0,0"/>
+                                    <TextBlock Text="{x:Static res:Resources.String32}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                                    <TextBox Width="70"
+                                        FontSize="10"
+                                        Margin="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        Background="Black"
+                                        Foreground="White"
+                                        Text="{Binding GaugeHeightMax, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding IsTextBoxEnabled}"/>
+                                    <TextBlock Text="{x:Static res:Resources.String33}" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                                    <TextBox Width="70"
+                                        FontSize="10"
+                                        Margin="10,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        Background="Black"
+                                        Foreground="White"
+                                        Text="{Binding GaugeHeightMin, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding IsTextBoxEnabled}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
+                                    <TextBlock Text="{x:Static res:Resources.String35}" Foreground="White" FontSize="10" VerticalAlignment="Center"/>
+                                    <TextBox Width="70"
+                                        FontSize="10"
+                                        Margin="50,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        Background="Black"
+                                        Foreground="White"
+                                        Text="{Binding CalibrationTolerance, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="{Binding IsTextBoxEnabled}"/>
+                                    <TextBlock Text="mm" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,10,0,0">
+                            <Button Content="パスワード"
+                                Click="Click_PasswordBtn"
+                                Width="120" Height="40"
+                                Margin="0,0,10,0" Style="{StaticResource PanelPasswordButtonStyle}" />
+                            <Button Content="OK"
+                                Click="Click_DoneBtn"
+                                Width="120" Height="40"
+                                Margin="340,0,10,0" Style="{StaticResource PanelDoneButtonStyle}" />
+                            <Button Content="キャンセル"
+                                Click="Click_CancelBtn"
+                                Width="120" Height="40"
+                                Margin="0,0,0,0" Style="{StaticResource PanelCancelButtonStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
+</local:PanelBase>

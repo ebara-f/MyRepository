@@ -1,0 +1,55 @@
+﻿<Window x:Class="VecApp.Dlg01"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Closing="Terminate"
+        Loaded="Window_Loaded"
+        BorderThickness="1" BorderBrush="LightGray"
+        Title="Dlg01" Height="200" Width="250"
+        ResizeMode="NoResize">
+
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="20,0" Text="A =" VerticalAlignment="Center" Foreground="White"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="20,0" Text="B =" VerticalAlignment="Center" Foreground="White"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="20,0" Text="C =" VerticalAlignment="Center" Foreground="White"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="20,0" Text="D =" VerticalAlignment="Center" Foreground="Red"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="20,0" Text="E =" VerticalAlignment="Center" Foreground="Green"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="20,0" Text="F =" VerticalAlignment="Center" Foreground="Blue"/>
+
+            <TextBox Name="ValA" Grid.Row="0" Grid.Column="1" Text="{Binding A,UpdateSourceTrigger=Explicit}" VerticalAlignment="Center" Background="LightGray"  Foreground="Black"/>
+            <TextBox Name="ValB" Grid.Row="1" Grid.Column="1" Text="{Binding B,UpdateSourceTrigger=Explicit}" VerticalAlignment="Center" Background="LightGray" Foreground="Black"/>
+            <TextBox Name="ValC" Grid.Row="2" Grid.Column="1" Text="{Binding C,UpdateSourceTrigger=Explicit}" VerticalAlignment="Center" Background="LightGray" Foreground="Black"/>
+            <TextBox Name="ValD" Grid.Row="3" Grid.Column="1" Text="{Binding D,UpdateSourceTrigger=Explicit}" VerticalAlignment="Center" Background="Red" Foreground="White"/>
+            <TextBox Name="ValE" Grid.Row="4" Grid.Column="1" Text="{Binding E,UpdateSourceTrigger=Explicit}" VerticalAlignment="Center" Background="Green" Foreground="White"/>
+            <TextBox Name="ValF" Grid.Row="5" Grid.Column="1" Text="{Binding F,UpdateSourceTrigger=Explicit}" VerticalAlignment="Center" Background="Blue" Foreground="White"/>
+        </Grid>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Margin="4,0" Width="70" Height="30" Content="OK"         Click="Button_Click_Btn01" Background="DarkGray" Foreground="Black"/>
+            <Button Margin="4,0" Width="70" Height="30" Content="キャンセル" Click="Button_Click_Btn02" Background="DarkGray" Foreground="Black"/>
+            <Button Margin="4,0" Width="70" Height="30" Content="更新"       Click="Button_Click_Btn03" Background="DarkGray" Foreground="Black"/>
+        </StackPanel>
+    </Grid>
+ 
+</Window>

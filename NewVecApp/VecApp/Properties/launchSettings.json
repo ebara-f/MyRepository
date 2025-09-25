@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "VecApp": {
+      "commandName": "Executable",
+      "executablePath": "..\\..\\..\\..\\_exec\\$(ConfigurationName)\\$(TargetName).exe",
+      "nativeDebugging": true
+    }
+  }
+}

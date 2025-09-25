@@ -1,0 +1,90 @@
+﻿<local:PanelBase
+             x:Class="VecApp.ContactPropertyPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VecApp"
+             xmlns:res="clr-namespace:VecApp.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Border Background="#2C3E50" CornerRadius="10" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <TextBlock Text="{x:Static res:Resources.String73}"
+                           FontSize="12"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           Margin="0,0,0,10"/>
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Height="396">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,0,0">
+                                <Button Content="{x:Static res:Resources.String65}"
+                                        Width="195" Height="140"
+                                        Margin="0,0,10,0"
+                                        Click="Click_NetworkBtn"
+                                        Style="{StaticResource PanelButtonStyle}"/>
+                                <Button Content="{x:Static res:Resources.String66}"
+                                        Width="195" Height="140"
+                                        Margin="0,0,10,0"
+                                        Click="Click_ProbeBtn"
+                                        Style="{StaticResource PanelButtonStyle}"/>
+                                <Button Content="{x:Static res:Resources.String67}"
+                                        Width="195" Height="140"
+                                        Margin="0,0,0,0"
+                                        Click="Click_ArmTypeBtn"
+                                        Style="{StaticResource PanelButtonStyle}"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,0,0">
+                                <Button Content="{x:Static res:Resources.String68}"
+                                        Width="195" Height="140"
+                                        Margin="0,0,10,0"
+                                        Click="Click_InspectionBtn"
+                                        Style="{StaticResource PanelButtonStyle}"/>
+                                <Button Content="{x:Static res:Resources.String69}"
+                                        Width="195" Height="140"
+                                        Margin="0,0,10,0"
+                                        Click="Click_CalibrationgBtn"
+                                        Style="{StaticResource PanelButtonStyle}"/>
+                                <Button Content="{x:Static res:Resources.String70}"
+                                        Width="195" Height="140"
+                                        Margin="0,0,0,0"
+                                        Click="Click_ProbeRegistrationBtn"
+                                        Style="{StaticResource PanelButtonStyle}"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,5,0,0">
+                                <Button Content="{x:Static res:Resources.String64}"
+                                       Width="160" Height="40"
+                                        Margin="420,10,0,0"
+                                       Click="Click_CloseBtn"
+                                       Style="{StaticResource PanelButtonStyle}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Top" Orientation="Vertical" Margin="10,0,0,0">
+                    <Button Content="{x:Static res:Resources.String71}"
+                            Margin="0,100,0,5"
+                            Width="120" Height="40"
+                            Click="Click_ContactBtn"
+                            Style="{StaticResource PanelButtonStyle}"/>
+                    <Button Content="{x:Static res:Resources.String72}"
+                            Margin="0,10,0,5"
+                            Width="120" Height="40"
+                            Click="Click_SelfJudgmentBtn"
+                            Style="{StaticResource PanelButtonStyle}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</local:PanelBase>

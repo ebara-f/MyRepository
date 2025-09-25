@@ -1,0 +1,14 @@
+; LplQue.def : DLL 用のモジュール パラメータ宣言
+
+LIBRARY      "LplQue"
+
+EXPORTS
+    ; 明示的なエクスポートはここへ記述できます
+	LplInitialIFCommon		@8
+	LplSendMesBox			@10
+	LplRecvMesBox			@11
+	LplCreateCommonArea		@12
+	LplInitialIFCommonEx	@17 
+	LplSendMesBox2			@19
+	LplSendMesBoxBuffferEmpty @20
+	LplTerminateALL			@21

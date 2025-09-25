@@ -1,0 +1,153 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows7.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Command\**" />
+    <Compile Remove="Views\**" />
+    <EmbeddedResource Remove="Command\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="Command\**" />
+    <None Remove="Views\**" />
+    <Page Remove="Command\**" />
+    <Page Remove="Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="GeomLab.jpg" />
+    <None Remove="Image\1-1-1.png" />
+    <None Remove="Image\ArmType_VAR800M.PNG" />
+    <None Remove="Image\BallProbe.PNG" />
+    <None Remove="Image\BK100S-NC.png" />
+    <None Remove="Image\BK100S.png" />
+    <None Remove="Image\connectSensor_Api_V8.PNG" />
+    <None Remove="Image\init_machine10.PNG" />
+    <None Remove="Image\init_No0.PNG" />
+    <None Remove="Image\init_V8+Api.PNG" />
+    <None Remove="Image\init_V8+VPR81.PNG" />
+    <None Remove="Image\Invalid data.png" />
+    <None Remove="Image\standardProbeV8.PNG" />
+    <None Remove="Image\VAC26.png" />
+    <None Remove="Image\VAC39.png" />
+    <None Remove="Image\VAC46.png" />
+    <None Remove="Image\VST28-0.1.PNG" />
+    <None Remove="Image\VST29-φ6.PNG" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Image\1-1-1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\ArmType_VAR800M.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="GeomLab.jpg" />
+    <Resource Include="Image\BallProbe.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\BK100S-NC.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\BK100S.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\connectSensor_Api_V8.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\init_machine10.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\init_No0.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\init_V8+Api.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\init_V8+VPR81.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\Invalid data.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\standardProbeV8.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\VAC39.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\VAC46.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\Valid data Near distance.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\Valid data Wide waveform.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\VST28-0.1.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\VST29-φ6.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="sample01.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CSH\CSH.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="VecCmd.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /D /Y /I $(OutDir)$(TargetName).dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)$(TargetName).exe ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)$(TargetName).runtimeconfig.json ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.Wpf.dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.Wpf.Shared.dll ..\_exec\$(Configuration)\&#xD;&#xA;" />
+  </Target>
+
+</Project>
