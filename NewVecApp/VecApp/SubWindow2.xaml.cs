@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using CSH;
 
 namespace VecApp
@@ -22,6 +23,26 @@ namespace VecApp
     /// </summary>
     public partial class SubWindow2 : SubWindowBase
     {
+        #region 最大化・最小化・閉じるボタンの非表示設定
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            const int GWL_STYLE = -16;
+            const int WS_SYSMENU = 0x80000;
+
+            // SYSMENUを非表示にする
+            var hwnd = new WindowInteropHelper((Window)sender).Handle;
+            //SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);   // 2025.4.22 eba del
+        }
+
+        #endregion
+
         // 2025.09.04  Modify by GeomLab
         // MainWindow から終了させるときだけ true にする
         public bool m_AllowClose { get; set; } = false;

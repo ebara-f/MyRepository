@@ -112,16 +112,21 @@ int Grp01::CmdXX(double* pA, TCHAR*& pB, int B_count)
 int Grp01::Cmd04()
 {
     int ret = 0;
-
+    static int dmy = 0;
     // 2025.7.4 eba del
     //HwCtrl::m_b_Button_ConnectFlag = false; // アプリ側から切断を行った。(2025.6.10yori)
     //ret = HwCtrl::Func04(); // 有接触切断
 
     // 2025.7.2 eba chg
     //WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE); // コールバック関数UsrMsg::CallBackが戻ってこないため、一時的にコメントアウト、後で調査(2025.8.21yori)
-    if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::CONNECT_CMP || HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::MEAS_IDLE)
+    if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::CONNECT_CMP || HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::MEAS_IDLE ||
+        HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::INITIALIZE_CMP)   // 2025.9.30 add eba
     {
         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_REQ;
+    }
+    else
+    {
+        dmy = 1;
     }
     //ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL); // コールバック関数UsrMsg::CallBackが戻ってこないため、一時的にコメントアウト、後で調査(2025.8.21yori)
 

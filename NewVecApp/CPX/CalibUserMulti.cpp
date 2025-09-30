@@ -78,25 +78,17 @@ int CalibUserMulti::CntDataMesCallBackSub(CALIB_PARA* para)
 	{
 		ret = 1;
 	}
-	else
+
+
+	// 通常シーケンスにもどす
+	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
+	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
 	{
-
-		// 転送シーケンスに変更する
-		if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::ALIGNMENT_ING)
-		{
-			HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ALIGNMENT_ING2;
-			while (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::ALIGNMENT_ING)
-			{
-				Sleep(100);
-				if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::ALIGNMENT_ING2)
-				{
-					break;
-				}
-			}
-		}
-		////
-
-
+		Sleep(100);
+		//if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::ALIGNMENT_ING2)
+		//{
+		//	break;
+		//}
 	}
 
 	return (ret);

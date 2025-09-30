@@ -219,6 +219,13 @@ int CalibComm::Close(CALIB_PARA* para)
 	int ret = 0;
 
 	ret |= CalibEnd();
+	// 通常シーケンスにもどす
+	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
+	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
+	{
+		Sleep(100);
+	}
+	////
 
 	return (ret);
 }
