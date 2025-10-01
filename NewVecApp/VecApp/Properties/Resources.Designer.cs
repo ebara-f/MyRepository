@@ -205,7 +205,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   センサーパラメータ詳細 に類似しているローカライズされた文字列を検索します。
+        ///   スキャナパラメータ詳細 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String113 {
             get {
@@ -928,7 +928,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   センサーパラメータ詳細 に類似しているローカライズされた文字列を検索します。
+        ///   スキャナパラメータ詳細 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String186 {
             get {
@@ -1047,7 +1047,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   センサーSW に類似しているローカライズされた文字列を検索します。
+        ///   スキャナSW に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String198 {
             get {
@@ -1155,7 +1155,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   センサー ネットワーク設定 に類似しているローカライズされた文字列を検索します。
+        ///   スキャナネットワーク設定 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String208 {
             get {
@@ -1173,7 +1173,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///    センサー に類似しているローカライズされた文字列を検索します。
+        ///    スキャナ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String21 {
             get {

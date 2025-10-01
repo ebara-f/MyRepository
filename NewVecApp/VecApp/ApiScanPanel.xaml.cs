@@ -227,7 +227,7 @@ namespace VecApp
 
         private void Click_SensorParameterBtn(object sender, RoutedEventArgs e)
         {
-            // ボタンをクリック毎にセンサーパラメータ詳細画面の表示、非表示を切り替える。(2025.8.13yori)
+            // ボタンをクリック毎にスキャナパラメータ詳細画面の表示、非表示を切り替える。(2025.8.13yori)
             if (this.ViewModel.IsSensorParameterVisible == Visibility.Visible)
             {
                 this.ViewModel.IsSensorParameterVisible = Visibility.Collapsed;

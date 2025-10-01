@@ -1,4 +1,5 @@
 ﻿<!-- UserControl→PanelBaseへ変更(2025.7.28yori) -->
+<!-- 全体のFontSize="20"へ変更(2025.9.28yori) -->
 <local:PanelBase
 			 x:Class="VecApp.InitializePanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,13 +9,13 @@
              xmlns:local="clr-namespace:VecApp"
              xmlns:res="clr-namespace:VecApp.Properties"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="480" d:DesignWidth="800">
     <Grid>
         <Border Background="#2C3E50" CornerRadius="10" Padding="20">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
 
                 <TextBlock Text="{x:Static res:Resources.String1}"
-                    FontSize="12"
+                    FontSize="20"
                     FontWeight="Bold"
                     Foreground="White"
                     Margin="0,0,0,10"/>
@@ -80,7 +81,7 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Static res:Resources.String2}" VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0" Foreground="White"/>
+                                <TextBlock Text="{x:Static res:Resources.String2}" VerticalAlignment="Center" FontSize="20" Margin="0,0,10,0" Foreground="White"/>
 
                                 <!-- スライドバー -->
                                 <Slider
@@ -89,7 +90,7 @@
                                     TickFrequency="1"
                                     IsSnapToTickEnabled="True"
                                     ValueChanged="SlideSwitch_ValueChanged"
-                                    Value="{Binding _SlideSwitch}"/>
+                                    Value="{Binding _SlideSwitch}" VerticalAlignment="Center"/>
 
                                 <TextBlock
                                     Text="{Binding _SlideText}"
@@ -99,8 +100,8 @@
                                     Margin="5,0,0,0"/>
                             </StackPanel>
 
-                            <Button Content="{x:Static res:Resources.String56}" Margin="607,0,7,0" Width="124" Height="46"
-                              Click="Click_CancelBtn" Style="{StaticResource PanelCancelButtonStyle}" VerticalAlignment="Top"/>
+                            <Button Content="{x:Static res:Resources.String56}" Margin="600,0,7,0" Width="130" Height="50"
+                              Click="Click_CancelBtn" Style="{StaticResource PanelCancelButtonStyle}" VerticalAlignment="Top" FontSize="20"/>
                         </Grid>
                     </StackPanel>
                 </Border>

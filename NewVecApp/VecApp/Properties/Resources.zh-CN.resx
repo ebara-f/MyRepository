@@ -163,7 +163,7 @@
     <value>点間ピッチ</value>
   </data>
   <data name="String113" xml:space="preserve">
-    <value>センサーパラメータ詳細</value>
+    <value>スキャナパラメータ詳細</value>
   </data>
   <data name="String114" xml:space="preserve">
     <value>スタート</value>
@@ -243,7 +243,7 @@
     <value> アーム</value>
   </data>
   <data name="String21" xml:space="preserve">
-    <value> センサー</value>
+    <value>スキャナ</value>
   </data>
   <data name="String78" xml:space="preserve">
     <value>最大-最小</value>
@@ -678,7 +678,7 @@ Ver.</value>
     <value>点間ピッチ</value>
   </data>
   <data name="String186" xml:space="preserve">
-    <value>センサーパラメータ詳細</value>
+    <value>スキャナパラメータ詳細</value>
   </data>
   <data name="String187" xml:space="preserve">
     <value>Default1</value>
@@ -716,7 +716,7 @@ Ver.</value>
     <value>感度</value>
   </data>
   <data name="String198" xml:space="preserve">
-    <value>センサーSW</value>
+    <value>スキャナSW</value>
   </data>
   <data name="String199" xml:space="preserve">
     <value>ラッチ通信</value>
@@ -746,7 +746,7 @@ Ver.</value>
     <value>結果保存</value>
   </data>
   <data name="String208" xml:space="preserve">
-    <value>センサー ネットワーク設定</value>
+    <value>スキャナネットワーク設定</value>
   </data>
   <data name="String209" xml:space="preserve">
     <value>IPアドレス：</value>

@@ -1,4 +1,5 @@
 ﻿<!-- UserControl→PanelBaseへ変更(2025.7.28yori) -->
+<!-- 全体のFontSize="20"へ変更(2025.9.28yori) -->
 <local:PanelBase
         x:Class="VecApp._0AxisInitializePanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,12 +9,12 @@
              xmlns:local="clr-namespace:VecApp"
              xmlns:res="clr-namespace:VecApp.Properties"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="480" d:DesignWidth="800">
     <Grid>
         <Border Background="#2C3E50" CornerRadius="10" Padding="20">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
                 <TextBlock Text="{x:Static res:Resources.String1}"
-                    FontSize="12"
+                    FontSize="20"
                     FontWeight="Bold"
                     Foreground="White"
                     Margin="0,0,0,10"/>
@@ -27,8 +28,8 @@
                                HorizontalAlignment="Center"/>
                         </Border>
                         <!-- キャンセルボタン追加(2025.7.25yori) -->
-                        <Button Content="{x:Static res:Resources.String56}" Margin="600,20,0,0" Width="124" Height="46"
-                              Click="Click_CancelBtn" Style="{StaticResource PanelCancelButtonStyle}"/>
+                        <Button Content="{x:Static res:Resources.String56}" Margin="600,20,0,0" Width="130" Height="50"
+                              Click="Click_CancelBtn" Style="{StaticResource PanelCancelButtonStyle}" FontSize="20"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
