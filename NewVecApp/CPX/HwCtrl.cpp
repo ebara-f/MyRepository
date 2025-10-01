@@ -81,10 +81,10 @@ int HwCtrl::Func01()
     int ret = 0;
 
     // VECTORONと接続開始
-    ret = m_hVecCnt.VecOpen(20000, NULL);
+    ret = HwCtrl::m_hVecCnt.VecOpen(20000, NULL);
 
     // 機種を識別するため、バージョン取得する。(2025.6.10yori)
-    ret = m_hVecCnt.VecCmd_GetVecVer();
+    ret = HwCtrl::m_hVecCnt.VecCmd_GetVecVer();
 
     // アプリ単体でVECTORONと接続する場合もあるため、
     // PolyWorksへのコマンド送信はここでは行わない(2025.6.6yori)
@@ -854,7 +854,7 @@ int HwCtrl::Func30()
 
 ***********************************************************************/
 
-int HwCtrl::Func31(char address[4][8], char subnet[4][8], char port[4])
+int HwCtrl::Func31(char address[4][8], char subnet[4][8], char port[4]) // 2025.9.30 この関数バグあり、メモリ壊しています！！！！ memo eba
 {
     int ret = 0;
     int i = 0;

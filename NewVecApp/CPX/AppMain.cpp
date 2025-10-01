@@ -203,7 +203,7 @@ int AppMain::UpDateData01(STATUS01* sts)
         sts->probe_id = HwCtrl::m_hVecCnt.m_Sts.m_iProbeId; // プローブID(2025.6.11yori)
         sts->dia = HwCtrl::m_hVecCnt.m_Sts.m_dia; // スタイラス直径(2025.6.11yori)
     }
-
+ 
     // アーム暖機、温度変化チェック(2025.6.4yori)
     ret = HwCtrl::Func22();
     if (ret == 0)
@@ -251,7 +251,7 @@ int AppMain::UpDateData01(STATUS01* sts)
 
     //// ネットワーク設定取得(2025.6.18yori)
     char adress[4][8], subnet[4][8], port[4]; // IPアドレス、サブネットマスクを4つに分割(2025.8.15yori)
-    ret = HwCtrl::Func31(adress, subnet, port);
+//    ret = HwCtrl::Func31(adress, subnet, port); // 2025.9.30 この関数バグあり、メモリ壊しています！！！！ memo eba
     if (ret == 0)
     {
         for (i = 0; i < 4; i++)
