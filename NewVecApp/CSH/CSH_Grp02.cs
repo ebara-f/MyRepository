@@ -143,10 +143,9 @@ namespace CSH
         public CalibJudgeFg ProbeCheckResultFg;
         public CalibJudgeCkFg InspectionResultFg;
 
-        public CalibPosErrFg DataCheckFg;    // キャリブデータの位置、ボールから離れたかのチェックを知らせるフラグ
-
         public double PlateErrVal;
         public int CalibInspectJudge;
+        public int CalibResultVal;
 
         public int Language;
         public int CalibType;

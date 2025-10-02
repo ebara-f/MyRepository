@@ -219,10 +219,9 @@ typedef struct CalibSettingParamter
     CALIB_JUDGE_FG      ProbeCheckResultFg;
     CALIB_JUDGE_CK_FG  InspectionResultFg;
 
-    CALIB_POS_ERR_FG    DataCheckFg;    // キャリブデータの位置、ボールから離れたかのチェックを知らせるフラグ
-
     double PlateErrVal;
     int CalibInspectJudge; 
+    int CalibResultVal;
 
     int Language;
     int CalibType;

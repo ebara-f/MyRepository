@@ -21,21 +21,17 @@ int CalibInspectMultiPlateStd::CntDataMesCallBackSub(CALIB_PARA* para)
 
 	para->PlateErrVal = result.plate - para->GaugePara.PlateLen;
 	para->InspAndProbCkResult.plate = result.plate;
-	if (para->InspectionThreshold.plate < para->PlateErrVal)
+	if (para->InspectionThreshold.plate < abs(para->PlateErrVal))
 	{
 		para->InspectionResultFg.plate = 1;
 		para->CalibInspectJudge |= 1;
 	}
 
 	// 通常シーケンスにもどす
-	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
-	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
+	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ALIGNMENT_ING2;
+	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::ALIGNMENT_ING2)
 	{
 		Sleep(100);
-		//if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::ALIGNMENT_ING2)
-		//{
-		//	break;
-		//}
 	}
 	////
 

@@ -811,4 +811,16 @@ Ver.</value>
   <data name="String229" xml:space="preserve">
     <value>設定(非)</value>
   </data>
+  <data name="String230" xml:space="preserve">
+    <value>连接标准探头（ID2）</value>
+  </data>
+  <data name="String231" xml:space="preserve">
+    <value>配置エラー</value>
+  </data>
+  <data name="String232" xml:space="preserve">
+    <value>配置エラーと測定誤差許容値オーバー</value>
+  </data>
+  <data name="String233" xml:space="preserve">
+    <value>測定誤差許容値オーバー</value>
+  </data>
 </root>

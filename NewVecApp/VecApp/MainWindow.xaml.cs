@@ -106,7 +106,7 @@ namespace VecApp
             m_SubWnd02 = new SubWindow2();  // 2025.4.23 eba add
             m_SubWnd03 = new SubWindow3();  // 2025.4.23 eba add
             // m_DlgPrgBar1,2も3と同じように改良しないとプロセスがこのってしまう(後で必ずやる必要あり) 2025.9.10 eba memo
-            //m_DlgPrgBar1 = new DlgPrgBar1(); // プログレスバー追加のため番号追加(2025.7.30yori)
+            m_DlgPrgBar1 = new DlgPrgBar1(); // プログレスバー追加のため番号追加(2025.7.30yori)
             //m_DlgPrgBar2 = new DlgPrgBar2(); // 追加(2025.7.30yori)
             //
             m_DlgPrgBar3 = new DlgPrgBar3(); // 追加(2025.7.31yori) 2025.8.29 これがあるとプロセスが残る
@@ -145,11 +145,27 @@ namespace VecApp
                 m_SubWnd03.Close();
             }
 
-            if ( m_DlgPrgBar3 != null ) {           // 2025.4.23 eba add
+            if (m_DlgPrgBar1 != null)
+            {           
+                m_DlgPrgBar1.m_AllowClose = true;   // 2025.10.2 add eba
+                m_DlgPrgBar1.Dispose();
+                m_DlgPrgBar1.Close();
+            }
+
+            if (m_DlgPrgBar2 != null)
+            {           
+                m_DlgPrgBar2.m_AllowClose = true;   // 2025.10.2 add eba
+                m_DlgPrgBar2.Dispose();
+                m_DlgPrgBar2.Close();
+            }
+
+            if ( m_DlgPrgBar3 != null ) 
+            {
                 m_DlgPrgBar3.m_AllowClose = true;   // 2025.09.04  Modify by GeomLab
                 m_DlgPrgBar3.Dispose();
                 m_DlgPrgBar3.Close();
             }
+
         }
 
         // メッセージループを記述したメソッド

@@ -315,8 +315,6 @@ int CalibComm::CntDataMesCallBack(CALIB_PARA* para)
 	CalibComm::m_pData.GetData(&CntData);
 
 	// 測定データのチェック
-	para->DataCheckFg.user_ball_err = 0;
-	para->DataCheckFg.user_pos_err = 0;
 	if (CalibComm::m_CalibType == CALIB_TYPE::ALIGNMENT_MULTI_GAUGE)
 	{
 		fg = CalibUserMulti::CntDataMesCallBackSub2(para, &CntData);
@@ -387,7 +385,12 @@ int CalibComm::ParaOutCallBack(CALIB_PARA* para)
 	
 
 	
-
+	// 通常シーケンスにもどす
+	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
+	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
+	{
+		Sleep(100);
+	}
 
 	return (ret);
 }

@@ -52,11 +52,11 @@ int CalibUserMulti::StartSub(CALIB_PARA* para)
 	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 2 ||
 		HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 1)
 	{
-		// PS=1へ強制変更
+		HwCtrl::m_hVecCnt.VecCmd_ChangeProbe(1); // PS=1へ強制変更
 	}
 	else
 	{
-		para->MesString = 1;	// 2025.9.21 仮
+		para->MesString = 230;
 		ret = 1;
 	}
 	
@@ -76,19 +76,21 @@ int CalibUserMulti::CntDataMesCallBackSub(CALIB_PARA* para)
 	int result;
 	if (!CalibCalParaOut(&result, &CalibComm::m_ArmParaTxt, 1))	// 試しにPSIDは１
 	{
+		para->CalibInspectJudge = 1;
 		ret = 1;
 	}
+	else
+	{
+		para->CalibInspectJudge = 0;
+	}
+	para->CalibResultVal = result;
 
 
 	// 通常シーケンスにもどす
-	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
-	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
+	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ALIGNMENT_ING2;
+	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::ALIGNMENT_ING2)
 	{
 		Sleep(100);
-		//if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::ALIGNMENT_ING2)
-		//{
-		//	break;
-		//}
 	}
 
 	return (ret);
@@ -102,17 +104,25 @@ int CalibUserMulti::CntDataMesCallBackSub2(CALIB_PARA* para, VecCtEx2* data)
 	double radius;
 	double height;
 	double err;
+	
+	para->MesString = 0;
 	if (CalibMesPosChk(data, &radius, &height) == 0)
-	{
-		
-		para->DataCheckFg.user_pos_err = 1;
+	{	
+		para->MesString = 231;
 		ret |= 1;
 	}
 
 	if (CalibMesErrChk(data, &err) == 0)
 	{
-		para->DataCheckFg.user_ball_err = 1;
-		ret |= 2;
+		if (ret == 1)
+		{
+			para->MesString = 232;
+		}
+		else
+		{
+			para->MesString = 233;
+		}
+		ret |= 1;
 	}
 
 	return (ret);

@@ -18,6 +18,6 @@
         </Grid.RowDefinitions>
 
         <TextBlock   Grid.Row="0" Margin="10,4" VerticalAlignment="Center" Text="スキャナ接続中です。&#10;お待ちください。" />
-        <ProgressBar Grid.Row="1" Margin="10,4" Height="25" IsIndeterminate="{Binding Executing}" Background="White" Foreground="Orange"/>
+        <ProgressBar Grid.Row="1" Margin="10,4" Height="25" IsIndeterminate="true" Background="White" Foreground="Orange" x:Name="Prg"/>
     </Grid>
 </Window>

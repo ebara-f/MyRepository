@@ -76,14 +76,7 @@ namespace VecApp
             this.ViewModel.ImageSource = this.ViewModel.CalibPara.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibPara.mes;
 
-            if(this.ViewModel.CalibPara.DataCheckFg.user_pos_err != 0)
-            {
-                this.ViewModel.ThresholdText = "ゲージ位置エラー";
-            }
-            if (this.ViewModel.CalibPara.DataCheckFg.user_pos_err != 0)
-            {
-                this.ViewModel.ThresholdText = "測定値限界オーバー";
-            }
+            UsrMessageBox.Show(this.ViewModel.CalibPara.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void ParaOutCallBack()
@@ -91,7 +84,7 @@ namespace VecApp
 
             CSH.Grp02.ContactInspectionPanelParaOutCallBack(ref this.ViewModel.CalibPara);
 
-            if(this.ViewModel.CalibPara.CalibType == 1)
+            if (this.ViewModel.CalibPara.CalibType == 1)
             {
                 this.ViewModel.ImageVisibility = Visibility.Hidden;
                 this.ViewModel.GridVisibility = Visibility.Visible;
@@ -120,7 +113,7 @@ namespace VecApp
                 }
 
                 // 各結果の背景色変更
-                if(this.ViewModel.CalibPara.InspectionResultFg.pp[0] == 0)
+                if (this.ViewModel.CalibPara.InspectionResultFg.pp[0] == 0)
                 {
                     this.ViewModel.XMaxMinJudge = true;
                 }
@@ -207,7 +200,26 @@ namespace VecApp
 
 
             }
+            else if (this.ViewModel.CalibPara.CalibType == 4)    // ユーザーキャリブ
+             {
 
+                this.ViewModel.ImageVisibility = Visibility.Hidden;
+                this.ViewModel.GridVisibility = Visibility.Visible;
+
+                // OK・NG表示
+                if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
+                {
+                    this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
+                    this.ViewModel.ResultJudge = true;  // 背景色緑
+                }
+                else
+                {
+                    this.ViewModel.ResultJudge = false; // 背景色赤
+                }
+
+                this.ViewModel.ThresholdText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
+
+            }
             
             
 
@@ -219,14 +231,22 @@ namespace VecApp
             this.ViewModel.CalibPara.GaugePara.BallBarLen = Convert.ToDouble(this.ViewModel.GaugeLength);
             CSH.Grp02.ContactInspectionPanelClickStart(ref this.ViewModel.CalibPara);
 
-            this.ViewModel.IsStartBtnEnabled = false;
-            this.ViewModel.IsBackBtnEnabled = true;
-            this.ViewModel.IsReStartBtnEnabled = true;
-            this.ViewModel.IsTextBoxEnabled = false;
-            this.ViewModel.IsSettingBtnEnabled = false;
-            this.ViewModel.ImageSource = this.ViewModel.CalibPara.path;
-            this.ViewModel.SubtitleText = this.ViewModel.CalibPara.mes;
+            if(this.ViewModel.CalibPara.MesString ==0)
+            {
+                this.ViewModel.IsStartBtnEnabled = false;
+                this.ViewModel.IsBackBtnEnabled = true;
+                this.ViewModel.IsReStartBtnEnabled = true;
+                this.ViewModel.IsTextBoxEnabled = false;
+                this.ViewModel.IsSettingBtnEnabled = false;
+                this.ViewModel.ImageSource = this.ViewModel.CalibPara.path;
+                this.ViewModel.SubtitleText = this.ViewModel.CalibPara.mes;
+            }
+            else
+            {
+                UsrMessageBox.Show(this.ViewModel.CalibPara.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
 
+         
             //確認用(画像とテキストボックスの切り替え) アスタワン様サンプル
             //this.ViewModel.ImageVisibility = Visibility.Hidden;
             //this.ViewModel.GridVisibility = Visibility.Visible;

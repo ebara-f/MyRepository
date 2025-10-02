@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock   Grid.Row="0" Margin="10,4" VerticalAlignment="Center" Text="暖機中です。&#10;お待ちください。" />
-        <ProgressBar Grid.Row="1" Margin="10,4" Height="25" IsIndeterminate="{Binding Executing}" Background="White" Foreground="Orange"/>
+        <ProgressBar Grid.Row="1" Margin="10,4" Height="25" IsIndeterminate="true" Background="White" Foreground="Orange" x:Name="Prg"/>
         <Button      Grid.Row="2" Width="120" Height="30" Content="キャンセル" Click="Button_Click_Btn01" Background="DarkGray" Foreground="Black"/>
     </Grid>
 </Window>

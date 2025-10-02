@@ -52,11 +52,11 @@ int CalibInspectMultiNestStd::StartSub(CALIB_PARA* para)
 	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 2 ||
 		HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 1)
 	{
-		// PS=2‚Ö‹­§•ÏX
+		HwCtrl::m_hVecCnt.VecCmd_ChangeProbe(2); // PS=2‚Ö‹­§•ÏX
 	}
 	else
 	{
-		para->MesString = 1;	// 2025.9.21 ‰¼
+		para->MesString = 230;	// 2025.10.1 add eba
 		ret = 1;
 	}
 

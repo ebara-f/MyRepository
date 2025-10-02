@@ -53,22 +53,6 @@ namespace VecApp
         }
 
         /// <summary>
-        /// 中止ボタンをクリックした際に発生するイベントハンドラ
-        /// </summary>
-        private void Button_Click_Btn01( object sender, RoutedEventArgs e )
-        {
-            try {
-                CSH.Grp01.Cmd15();  // 暖機監視を終了する(2025.7.31yori)
-            }
-            catch {
-                // CSH 側が例外でもUIは落とさない
-            }
-
-            Cancel();       // バックグラウンド停止
-            this.Hide();    // 画面の非表示
-        }
-
-        /// <summary>
         /// ×ボタン（Close）やアプリ終了時の終了処理
         /// </summary>
         private void Terminate( object sender, CancelEventArgs e )
@@ -82,6 +66,24 @@ namespace VecApp
                 Cancel();           // バックグラウンド停止
                 this.Hide();        // 画面の非表示
             }
+        }
+
+        /// <summary>
+        /// 中止ボタンをクリックした際に発生するイベントハンドラ
+        /// </summary>
+        private void Button_Click_Btn01(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CSH.Grp01.Cmd15();  // 暖機監視を終了する(2025.7.31yori)
+            }
+            catch
+            {
+                // CSH 側が例外でもUIは落とさない
+            }
+
+            Cancel();       // バックグラウンド停止
+            this.Hide();    // 画面の非表示
         }
 
         /// <summary>

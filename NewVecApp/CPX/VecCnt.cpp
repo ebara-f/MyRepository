@@ -329,7 +329,7 @@ int CVecCnt::VecCmd_ChangeProbe(int probe_id)
 	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;	//実行不可 //this->削除(2025.5.15yori)
 
 	//Monitor::Enter(m_Lock);			//ロック //コメントアウト、下記追加(2025.5.15yori)
-	WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE); 2025.10.1 del eba
 
 	sprintf_s(cSendData, 32, "%d", probe_id);
 
@@ -340,7 +340,7 @@ int CVecCnt::VecCmd_ChangeProbe(int probe_id)
 		ret_code = StdRecvCheck();		// Standerd Recve (Ack Check)
 
 	//Monitor::Exit(m_Lock);			//Unlock //コメントアウト、下記追加(2025.5.15yori)
-	ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL); 2025.10.1 del eba
 
 	return ret_code;
 }
