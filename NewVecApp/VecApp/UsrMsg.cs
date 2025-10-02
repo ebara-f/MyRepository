@@ -91,5 +91,7 @@ namespace VecApp
 
         public const int WM_ContactInspectionPanel_MesCallBack = WM_USER + 39;  // 2025.9.2 add eba
         public const int WM_ContactInspectionPanel_ParaOutCallBack = WM_USER + 40;  // 2025.9.2 add eba
+
+        public const int WM_Init0Panel_Setup = WM_USER + 41;   // 追加(2025.10.2yori)
     }
 }

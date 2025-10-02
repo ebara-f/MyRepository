@@ -22,7 +22,8 @@
                     <StackPanel>
                         <!-- 仮の画像スペース -->
                         <Border Background="#DDD" Margin="0,0,0,0" CornerRadius="6" Grid.ColumnSpan="2" Height="300">
-                            <Image Source="Image/init_No0.PNG"
+                            <!-- "Image/init_No0.PNG"→"{Binding Init0Image}へ変更(2025.10.2yori) -->
+                            <Image Source="{Binding Init0Image}"
                                Stretch="Uniform"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"/>

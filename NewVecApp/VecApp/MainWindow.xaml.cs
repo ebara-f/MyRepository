@@ -326,6 +326,10 @@ namespace VecApp
                     (Content as ContactInspectionPanel).ParaOutCallBack();
                 }
             }
+            else if (msg == UsrMsg.WM_Init0Panel_Setup)
+            {
+                Init0PanelSetup(); // 追加(2025.10.2yori)
+            }
 
             return IntPtr.Zero;
         }
@@ -764,6 +768,20 @@ namespace VecApp
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 0軸イニシャライズ画面の初期設定(2025.10.2yori)
+        /// </summary>
+        private void Init0PanelSetup()
+        {
+            Status01 sts = new Status01();
+            CSH.AppMain.UpDateData01(out sts);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if ( sts.probe_id == 0 ) m_SubWnd01._0AxisInitializeValue.Init0Image = "Image/init_No0.PNG";
+                if ( sts.probe_id > 2 && sts.probe_id < 20 ) m_SubWnd01._0AxisInitializeValue.Init0Image = "Image/init_VPR81.PNG";
+            });
         }
 
         /// <summary>

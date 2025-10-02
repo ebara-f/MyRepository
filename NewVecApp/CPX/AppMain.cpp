@@ -971,6 +971,8 @@ void AppMain::ThreadProc()
 
                 ret = HwCtrl::Func08(); // 有接触モードへ変更
                 ret = HwCtrl::Func75(); // 関節リミットビープ音のON(2025.9.1yori)
+                ret = HwCtrl::Func05(&PosiData); // 接続時にプローブID変更フラグ初期値取得のため、追加(2025.10.2)
+
                 if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 0) //温度が正常な場合(2025.7.17yori)
                 {
                     if (HwCtrl::m_hVecCnt.m_VecInitflag) // 初期化が完了していたら
@@ -1096,6 +1098,7 @@ void AppMain::ThreadProc()
             {
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE0_ING;
                 if (!HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Btn04); // 0軸イニシャライズ画面表示(2025.7.25yori)
+                UsrMsg::CallBack(UsrMsg::WM_Init0Panel_Setup); // イニシャライズ画像表示(2025.10.2yori)
             }
             else
             {
@@ -1247,6 +1250,7 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::MEAS_IDLE:
+            HwCtrl::pbid_chg_old_fg = PosiData.pbid_chg_fg; // 追加(2025.10.2yori)
             ret = HwCtrl::Func05(&PosiData);
             // 測定中に異常があった場合のエラー処理をちゃんとすること 2025.5.27 memo eba
             if (ret == 0)
@@ -1257,6 +1261,17 @@ void AppMain::ThreadProc()
                     if (HwCtrl::m_hVecCnt.m_Sts.m_enMode == VEC_MODE_PROBE && HwCtrl::m_hVecCnt.m_VecInitflag == true)
                     {
                         HwCtrl::Func11(PosiData);
+                    }
+
+                    // プローブID変更があった場合(2025.10.2yori)
+                    if (PosiData.pbid_chg_fg != HwCtrl::pbid_chg_old_fg)
+                    {
+                        ret = HwCtrl::Func09();
+                        if (ret == 0 && HwCtrl::m_hVecCnt.m_Sts.m_No0Fg == 1 && HwCtrl::m_hVecCnt.m_Sts.m_iProbeId != 0) // No.0関節の有無確認、スキャナ(ID=0)はここでイニシャライズしない。
+                        {
+                            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE0_REQ; // 0軸イニシャライズ要求(2025.10.2yori)
+                            UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn01); // 接続メニュー表示
+                        }
                     }
                 }
             }
