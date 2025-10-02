@@ -205,7 +205,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   センサーパラメータ詳細 に類似しているローカライズされた文字列を検索します。
+        ///   スキャナパラメータ詳細 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String113 {
             get {
@@ -928,7 +928,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   センサーパラメータ詳細 に類似しているローカライズされた文字列を検索します。
+        ///   スキャナパラメータ詳細 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String186 {
             get {
@@ -1047,7 +1047,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   センサーSW に類似しているローカライズされた文字列を検索します。
+        ///   スキャナSW に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String198 {
             get {
@@ -1155,7 +1155,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   センサー ネットワーク設定 に類似しているローカライズされた文字列を検索します。
+        ///   スキャナネットワーク設定 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String208 {
             get {
@@ -1173,7 +1173,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///    センサー に類似しているローカライズされた文字列を検索します。
+        ///    スキャナ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String21 {
             get {
@@ -1376,42 +1376,6 @@ namespace VecApp.Properties {
         public static string String23 {
             get {
                 return ResourceManager.GetString("String23", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   標準プローブを取り付けて下さい(ID2) に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string String230 {
-            get {
-                return ResourceManager.GetString("String230", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   配置エラー に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string String231 {
-            get {
-                return ResourceManager.GetString("String231", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   配置エラーと測定誤差許容値オーバー に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string String232 {
-            get {
-                return ResourceManager.GetString("String232", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   測定誤差許容値オーバー に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string String233 {
-            get {
-                return ResourceManager.GetString("String233", resourceCulture);
             }
         }
         

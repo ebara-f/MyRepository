@@ -171,7 +171,7 @@ void CVecCnt::SetVecStatus(VecSt* get_status)
 	// 軸数が7軸以外は処理が必要
 	// m_Modelにm_Sts.追加(2025.8.20yori)
 	// m_INIT0_REQ_Fgの型をbool→intへ変更、m_Sts(2025.8.22yori)
-	if (m_Sts.m_Model == MODEL_V8 && m_Sts.m_No0Fg == 1 && m_Sts.m_INIT0_REQ_Fg == 1) // V8かつNo.0関節のみイニシャライズを行う場合(2025.6.10yori)
+	if ((m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) && m_Sts.m_No0Fg == 1 && m_Sts.m_INIT0_REQ_Fg == 1) // V8かつNo.0関節のみイニシャライズを行う場合(2025.6.10yori) // V8をS/M/Lに分割(2025.9.29yori)
 	{
 		if (m_Sts.m_iInitFlg == 127)
 		{
@@ -183,7 +183,7 @@ void CVecCnt::SetVecStatus(VecSt* get_status)
 			m_VecInitflag = false;
 		}
 	}
-	if (m_Sts.m_Model == MODEL_V8 && m_Sts.m_No0Fg == 1 && m_Sts.m_INIT0_REQ_Fg == 0) // V8かつNo.0-6全部イニシャライズを行う場合　2025.7.2 eba add
+	if ((m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) && m_Sts.m_No0Fg == 1 && m_Sts.m_INIT0_REQ_Fg == 0) // V8かつNo.0-6全部イニシャライズを行う場合　2025.7.2 eba add // V8をS/M/Lに分割(2025.9.29yori)
 	{
 		if (m_Sts.m_iInitFlg == 0x7F)
 		{
@@ -194,7 +194,7 @@ void CVecCnt::SetVecStatus(VecSt* get_status)
 			m_VecInitflag = false;
 		}
 	}
-	else if (m_Sts.m_Model == MODEL_V8 && m_Sts.m_No0Fg == 0 && m_Sts.m_INIT0_REQ_Fg == 0) // V8かつNo.0関節が無い場合(2025.6.10yori)
+	else if ((m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) && m_Sts.m_No0Fg == 0 && m_Sts.m_INIT0_REQ_Fg == 0) // V8かつNo.0関節が無い場合(2025.6.10yori) // V8をS/M/Lに分割(2025.9.29yori)
 	{
 		if (m_Sts.m_iInitFlg == 126) m_VecInitflag = true;
 		else                         m_VecInitflag = false;
@@ -231,7 +231,7 @@ int CVecCnt::VecCmd_GetVecStatus()
 
 	// 機種識別追加(2025.6.10)
 	// m>Modelにm_Sts.追加(2025.8.20yori)
-	if (m_Sts.m_Model == MODEL_V8)
+	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{
 		ret_code = Vec_StatusRequestV8(m_VecHandle, &vecStatus);
 	}
@@ -542,16 +542,24 @@ int CVecCnt::VecCmd_GetVecVer()
 				m_Sts.m_Ver = string(cRecvData); // バージョン情報 //->→.、gcnew String()→stringへ変更(2025.5.15yori)
 
 				// バージョン情報から機種を識別する。(2025.6.10yori)
-				// m_Modelにm_Sts.追加(2025.8.20yori)
-				if (m_Sts.m_Ver.substr(0, 2) == MODEL_V8)
+				// m_Modelにm_Sts.追加(2025.8.20yori) // #defineをアーム型式へ変更(2025.9.26yori)
+				if ((m_Sts.m_Ver.substr(0, 2) == "V8") && (m_Sts.m_Ver.substr(13, 1) == "M"))
 				{
-					m_Sts.m_Model = MODEL_V8;
+					m_Sts.m_Model = MODEL_V8M;
 				}
-				if (m_Sts.m_Ver.substr(0, 2) == MODEL_V7S)
+				if ((m_Sts.m_Ver.substr(0, 2) == "V8") && (m_Sts.m_Ver.substr(13, 1) == "L"))
+				{
+					m_Sts.m_Model = MODEL_V8L;
+				}
+				if ((m_Sts.m_Ver.substr(0, 2) == "V8") && (m_Sts.m_Ver.substr(13, 1) == "S")) // 追加(2025.9.29yori)
+				{
+					m_Sts.m_Model = MODEL_V8S;
+				}
+				if ((m_Sts.m_Ver.substr(0, 2) == "V7") && (m_Sts.m_Ver.substr(13, 1) == "S"))
 				{
 					m_Sts.m_Model = MODEL_V7S;
 				}
-				if (m_Sts.m_Ver.substr(0, 2) == MODEL_V7SA)
+				if ((m_Sts.m_Ver.substr(0, 2) == "V7") && (m_Sts.m_Ver.substr(13, 2) == "sa"))
 				{
 					m_Sts.m_Model = MODEL_V7SA;
 				}
@@ -1042,7 +1050,7 @@ int CVecCnt::VecFunc_DataRequestEx(VecDtEx* PosiData,int iDataSize)
 
 	// 機種識別追加(2025.6.16)
 	// m_Modelにm_Sts.追加(2025.8.20yori)
-	if (m_Sts.m_Model == MODEL_V8)
+	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{
 		ret = Vec_DataRequestV8(m_VecHandle, iDataSize, PosiData, &data_no);
 	}
@@ -1070,7 +1078,7 @@ int CVecCnt::VecFunc_CntRequestEx(VecCtEx2* CntData, int iDataSize)
 
 	// 機種識別追加(2025.6.16)
 	// m_Modelにm_Sts.追加(2025.8.20yori)
-	if (m_Sts.m_Model == MODEL_V8)
+	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{
 		ret = Vec_CntRequestV8(m_VecHandle, iDataSize, CntData, &data_no);
 	}

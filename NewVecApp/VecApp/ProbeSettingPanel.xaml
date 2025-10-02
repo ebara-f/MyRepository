@@ -1,4 +1,5 @@
 ﻿<!-- UserControl→PanelBaseへ変更(2025.7.28yori) -->
+<!-- 全体のFontSize="20"へ変更(2025.9.27yori) -->
 <local:PanelBase
 			 x:Class="VecApp.ProbeSettingPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,19 +9,19 @@
              xmlns:local="clr-namespace:VecApp"
              xmlns:res="clr-namespace:VecApp.Properties"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="500" d:DesignWidth="800">
     <Grid>
         <Border Background="#2C3E50" CornerRadius="10" Padding="20">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
                 <TextBlock Text="{x:Static res:Resources.String9}"
-                    FontSize="12"
+                    FontSize="20"
                     FontWeight="Bold"
                     Foreground="White"
                     Margin="0,0,0,10"/>
 
                 <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,0">
                     <StackPanel>
-                        <TextBlock Text="{x:Static res:Resources.String10}" Foreground="White" FontSize="18" Margin="0,0,0,10" Background="Gray"/>
+                        <TextBlock Text="{x:Static res:Resources.String10}" Foreground="White" FontSize="20" Margin="0,0,0,10" Background="Gray"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -28,24 +29,24 @@
                                 <ColumnDefinition Width="200" />
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,76,0" Height="280">
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,76,0" Height="300">
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,20">
-                                    <TextBlock Text="{x:Static res:Resources.String11}" Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static res:Resources.String11}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
                                     <!-- TextBox→ComboBox変更(2025.7.22yori) -->
                                     <!-- x:Name="ProbeName"追加(2025.9.8yori) -->
-                                    <ComboBox x:Name="ProbeName" ItemsSource="{Binding Name}" SelectedIndex="{Binding NameIndex}" Width="200" FontSize="16" Margin="10,0,0,0"/>
+                                    <ComboBox x:Name="ProbeName" ItemsSource="{Binding Name}" SelectedIndex="{Binding NameIndex}" Width="200" FontSize="20" Margin="10,0,0,0"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,20">
-                                    <TextBlock Text="{x:Static res:Resources.String12}" Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static res:Resources.String12}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
                                     <!-- TextBox→TextBlockへ、編集不可へ変更(2025.9.1yori) -->
                                     <!-- VerticalContentAlignment="Center"→TextAlignment="Center"-->
-                                    <TextBlock Text="{Binding Id}" Width="70" FontSize="16" Margin="10,0,0,0"
+                                    <TextBlock Text="{Binding Id}" Width="70" FontSize="20" Margin="10,0,0,0"
                                          TextAlignment="Center" Background="Black" Foreground="White"/>
                                 </StackPanel>
-                                <TextBlock Text="{x:Static res:Resources.String13}" Foreground="White" FontSize="18" Margin="0,0,0,10" Background="Gray"/>
+                                <TextBlock Text="{x:Static res:Resources.String13}" Foreground="White" FontSize="20" Margin="0,0,0,10" Background="Gray"/>
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,20">
-                                    <TextBlock Text="{x:Static res:Resources.String14}" Foreground="White" FontSize="16" VerticalAlignment="Center"/>
-                                    <ComboBox ItemsSource="{Binding BallItems}" SelectedIndex="{Binding BallIndex}" Width="100" FontSize="16" Margin="10,0,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+                                    <TextBlock Text="{x:Static res:Resources.String14}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
+                                    <ComboBox ItemsSource="{Binding BallItems}" SelectedIndex="{Binding BallIndex}" Width="100" FontSize="20" Margin="10,0,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
                                 </StackPanel>
                                 <Border Background="#DDD" Margin="40,0,0,0" CornerRadius="6"
                                     Grid.ColumnSpan="2" Height="69" Width="340">
@@ -55,9 +56,9 @@
                                            HorizontalAlignment="Center" Height="111"/>
                                 </Border>
                                 <StackPanel Orientation="Horizontal" Margin="90,10,0,20">
-                                    <TextBlock Text="{x:Static res:Resources.String15}" Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static res:Resources.String15}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
                                     <!-- x:Name="Dia"追加(2025.9.8yori) -->
-                                    <TextBox x:Name="Dia" Text="{Binding Diameter}" Width="70" FontSize="16" Margin="10,0,0,0"
+                                    <TextBox x:Name="Dia" Text="{Binding Diameter}" Width="70" FontSize="20" Margin="10,0,0,0"
                                          VerticalContentAlignment="Center" Background="Black" Foreground="White"/>
                                     <TextBlock Text="mm" Foreground="White" FontSize="20"
                                            VerticalAlignment="Center" Margin="10,0,0,0"/>
@@ -74,13 +75,13 @@
                         </Grid>
 
                         <!-- OK/キャンセルボタン -->
-                        <StackPanel Orientation="Horizontal" Margin="490,10,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="450,10,0,0">
                             <Button Content="{x:Static res:Resources.String57}"
-                                Click="Click_DoneBtn" Width="124" Height="46"
-                                Margin="0,0,0,0" Style="{StaticResource PanelDoneButtonStyle}" />
+                                Click="Click_DoneBtn" Width="135" Height="46"
+                                Margin="0,0,0,0" Style="{StaticResource PanelDoneButtonStyle}" FontSize="20" />
                             <Button Content="{x:Static res:Resources.String56}"
-                                Click="Click_CancelBtn" Width="124" Height="46"
-                                Margin="10,0,0,0" Style="{StaticResource PanelCancelButtonStyle}" />
+                                Click="Click_CancelBtn" Width="135" Height="46"
+                                Margin="20,0,0,0" Style="{StaticResource PanelCancelButtonStyle}" FontSize="20" />
                         </StackPanel>
                     </StackPanel>
                 </Border>

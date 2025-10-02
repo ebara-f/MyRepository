@@ -848,6 +848,10 @@ void AppMain::ThreadProc()
     ////
     VecDtEx PosiData; // 下記から移動(2025.9.8yori)
     PosiData.pbid_chg_fg = 0;  // 追加(2025.9.8yori)
+    size_t converted = 0; // 追加(2025.9.26yori)
+    errno_t err; // 追加(2025.9.26yori)
+    wchar_t armtype[16]; // 追加(2025.9.26yori)
+    char model[16];// 追加(2025.9.26yori)
 
     while( 1 )
     {
@@ -959,6 +963,12 @@ void AppMain::ThreadProc()
             ret = HwCtrl::Func01(); // 有接触接続
             if (ret == 0)
             {
+                // 接続時にファームウェアからアーム型式を自動変更する。(2025.9.29yori)
+                if (HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR800S") strcpy_s(model, 16, "BK100S"); // VAR800Sは、BK100Sで点検、キャリブを行う。(2025.9.29yori)
+                else strcpy_s(model, 16, HwCtrl::m_hVecCnt.m_Sts.m_Model.c_str());
+                err = mbstowcs_s(&converted, armtype, 16, model, _TRUNCATE);
+                ret = HwCtrl::Func74(armtype);
+
                 ret = HwCtrl::Func08(); // 有接触モードへ変更
                 ret = HwCtrl::Func75(); // 関節リミットビープ音のON(2025.9.1yori)
                 if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 0) //温度が正常な場合(2025.7.17yori)

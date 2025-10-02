@@ -56,7 +56,7 @@ namespace VecApp
         }
         private void Click_CloseBtn(object sender, RoutedEventArgs e)
         {
-
+            Parent.CurrentPanel = Panel.None; // 追加(2025.9.26yori)
         }
 
         private void Click_SensitivityBtn(object sender, RoutedEventArgs e)

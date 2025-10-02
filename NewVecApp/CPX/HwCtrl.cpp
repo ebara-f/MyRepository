@@ -1452,7 +1452,7 @@ int HwCtrl::Func50(int id, double dia)
 {
     int ret = 0;
 
-    if (m_hVecCnt.m_Sts.m_Model != "V8") // m_Sts追加(2025.8.20yori)
+    if (m_hVecCnt.m_Sts.m_Model != "VAR800M" || m_hVecCnt.m_Sts.m_Model != "VAR800L") // m_Sts追加(2025.8.20yori) // V8をMとLに分割(2025.9.26yori)
     {
         ret = HwCtrl::m_hVecCnt.VecCmd_ChangeProbe(id);
     }
