@@ -71,4 +71,5 @@ public:
     const static int WM_ContactInspectionPanel_ParaOutCallBack = WM_USER + 40;  // 2025.9.2 add eba
 
     const static int WM_Init0Panel_Setup = WM_USER + 41;   // 追加(2025.10.2yori)
+    const static int WM_ContactSelfJudgmentPanel_Update = WM_USER + 42;   // 追加(2025.10.3yori)
 };

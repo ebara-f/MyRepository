@@ -249,6 +249,7 @@ CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData02(STATUS02*);    // 2025.6.19 yo
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData03(STATUS03*);    // 2025.6.24 yori
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData04(THRESHOLD*, int); // 2025.7.31 yori // int追加(2025.9.22yori)
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData05(GAUGE*);    // 2025.8.7 yori
+CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData06(STATUS04*); // 追加(2025.10.3yori)
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData01_Write(STATUS01*); // 2025.7.18 yori
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData02_Write(STATUS02*); // 2025.8.25 yori
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData04_Write(THRESHOLD*, int); // 2025.8.1 yori // int追加(2025.9.22yori)

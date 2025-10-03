@@ -1227,10 +1227,10 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::ARM_SELFCHECK_REQ: // 有接触自己診断(2025.6.11yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SELFCHECK_ING;
-            UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Btn04); // SubWindow2へ有接触自己診断情報を送る。(2025.6.12yori)
             break;
 
         case VEC_STEP_SEQ::ARM_SELFCHECK_ING: // 有接触自己診断中(2025.6.11yori)
+            UsrMsg::CallBack(UsrMsg::WM_ContactSelfJudgmentPanel_Update); // C#側に有接触自己診断更新要求(2025.10.3yori)
             break;
 
         case VEC_STEP_SEQ::ARM_SELFCHECK_CMP: // 有接触自己診断終了(2025.6.11yori)

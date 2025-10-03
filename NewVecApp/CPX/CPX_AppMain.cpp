@@ -129,6 +129,17 @@ int WINAPI CPX_AppMain_UpDateData05(GAUGE* ga)
 }
 
 
+// 追加(2025.10.3yori)
+int WINAPI CPX_AppMain_UpDateData06(STATUS04* sts)
+{
+    int     rc;
+
+    rc = AppMain::UpDateData06(sts);
+
+    return(rc);
+}
+
+
 // 追加(2025.7.18yori)
 int WINAPI CPX_AppMain_UpDateData01_Write(STATUS01* sts)
 {

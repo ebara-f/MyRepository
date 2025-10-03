@@ -1378,61 +1378,121 @@ namespace VecApp.Properties {
                 return ResourceManager.GetString("String23", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   標準プローブを取り付けて下さい(ID2) に類似しているローカライズされた文字列を検索します。
-        ///   追加(2025.10.2yori)
         /// </summary>
-        public static string String230
-        {
-            get
-            {
+        public static string String230 {
+            get {
                 return ResourceManager.GetString("String230", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   配置エラー に類似しているローカライズされた文字列を検索します。
-        ///   追加(2025.10.2yori)
         /// </summary>
-        public static string String231
-        {
-            get
-            {
+        public static string String231 {
+            get {
                 return ResourceManager.GetString("String231", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   配置エラーと測定誤差許容値オーバー に類似しているローカライズされた文字列を検索します。
-        ///   追加(2025.10.2yori)
         /// </summary>
-        public static string String232
-        {
-            get
-            {
+        public static string String232 {
+            get {
                 return ResourceManager.GetString("String232", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   測定誤差許容値オーバー に類似しているローカライズされた文字列を検索します。
-        ///   追加(2025.10.2yori)
         /// </summary>
-        public static string String233
-        {
-            get
-            {
+        public static string String233 {
+            get {
                 return ResourceManager.GetString("String233", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   ボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String234 {
+            get {
+                return ResourceManager.GetString("String234", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   状態 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String235 {
+            get {
+                return ResourceManager.GetString("String235", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   判定 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String236 {
+            get {
+                return ResourceManager.GetString("String236", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   トリガボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String237 {
+            get {
+                return ResourceManager.GetString("String237", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   キャンセルボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String238 {
+            get {
+                return ResourceManager.GetString("String238", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   実行ボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String239 {
+            get {
+                return ResourceManager.GetString("String239", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   最大-最小 しきい値： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String24 {
             get {
                 return ResourceManager.GetString("String24", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   アームロックボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String240 {
+            get {
+                return ResourceManager.GetString("String240", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   各ボタンを押してください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String241 {
+            get {
+                return ResourceManager.GetString("String241", resourceCulture);
             }
         }
         

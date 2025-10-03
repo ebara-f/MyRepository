@@ -37,6 +37,7 @@
     <None Remove="Image\init_V8+VPR81.PNG" />
     <None Remove="Image\init_VPR81.PNG" />
     <None Remove="Image\Invalid data.png" />
+    <None Remove="Image\selfchk_ja.png" />
     <None Remove="Image\standardProbeV8.PNG" />
     <None Remove="Image\VAC26.png" />
     <None Remove="Image\VAC39.png" />
@@ -88,6 +89,7 @@
     <Resource Include="Image\Invalid data.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Image\selfchk_ja.png" />
     <Resource Include="Image\standardProbeV8.PNG">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

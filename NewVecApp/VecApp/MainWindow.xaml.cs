@@ -330,6 +330,18 @@ namespace VecApp
             {
                 Init0PanelSetup(); // 追加(2025.10.2yori)
             }
+            else if (msg == UsrMsg.WM_ContactSelfJudgmentPanel_Update) // 有接触自己診断画面更新(2025.10.3yori)
+            {
+                // 現在表示されているPanelクラスを取得
+                var Content = m_SubWnd02.MainContent.Content;
+
+                // パネルが表示されており(非null)、表示されているパネルが目的のパネル(Panel.ContactSelfJudgment)が表示されているか確認
+                if (Content != null && (Content as PanelBase).Type == Panel.ContactSelfJudgment)
+                {
+                    // ContentがContactSelfJudgmentPanelであればキャストしてアクセスする
+                    (Content as ContactSelfJudgmentPanel).PanelUpdate();
+                }
+            }
 
             return IntPtr.Zero;
         }
