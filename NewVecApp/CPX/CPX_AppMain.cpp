@@ -140,6 +140,17 @@ int WINAPI CPX_AppMain_UpDateData06(STATUS04* sts)
 }
 
 
+// 追加(2025.10.6yori)
+int WINAPI CPX_AppMain_CountCheck(STATUS04* sts)
+{
+    int     rc;
+
+    rc = AppMain::CountCheck(sts);
+
+    return(rc);
+}
+
+
 // 追加(2025.7.18yori)
 int WINAPI CPX_AppMain_UpDateData01_Write(STATUS01* sts)
 {

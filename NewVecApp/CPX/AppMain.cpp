@@ -304,34 +304,33 @@ int AppMain::UpDateData06(STATUS04* sts)
         strcpy_s(sts->cnt_ver, sizeof(sts->cnt_ver), HwCtrl::m_hVecCnt.m_Sts.m_CntVer);
     }
 
-    // カウントチェック1作成中(2025.10.6yori)
-    //VecCtEx2 cntdata;
-    //ret = HwCtrl::Func28(&cntdata);
-    //if (ret == 0)
-    //{
-    //    for (i = 0; i < 9; i++)
-    //    {
-    //        sts->cnt_data[i] = cntdata.cnt[i];
-    //    }
-    //}
+    // カウントチェック1は、CountCheckを使用する。(2025.10.6yori)
+    // カウントチェック2は、CountCheckを使用する。(2025.10.6yori)
 
-    // 有接触自己診断実装時にコーディング(仮置き2025.9.1yori)
-    //// カウントチェック1
-    //ret = HwCtrl::Func08();
-    //// カウントチェック2
-    //ret = HwCtrl::Func29();
-    //if (ret == 0)
-    //{
-    //    VecCtEx2 cntdata;
-    //    ret = HwCtrl::Func28(&cntdata);
-    //    if (ret == 0)
-    //    {
-    //        for (i = 0; i < 9; i++)
-    //        {
-    //            sts->cnt_data[i] = cntdata.cnt[i];
-    //        }
-    //    }
-    //}
+    return(0);
+}
+
+/***********************************************************************
+
+    2025.10.6 yori
+    カウントチェック1、2
+
+***********************************************************************/
+
+int AppMain::CountCheck(STATUS04* sts)
+{
+    int ret = 0;
+    int i = 0;
+
+    VecCtEx2 cntdata;
+    ret = HwCtrl::Func28(&cntdata);
+    if (ret == 0)
+    {
+        for (i = 0; i < 9; i++)
+        {
+            sts->cnt_data[i] = cntdata.cnt[i];
+        }
+    }
 
     return(0);
 }
@@ -1241,7 +1240,28 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::ARM_SELFCHECK_ING: // 有接触自己診断中(2025.6.11yori)
+            if (HwCtrl::m_MaintModeFlag == true) // 追加(2025.10.6yori)
+            {
+                ret = HwCtrl::Func29(); //メンテナンスモードへ変更
+                if (ret == 0)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SELFCHECK_ING2;
+                }
+                
+            }
             UsrMsg::CallBack(UsrMsg::WM_ContactSelfJudgmentPanel_Update); // C#側に有接触自己診断更新要求(2025.10.3yori)
+            break;
+
+        case VEC_STEP_SEQ::ARM_SELFCHECK_ING2: // 有接触自己診断のカウントチェック2(2025.10.6yori)
+            if (HwCtrl::m_MaintModeFlag == false)
+            {
+                ret = HwCtrl::Func08(); // 有接触モードへ変更
+                if (ret == 0)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SELFCHECK_ING;
+                }
+            }
+            UsrMsg::CallBack(UsrMsg::WM_ContactSelfJudgmentPanel_Update); // C#側に有接触自己診断更新要求
             break;
 
         case VEC_STEP_SEQ::ARM_SELFCHECK_CMP: // 有接触自己診断終了(2025.6.11yori)

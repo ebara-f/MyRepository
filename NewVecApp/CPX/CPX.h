@@ -250,6 +250,7 @@ CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData03(STATUS03*);    // 2025.6.24 yo
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData04(THRESHOLD*, int); // 2025.7.31 yori // int追加(2025.9.22yori)
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData05(GAUGE*);    // 2025.8.7 yori
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData06(STATUS04*); // 追加(2025.10.3yori)
+CPX_DECLSPEC int  WINAPI CPX_AppMain_CountCheck(STATUS04*); // 追加(2025.10.6yori)
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData01_Write(STATUS01*); // 2025.7.18 yori
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData02_Write(STATUS02*); // 2025.8.25 yori
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData04_Write(THRESHOLD*, int); // 2025.8.1 yori // int追加(2025.9.22yori)
@@ -287,6 +288,9 @@ CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd08(int); // 追加(2025.8.9yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd09(); // 追加(2025.8.16yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd10(const TCHAR*); // 追加(2025.9.1yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd11(); // 追加(2025.9.1yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd12(); // 追加(2025.10.6yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd13(); // 追加(2025.10.6yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactSelfJudgmentPanelSavePara(); // 追加(2025.10.6yori)
 
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelInit(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickStart(CALIB_PARA* para);

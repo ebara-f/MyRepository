@@ -106,6 +106,7 @@ enum class VEC_STEP_SEQ {	// 2025.5.23 作成 eba
 	ALIGNMENT_CMP,	// 追加(2025.6.11yori) 2025.8.27 del eba
 	ARM_SELFCHECK_REQ,	// 追加(2025.6.11yori)
 	ARM_SELFCHECK_ING,	// 追加(2025.6.11yori)
+	ARM_SELFCHECK_ING2,	// メンテナンスモードでカウントチェック2を行う。(2025.10.6yori)
 	ARM_SELFCHECK_CMP,	// 追加(2025.6.11yori)
 	// アーム設定は下記のシーケンスで共通で使用できるよう整理中(2025.9.1yori)
 	ARM_SET_REQ,	// 追加(2025.9.1yori)

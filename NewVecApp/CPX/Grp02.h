@@ -25,6 +25,9 @@ public:
     static int  Cmd09(); // 追加(2025.8.16yori)
     static int  Cmd10(const TCHAR* armtype); // 追加(2025.8.31yori)
     static int  Cmd11(); // 追加(2025.9.1yori)
+    static int  Cmd12(); // 追加(2025.10.6yori)
+    static int  Cmd13(); // 追加(2025.10.6yori)
+    static int  ContactSelfJudgmentPanelSavePara(); // 追加(2025.10.6yori)
 
     static int  ContactInspectionPanelInit(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);  // 2025.8.26 add eba
     static int  ContactInspectionPanelClickStart(CALIB_PARA* para);         // 2025.8.26 add eba

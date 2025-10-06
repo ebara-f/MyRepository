@@ -216,20 +216,20 @@
 
                             <TextBox Grid.Row="1" Grid.Column="0" Text="Z" IsReadOnly="True" Background="Gray" Foreground="White" TextAlignment="Center" FontSize="20"/>
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CounterNo8Count, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"/>
-                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding CounterNo8Result, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"  Background="{Binding BackgroundColor0}"/>
+                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding CounterNo8Judge, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"  Background="{Binding BackgroundColor0}"/>
 
                             <TextBox Grid.Row="2" Grid.Column="0" Text="X" IsReadOnly="True" Background="Gray" Foreground="White" TextAlignment="Center" FontSize="20"/>
                             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CounterNo9Count, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"/>
-                            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding CounterNo9Result, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"  Background="{Binding BackgroundColor1}"/>
+                            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding CounterNo9Judge, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"  Background="{Binding BackgroundColor1}"/>
 
                             <TextBox Grid.Row="4" Grid.Column="0" Text="{x:Static res:Resources.String250}" IsReadOnly="True" Background="Gray" Foreground="White" TextAlignment="Center" FontSize="20"/>
                             <TextBox Grid.Row="4" Grid.Column="1" Text="Ver." IsReadOnly="True" Background="Gray" Foreground="White" TextAlignment="Center" FontSize="20"/>
 
                             <TextBox Grid.Row="5" Grid.Column="0" Text="Z" IsReadOnly="True" Background="Gray" Foreground="White" TextAlignment="Center" FontSize="20"/>
-                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding CounterNo8Result, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding CounterNo8Ver, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"/>
 
                             <TextBox Grid.Row="6" Grid.Column="0" Text="X" IsReadOnly="True" Background="Gray" Foreground="White" TextAlignment="Center" FontSize="20"/>
-                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding CounterNo9Result, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"/>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding CounterNo9Ver, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontSize="20" TextAlignment="Right"/>
                         </Grid>                        
                         
                         <!-- 温度センサ(2025.10.5yori) -->

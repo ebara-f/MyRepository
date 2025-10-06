@@ -882,4 +882,7 @@
   <data name="String252" xml:space="preserve">
     <value>校正時温度(℃)</value>
   </data>
+  <data name="String253" xml:space="preserve">
+    <value>診断する項目のボタンをクリックしてください。</value>
+  </data>
 </root>
