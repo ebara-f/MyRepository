@@ -1380,6 +1380,42 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   標準プローブを取り付けて下さい(ID2) に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String230 {
+            get {
+                return ResourceManager.GetString("String230", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   配置エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String231 {
+            get {
+                return ResourceManager.GetString("String231", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   配置エラーと測定誤差許容値オーバー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String232 {
+            get {
+                return ResourceManager.GetString("String232", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   測定誤差許容値オーバー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String233 {
+            get {
+                return ResourceManager.GetString("String233", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   最大-最小 しきい値： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String24 {
