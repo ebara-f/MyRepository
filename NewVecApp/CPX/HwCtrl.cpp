@@ -50,6 +50,7 @@ bool	        HwCtrl::m_ArmWarmUpMonitorFlag = true; // 追加(2025.7.18yori)
 bool	        HwCtrl::m_ScannerWarmUpMonitorFlag = true; // 追加(2025.7.30yori)
 bool	        HwCtrl::m_ScannerWarmUpMonitorCancelFlag = false; // 追加(2025.8.22yori)
 bool            HwCtrl::m_ScannerConnectBtnFg = false; // 追加(2025.9.2yori)
+bool            HwCtrl::m_MaintModeFlag = false; // 追加(2025.10.6yori)
 unsigned short  HwCtrl::m_BrightSlice[5] = { 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0 }; // 輝度スライス(2025.8.25yori)
 unsigned short  HwCtrl::m_SensSlice[5] = { 0x0CCC, 0x04B0, 0x0CCC, 0x0CCC, 0x0CCC }; // 感度スライス(2025.8.25yori)
 double          HwCtrl::m_Angle = 70.0; // 角度マスク(2025.8.25yori)
@@ -3541,3 +3542,13 @@ int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid)
 }
 
 
+/***********************************************************************
+
+    アームパラメータ保存
+    2025.10.5yori)
+
+***********************************************************************/
+void HwCtrl::SavePara()
+{
+
+}

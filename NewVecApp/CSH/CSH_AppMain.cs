@@ -318,6 +318,9 @@ namespace CSH
         public extern static int CPX_AppMain_UpDateData06(out Status04 sts); // 追加(2025.10.3yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_AppMain_CountCheck(out Status04 sts); // 追加(2025.10.6yori)
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_AppMain_UpDateData01_Write(in Status01 sts); // 追加(2025.7.18yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
@@ -423,6 +426,12 @@ namespace CSH
         static public int UpDateData06(out Status04 sts)
         {
             return CPX_AppMain_UpDateData06(out sts);
+        }
+
+        // 追加(2025.10.6yori)
+        static public int CountCheck(out Status04 sts)
+        {
+            return CPX_AppMain_CountCheck(out sts);
         }
 
         // 追加(2025.7.18yori)

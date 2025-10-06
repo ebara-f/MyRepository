@@ -269,6 +269,67 @@ int Grp02::Cmd11()
 
 /***********************************************************************
 
+    コマンド12
+    追加(2025.10.6yori)
+
+***********************************************************************/
+
+int Grp02::Cmd12()
+{
+    int ret = 0;
+
+    WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
+
+    HwCtrl::m_MaintModeFlag = true; // メンテナンスモードへ変更
+
+    ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    コマンド13
+    追加(2025.10.6yori)
+
+***********************************************************************/
+
+int Grp02::Cmd13()
+{
+    int ret = 0;
+
+    WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
+
+    HwCtrl::m_MaintModeFlag = false; // 有接触モードへ変更
+
+    ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    ContactSelfJudgmentPanelSavePara
+    追加(2025.10.6yori)
+
+***********************************************************************/
+
+int Grp02::ContactSelfJudgmentPanelSavePara()
+{
+    int ret = 0;
+
+    HwCtrl::SavePara();
+
+    return (ret);
+}
+
+
+/***********************************************************************
+
     ContactInspectionPanelInit
     2025.8.26 add eba
 

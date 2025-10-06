@@ -26,10 +26,12 @@ namespace VecApp
     public class ContactSelfJudgmentViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public long[] Count { get; set; } // カウンタ値(2025.10.6yori)
 
         public ContactSelfJudgmentViewModel()
         {
             ImageSource = "Image/selfchk_ja.png"; // 1-1-1.pngから変更(2025.10.2yori)
+            Count = new long[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // カウンタ初期値(2025.10.6yori)
         }
 
         private Visibility _imageVisibility = Visibility.Visible;
@@ -523,17 +525,62 @@ namespace VecApp
             }
         }
 
-        // カウンタNo.8の結果(2025.10.5yori)
-        private string _counterNo8Result;
-        public string CounterNo8Result
+        // カウンタNo.8の判定(2025.10.5yori)
+        private string _counterNo8Judge;
+        public string CounterNo8Judge
         {
-            get => _counterNo8Result;
+            get => _counterNo8Judge;
             set
             {
-                if (_counterNo8Result != value)
+                if (_counterNo8Judge != value)
                 {
-                    _counterNo8Result = value;
-                    OnPropertyChanged(nameof(CounterNo8Result));
+                    _counterNo8Judge = value;
+                    OnPropertyChanged(nameof(CounterNo8Judge));
+                }
+            }
+        }
+
+        // カウンタNo.9の判定(2025.10.6yori)
+        private string _counterNo9Judge;
+        public string CounterNo9Judge
+        {
+            get => _counterNo9Judge;
+            set
+            {
+                if (_counterNo9Judge != value)
+                {
+                    _counterNo9Judge = value;
+                    OnPropertyChanged(nameof(CounterNo9Judge));
+                }
+            }
+        }
+
+        // カウンタNo.8のVer.(2025.10.6yori)
+        private string _counterNo8Ver;
+        public string CounterNo8Ver
+        {
+            get => _counterNo8Ver;
+            set
+            {
+                if (_counterNo8Ver != value)
+                {
+                    _counterNo8Ver = value;
+                    OnPropertyChanged(nameof(CounterNo8Ver));
+                }
+            }
+        }
+
+        // カウンタNo.9のVer.(2025.10.6yori)
+        private string _counterNo9Ver;
+        public string CounterNo9Ver
+        {
+            get => _counterNo9Ver;
+            set
+            {
+                if (_counterNo9Ver != value)
+                {
+                    _counterNo9Ver = value;
+                    OnPropertyChanged(nameof(CounterNo9Ver));
                 }
             }
         }

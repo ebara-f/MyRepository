@@ -113,6 +113,7 @@ public:
     static bool	m_ScannerWarmUpMonitorFlag; // 非接触暖機監視フラグ(2025.7.30yori)
     static bool	m_ScannerWarmUpMonitorCancelFlag; // 非接触暖機監視キャンセルフラグ(2025.8.22yori)
     static bool m_ScannerConnectBtnFg; // スキャナ暖機完了ボタンフラグ(2025.9.2yori)
+    static bool	m_MaintModeFlag; // メンテナンスモードフラグ(2025.10.6yori)
 
     static HANDLE m_hGetScanDataThread;
     static void GetScanDataThread_new(); // スキャンデータ取得レッド
@@ -173,6 +174,11 @@ public:
     //static bool SendOneLineData(); // コメントアウト(2025.5.15yori)
     static int SendLineDataCheck2(int index);
     static void FileOutput(); // Debug用、スキャンデータファイル出力(2025.8.5yori)
+
+    // パラメータ保存復元関数(2025.10.6yori)
+    static void SavePara();
+    static void RestorPara();
+
 
     // 非接触点検、キャリブ用関数
     static void CalibCheckAndCalcu(CalibResult* ptCalibResultt, ChkScnResult* ptChkResult);

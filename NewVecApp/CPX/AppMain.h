@@ -28,6 +28,7 @@ public:
     static int  UpDateData04(THRESHOLD* th, int id); // しきい値用で追加(2025.7.31yori)  // id追加(2025.9.22yori)
     static int  UpDateData05(GAUGE* ga); // ゲージ用で追加(2025.7.31yori)
     static int  UpDateData06(STATUS04* sts); // 有接触自己診断用で追加(2025.9.1yori)
+    static int  CountCheck(STATUS04* sts); // カウントチェック1、2用で追加(2025.10.6yori)
     static int  UpDateData01_Write(STATUS01* sts); // 追加(2025.7.18yori)
     static int  UpDateData02_Write(STATUS02* sts); // 追加(2025.8.17yori)
     static int  UpDateData04_Write(THRESHOLD* sts, int id); // 追加(2025.8.1yori) // id追加(2025.9.22yori)
