@@ -36,6 +36,7 @@ namespace VecApp
             this.ViewModel.GridVisibility4 = Visibility.Hidden; // カウントチェック1、2
             this.ViewModel.GridVisibility5 = Visibility.Hidden; // ZXスケール
             this.ViewModel.GridVisibility6 = Visibility.Hidden; // 温度センサ
+            this.ViewModel.SubtitleText = VecApp.Properties.Resources.String253;
             ////
         }
 
