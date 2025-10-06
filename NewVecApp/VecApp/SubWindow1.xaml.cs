@@ -36,7 +36,7 @@ namespace VecApp
 
         public INotifyPropertyChanged SensorConnectionValue; /* TODO: Not yet implemented */
 
-        public INotifyPropertyChanged _0AxisInitializeValue; /* TODO: Not yet implemented */
+        public _0AxisInitializeViewModel _0AxisInitializeValue = new _0AxisInitializeViewModel(); // 変更(2025.10.2yori)
 
         public SubWindow1()
         {

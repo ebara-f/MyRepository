@@ -1416,11 +1416,83 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   ボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String234 {
+            get {
+                return ResourceManager.GetString("String234", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   状態 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String235 {
+            get {
+                return ResourceManager.GetString("String235", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   判定 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String236 {
+            get {
+                return ResourceManager.GetString("String236", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   トリガボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String237 {
+            get {
+                return ResourceManager.GetString("String237", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   キャンセルボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String238 {
+            get {
+                return ResourceManager.GetString("String238", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   実行ボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String239 {
+            get {
+                return ResourceManager.GetString("String239", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   最大-最小 しきい値： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String24 {
             get {
                 return ResourceManager.GetString("String24", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   アームロックボタン に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String240 {
+            get {
+                return ResourceManager.GetString("String240", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   各ボタンを押してください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String241 {
+            get {
+                return ResourceManager.GetString("String241", resourceCulture);
             }
         }
         

@@ -823,4 +823,28 @@ Ver.</value>
   <data name="String233" xml:space="preserve">
     <value>測定誤差許容値オーバー</value>
   </data>
+  <data name="String234" xml:space="preserve">
+    <value>ボタン</value>
+  </data>
+  <data name="String235" xml:space="preserve">
+    <value>状態</value>
+  </data>
+  <data name="String236" xml:space="preserve">
+    <value>判定</value>
+  </data>
+  <data name="String237" xml:space="preserve">
+    <value>トリガボタン</value>
+  </data>
+  <data name="String238" xml:space="preserve">
+    <value>キャンセルボタン</value>
+  </data>
+  <data name="String239" xml:space="preserve">
+    <value>実行ボタン</value>
+  </data>
+  <data name="String240" xml:space="preserve">
+    <value>アームロックボタン</value>
+  </data>
+  <data name="String241" xml:space="preserve">
+    <value>各ボタンを押してください。</value>
+  </data>
 </root>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel; // 追加(2025.7.28yori)
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ComponentModel; // 追加(2025.7.28yori)
+using CSH;
 
 namespace VecApp
 {
@@ -25,6 +26,7 @@ namespace VecApp
             : base(parent, Panel._0AxisInitialize)
         {
             InitializeComponent();
+            this.DataContext = model; // 追加(2025.10.2yori)
         }
 
         private void Click_CancelBtn(object sender, RoutedEventArgs e)

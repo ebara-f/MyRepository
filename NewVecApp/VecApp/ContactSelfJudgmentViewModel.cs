@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace VecApp
 {
@@ -14,7 +15,7 @@ namespace VecApp
 
         public ContactSelfJudgmentViewModel()
         {
-            ImageSource = "Image/1-1-1.png";
+            ImageSource = "Image/selfchk_ja.png"; // 1-1-1.pngから変更(2025.10.2yori)
         }
 
         private Visibility _imageVisibility = Visibility.Visible;
@@ -45,142 +46,137 @@ namespace VecApp
             }
         }
 
-        private string _xMaxMinValue;
-        public string XMaxMinValue
+        // 追加(2025.10.3yori)
+        private Visibility _gridVisibility2 = Visibility.Hidden;
+        public Visibility GridVisibility2
         {
-            get => _xMaxMinValue;
+            get => _gridVisibility2;
             set
             {
-                if (_xMaxMinValue != value)
+                if (_gridVisibility2 != value)
                 {
-                    _xMaxMinValue = value;
-                    OnPropertyChanged(nameof(XMaxMinValue));
+                    _gridVisibility2 = value;
+                    OnPropertyChanged(nameof(GridVisibility2));
                 }
             }
         }
 
-        private string _xTwoSigmaValue;
-        public string XTwoSigmaValue
+        // トリガボタンの状態(2025.10.3yori)
+        private string _triggerButtonStatus;
+        public string TriggerButtonStatus
         {
-            get => _xTwoSigmaValue;
+            get => _triggerButtonStatus;
             set
             {
-                if (_xTwoSigmaValue != value)
+                if (_triggerButtonStatus != value)
                 {
-                    _xTwoSigmaValue = value;
-                    OnPropertyChanged(nameof(XTwoSigmaValue));
+                    _triggerButtonStatus = value;
+                    OnPropertyChanged(nameof(TriggerButtonStatus));
                 }
             }
         }
 
-        private string _yMaxMinValue;
-        public string YMaxMinValue
+        // トリガボタンの結果(2025.10.3yori)
+        private string _triggerButtonResult;
+        public string TriggerButtonResult
         {
-            get => _yMaxMinValue;
+            get => _triggerButtonResult;
             set
             {
-                if (_yMaxMinValue != value)
+                if (_triggerButtonResult != value)
                 {
-                    _yMaxMinValue = value;
-                    OnPropertyChanged(nameof(YMaxMinValue));
+                    _triggerButtonResult = value;
+                    OnPropertyChanged(nameof(TriggerButtonResult));
                 }
             }
         }
 
-        private string _yTwoSigmaValue;
-        public string YTwoSigmaValue
+        // キャンセルボタンの状態(2025.10.3yori)
+        private string _cancelButtonStatus;
+        public string CancelButtonStatus
         {
-            get => _yTwoSigmaValue;
+            get => _cancelButtonStatus;
             set
             {
-                if (_yTwoSigmaValue != value)
+                if (_cancelButtonStatus != value)
                 {
-                    _yTwoSigmaValue = value;
-                    OnPropertyChanged(nameof(YTwoSigmaValue));
+                    _cancelButtonStatus = value;
+                    OnPropertyChanged(nameof(CancelButtonStatus));
                 }
             }
         }
 
-        private string _zMaxMinValue;
-        public string ZMaxMinValue
+        // キャンセルボタンの結果(2025.10.3yori)
+        private string _cancelButtonResult;
+        public string CancelButtonResult
         {
-            get => _zMaxMinValue;
+            get => _cancelButtonResult;
             set
             {
-                if (_zMaxMinValue != value)
+                if (_cancelButtonResult != value)
                 {
-                    _zMaxMinValue = value;
-                    OnPropertyChanged(nameof(ZMaxMinValue));
+                    _cancelButtonResult = value;
+                    OnPropertyChanged(nameof(CancelButtonResult));
                 }
             }
         }
 
-        private string _zTwoSigmaValue;
-        public string ZTwoSigmaValue
+        // 実行ボタンの状態(2025.10.3yori)
+        private string _execButtonStatus;
+        public string ExecButtonStatus
         {
-            get => _zTwoSigmaValue;
+            get => _execButtonStatus;
             set
             {
-                if (_zTwoSigmaValue != value)
+                if (_execButtonStatus != value)
                 {
-                    _zTwoSigmaValue = value;
-                    OnPropertyChanged(nameof(ZTwoSigmaValue));
+                    _execButtonStatus = value;
+                    OnPropertyChanged(nameof(ExecButtonStatus));
                 }
             }
         }
 
-        private string _distanceTwoSigmaValue;
-        public string DistanceTwoSigmaValue
+        // 実行ボタンの結果(2025.10.3yori)
+        private string _execButtonResult;
+        public string ExecButtonResult
         {
-            get => _distanceTwoSigmaValue;
+            get => _execButtonResult;
             set
             {
-                if (_distanceTwoSigmaValue != value)
+                if (_execButtonStatus != value)
                 {
-                    _distanceTwoSigmaValue = value;
-                    OnPropertyChanged(nameof(DistanceTwoSigmaValue));
+                    _execButtonResult = value;
+                    OnPropertyChanged(nameof(ExecButtonResult));
                 }
             }
         }
 
-        private string _faceDistanceValue;
-        public string FaceDistanceValue
+        // アームロックボタンの状態(2025.10.3yori)
+        private string _lockButtonStatus;
+        public string LockButtonStatus
         {
-            get => _faceDistanceValue;
+            get => _lockButtonStatus;
             set
             {
-                if (_faceDistanceValue != value)
+                if (_lockButtonStatus != value)
                 {
-                    _faceDistanceValue = value;
-                    OnPropertyChanged(nameof(FaceDistanceValue));
+                    _lockButtonStatus = value;
+                    OnPropertyChanged(nameof(LockButtonStatus));
                 }
             }
         }
 
-        private string _measurementErrorValue;
-        public string MeasurementErrorValue
+        // アームロックボタンの結果(2025.10.3yori)
+        private string _lockButtonResult;
+        public string LockButtonResult
         {
-            get => _measurementErrorValue;
+            get => _lockButtonResult;
             set
             {
-                if (_measurementErrorValue != value)
+                if (_lockButtonResult != value)
                 {
-                    _measurementErrorValue = value;
-                    OnPropertyChanged(nameof(MeasurementErrorValue));
-                }
-            }
-        }
-
-        private string _thresholdText;
-        public string ThresholdText
-        {
-            get => _thresholdText;
-            set
-            {
-                if (_thresholdText != value)
-                {
-                    _thresholdText = value;
-                    OnPropertyChanged(nameof(ThresholdText));
+                    _lockButtonResult = value;
+                    OnPropertyChanged(nameof(LockButtonResult));
                 }
             }
         }
@@ -199,34 +195,6 @@ namespace VecApp
             }
         }
 
-        private string _resultText = "NG";
-        public string ResultText
-        {
-            get => _resultText;
-            set
-            {
-                if (_resultText != value)
-                {
-                    _resultText = value;
-                    OnPropertyChanged(nameof(ResultText));
-                }
-            }
-        }
-
-        public string ToggleResultText()
-        {
-            if (ResultText == "OK")
-            {
-                ResultText = "NG";
-            }
-            else
-            {
-                ResultText = "OK";
-            }
-
-            return ResultText;
-        }
-
         private string _imageSource;
         public string ImageSource
         {
@@ -237,6 +205,66 @@ namespace VecApp
                 {
                     _imageSource = value;
                     OnPropertyChanged(nameof(ImageSource));
+                }
+            }
+        }
+
+        // トリガボタンの結果の色(2025.10.3yori)
+        private Brush _backgroundColor1;
+        public Brush BackgroundColor1
+        {
+            get { return _backgroundColor1; }
+            set
+            {
+                if (_backgroundColor1 != value)
+                {
+                    _backgroundColor1 = value;
+                    OnPropertyChanged(nameof(BackgroundColor1));
+                }
+            }
+        }
+
+        // キャンセルボタンの結果の色(2025.10.3yori)
+        private Brush _backgroundColor2;
+        public Brush BackgroundColor2
+        {
+            get { return _backgroundColor2; }
+            set
+            {
+                if (_backgroundColor2 != value)
+                {
+                    _backgroundColor2 = value;
+                    OnPropertyChanged(nameof(BackgroundColor2));
+                }
+            }
+        }
+
+        // 実行ボタンの結果の色(2025.10.3yori)
+        private Brush _backgroundColor3;
+        public Brush BackgroundColor3
+        {
+            get { return _backgroundColor3; }
+            set
+            {
+                if (_backgroundColor3 != value)
+                {
+                    _backgroundColor3 = value;
+                    OnPropertyChanged(nameof(BackgroundColor3));
+                }
+            }
+        }
+
+        // アームロックボタンの結果の色(2025.10.3yori)
+        private Brush _backgroundColor4;
+        public Brush BackgroundColor4
+        {
+            get { return _backgroundColor4; }
+            set
+            {
+                if (_backgroundColor4 != value)
+                {
+                    _backgroundColor4 = value;
+                    OnPropertyChanged(nameof(BackgroundColor4));
                 }
             }
         }

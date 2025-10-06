@@ -38,7 +38,7 @@ namespace VecApp
                     text = VecApp.Properties.Resources.String232;
                     break;
                 case 233:
-                    text = VecApp.Properties.Resources.String232;
+                    text = VecApp.Properties.Resources.String233; // 232→233へ変更(2025.10.2yori)
                     break;
 
                 default:

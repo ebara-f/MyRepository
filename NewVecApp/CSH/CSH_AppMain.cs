@@ -102,7 +102,7 @@ namespace CSH
 
     // 有接触自己診断用の構造体(2025.9.1yori)
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    public struct Status04 
+    public struct Status04
     {
         public uint btn; // ボタンの状態
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
@@ -315,6 +315,9 @@ namespace CSH
         public extern static int CPX_AppMain_UpDateData05(out Gauge ga); // 追加(2025.8.7yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_AppMain_UpDateData06(out Status04 sts); // 追加(2025.10.3yori)
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_AppMain_UpDateData01_Write(in Status01 sts); // 追加(2025.7.18yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
@@ -414,6 +417,12 @@ namespace CSH
         static public int UpDateData05(out Gauge ga)
         {
             return CPX_AppMain_UpDateData05(out ga);
+        }
+
+        // 追加(2025.10.3yori)
+        static public int UpDateData06(out Status04 sts)
+        {
+            return CPX_AppMain_UpDateData06(out sts);
         }
 
         // 追加(2025.7.18yori)
