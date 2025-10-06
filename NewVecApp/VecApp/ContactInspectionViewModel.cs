@@ -48,6 +48,37 @@ namespace VecApp
             }
         }
 
+        // 2025.10.6 add eba
+        private Visibility _gridVisibility2 = Visibility.Hidden;
+        public Visibility GridVisibility2
+        {
+            get => _gridVisibility2;
+            set
+            {
+                if (_gridVisibility2 != value)
+                {
+                    _gridVisibility2 = value;
+                    OnPropertyChanged(nameof(GridVisibility2));
+                }
+            }
+        }
+
+        // 2025.10.6 add eba
+        private Visibility _gridVisibility3 = Visibility.Hidden;
+        public Visibility GridVisibility3
+        {
+            get => _gridVisibility3;
+            set
+            {
+                if (_gridVisibility3 != value)
+                {
+                    _gridVisibility3 = value;
+                    OnPropertyChanged(nameof(GridVisibility3));
+                }
+            }
+        }
+
+
         // 2025.9.22 add eba
         private Visibility _snapVisibility = Visibility.Hidden;
         public Visibility SnapVisibility
@@ -203,6 +234,20 @@ namespace VecApp
             }
         }
 
+        private string _historyText;
+        public string HistoryText
+        {
+            get => _historyText;
+            set
+            {
+                if (_historyText != value)
+                {
+                    _historyText = value;
+                    OnPropertyChanged(nameof(HistoryText));
+                }
+            }
+        }
+
         private string _subtitleText;
         public string SubtitleText
         {
@@ -243,6 +288,21 @@ namespace VecApp
             }
 
             return ResultText;
+        }
+
+        // 2025.10.6 add eba
+        private string _resultText2 = "NG";
+        public string ResultText2
+        {
+            get => _resultText2;
+            set
+            {
+                if (_resultText2 != value)
+                {
+                    _resultText2 = value;
+                    OnPropertyChanged(nameof(ResultText2));
+                }
+            }
         }
 
 
@@ -404,6 +464,25 @@ namespace VecApp
             }
         }
         public Brush ResultBackground => ResultJudge ? Brushes.LightGreen : Brushes.LightPink;
+
+        private bool _resultJudge2 = true;
+        public bool ResultJudge2
+        {
+            get => _resultJudge2;
+            set
+            {
+                if (_resultJudge2 != value)
+                {
+                    _resultJudge2 = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(ResultBackground2));
+                }
+            }
+        }
+        public Brush ResultBackground2 => ResultJudge2 ? Brushes.LightGreen : Brushes.LightPink;
+
+
 
         private string _imageSource;
         public string ImageSource

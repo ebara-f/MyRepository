@@ -158,7 +158,20 @@ namespace CSH
         public　int MesString;  // 2025.9.21 add eba 仮
     }
 
-        public partial class Grp02
+    public enum CalibType
+    {
+        UNKNOWN = 0,
+        INSPECT_MULTI_GAUGE_NEST_STD,
+        INSPECT_MULTI_GAUGE_PLATE_STD,
+        INSPECT_BALL_GAUGE,
+        ALIGNMENT_MULTI_GAUGE,
+        ALIGNMENT_BALL_GAUGE_STD,
+
+        END
+    }
+
+
+    public partial class Grp02
     {
         #region C/C++DLL-関数定義
 

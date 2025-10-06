@@ -32,6 +32,8 @@ namespace VecApp
             // 初期化処理 2025.8.26 eba
             this.ViewModel.ImageVisibility = Visibility.Visible;
             this.ViewModel.GridVisibility = Visibility.Hidden;
+            this.ViewModel.GridVisibility2 = Visibility.Hidden;
+            this.ViewModel.GridVisibility3 = Visibility.Hidden;
             this.ViewModel.IsStartBtnEnabled = true;
             this.ViewModel.IsBackBtnEnabled = false;
             this.ViewModel.IsReStartBtnEnabled = false;
@@ -84,7 +86,7 @@ namespace VecApp
 
             CSH.Grp02.ContactInspectionPanelParaOutCallBack(ref this.ViewModel.CalibPara);
 
-            if (this.ViewModel.CalibPara.CalibType == 1)
+            if (this.ViewModel.CalibPara.CalibType == (int)CalibType.INSPECT_MULTI_GAUGE_NEST_STD)
             {
                 this.ViewModel.ImageVisibility = Visibility.Hidden;
                 this.ViewModel.GridVisibility = Visibility.Visible;
@@ -200,46 +202,29 @@ namespace VecApp
 
 
             }
-            else if (this.ViewModel.CalibPara.CalibType == 4)    // ユーザーキャリブ
+            else if (this.ViewModel.CalibPara.CalibType == (int)CalibType.ALIGNMENT_MULTI_GAUGE ||
+                this.ViewModel.CalibPara.CalibType == (int)CalibType.ALIGNMENT_BALL_GAUGE_STD)    // ユーザーキャリブ
              {
 
                 this.ViewModel.ImageVisibility = Visibility.Hidden;
-                this.ViewModel.GridVisibility = Visibility.Visible;
+                this.ViewModel.GridVisibility2 = Visibility.Visible;
 
                 // OK・NG表示
                 if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
                 {
-                    this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
-                    this.ViewModel.ResultJudge = true;  // 背景色緑
+                    this.ViewModel.ResultText2 = "OK";
+                    this.ViewModel.ResultJudge2 = true;  // 背景色緑
                 }
                 else
                 {
-                    this.ViewModel.ResultJudge = false; // 背景色赤
+                    this.ViewModel.ResultText2 = "NG";
+                    this.ViewModel.ResultJudge2 = false; // 背景色赤
                 }
 
-                this.ViewModel.ThresholdText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
+                //this.ViewModel.ThresholdText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
 
             }
-            else if (this.ViewModel.CalibPara.CalibType == 5)    // プローブキャリブ
-            {
-
-                this.ViewModel.ImageVisibility = Visibility.Hidden;
-                this.ViewModel.GridVisibility = Visibility.Visible;
-
-                // OK・NG表示
-                if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
-                {
-                    this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
-                    this.ViewModel.ResultJudge = true;  // 背景色緑
-                }
-                else
-                {
-                    this.ViewModel.ResultJudge = false; // 背景色赤
-                }
-
-                this.ViewModel.ThresholdText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
-
-            }
+           
 
 
 
@@ -306,6 +291,53 @@ namespace VecApp
 
         private void Click_HistoryBtn(object sender, RoutedEventArgs e)
         {
+            this.ViewModel.ImageVisibility = Visibility.Hidden;
+
+            switch ((CalibType)this.ViewModel.CalibPara.CalibType)
+            {
+                case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
+
+                    //this.ViewModel.HistoryText = ...
+
+
+                    this.ViewModel.GridVisibility2 = Visibility.Hidden;
+                    if (this.ViewModel.GridVisibility3 == Visibility.Hidden)
+                    {
+                        this.ViewModel.GridVisibility3 = Visibility.Visible;
+                        this.ViewModel.GridVisibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        this.ViewModel.GridVisibility3 = Visibility.Hidden;
+                        this.ViewModel.GridVisibility = Visibility.Visible;
+                    }
+                    break;
+
+                case CalibType.ALIGNMENT_MULTI_GAUGE:
+                case CalibType.ALIGNMENT_BALL_GAUGE_STD:
+
+                    this.ViewModel.HistoryText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
+
+
+                    this.ViewModel.GridVisibility = Visibility.Hidden;
+                    if (this.ViewModel.GridVisibility3 == Visibility.Hidden)
+                    {
+                        this.ViewModel.GridVisibility3 = Visibility.Visible;
+                        this.ViewModel.GridVisibility2 = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        this.ViewModel.GridVisibility3 = Visibility.Hidden;
+                        this.ViewModel.GridVisibility2 = Visibility.Visible;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            
+
+            
 
         }
 
@@ -330,13 +362,13 @@ namespace VecApp
 
         private void Click_HelpBtn(object sender, RoutedEventArgs e)
         {
-            switch(this.ViewModel.CalibPara.CalibType)
+            switch((CalibType)this.ViewModel.CalibPara.CalibType)
             {
-                case 1: // INSPECT_MULTI_GAUGE_NEST_STD
+                case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
                     this.ViewModel.ImageSource = "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\chkpos_V8_Multi.png";
                     break;
 
-                case 4: // ALIGNMENT_MULTI_GAUGE
+                case CalibType.ALIGNMENT_MULTI_GAUGE:
                     this.ViewModel.ImageSource = "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\light_V8_Multi.png";
                     break;
 

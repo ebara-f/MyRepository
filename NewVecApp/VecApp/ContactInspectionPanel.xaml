@@ -84,6 +84,31 @@
 
                         </Grid>
 
+                        <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,245,10"
+                           Visibility="{Binding GridVisibility2}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ResultText2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,15,0,0" VerticalAlignment="Center" Height="230" FontSize="65" TextAlignment="Center" Background="{Binding ResultBackground2}"/>
+
+                        </Grid>
+
+                        <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,245,10"
+                           Visibility="{Binding GridVisibility3}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding HistoryText, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,15,0,0" VerticalAlignment="Center" Height="230" FontSize="15" TextAlignment="Left" Background="#2A2A2A" Foreground="White"/>
+
+                        </Grid>
 
                         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Orientation="Vertical" Margin="10,0,0,0" VerticalAlignment="Top">
                             <Button Content="{x:Static res:Resources.String82}" Margin="0,0,0,5" Click="Click_StartBtn" IsEnabled="{Binding IsStartBtnEnabled}" Style="{StaticResource PanelStartButton2Style}"/>
@@ -106,11 +131,6 @@
                         </StackPanel>
 
                         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
-                            <Button Content="{x:Static res:Resources.String87}"
-                                    Click="Click_HistoryBtn"
-                                    Width="100" Height="40"
-                                    Margin="0,0,10,0"
-                                    Style="{StaticResource PanelButton2Style}"/>
                             <Button Content="{x:Static res:Resources.String88}"
                                     Click="Click_SettingBtn" IsEnabled="{Binding IsSettingBtnEnabled}"
                                     Width="100" Height="40"
@@ -121,15 +141,19 @@
                                     Width="100" Height="40"
                                     Margin="0,0,10,0"
                                     Style="{StaticResource PanelButton2Style}"/>
+                            <Button Content="{x:Static res:Resources.String63}"
+                                    Click="Click_HelpBtn"
+                                    Width="100" Height="40"
+                                    Margin="0,0,10,0"
+                                    Style="{StaticResource PanelButton2Style}"/>
                             <Button Content="{x:Static res:Resources.String90}"
                                     Click="Click_SnapBtn" Visibility="{Binding SnapVisibility}"
                                     Width="100" Height="40"
                                     Margin="0,0,10,0"
                                     Style="{StaticResource PanelButton2Style}"/>
-                            <Button Content="{x:Static res:Resources.String63}"
-                                    Click="Click_HelpBtn"
+                            <Button Content="{x:Static res:Resources.String87}"
+                                    Click="Click_HistoryBtn"
                                     Width="100" Height="40"
-                                    Margin="0,0,10,0"
                                     Style="{StaticResource PanelButton2Style}"/>
                         </StackPanel>
 
