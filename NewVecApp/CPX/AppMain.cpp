@@ -304,6 +304,17 @@ int AppMain::UpDateData06(STATUS04* sts)
         strcpy_s(sts->cnt_ver, sizeof(sts->cnt_ver), HwCtrl::m_hVecCnt.m_Sts.m_CntVer);
     }
 
+    // カウントチェック1作成中(2025.10.6yori)
+    //VecCtEx2 cntdata;
+    //ret = HwCtrl::Func28(&cntdata);
+    //if (ret == 0)
+    //{
+    //    for (i = 0; i < 9; i++)
+    //    {
+    //        sts->cnt_data[i] = cntdata.cnt[i];
+    //    }
+    //}
+
     // 有接触自己診断実装時にコーディング(仮置き2025.9.1yori)
     //// カウントチェック1
     //ret = HwCtrl::Func08();

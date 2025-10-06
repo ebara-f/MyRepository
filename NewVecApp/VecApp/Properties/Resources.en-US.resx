@@ -493,8 +493,7 @@
     <value>スイッチ</value>
   </data>
   <data name="String97" xml:space="preserve">
-    <value>ファームウェア
-Ver.</value>
+    <value>ファームウェアVer.</value>
   </data>
   <data name="String98" xml:space="preserve">
     <value>通信チェック</value>
@@ -846,5 +845,39 @@ Ver.</value>
   </data>
   <data name="String241" xml:space="preserve">
     <value>各ボタンを押してください。</value>
+  </data>
+  <data name="String242" xml:space="preserve">
+    <value>ファームウェアのバージョンが表示されます。</value>
+  </data>
+  <data name="String243" xml:space="preserve">
+    <value>センサー</value>
+  </data>
+  <data name="String244" xml:space="preserve">
+    <value>各関節の通信が正常か確認してください。</value>
+  </data>
+  <data name="String245" xml:space="preserve">
+    <value>全ての関節を動かして正常動作しているか確認してください。</value>
+  </data>
+  <data name="String246" xml:space="preserve">
+    <value>イニシャライズ位置を反復回転させてゼロ付近になるか確認してください。</value>
+  </data>
+  <data name="String247" xml:space="preserve">
+    <value>Z、Xスケールを動かして正常動作しているか確認してください。
+ファームウェアのバージョンが表示されます。</value>
+  </data>
+  <data name="String248" xml:space="preserve">
+    <value>現在のアーム内温度と校正時のアーム内温度が表示されます。</value>
+  </data>
+  <data name="String249" xml:space="preserve">
+    <value>Counter</value>
+  </data>
+  <data name="String250" xml:space="preserve">
+    <value>スケール</value>
+  </data>
+  <data name="String251" xml:space="preserve">
+    <value>アーム内温度(℃)</value>
+  </data>
+  <data name="String252" xml:space="preserve">
+    <value>校正時温度(℃)</value>
   </data>
 </root>

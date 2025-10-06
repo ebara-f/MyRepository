@@ -1497,11 +1497,111 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   ファームウェアのバージョンが表示されます。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String242 {
+            get {
+                return ResourceManager.GetString("String242", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   センサー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String243 {
+            get {
+                return ResourceManager.GetString("String243", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   各関節の通信が正常か確認してください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String244 {
+            get {
+                return ResourceManager.GetString("String244", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   全ての関節を動かして正常動作しているか確認してください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String245 {
+            get {
+                return ResourceManager.GetString("String245", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   イニシャライズ位置を反復回転させてゼロ付近になるか確認してください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String246 {
+            get {
+                return ResourceManager.GetString("String246", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Z、Xスケールを動かして正常動作しているか確認してください。
+        ///ファームウェアのバージョンが表示されます。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String247 {
+            get {
+                return ResourceManager.GetString("String247", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   現在のアーム内温度と校正時のアーム内温度が表示されます。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String248 {
+            get {
+                return ResourceManager.GetString("String248", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Counter に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String249 {
+            get {
+                return ResourceManager.GetString("String249", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   2σ しきい値： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String25 {
             get {
                 return ResourceManager.GetString("String25", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   スケール に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String250 {
+            get {
+                return ResourceManager.GetString("String250", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   アーム内温度(℃) に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String251 {
+            get {
+                return ResourceManager.GetString("String251", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   校正時温度(℃) に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String252 {
+            get {
+                return ResourceManager.GetString("String252", resourceCulture);
             }
         }
         
@@ -2209,8 +2309,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   ファームウェア
-        ///Ver. に類似しているローカライズされた文字列を検索します。
+        ///   ファームウェアVer. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String97 {
             get {
