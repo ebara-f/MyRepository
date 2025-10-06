@@ -220,8 +220,28 @@ namespace VecApp
                 this.ViewModel.ThresholdText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
 
             }
-            
-            
+            else if (this.ViewModel.CalibPara.CalibType == 5)    // プローブキャリブ
+            {
+
+                this.ViewModel.ImageVisibility = Visibility.Hidden;
+                this.ViewModel.GridVisibility = Visibility.Visible;
+
+                // OK・NG表示
+                if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
+                {
+                    this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
+                    this.ViewModel.ResultJudge = true;  // 背景色緑
+                }
+                else
+                {
+                    this.ViewModel.ResultJudge = false; // 背景色赤
+                }
+
+                this.ViewModel.ThresholdText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
+
+            }
+
+
 
         }
 

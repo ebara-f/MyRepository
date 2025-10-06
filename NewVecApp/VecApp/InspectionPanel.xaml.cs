@@ -69,6 +69,7 @@ namespace VecApp
 
         private void Click_MultiGaugeBtn01(object sender, RoutedEventArgs e)
         {
+            (Parent as SubWindow2).ContactInspectionValue.CalibPara.CalibType = 5; // 2025.10.6. add eba
             Parent.CurrentPanel = Panel.ContactInspection; // 追加(2025.7.31yori)
         }
 
