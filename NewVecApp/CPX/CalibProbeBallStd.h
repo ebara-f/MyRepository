@@ -8,7 +8,7 @@
 
 
 
-class CalibUserMulti : public CalibComm
+class CalibProbeBallStd : public CalibComm
 {
 public:
 	static int InitSub(CALIB_PARA* para);

@@ -4,11 +4,11 @@
 
 ***********************************************************************/
 #include    "CalibComm.h"
-#include	"CalibUserMulti.h"
+#include	"CalibProbeBallStd.h"
 
 
 
-int CalibUserMulti::InitSub(CALIB_PARA* para)
+int CalibProbeBallStd::InitSub(CALIB_PARA* para)
 {
 	int ret = 0;
 
@@ -16,15 +16,15 @@ int CalibUserMulti::InitSub(CALIB_PARA* para)
 	switch (CalibComm::m_Language)
 	{
 	case LANGUAGE::JAPANESE:
-		ret |= CalibInit(0, CALIB_MODE_USER);
-		wcscpy_s(para->mes, 256, _T("ユーザーキャリブレーションをはじめます"));
-		wcscpy_s(para->path, 128, _T("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\light_ja.png"));
+		ret |= CalibInit(0, CALIB_MODE_SIMPLE_BALL);
+		wcscpy_s(para->mes, 256, _T("プローブキャリブレーションをはじめます"));
+		wcscpy_s(para->path, 128, _T("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\probeCalib_ja.png"));
 		break;
 
 	case LANGUAGE::ENBLISH:
-		ret |= CalibInit(1, CALIB_MODE_USER);
+		ret |= CalibInit(1, CALIB_MODE_SIMPLE_BALL);
 		wcscpy_s(para->mes, 256, _T("Start User Calibration."));
-		wcscpy_s(para->path, 128, _T("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\light_en.png"));
+		wcscpy_s(para->path, 128, _T("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\probeCalib_en.png"));
 		break;
 
 	default:
@@ -40,7 +40,7 @@ int CalibUserMulti::InitSub(CALIB_PARA* para)
 }
 
 
-int CalibUserMulti::StartSub(CALIB_PARA* para)
+int CalibProbeBallStd::StartSub(CALIB_PARA* para)
 {
 	int ret = 0;
 	char path[256];
@@ -52,7 +52,7 @@ int CalibUserMulti::StartSub(CALIB_PARA* para)
 	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 2 ||
 		HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 1)
 	{
-		HwCtrl::m_hVecCnt.VecCmd_ChangeProbe(1); // PS=1へ強制変更
+		HwCtrl::m_hVecCnt.VecCmd_ChangeProbe(2); // PS=2へ強制変更
 	}
 	else
 	{
@@ -65,7 +65,7 @@ int CalibUserMulti::StartSub(CALIB_PARA* para)
 
 
 
-int CalibUserMulti::CntDataMesCallBackSub(CALIB_PARA* para)
+int CalibProbeBallStd::CntDataMesCallBackSub(CALIB_PARA* para)
 {
 	int ret = 0;
 
@@ -74,14 +74,14 @@ int CalibUserMulti::CntDataMesCallBackSub(CALIB_PARA* para)
 	char mesg[512], mesg1[256], mesg2[256];
 
 	int result;
-	if (!CalibCalParaOut(&result, &CalibComm::m_ArmParaTxt, 1))	// 試しにPSIDは１
+	if (!CalibCalParaOut(&result, &CalibComm::m_ArmParaTxt, 2))	// PSIDは2
 	{
-		para->CalibInspectJudge = 1;	// NG
+		para->CalibInspectJudge = 1;
 		ret = 1;
 	}
 	else
 	{
-		para->CalibInspectJudge = 0;	// OK
+		para->CalibInspectJudge = 0;
 	}
 	para->CalibResultVal = result;
 
@@ -98,40 +98,7 @@ int CalibUserMulti::CntDataMesCallBackSub(CALIB_PARA* para)
 
 
 
-int CalibUserMulti::CntDataMesCallBackSub2(CALIB_PARA* para, VecCtEx2* data)
-{
-	int ret = 0;
-	double radius;
-	double height;
-	double err;
-	
-	para->MesString = 0;
-	if (CalibMesPosChk(data, &radius, &height) == 0)
-	{	
-		para->MesString = 231;
-		ret |= 1;
-	}
-
-	if (CalibMesErrChk(data, &err) == 0)
-	{
-		if (ret == 1)
-		{
-			para->MesString = 232;
-		}
-		else
-		{
-			para->MesString = 233;
-		}
-		ret |= 1;
-	}
-
-	return (ret);
-}
-
-
-
-
-int CalibUserMulti::ParaOutCallBackSub(CALIB_PARA* para)
+int CalibProbeBallStd::ParaOutCallBackSub(CALIB_PARA* para)
 {
 	int ret = 0;
 

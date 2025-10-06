@@ -7,6 +7,7 @@
 #include	"CalibUserMulti.h"
 #include	"CalibInspectMultiNestStd.h"
 #include	"CalibInspectMultiPlateStd.h"
+#include	"CalibProbeBallStd.h"
 
 CALIB_TYPE		CalibComm::m_CalibType;
 LANGUAGE		CalibComm::m_Language;
@@ -42,6 +43,9 @@ int CalibComm::Init(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, in
 			ret |= CalibUserMulti::InitSub(para);
 			break;
 
+		case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
+			ret |= CalibProbeBallStd::InitSub(para);
+			break;
 		default:
 			break;
 	}
@@ -91,6 +95,10 @@ int CalibComm::Start(CALIB_PARA* para)
 
 	case CALIB_TYPE::ALIGNMENT_MULTI_GAUGE:
 		ret |= CalibUserMulti::StartSub(para);
+		break;
+
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
+		ret |= CalibProbeBallStd::StartSub(para);
 		break;
 
 	default:
@@ -163,6 +171,9 @@ int CalibComm::Back(CALIB_PARA* para)
 
 		break;
 
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
+
+		break;
 	default:
 		break;
 	}
@@ -195,6 +206,10 @@ int CalibComm::ReStart(CALIB_PARA* para)
 
 	case CALIB_TYPE::ALIGNMENT_MULTI_GAUGE:
 		ret |= CalibUserMulti::InitSub(para);
+		break;
+
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
+		ret |= CalibProbeBallStd::InitSub(para);
 		break;
 
 	default:
@@ -348,6 +363,10 @@ int CalibComm::CntDataMesCallBack(CALIB_PARA* para)
 			ret |= CalibUserMulti::CntDataMesCallBackSub(para);
 			break;
 
+		case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
+			ret |= CalibProbeBallStd::CntDataMesCallBackSub(para);
+			break;
+
 		default:
 			break;
 		}
@@ -376,8 +395,12 @@ int CalibComm::ParaOutCallBack(CALIB_PARA* para)
 		break;
 
 	case CALIB_TYPE::ALIGNMENT_MULTI_GAUGE:
-		
-		ret = CalibUserMulti::ParaOutCallBackSub();
+		ret = CalibUserMulti::ParaOutCallBackSub(para);
+		break;
+
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
+		ret = CalibProbeBallStd::ParaOutCallBackSub(para);
+		break;
 
 	default:
 		break;
