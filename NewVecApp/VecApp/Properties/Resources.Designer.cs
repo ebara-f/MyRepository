@@ -1615,6 +1615,42 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   補正前 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String254 {
+            get {
+                return ResourceManager.GetString("String254", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   補正後 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String255 {
+            get {
+                return ResourceManager.GetString("String255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   球中心誤差 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String256 {
+            get {
+                return ResourceManager.GetString("String256", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   球直径誤差 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String257 {
+            get {
+                return ResourceManager.GetString("String257", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   面間距離 しきい値： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String26 {

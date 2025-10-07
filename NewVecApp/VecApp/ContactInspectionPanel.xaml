@@ -35,7 +35,7 @@
                            Height="268" Margin="5,-10,245,10"
                            Visibility="{Binding ImageVisibility}" Grid.ColumnSpan="2"/>
 
-                        <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,245,10"
+<!--                        <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,245,10"
                            Visibility="{Binding GridVisibility}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="35"/>
@@ -100,16 +100,76 @@
                         <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,245,10"
                            Visibility="{Binding GridVisibility3}">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding HistoryText, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,15,0,0" VerticalAlignment="Center" Height="230" FontSize="15" TextAlignment="Left" Background="#2A2A2A" Foreground="White"/>
+                            <TextBox Grid.Row="0" Grid.Column="0" Text="" IsReadOnly="True" Margin="0,10,0,0" Background="Gray"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{x:Static res:Resources.String254}" IsReadOnly="True" Margin="0,10,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="25"/>
+                            <TextBox Grid.Row="0" Grid.Column="2" Text="{x:Static res:Resources.String255}" IsReadOnly="True" Margin="0,10,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="25"/>
+                            
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="{x:Static res:Resources.String256}" IsReadOnly="True" Margin="0,10,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="25"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CenterBefValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding CenterBefBackground}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="25"/>
+                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding CenterAftValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding CenterAftBackground}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="25"/>
+                            
+                            <TextBox Grid.Row="2" Grid.Column="0" Text="{x:Static res:Resources.String257}" IsReadOnly="True" Margin="0,10,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="25"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding DiaBefValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding DiaBefBackground}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="25"/>
+                            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding DiaAftValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding DiaAftBackground}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="25"/>
+
+                            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding ThresholdText3, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,10,0,0" Grid.ColumnSpan="2"  VerticalContentAlignment="Center" Background="#2A2A2A" Foreground="White"/>
+                            <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding ResultText3, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,10,0,0" VerticalAlignment="Center" TextAlignment="Center" Background="{Binding ResultBackground3}" FontSize="35"/>
 
                         </Grid>
+              -->
 
+                        <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,245,10"
+                           Visibility="{Binding GridVisibility4}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Row="0" Grid.Column="0" Text="" IsReadOnly="True" Margin="0,10,0,0" Background="Gray"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{x:Static res:Resources.String78}" IsReadOnly="True" Margin="0,10,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="20"/>
+
+                            <TextBox Grid.Row="1" Grid.Column="0" Text="X" IsReadOnly="True" Margin="0,0,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="20"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding XMaxMixValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding XMaxMinground}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="20"/>
+
+                            <TextBox Grid.Row="2" Grid.Column="0" Text="Y" IsReadOnly="True" Margin="0,0,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="20"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding YMaxMixValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding YMaxMinground}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="20"/>
+
+                            <TextBox Grid.Row="3" Grid.Column="0" Text="Z" IsReadOnly="True" Margin="0,0,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="20"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ZMaxMixValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding ZMaxMinground}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="20"/>
+
+                            <TextBox Grid.Row="4" Grid.Column="0" Text="{x:Static res:Resources.String41}" IsReadOnly="True" Margin="0,10,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="20"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{x:Static res:Resources.String81}" IsReadOnly="True" Margin="0,10,0,0" Background="Gray" Foreground="White" TextAlignment="Center" VerticalContentAlignment="Center"  FontSize="20"/>
+
+                            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding FaceDistanceValue4, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,0,0,0" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="20"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding MeasurementErrorValue4, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding MeasurementError4Background}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="20"/>
+
+                            <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding ThresholdText4, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,0,0,0" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                            <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding ResultText4, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,0,0,0" Grid.RowSpan="2" VerticalAlignment="Center" TextAlignment="Center" Background="{Binding ResultBackground4}" FontSize="40"/>
+                        </Grid>
+                        
+                        
                         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Orientation="Vertical" Margin="10,0,0,0" VerticalAlignment="Top">
                             <Button Content="{x:Static res:Resources.String82}" Margin="0,0,0,5" Click="Click_StartBtn" IsEnabled="{Binding IsStartBtnEnabled}" Style="{StaticResource PanelStartButton2Style}"/>
                             <Button Content="{x:Static res:Resources.String83}" Margin="0,0,0,5" Click="Click_BackBtn" IsEnabled="{Binding IsBackBtnEnabled}" Style="{StaticResource PanelBackButtonStyle}"/>

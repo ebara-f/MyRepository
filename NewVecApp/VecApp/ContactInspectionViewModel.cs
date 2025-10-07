@@ -34,6 +34,21 @@ namespace VecApp
             }
         }
 
+        private string _imageSource;
+        public string ImageSource
+        {
+            get => _imageSource;
+            set
+            {
+                if (_imageSource != value)
+                {
+                    _imageSource = value;
+                    OnPropertyChanged(nameof(ImageSource));
+                }
+            }
+        }
+
+
         private Visibility _gridVisibility = Visibility.Hidden;
         public Visibility GridVisibility
         {
@@ -48,51 +63,6 @@ namespace VecApp
             }
         }
 
-        // 2025.10.6 add eba
-        private Visibility _gridVisibility2 = Visibility.Hidden;
-        public Visibility GridVisibility2
-        {
-            get => _gridVisibility2;
-            set
-            {
-                if (_gridVisibility2 != value)
-                {
-                    _gridVisibility2 = value;
-                    OnPropertyChanged(nameof(GridVisibility2));
-                }
-            }
-        }
-
-        // 2025.10.6 add eba
-        private Visibility _gridVisibility3 = Visibility.Hidden;
-        public Visibility GridVisibility3
-        {
-            get => _gridVisibility3;
-            set
-            {
-                if (_gridVisibility3 != value)
-                {
-                    _gridVisibility3 = value;
-                    OnPropertyChanged(nameof(GridVisibility3));
-                }
-            }
-        }
-
-
-        // 2025.9.22 add eba
-        private Visibility _snapVisibility = Visibility.Hidden;
-        public Visibility SnapVisibility
-        {
-            get => _snapVisibility;
-            set
-            {
-                if (_snapVisibility != value)
-                {
-                    _snapVisibility = value;
-                    OnPropertyChanged(nameof(SnapVisibility));
-                }
-            }
-        }
 
         private string _xMaxMinValue;
         public string XMaxMinValue
@@ -234,20 +204,6 @@ namespace VecApp
             }
         }
 
-        private string _historyText;
-        public string HistoryText
-        {
-            get => _historyText;
-            set
-            {
-                if (_historyText != value)
-                {
-                    _historyText = value;
-                    OnPropertyChanged(nameof(HistoryText));
-                }
-            }
-        }
-
         private string _subtitleText;
         public string SubtitleText
         {
@@ -288,21 +244,6 @@ namespace VecApp
             }
 
             return ResultText;
-        }
-
-        // 2025.10.6 add eba
-        private string _resultText2 = "NG";
-        public string ResultText2
-        {
-            get => _resultText2;
-            set
-            {
-                if (_resultText2 != value)
-                {
-                    _resultText2 = value;
-                    OnPropertyChanged(nameof(ResultText2));
-                }
-            }
         }
 
 
@@ -465,6 +406,38 @@ namespace VecApp
         }
         public Brush ResultBackground => ResultJudge ? Brushes.LightGreen : Brushes.LightPink;
 
+
+        // 2025.10.6 add eba
+        private Visibility _gridVisibility2 = Visibility.Hidden;
+        public Visibility GridVisibility2
+        {
+            get => _gridVisibility2;
+            set
+            {
+                if (_gridVisibility2 != value)
+                {
+                    _gridVisibility2 = value;
+                    OnPropertyChanged(nameof(GridVisibility2));
+                }
+            }
+        }
+
+        // 2025.10.6 add eba
+        private string _resultText2 = "NG";
+        public string ResultText2
+        {
+            get => _resultText2;
+            set
+            {
+                if (_resultText2 != value)
+                {
+                    _resultText2 = value;
+                    OnPropertyChanged(nameof(ResultText2));
+                }
+            }
+        }
+
+
         private bool _resultJudge2 = true;
         public bool ResultJudge2
         {
@@ -484,19 +457,398 @@ namespace VecApp
 
 
 
-        private string _imageSource;
-        public string ImageSource
+       
+
+        // 2025.10.6 add eba
+        private Visibility _gridVisibility3 = Visibility.Hidden;
+        public Visibility GridVisibility3
         {
-            get => _imageSource;
+            get => _gridVisibility3;
             set
             {
-                if (_imageSource != value)
+                if (_gridVisibility3 != value)
                 {
-                    _imageSource = value;
-                    OnPropertyChanged(nameof(ImageSource));
+                    _gridVisibility3 = value;
+                    OnPropertyChanged(nameof(GridVisibility3));
                 }
             }
         }
+
+
+        private string _centerBefValue;
+        public string CenterBefValue
+        {
+            get => _centerBefValue;
+            set
+            {
+                if (_centerBefValue != value)
+                {
+                    _centerBefValue = value;
+                    OnPropertyChanged(nameof(CenterBefValue));
+                }
+            }
+        }
+
+        private bool _centerBefJudge = true;
+        public bool CenterBefJudge
+        {
+            get => _centerBefJudge;
+            set
+            {
+                if (_centerBefJudge != value)
+                {
+                    _centerBefJudge = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(CenterBefBackground));
+                }
+            }
+        }
+        public Brush CenterBefBackground => CenterBefJudge ? Brushes.White : Brushes.LightYellow;
+
+        private string _centerAftValue;
+        public string CenterAftValue
+        {
+            get => _centerAftValue;
+            set
+            {
+                if (_centerAftValue != value)
+                {
+                    _centerAftValue = value;
+                    OnPropertyChanged(nameof(CenterAftValue));
+                }
+            }
+        }
+
+        private bool _centerAftJudge = true;
+        public bool CenterAftJudge
+        {
+            get => _centerAftJudge;
+            set
+            {
+                if (_centerAftJudge != value)
+                {
+                    _centerAftJudge = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(CenterAftBackground));
+                }
+            }
+        }
+        public Brush CenterAftBackground => CenterAftJudge ? Brushes.White : Brushes.LightYellow;
+
+
+        private string _diaBefValue;
+        public string DiaBefValue
+        {
+            get => _diaBefValue;
+            set
+            {
+                if (_diaBefValue != value)
+                {
+                    _diaBefValue = value;
+                    OnPropertyChanged(nameof(DiaBefValue));
+                }
+            }
+        }
+
+        private bool _diaBefJudge = true;
+        public bool DiaBefJudge
+        {
+            get => _diaBefJudge;
+            set
+            {
+                if (_diaBefJudge != value)
+                {
+                    _diaBefJudge = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(DiaBefBackground));
+                }
+            }
+        }
+        public Brush DiaBefBackground => DiaBefJudge ? Brushes.White : Brushes.LightYellow;
+
+
+        private string _diaAftValue;
+        public string DiaAftValue
+        {
+            get => _diaAftValue;
+            set
+            {
+                if (_diaAftValue != value)
+                {
+                    _diaAftValue = value;
+                    OnPropertyChanged(nameof(DiaAftValue));
+                }
+            }
+        }
+
+        private bool _diaAftJudge = true;
+        public bool DiaAftJudge
+        {
+            get => _diaAftJudge;
+            set
+            {
+                if (_diaAftJudge != value)
+                {
+                    _diaAftJudge = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(DiaAftBackground));
+                }
+            }
+        }
+        public Brush DiaAftBackground => DiaAftJudge ? Brushes.White : Brushes.LightYellow;
+
+        private string _thresholdText3;
+        public string ThresholdText3
+        {
+            get => _thresholdText3;
+            set
+            {
+                if (_thresholdText3 != value)
+                {
+                    _thresholdText3 = value;
+                    OnPropertyChanged(nameof(ThresholdText3));
+                }
+            }
+        }
+
+
+        // 2025.10.7 add eba
+        private string _resultText3 = "NG";
+        public string ResultText3
+        {
+            get => _resultText3;
+            set
+            {
+                if (_resultText3 != value)
+                {
+                    _resultText3 = value;
+                    OnPropertyChanged(nameof(ResultText3));
+                }
+            }
+        }
+
+        private bool _resultJudge3 = true;
+        public bool ResultJudge3
+        {
+            get => _resultJudge3;
+            set
+            {
+                if (_resultJudge3 != value)
+                {
+                    _resultJudge3 = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(ResultBackground3));
+                }
+            }
+        }
+        public Brush ResultBackground3 => ResultJudge3 ? Brushes.LightGreen : Brushes.LightPink;
+
+        /// <summary>
+        /// ////////
+        /// </summary>
+        // 2025.10.7 add eba
+        private Visibility _gridVisibility4 = Visibility.Hidden;
+        public Visibility GridVisibility4
+        {
+            get => _gridVisibility4;
+            set
+            {
+                if (_gridVisibility4 != value)
+                {
+                    _gridVisibility4 = value;
+                    OnPropertyChanged(nameof(GridVisibility4));
+                }
+            }
+        }
+
+
+        private string _xMaxMixValue;
+        public string XMaxMixValue
+        {
+            get => _xMaxMixValue;
+            set
+            {
+                if (_xMaxMixValue != value)
+                {
+                    _xMaxMixValue = value;
+                    OnPropertyChanged(nameof(XMaxMixValue));
+                }
+            }
+        }
+
+        private bool _xMaxMinJudge4 = true;
+        public bool XMaxMinJudge4
+        {
+            get => _xMaxMinJudge4;
+            set
+            {
+                if (_xMaxMinJudge4 != value)
+                {
+                    _xMaxMinJudge4 = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(XMaxMinground));
+                }
+            }
+        }
+        public Brush XMaxMinground => XMaxMinJudge4 ? Brushes.White : Brushes.LightYellow;
+
+
+        private string _yMaxMixValue;
+        public string YMaxMixValue
+        {
+            get => _yMaxMixValue;
+            set
+            {
+                if (_yMaxMixValue != value)
+                {
+                    _yMaxMixValue = value;
+                    OnPropertyChanged(nameof(YMaxMixValue));
+                }
+            }
+        }
+
+        private bool _yMaxMinJudge4 = true;
+        public bool YMaxMinJudge4
+        {
+            get => _yMaxMinJudge4;
+            set
+            {
+                if (_yMaxMinJudge4 != value)
+                {
+                    _yMaxMinJudge4 = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(YMaxMinground));
+                }
+            }
+        }
+        public Brush YMaxMinground => YMaxMinJudge4 ? Brushes.White : Brushes.LightYellow;
+
+
+        private string _zMaxMixValue;
+        public string ZMaxMixValue
+        {
+            get => _zMaxMixValue;
+            set
+            {
+                if (_zMaxMixValue != value)
+                {
+                    _zMaxMixValue = value;
+                    OnPropertyChanged(nameof(ZMaxMixValue));
+                }
+            }
+        }
+
+        private bool _zMaxMinJudge4 = true;
+        public bool ZMaxMinJudge4
+        {
+            get => _zMaxMinJudge4;
+            set
+            {
+                if (_zMaxMinJudge4 != value)
+                {
+                    _zMaxMinJudge4 = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(ZMaxMinground));
+                }
+            }
+        }
+        public Brush ZMaxMinground => ZMaxMinJudge4 ? Brushes.White : Brushes.LightYellow;
+
+        private string _faceDistanceValue4;
+        public string FaceDistanceValue4
+        {
+            get => _faceDistanceValue4;
+            set
+            {
+                if (_faceDistanceValue4 != value)
+                {
+                    _faceDistanceValue4 = value;
+                    OnPropertyChanged(nameof(FaceDistanceValue4));
+                }
+            }
+        }
+
+        private string _measurementErrorValue4;
+        public string MeasurementErrorValue4
+        {
+            get => _measurementErrorValue4;
+            set
+            {
+                if (_measurementErrorValue4 != value)
+                {
+                    _measurementErrorValue4 = value;
+                    OnPropertyChanged(nameof(MeasurementErrorValue4));
+                }
+            }
+        }
+
+        private string _thresholdText4;
+        public string ThresholdText4
+        {
+            get => _thresholdText4;
+            set
+            {
+                if (_thresholdText4 != value)
+                {
+                    _thresholdText4 = value;
+                    OnPropertyChanged(nameof(ThresholdText4));
+                }
+            }
+        }
+
+        private string _resultText4 = "NG";
+        public string ResultText4
+        {
+            get => _resultText4;
+            set
+            {
+                if (_resultText4 != value)
+                {
+                    _resultText4 = value;
+                    OnPropertyChanged(nameof(ResultText4));
+                }
+            }
+        }
+
+        private bool _resultJudge4 = true;
+        public bool ResultJudge4
+        {
+            get => _resultJudge4;
+            set
+            {
+                if (_resultJudge4 != value)
+                {
+                    _resultJudge4 = value;
+                    //OnPropertyChanged();
+                    // 状態が変わったら色も変わる
+                    OnPropertyChanged(nameof(ResultBackground4));
+                }
+            }
+        }
+        public Brush ResultBackground4 => ResultJudge4 ? Brushes.LightGreen : Brushes.LightPink;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // TextBoxの有効無効を設定する。 2025.9.2 add eba
         private bool _isTextBoxEnabled = false; // 初期状態は無効
@@ -605,6 +957,21 @@ namespace VecApp
                 {
                     _isSettingBtnEnabled = value;
                     OnPropertyChanged(nameof(IsSettingBtnEnabled));
+                }
+            }
+        }
+
+        // 2025.9.22 add eba
+        private Visibility _snapVisibility = Visibility.Hidden;
+        public Visibility SnapVisibility
+        {
+            get => _snapVisibility;
+            set
+            {
+                if (_snapVisibility != value)
+                {
+                    _snapVisibility = value;
+                    OnPropertyChanged(nameof(SnapVisibility));
                 }
             }
         }
