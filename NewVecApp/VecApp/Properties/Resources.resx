@@ -885,4 +885,16 @@
   <data name="String253" xml:space="preserve">
     <value>診断する項目のボタンをクリックしてください。</value>
   </data>
+  <data name="String254" xml:space="preserve">
+    <value>補正前</value>
+  </data>
+  <data name="String255" xml:space="preserve">
+    <value>補正後</value>
+  </data>
+  <data name="String256" xml:space="preserve">
+    <value>球中心誤差</value>
+  </data>
+  <data name="String257" xml:space="preserve">
+    <value>球直径誤差</value>
+  </data>
 </root>

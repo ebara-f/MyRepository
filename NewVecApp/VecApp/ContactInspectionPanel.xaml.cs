@@ -32,6 +32,8 @@ namespace VecApp
             // 初期化処理 2025.8.26 eba
             this.ViewModel.ImageVisibility = Visibility.Visible;
             this.ViewModel.GridVisibility = Visibility.Hidden;
+            this.ViewModel.GridVisibility2 = Visibility.Hidden;
+            this.ViewModel.GridVisibility3 = Visibility.Hidden;
             this.ViewModel.IsStartBtnEnabled = true;
             this.ViewModel.IsBackBtnEnabled = false;
             this.ViewModel.IsReStartBtnEnabled = false;
@@ -84,163 +86,151 @@ namespace VecApp
 
             CSH.Grp02.ContactInspectionPanelParaOutCallBack(ref this.ViewModel.CalibPara);
 
-            if (this.ViewModel.CalibPara.CalibType == 1)
+            switch((CalibType)this.ViewModel.CalibPara.CalibType)
             {
-                this.ViewModel.ImageVisibility = Visibility.Hidden;
-                this.ViewModel.GridVisibility = Visibility.Visible;
+                case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
+                    this.ViewModel.ImageVisibility = Visibility.Hidden;
+                    this.ViewModel.GridVisibility = Visibility.Visible;
 
-                this.ViewModel.XMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[0].ToString("F3");
-                this.ViewModel.YMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[1].ToString("F3");
-                this.ViewModel.ZMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[2].ToString("F3");
+                    this.ViewModel.XMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[0].ToString("F3");
+                    this.ViewModel.YMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[1].ToString("F3");
+                    this.ViewModel.ZMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[2].ToString("F3");
 
-                this.ViewModel.XTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[0].ToString("F3");
-                this.ViewModel.YTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[1].ToString("F3");
-                this.ViewModel.ZTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[2].ToString("F3");
-                this.ViewModel.DistanceTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[3].ToString("F3");
+                    this.ViewModel.XTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[0].ToString("F3");
+                    this.ViewModel.YTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[1].ToString("F3");
+                    this.ViewModel.ZTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[2].ToString("F3");
+                    this.ViewModel.DistanceTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[3].ToString("F3");
 
-                this.ViewModel.FaceDistanceValue = this.ViewModel.CalibPara.InspAndProbCkResult.plate.ToString("F3");
-                this.ViewModel.MeasurementErrorValue = this.ViewModel.CalibPara.PlateErrVal.ToString("F3");
+                    this.ViewModel.FaceDistanceValue = this.ViewModel.CalibPara.InspAndProbCkResult.plate.ToString("F3");
+                    this.ViewModel.MeasurementErrorValue = this.ViewModel.CalibPara.PlateErrVal.ToString("F3");
 
-                // OK・NG表示
-                if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
-                {
-                    this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
-                    this.ViewModel.ResultJudge = true;  // 背景色緑
-                }
-                else
-                {
-                    this.ViewModel.ResultJudge = false; // 背景色赤
-                }
+                    // OK・NG表示
+                    if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
+                    {
+                        this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
+                        this.ViewModel.ResultJudge = true;  // 背景色緑
+                    }
+                    else
+                    {
+                        this.ViewModel.ResultJudge = false; // 背景色赤
+                    }
 
-                // 各結果の背景色変更
-                if (this.ViewModel.CalibPara.InspectionResultFg.pp[0] == 0)
-                {
-                    this.ViewModel.XMaxMinJudge = true;
-                }
-                else
-                {
-                    this.ViewModel.XMaxMinJudge = false;
-                }
+                    // 各結果の背景色変更
+                    if (this.ViewModel.CalibPara.InspectionResultFg.pp[0] == 0)
+                    {
+                        this.ViewModel.XMaxMinJudge = true;
+                    }
+                    else
+                    {
+                        this.ViewModel.XMaxMinJudge = false;
+                    }
 
-                if (this.ViewModel.CalibPara.InspectionResultFg.pp[1] == 0)
-                {
-                    this.ViewModel.YMaxMinJudge = true;
-                }
-                else
-                {
-                    this.ViewModel.YMaxMinJudge = false;
-                }
+                    if (this.ViewModel.CalibPara.InspectionResultFg.pp[1] == 0)
+                    {
+                        this.ViewModel.YMaxMinJudge = true;
+                    }
+                    else
+                    {
+                        this.ViewModel.YMaxMinJudge = false;
+                    }
 
-                if (this.ViewModel.CalibPara.InspectionResultFg.pp[2] == 0)
-                {
-                    this.ViewModel.ZMaxMinJudge = true;
-                }
-                else
-                {
-                    this.ViewModel.ZMaxMinJudge = false;
-                }
+                    if (this.ViewModel.CalibPara.InspectionResultFg.pp[2] == 0)
+                    {
+                        this.ViewModel.ZMaxMinJudge = true;
+                    }
+                    else
+                    {
+                        this.ViewModel.ZMaxMinJudge = false;
+                    }
 
-                if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[0] == 0)
-                {
-                    this.ViewModel.XTwoSigmaJudge = true;
-                }
-                else
-                {
-                    this.ViewModel.XTwoSigmaJudge = false;
-                }
+                    if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[0] == 0)
+                    {
+                        this.ViewModel.XTwoSigmaJudge = true;
+                    }
+                    else
+                    {
+                        this.ViewModel.XTwoSigmaJudge = false;
+                    }
 
-                if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[1] == 0)
-                {
-                    this.ViewModel.YTwoSigmaJudge = true;
-                }
-                else
-                {
-                    this.ViewModel.YTwoSigmaJudge = false;
-                }
+                    if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[1] == 0)
+                    {
+                        this.ViewModel.YTwoSigmaJudge = true;
+                    }
+                    else
+                    {
+                        this.ViewModel.YTwoSigmaJudge = false;
+                    }
 
-                if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[2] == 0)
-                {
-                    this.ViewModel.ZTwoSigmaJudge = true;
-                }
-                else
-                {
-                    this.ViewModel.ZTwoSigmaJudge = false;
-                }
+                    if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[2] == 0)
+                    {
+                        this.ViewModel.ZTwoSigmaJudge = true;
+                    }
+                    else
+                    {
+                        this.ViewModel.ZTwoSigmaJudge = false;
+                    }
 
-                if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[3] == 0)
-                {
-                    this.ViewModel.DistanceTwoSigmaJudge = true;
-                }
-                else
-                {
-                    this.ViewModel.DistanceTwoSigmaJudge = false;
-                }
+                    if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[3] == 0)
+                    {
+                        this.ViewModel.DistanceTwoSigmaJudge = true;
+                    }
+                    else
+                    {
+                        this.ViewModel.DistanceTwoSigmaJudge = false;
+                    }
 
-                if (this.ViewModel.CalibPara.InspectionResultFg.plate == 0)
-                {
-                    this.ViewModel.MeasurementErrorJudge = true;
-                }
-                else
-                {
-                    this.ViewModel.MeasurementErrorJudge = false;
-                }
-
-
-
-                // しきい値表示
-                this.ViewModel.ThresholdText =
-                        "最大最小しきい値 : " +
-                        this.ViewModel.CalibPara.InspectionThreshold.pp.ToString("F2") +
-                        "\n" +
-                        "2σしきい値 : " +
-                        this.ViewModel.CalibPara.InspectionThreshold.sigma2.ToString("F2") +
-                        "\n" +
-                        "面間誤差しきい値 : " +
-                        this.ViewModel.CalibPara.InspectionThreshold.plate.ToString("F2");
+                    if (this.ViewModel.CalibPara.InspectionResultFg.plate == 0)
+                    {
+                        this.ViewModel.MeasurementErrorJudge = true;
+                    }
+                    else
+                    {
+                        this.ViewModel.MeasurementErrorJudge = false;
+                    }
 
 
-            }
-            else if (this.ViewModel.CalibPara.CalibType == 4)    // ユーザーキャリブ
-             {
 
-                this.ViewModel.ImageVisibility = Visibility.Hidden;
-                this.ViewModel.GridVisibility = Visibility.Visible;
+                    // しきい値表示
+                    this.ViewModel.ThresholdText =
+                            "最大最小しきい値 : " +
+                            this.ViewModel.CalibPara.InspectionThreshold.pp.ToString("F2") +
+                            "\n" +
+                            "2σしきい値 : " +
+                            this.ViewModel.CalibPara.InspectionThreshold.sigma2.ToString("F2") +
+                            "\n" +
+                            "面間誤差しきい値 : " +
+                            this.ViewModel.CalibPara.InspectionThreshold.plate.ToString("F2");
 
-                // OK・NG表示
-                if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
-                {
-                    this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
-                    this.ViewModel.ResultJudge = true;  // 背景色緑
-                }
-                else
-                {
-                    this.ViewModel.ResultJudge = false; // 背景色赤
-                }
+                    break;
 
-                this.ViewModel.ThresholdText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
+                case CalibType.ALIGNMENT_MULTI_GAUGE:
+                case CalibType.ALIGNMENT_BALL_GAUGE_STD:
+                    this.ViewModel.ImageVisibility = Visibility.Hidden;
+                    this.ViewModel.GridVisibility2 = Visibility.Visible;
 
-            }
-            else if (this.ViewModel.CalibPara.CalibType == 5)    // プローブキャリブ
-            {
+                    // OK・NG表示
+                    if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
+                    {
+                        this.ViewModel.ResultText2 = "OK";
+                        this.ViewModel.ResultJudge2 = true;  // 背景色緑
+                    }
+                    else
+                    {
+                        this.ViewModel.ResultText2 = "NG";
+                        this.ViewModel.ResultJudge2 = false; // 背景色赤
+                    }
 
-                this.ViewModel.ImageVisibility = Visibility.Hidden;
-                this.ViewModel.GridVisibility = Visibility.Visible;
+                    //SetHistoryText(this.ViewModel.CalibPara.CalibResultVal.ToString("F0"));
 
-                // OK・NG表示
-                if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
-                {
-                    this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
-                    this.ViewModel.ResultJudge = true;  // 背景色緑
-                }
-                else
-                {
-                    this.ViewModel.ResultJudge = false; // 背景色赤
-                }
+                    break;
 
-                this.ViewModel.ThresholdText = this.ViewModel.CalibPara.CalibResultVal.ToString("F0");
+                default:
+                    break;
+
+
 
             }
-
+ 
 
 
         }
@@ -307,6 +297,28 @@ namespace VecApp
         private void Click_HistoryBtn(object sender, RoutedEventArgs e)
         {
 
+            DlgHistory dlg = new DlgHistory();
+            bool? test = false;
+
+            switch ((CalibType)this.ViewModel.CalibPara.CalibType)
+            {
+                case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
+
+                    break;
+
+                case CalibType.ALIGNMENT_MULTI_GAUGE:
+                case CalibType.ALIGNMENT_BALL_GAUGE_STD:
+                    dlg.SetHistoryText(this.ViewModel.CalibPara.CalibResultVal.ToString("F0"));
+
+                    break;
+
+                default:
+                    break;
+            }
+
+            test = dlg.ShowDialog();
+            
+
         }
 
 
@@ -330,13 +342,13 @@ namespace VecApp
 
         private void Click_HelpBtn(object sender, RoutedEventArgs e)
         {
-            switch(this.ViewModel.CalibPara.CalibType)
+            switch((CalibType)this.ViewModel.CalibPara.CalibType)
             {
-                case 1: // INSPECT_MULTI_GAUGE_NEST_STD
+                case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
                     this.ViewModel.ImageSource = "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\chkpos_V8_Multi.png";
                     break;
 
-                case 4: // ALIGNMENT_MULTI_GAUGE
+                case CalibType.ALIGNMENT_MULTI_GAUGE:
                     this.ViewModel.ImageSource = "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\light_V8_Multi.png";
                     break;
 
