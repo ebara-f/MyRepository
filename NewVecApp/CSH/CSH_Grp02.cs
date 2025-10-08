@@ -214,8 +214,8 @@ namespace CSH
         [DllImport("CPX.dll")]
         public extern static int CPX_Grp02_Cmd13(); // 追加(2025.10.6yori)
 
-        [DllImport("CPX.dll")]
-        public extern static int CPX_Grp02_ContactSelfJudgmentPanelSavePara(); // 追加(2025.10.6yori)
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_ContactSelfJudgmentPanelSavePara(string path); // 追加(2025.10.8yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_Grp02_ContactInspectionPanelInit(ref CalibPara para, ref StringBuilder sb_p, int p_count, ref StringBuilder sb_m, int m_count); // 2025.8.26 add eba
@@ -374,12 +374,12 @@ namespace CSH
         }
 
         /// <summary>
-        /// アームパラメータ保存(2025.10.6yori)
+        /// アームパラメータ保存(2025.10.8yori)
         /// </summary>
 
-        static public int ContactSelfJudgmentPanelSavePara()
+        static public int ContactSelfJudgmentPanelSavePara(string path)
         {
-            return CPX_Grp02_ContactSelfJudgmentPanelSavePara();
+            return CPX_Grp02_ContactSelfJudgmentPanelSavePara(path);
         }
 
         /// <summary>

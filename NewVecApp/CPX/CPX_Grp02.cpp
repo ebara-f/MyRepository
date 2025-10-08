@@ -243,15 +243,15 @@ int WINAPI CPX_Grp02_Cmd13()
 /***********************************************************************
 
     ContactSelfJudgmentPanelSavePara
-    追加(2025.10.6yori)
+    追加(2025.10.8yori)
 
 ***********************************************************************/
 
-int WINAPI CPX_Grp02_ContactSelfJudgmentPanelSavePara()
+int WINAPI CPX_Grp02_ContactSelfJudgmentPanelSavePara(const TCHAR* path)
 {
     int     rc;
 
-    rc = Grp02::ContactSelfJudgmentPanelSavePara();
+    rc = Grp02::ContactSelfJudgmentPanelSavePara(path);
 
     return(rc);
 }

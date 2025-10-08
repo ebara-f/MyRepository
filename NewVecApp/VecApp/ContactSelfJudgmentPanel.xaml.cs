@@ -46,17 +46,21 @@ namespace VecApp
         {
             CSH.Grp02.Cmd13(); // 有接触モードへ変更(2025.10.6yori)
 
+            string timestamp = DateTime.Now.ToString("yyyyMMddHHmm"); // ファイル名に含める日付と時刻を取得    
             var dialog = new SaveFileDialog
             {
                 Title = VecApp.Properties.Resources.String258,
-                Filter = "VECTORON files (*.V8)|*.V8|"
+                //Filter = "VECTORON files (*.V8)|*.V8|",
+                Filter = "files (*.V8)|*.V8",
+                FileName = $"{timestamp}.V8", // ファイル名を設定する。(拡張子を設定することも可能)
+                InitialDirectory = @"C:\ProgramData\Kosakalab\Kosaka CMM\Log\"// 初期ディレクトリを設定
             };
 
             if (dialog.ShowDialog() == true)
             {
+                string filePath = dialog.FileName;
+                CSH.Grp02.ContactSelfJudgmentPanelSavePara(filePath); // パラメータ保存、引数にファイル名を含むフルパスをC++側へ送る。(2025.10.8yori)
             }
-
-            CSH.Grp02.ContactSelfJudgmentPanelSavePara(); // パラメータ保存(2025.10.6yori)
         }
         private void Click_ParamRestoreBtn(object sender, RoutedEventArgs e)
         {

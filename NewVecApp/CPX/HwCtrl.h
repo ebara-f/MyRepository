@@ -176,7 +176,7 @@ public:
     static void FileOutput(); // Debug用、スキャンデータファイル出力(2025.8.5yori)
 
     // パラメータ保存復元関数(2025.10.6yori)
-    static void SavePara();
+    static void SavePara(const TCHAR* path);
     static void RestorPara();
 
 

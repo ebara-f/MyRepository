@@ -3548,7 +3548,7 @@ int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid)
     2025.10.8yori)
 
 ***********************************************************************/
-void HwCtrl::SavePara()
+void HwCtrl::SavePara(const TCHAR* path)
 {
     int ret = 0, psid = 0, branch = 0, no = 0, i = 0, j = 0, k = 0, l = 0 ;
     CALIB_DATA para;
@@ -4123,21 +4123,10 @@ void HwCtrl::SavePara()
 
     FILE* pf;
     char cPath[256] = { 0 }; // ファイルのパス
+    size_t converted = 0;
+    errno_t err;
+    err = wcstombs_s(&converted, cPath, sizeof(cPath), path, _TRUNCATE); // wcstombs_sを使ってwchar_tからcharへ変換
 
-    // 年月日時分.vec8
-    SYSTEMTIME lpSys;
-    char time[64];
-    ::GetLocalTime(&lpSys);
-    sprintf_s(time, "%04d%02d%02d%02d%02d.vec8",
-                lpSys.wYear,
-                lpSys.wMonth,
-                lpSys.wDay,
-                lpSys.wHour,
-                lpSys.wMinute);
-
-    MakeSureDirectoryPathExists("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Log\\"); //フォルダが無ければ、作成する
-    sprintf_s(cPath, "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Log\\"); // ファイルパス
-    strcat_s(cPath, sizeof(cPath), time); // ファイル名
     if ((fopen_s(&pf, cPath, "w")) == 0)
     {
         // ファイルへ書き込む

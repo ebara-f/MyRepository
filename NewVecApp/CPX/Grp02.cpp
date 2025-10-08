@@ -314,15 +314,15 @@ int Grp02::Cmd13()
 /***********************************************************************
 
     ContactSelfJudgmentPanelSavePara
-    追加(2025.10.6yori)
+    追加(2025.10.8yori)
 
 ***********************************************************************/
 
-int Grp02::ContactSelfJudgmentPanelSavePara()
+int Grp02::ContactSelfJudgmentPanelSavePara(const TCHAR* path)
 {
     int ret = 0;
 
-    HwCtrl::SavePara();
+    HwCtrl::SavePara(path);
 
     return (ret);
 }
