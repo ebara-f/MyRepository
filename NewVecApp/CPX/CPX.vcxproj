@@ -113,7 +113,9 @@
     <ClInclude Include="AppMain.h" />
     <ClInclude Include="CalibComm.h" />
     <ClInclude Include="CalibDataBuff.h" />
+    <ClInclude Include="CalibInspectMultiNestExt.h" />
     <ClInclude Include="CalibInspectMultiNestStd.h" />
+    <ClInclude Include="CalibInspectMultiPlateExt.h" />
     <ClInclude Include="CalibInspectMultiPlateStd.h" />
     <ClInclude Include="CalibProbeBallStd.h" />
     <ClInclude Include="CalibSetting.h" />
@@ -134,7 +136,9 @@
     <ClCompile Include="AppMain.cpp" />
     <ClCompile Include="CalibComm.cpp" />
     <ClCompile Include="CalibDataBuff.cpp" />
+    <ClCompile Include="CalibInspectMultiNestExt.cpp" />
     <ClCompile Include="CalibInspectMultiNestStd.cpp" />
+    <ClCompile Include="CalibInspectMultiPlateExt.cpp" />
     <ClCompile Include="CalibInspectMultiPlateStd.cpp" />
     <ClCompile Include="CalibProbeBallStd.cpp" />
     <ClCompile Include="CalibSetting.cpp" />

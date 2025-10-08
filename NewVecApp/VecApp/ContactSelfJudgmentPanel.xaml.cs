@@ -50,7 +50,6 @@ namespace VecApp
             var dialog = new SaveFileDialog
             {
                 Title = VecApp.Properties.Resources.String258,
-                //Filter = "VECTORON files (*.V8)|*.V8|",
                 Filter = "files (*.V8)|*.V8",
                 FileName = $"{timestamp}.V8", // ファイル名を設定する。(拡張子を設定することも可能)
                 InitialDirectory = @"C:\ProgramData\Kosakalab\Kosaka CMM\Log\"// 初期ディレクトリを設定

@@ -1660,6 +1660,15 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   オプションプローブを取り付けて下さい に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String259 {
+            get {
+                return ResourceManager.GetString("String259", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   面間距離 しきい値： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String26 {
