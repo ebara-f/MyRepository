@@ -1651,7 +1651,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   オプションプローブを取り付けて下さい に類似しているローカライズされた文字列を検索します。
+        ///   名前を付けて保存 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String258 {
             get {
