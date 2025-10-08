@@ -48,7 +48,7 @@ namespace VecApp
 
             var dialog = new SaveFileDialog
             {
-                Title = "保存先を選択",
+                Title = VecApp.Properties.Resources.String258,
                 Filter = "VECTORON files (*.V8)|*.V8|"
             };
 

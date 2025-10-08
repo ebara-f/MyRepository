@@ -1651,6 +1651,15 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   名前を付けて保存 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String258 {
+            get {
+                return ResourceManager.GetString("String258", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   面間距離 しきい値： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String26 {
