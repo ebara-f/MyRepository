@@ -52,7 +52,7 @@ int CalibInspectMultiNestExt::StartSub(CALIB_PARA* para)
 	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 2 ||
 		HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 1)
 	{
-		para->MesString = 258;
+		para->MesString = 259;
 		ret = 1;
 	}
 
