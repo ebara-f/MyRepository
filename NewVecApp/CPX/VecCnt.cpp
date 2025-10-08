@@ -1479,7 +1479,262 @@ int CVecCnt::VecCmd_Test008(CALIB_DATA* para)
 
 /***********************************************************************
 
-	SPROBEV8
+	TEST@010
+	2025.10.6yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Test010(CALIB_DATA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	sprintf_s(para->test010.cmd, sizeof(para->test010.cmd), "%s", "TEST@010B");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->test010.cmd, NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->test010.para, &para->test010.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	TEST@012
+	2025.10.6yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Test012(CALIB_DATA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	sprintf_s(para->test012.cmd, sizeof(para->test012.cmd), "%s", "TEST@012B");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->test012.cmd, NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->test012.para, &para->test012.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	TEST@018
+	2025.10.6yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Test018(CALIB_DATA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	sprintf_s(para->test018.cmd, sizeof(para->test018.cmd), "%s", "TEST@018B");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->test018.cmd, NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->test018.para, &para->test018.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	DPRDC
+	2025.10.6yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Dprdc(CALIB_DATA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	sprintf_s(para->sprdc.cmd, sizeof(para->sprdc.cmd), "%s", "DPRDC");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprdc.cmd, NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->sprdc.para, &para->sprdc.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	DPRDC2
+	2025.10.6yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Dprdc2(CALIB_DATA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	sprintf_s(para->sprdc2.cmd, sizeof(para->sprdc2.cmd), "%s", "DPRDC2");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprdc2.cmd, NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->sprdc2.para, &para->sprdc2.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	DPROBEV8
 	2025.9.12 add eba
 
 ***********************************************************************/
@@ -1499,6 +1754,266 @@ int CVecCnt::VecCmd_DprobeV8(CALIB_DATA* para, int psid)
 	sprintf_s(para->sprobe.para, sizeof(para->sprobe.para), "%d", psid);
 	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprobe.cmd, para->sprobe.para, 1);
 	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->sprobe.para, &para->sprobe.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	DPROBEV8MA
+	2025.10.6yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_DprobeV8Ma(CALIB_DATA* para, int psid, int branch)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	char	cbranch[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	sprintf_s(para->sprobe.cmd, sizeof(para->sprobe.cmd), "%s", "DPROBEV8MA");
+	sprintf_s(para->sprobe.para, sizeof(para->sprobe.para), "%d", psid);
+	sprintf_s(cbranch, sizeof(cbranch), " %d", branch);
+	strcat_s(para->sprobe.para, sizeof(para->sprobe.para), cbranch);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprobe.cmd, para->sprobe.para, 2);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->sprobe.para, &para->sprobe.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	DLEVEL
+	2025.10.7yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Dlevel(char* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		recv_count = 0;
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "DLEVEL", NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para, &recv_count);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	DCNT
+	2025.10.7yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Dcnt(char* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		recv_count = 0;
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "DCNT", NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para, &recv_count);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	DLIM
+	2025.10.7yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Dlim(char* para, int no)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	char	cTransPara[32] = { 0 };
+	int		recv_count = 0;
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+	sprintf_s(cTransPara, sizeof(cTransPara), "%d", no);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "DLIM", cTransPara, 1);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para, &recv_count);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	DSERIAL
+	2025.10.7yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Dserial(char* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		recv_count = 0;
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "DSERIAL", NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para, &recv_count);
 	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
 	{
 		ret_code = ret_code_send;

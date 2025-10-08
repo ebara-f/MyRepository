@@ -3545,10 +3545,635 @@ int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid)
 /***********************************************************************
 
     アームパラメータ保存
-    2025.10.5yori)
+    2025.10.8yori)
 
 ***********************************************************************/
 void HwCtrl::SavePara()
 {
+    int ret = 0, psid = 0, branch = 0, no = 0, i = 0, j = 0, k = 0, l = 0 ;
+    CALIB_DATA para;
+    char para2[64] = { 0 };
+    char test002[1024] = { 0 };
+    char test004[1024] = { 0 };
+    char test006[1024] = { 0 };
+    char test008[512] = { 0 };
+    char test010[1024] = { 0 };
+    char test012[1024] = { 0 };
+    char test018[128] = { 0 };
+    char dprdc[512] = { 0 };
+    char dprobe[20][512] = { 0 };
+    char dprobema[3][15][512] = { 0 };
+    char dlevel[64] = { 0 };
+    char dcnt[32] = { 0 };
+    char dlim[7][256] = { 0 };
+    char dserial[32] = { 0 };
+    char* token[40];
+    char* context = NULL;
 
+    // TEST@002
+    ret = HwCtrl::m_hVecCnt.VecCmd_Test002(&para);
+    // スペース区切りのパラメータを分割
+    token[0] = strtok_s(para.test002.para, " ", &context);
+    for (i = 1; i < 19; i++)
+    {
+        token[i] = strtok_s(NULL, " ", &context);
+    }
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(test002, "TEST@002\nARM1,");
+    strcat_s(test002, sizeof(test002), token[0]);
+    strcat_s(test002, sizeof(test002), ",ARM2,");
+    strcat_s(test002, sizeof(test002), token[1]);
+    strcat_s(test002, sizeof(test002), ",ARM3,");
+    strcat_s(test002, sizeof(test002), token[2]);
+    strcat_s(test002, sizeof(test002), "\nAB1,");
+    strcat_s(test002, sizeof(test002), token[3]);
+    strcat_s(test002, sizeof(test002), ",AO1,");
+    strcat_s(test002, sizeof(test002), token[11]);
+    strcat_s(test002, sizeof(test002), "\nAB2,");
+    strcat_s(test002, sizeof(test002), token[4]);
+    strcat_s(test002, sizeof(test002), ",AO2,");
+    strcat_s(test002, sizeof(test002), token[12]);
+    strcat_s(test002, sizeof(test002), "\nAB3,");
+    strcat_s(test002, sizeof(test002), token[5]);
+    strcat_s(test002, sizeof(test002), ",AO3,");
+    strcat_s(test002, sizeof(test002), token[13]);
+    strcat_s(test002, sizeof(test002), "\nAB4,");
+    strcat_s(test002, sizeof(test002), token[6]);
+    strcat_s(test002, sizeof(test002), ",AO4,");
+    strcat_s(test002, sizeof(test002), token[14]);
+    strcat_s(test002, sizeof(test002), "\nAB5,");
+    strcat_s(test002, sizeof(test002), token[7]);
+    strcat_s(test002, sizeof(test002), ",AO5,");
+    strcat_s(test002, sizeof(test002), token[15]);
+    strcat_s(test002, sizeof(test002), "\nAB6,");
+    strcat_s(test002, sizeof(test002), token[8]);
+    strcat_s(test002, sizeof(test002), ",AO6,");
+    strcat_s(test002, sizeof(test002), token[16]);
+    strcat_s(test002, sizeof(test002), "\nAB7,");
+    strcat_s(test002, sizeof(test002), token[9]);
+    strcat_s(test002, sizeof(test002), ",AO7,");
+    strcat_s(test002, sizeof(test002), token[17]);
+    strcat_s(test002, sizeof(test002), "\nAB8,");
+    strcat_s(test002, sizeof(test002), token[10]);
+    strcat_s(test002, sizeof(test002), ",AO8,");
+    strcat_s(test002, sizeof(test002), token[18]);
+    strcat_s(test002, sizeof(test002), "\n\n");
+
+    // TEST@004
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Test004(&para);
+    // スペース区切りのパラメータを分割
+    token[0] = strtok_s(para.test004.para, " ", &context);
+    for (i = 1; i < 27; i++)
+    {
+        token[i] = strtok_s(NULL, " ", &context);
+    }
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(test004, "TEST@004\nOF0X,");
+    strcat_s(test004, sizeof(test004), token[0]);
+    strcat_s(test004, sizeof(test004), ",OF0Y,");
+    strcat_s(test004, sizeof(test004), token[1]);
+    strcat_s(test004, sizeof(test004), ",OF0Z,");
+    strcat_s(test004, sizeof(test004), token[2]);
+    strcat_s(test004, sizeof(test004), "\nOF1X,");
+    strcat_s(test004, sizeof(test004), token[3]);
+    strcat_s(test004, sizeof(test004), ",OF1Y,");
+    strcat_s(test004, sizeof(test004), token[4]);
+    strcat_s(test004, sizeof(test004), ",OF1Z,");
+    strcat_s(test004, sizeof(test004), token[5]);
+    strcat_s(test004, sizeof(test004), "\nOF2X,");
+    strcat_s(test004, sizeof(test004), token[6]);
+    strcat_s(test004, sizeof(test004), ",OF2Y,");
+    strcat_s(test004, sizeof(test004), token[7]);
+    strcat_s(test004, sizeof(test004), ",OF2Z,");
+    strcat_s(test004, sizeof(test004), token[8]);
+    strcat_s(test004, sizeof(test004), "\nOF3X,");
+    strcat_s(test004, sizeof(test004), token[9]);
+    strcat_s(test004, sizeof(test004), ",OF3Y,");
+    strcat_s(test004, sizeof(test004), token[10]);
+    strcat_s(test004, sizeof(test004), ",OF3Z,");
+    strcat_s(test004, sizeof(test004), token[11]);
+    strcat_s(test004, sizeof(test004), "\nOF4X,");
+    strcat_s(test004, sizeof(test004), token[12]);
+    strcat_s(test004, sizeof(test004), ",OF4Y,");
+    strcat_s(test004, sizeof(test004), token[13]);
+    strcat_s(test004, sizeof(test004), ",OF4Z,");
+    strcat_s(test004, sizeof(test004), token[14]);
+    strcat_s(test004, sizeof(test004), "\nOF5X,");
+    strcat_s(test004, sizeof(test004), token[15]);
+    strcat_s(test004, sizeof(test004), ",OF5Y,");
+    strcat_s(test004, sizeof(test004), token[16]);
+    strcat_s(test004, sizeof(test004), ",OF5Z,");
+    strcat_s(test004, sizeof(test004), token[17]);
+    strcat_s(test004, sizeof(test004), "\nOF6X,");
+    strcat_s(test004, sizeof(test004), token[18]);
+    strcat_s(test004, sizeof(test004), ",OF6Y,");
+    strcat_s(test004, sizeof(test004), token[19]);
+    strcat_s(test004, sizeof(test004), ",OF6Z,");
+    strcat_s(test004, sizeof(test004), token[20]);
+    strcat_s(test004, sizeof(test004), "\nOF7X,");
+    strcat_s(test004, sizeof(test004), token[21]);
+    strcat_s(test004, sizeof(test004), ",OF7Y,");
+    strcat_s(test004, sizeof(test004), token[22]);
+    strcat_s(test004, sizeof(test004), ",OF7Z,");
+    strcat_s(test004, sizeof(test004), token[23]);
+    strcat_s(test004, sizeof(test004), "\nOF8X,");
+    strcat_s(test004, sizeof(test004), token[24]);
+    strcat_s(test004, sizeof(test004), ",OF8Y,");
+    strcat_s(test004, sizeof(test004), token[25]);
+    strcat_s(test004, sizeof(test004), ",OF8Z,");
+    strcat_s(test004, sizeof(test004), token[26]);
+    strcat_s(test004, sizeof(test004), "\n\n");
+
+    // TEST@006
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Test006(&para);
+    // スペース区切りのパラメータを分割
+    token[0] = strtok_s(para.test006.para, " ", &context);
+    for (i = 1; i < 27; i++)
+    {
+        token[i] = strtok_s(NULL, " ", &context);
+    }
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(test006, "TEST@006\nTT0X,");
+    strcat_s(test006, sizeof(test006), token[0]);
+    strcat_s(test006, sizeof(test006), ",TT0Y,");
+    strcat_s(test006, sizeof(test006), token[1]);
+    strcat_s(test006, sizeof(test006), ",TT0Z,");
+    strcat_s(test006, sizeof(test006), token[2]);
+    strcat_s(test006, sizeof(test006), "\nTT1X,");
+    strcat_s(test006, sizeof(test006), token[3]);
+    strcat_s(test006, sizeof(test006), ",TT1Y,");
+    strcat_s(test006, sizeof(test006), token[4]);
+    strcat_s(test006, sizeof(test006), ",TT1Z,");
+    strcat_s(test006, sizeof(test006), token[5]);
+    strcat_s(test006, sizeof(test006), "\nTT2X,");
+    strcat_s(test006, sizeof(test006), token[6]);
+    strcat_s(test006, sizeof(test006), ",TT2Y,");
+    strcat_s(test006, sizeof(test006), token[7]);
+    strcat_s(test006, sizeof(test006), ",TT2Z,");
+    strcat_s(test006, sizeof(test006), token[8]);
+    strcat_s(test006, sizeof(test006), "\nTT3X,");
+    strcat_s(test006, sizeof(test006), token[9]);
+    strcat_s(test006, sizeof(test006), ",TT3Y,");
+    strcat_s(test006, sizeof(test006), token[10]);
+    strcat_s(test006, sizeof(test006), ",TT3Z,");
+    strcat_s(test006, sizeof(test006), token[11]);
+    strcat_s(test006, sizeof(test006), "\nTT4X,");
+    strcat_s(test006, sizeof(test006), token[12]);
+    strcat_s(test006, sizeof(test006), ",TT4Y,");
+    strcat_s(test006, sizeof(test006), token[13]);
+    strcat_s(test006, sizeof(test006), ",TT4Z,");
+    strcat_s(test006, sizeof(test006), token[14]);
+    strcat_s(test006, sizeof(test006), "\nTT5X,");
+    strcat_s(test006, sizeof(test006), token[15]);
+    strcat_s(test006, sizeof(test006), ",TT5Y,");
+    strcat_s(test006, sizeof(test006), token[16]);
+    strcat_s(test006, sizeof(test006), ",TT5Z,");
+    strcat_s(test006, sizeof(test006), token[17]);
+    strcat_s(test006, sizeof(test006), "\nTT6X,");
+    strcat_s(test006, sizeof(test006), token[18]);
+    strcat_s(test006, sizeof(test006), ",TT6Y,");
+    strcat_s(test006, sizeof(test006), token[19]);
+    strcat_s(test006, sizeof(test006), ",TT6Z,");
+    strcat_s(test006, sizeof(test006), token[20]);
+    strcat_s(test006, sizeof(test006), "\nTT7X,");
+    strcat_s(test006, sizeof(test006), token[21]);
+    strcat_s(test006, sizeof(test006), ",TT7Y,");
+    strcat_s(test006, sizeof(test006), token[22]);
+    strcat_s(test006, sizeof(test006), ",TT7Z,");
+    strcat_s(test006, sizeof(test006), token[23]);
+    strcat_s(test006, sizeof(test006), "\nTT8X,");
+    strcat_s(test006, sizeof(test006), token[24]);
+    strcat_s(test006, sizeof(test006), ",TT8Y,");
+    strcat_s(test006, sizeof(test006), token[25]);
+    strcat_s(test006, sizeof(test006), ",TT8Z,");
+    strcat_s(test006, sizeof(test006), token[26]);
+    strcat_s(test006, sizeof(test006), "\n\n");
+
+    // TEST@008
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Test008(&para);
+    // スペース区切りのパラメータを分割
+    token[0] = strtok_s(para.test008.para, " ", &context);
+    for (i = 1; i < 14; i++)
+    {
+        token[i] = strtok_s(NULL, " ", &context);
+    }
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(test008, "TEST@008\nAB0,");
+    strcat_s(test008, sizeof(test008), token[0]);
+    strcat_s(test008, sizeof(test008), ",AO0,");
+    strcat_s(test008, sizeof(test008), token[1]);
+    strcat_s(test008, sizeof(test008), "\nOFAX,");
+    strcat_s(test008, sizeof(test008), token[2]);
+    strcat_s(test008, sizeof(test008), ",OFAY,");
+    strcat_s(test008, sizeof(test008), token[3]);
+    strcat_s(test008, sizeof(test008), ",OFAZ,");
+    strcat_s(test008, sizeof(test008), token[4]);
+    strcat_s(test008, sizeof(test008), "\nTTAX,");
+    strcat_s(test008, sizeof(test008), token[5]);
+    strcat_s(test008, sizeof(test008), ",TTAY,");
+    strcat_s(test008, sizeof(test008), token[6]);
+    strcat_s(test008, sizeof(test008), ",TTAZ,");
+    strcat_s(test008, sizeof(test008), token[7]);
+    strcat_s(test008, sizeof(test008), "\nOFBX,");
+    strcat_s(test008, sizeof(test008), token[8]);
+    strcat_s(test008, sizeof(test008), ",OFBY,");
+    strcat_s(test008, sizeof(test008), token[9]);
+    strcat_s(test008, sizeof(test008), ",OFBZ,");
+    strcat_s(test008, sizeof(test008), token[10]);
+    strcat_s(test008, sizeof(test008), "\nTTBX,");
+    strcat_s(test008, sizeof(test008), token[11]);
+    strcat_s(test008, sizeof(test008), ",TTBY,");
+    strcat_s(test008, sizeof(test008), token[12]);
+    strcat_s(test008, sizeof(test008), ",TTBZ,");
+    strcat_s(test008, sizeof(test008), token[13]);
+    strcat_s(test008, sizeof(test008), "\n\n");
+
+    // TEST@010
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Test010(&para);
+    // スペース区切りのパラメータを分割
+    token[0] = strtok_s(para.test010.para, " ", &context);
+    for (i = 1; i < 16; i++)
+    {
+        token[i] = strtok_s(NULL, " ", &context);
+    }
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(test010, "TEST@010\nNO.5 BASE HIGHT,");
+    strcat_s(test010, sizeof(test010), token[0]);
+    strcat_s(test010, sizeof(test010), "\nNO.5 0deg,");
+    strcat_s(test010, sizeof(test010), token[1]);
+    strcat_s(test010, sizeof(test010), "\nNO.5 45deg,");
+    strcat_s(test010, sizeof(test010), token[2]);
+    strcat_s(test010, sizeof(test010), "\nNO.5 90deg,");
+    strcat_s(test010, sizeof(test010), token[3]);
+    strcat_s(test010, sizeof(test010), "\nNO.5 135deg,");
+    strcat_s(test010, sizeof(test010), token[4]);
+    strcat_s(test010, sizeof(test010), "\nNO.5 180deg,");
+    strcat_s(test010, sizeof(test010), token[5]);
+    strcat_s(test010, sizeof(test010), "\nT5YR 0deg,");
+    strcat_s(test010, sizeof(test010), token[6]);
+    strcat_s(test010, sizeof(test010), "\nT5YR 45deg,");
+    strcat_s(test010, sizeof(test010), token[7]);
+    strcat_s(test010, sizeof(test010), "\nT5YR 90deg,");
+    strcat_s(test010, sizeof(test010), token[8]);
+    strcat_s(test010, sizeof(test010), "\nT5YR 135deg,");
+    strcat_s(test010, sizeof(test010), token[9]);
+    strcat_s(test010, sizeof(test010), "\nT5YR 180deg,");
+    strcat_s(test010, sizeof(test010), token[10]);
+    strcat_s(test010, sizeof(test010), "\nT5XR 0deg,");
+    strcat_s(test010, sizeof(test010), token[11]);
+    strcat_s(test010, sizeof(test010), "\nT5XR 45deg,");
+    strcat_s(test010, sizeof(test010), token[12]);
+    strcat_s(test010, sizeof(test010), "\nT5XR 90deg,");
+    strcat_s(test010, sizeof(test010), token[13]);
+    strcat_s(test010, sizeof(test010), "\nT5XR 135deg,");
+    strcat_s(test010, sizeof(test010), token[14]);
+    strcat_s(test010, sizeof(test010), "\nT5XR 180deg,");
+    strcat_s(test010, sizeof(test010), token[15]);
+    strcat_s(test010, sizeof(test010), "\n\n");
+
+    // TEST@012
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Test012(&para);
+    // スペース区切りのパラメータを分割
+    token[0] = strtok_s(para.test012.para, " ", &context);
+    for (i = 1; i < 38; i++)
+    {
+        token[i] = strtok_s(NULL, " ", &context);
+    }
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(test012, "TEST@012\nT3XR NO.5 -45deg,");
+    strcat_s(test012, sizeof(test012), token[0]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.5 0deg,");
+    strcat_s(test012, sizeof(test012), token[1]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.5 30deg,");
+    strcat_s(test012, sizeof(test012), token[2]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.5 60deg,");
+    strcat_s(test012, sizeof(test012), token[3]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.5 90deg,");
+    strcat_s(test012, sizeof(test012), token[4]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.5 135deg,");
+    strcat_s(test012, sizeof(test012), token[5]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.5 180deg,");
+    strcat_s(test012, sizeof(test012), token[6]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.4 0deg,");
+    strcat_s(test012, sizeof(test012), token[7]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.4 45deg,");
+    strcat_s(test012, sizeof(test012), token[8]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.4 90deg,");
+    strcat_s(test012, sizeof(test012), token[9]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.4 135deg,");
+    strcat_s(test012, sizeof(test012), token[10]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.4 180deg,");
+    strcat_s(test012, sizeof(test012), token[11]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.4 -45deg,");
+    strcat_s(test012, sizeof(test012), token[12]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.4 -90deg,");
+    strcat_s(test012, sizeof(test012), token[13]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.4 -135deg,");
+    strcat_s(test012, sizeof(test012), token[14]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.3 0deg,");
+    strcat_s(test012, sizeof(test012), token[15]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.3 30deg,");
+    strcat_s(test012, sizeof(test012), token[16]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.3 60deg,");
+    strcat_s(test012, sizeof(test012), token[17]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.3 90deg,");
+    strcat_s(test012, sizeof(test012), token[18]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.3 120deg,");
+    strcat_s(test012, sizeof(test012), token[19]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.3 150deg,");
+    strcat_s(test012, sizeof(test012), token[20]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.3 180deg,");
+    strcat_s(test012, sizeof(test012), token[21]);
+    strcat_s(test012, sizeof(test012), "\nT3XR NO.3 -45deg,");
+    strcat_s(test012, sizeof(test012), token[22]);
+    strcat_s(test012, sizeof(test012), "\nT3ZR NO.4 0deg,");
+    strcat_s(test012, sizeof(test012), token[23]);
+    strcat_s(test012, sizeof(test012), "\nT3ZR NO.4 45deg,");
+    strcat_s(test012, sizeof(test012), token[24]);
+    strcat_s(test012, sizeof(test012), "\nT3ZR NO.4 90deg,");
+    strcat_s(test012, sizeof(test012), token[25]);
+    strcat_s(test012, sizeof(test012), "\nT3ZR NO.4 135deg,");
+    strcat_s(test012, sizeof(test012), token[26]);
+    strcat_s(test012, sizeof(test012), "\nT3ZR NO.4 180deg,");
+    strcat_s(test012, sizeof(test012), token[27]);
+    strcat_s(test012, sizeof(test012), "\nT3ZR NO.4 -45deg,");
+    strcat_s(test012, sizeof(test012), token[28]);
+    strcat_s(test012, sizeof(test012), "\nT3ZR NO.4 -90deg,");
+    strcat_s(test012, sizeof(test012), token[29]);
+    strcat_s(test012, sizeof(test012), "\nT3ZR NO.4 -135deg,");
+    strcat_s(test012, sizeof(test012), token[30]);
+    strcat_s(test012, sizeof(test012), "\nOF4Z NO.5 -45deg,");
+    strcat_s(test012, sizeof(test012), token[31]);
+    strcat_s(test012, sizeof(test012), "\nOF4Z NO.5 0deg,");
+    strcat_s(test012, sizeof(test012), token[32]);
+    strcat_s(test012, sizeof(test012), "\nOF4Z NO.5 30deg,");
+    strcat_s(test012, sizeof(test012), token[33]);
+    strcat_s(test012, sizeof(test012), "\nOF4Z NO.5 60deg,");
+    strcat_s(test012, sizeof(test012), token[34]);
+    strcat_s(test012, sizeof(test012), "\nOF4Z NO.5 90deg,");
+    strcat_s(test012, sizeof(test012), token[35]);
+    strcat_s(test012, sizeof(test012), "\nOF4Z NO.5 135deg,");
+    strcat_s(test012, sizeof(test012), token[36]);
+    strcat_s(test012, sizeof(test012), "\nOF4Z NO.5 180deg,");
+    strcat_s(test012, sizeof(test012), token[37]);
+    strcat_s(test012, sizeof(test012), "\n\n");
+
+    // TEST@018
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Test018(&para);
+    // スペース区切りのパラメータを分割
+    token[0] = strtok_s(para.test018.para, " ", &context);
+    token[1] = strtok_s(NULL, " ", &context);
+    token[2] = strtok_s(NULL, " ", &context);
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(test018, "TEST@018\nARM1 ADJUST,");
+    strcat_s(test018, sizeof(test018), token[0]);
+    strcat_s(test018, sizeof(test018), "\nARM2 ADJUST,");
+    strcat_s(test018, sizeof(test018), token[1]);
+    strcat_s(test018, sizeof(test018), "\nARM3 ADJUST,");
+    strcat_s(test018, sizeof(test018), token[2]);
+    strcat_s(test018, sizeof(test018), "\n\n");
+
+    // DPRDC
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Dprdc(&para);
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Dprdc2(&para);
+    // スペース区切りのパラメータを分割
+    token[0] = strtok_s(para.sprdc.para, " ", &context);
+    token[1] = strtok_s(NULL, " ", &context);
+    token[2] = strtok_s(NULL, " ", &context);
+    token[3] = strtok_s(NULL, " ", &context);
+    token[4] = strtok_s(NULL, " ", &context);
+    token[5] = strtok_s(NULL, " ", &context);
+    token[6] = strtok_s(para.sprdc2.para, " ", &context);
+    token[7] = strtok_s(NULL, " ", &context);
+    token[8] = strtok_s(NULL, " ", &context);
+    token[9] = strtok_s(NULL, " ", &context);
+    token[10] = strtok_s(NULL, " ", &context);
+    token[11] = strtok_s(NULL, " ", &context);
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(dprdc, "DPRDC\nFLAG,");
+    strcat_s(dprdc, sizeof(dprdc), token[0]);
+    strcat_s(dprdc, sizeof(dprdc), "\nOFAO1,");
+    strcat_s(dprdc, sizeof(dprdc), token[1]);
+    strcat_s(dprdc, sizeof(dprdc), "\nOFAO2,");
+    strcat_s(dprdc, sizeof(dprdc), token[2]);
+    strcat_s(dprdc, sizeof(dprdc), "\nOFAO3,");
+    strcat_s(dprdc, sizeof(dprdc), token[3]);
+    strcat_s(dprdc, sizeof(dprdc), "\nOFAO4,");
+    strcat_s(dprdc, sizeof(dprdc), token[4]);
+    strcat_s(dprdc, sizeof(dprdc), "\nOFAO5,");
+    strcat_s(dprdc, sizeof(dprdc), token[5]);
+    strcat_s(dprdc, sizeof(dprdc), "\nOFAO6,");
+    strcat_s(dprdc, sizeof(dprdc), token[7]);
+    strcat_s(dprdc, sizeof(dprdc), "\nCALBAO1,");
+    strcat_s(dprdc, sizeof(dprdc), token[8]);
+    strcat_s(dprdc, sizeof(dprdc), "\nCALBAO2,");
+    strcat_s(dprdc, sizeof(dprdc), token[9]);
+    strcat_s(dprdc, sizeof(dprdc), "\nCALBAO3,");
+    strcat_s(dprdc, sizeof(dprdc), token[8]);
+    strcat_s(dprdc, sizeof(dprdc), "\nCALBAO4,");
+    strcat_s(dprdc, sizeof(dprdc), token[9]);
+    strcat_s(dprdc, sizeof(dprdc), "\nCALBAO5,");
+    strcat_s(dprdc, sizeof(dprdc), token[10]);
+    strcat_s(dprdc, sizeof(dprdc), "\nCALBAO6,");
+    strcat_s(dprdc, sizeof(dprdc), token[11]);
+    strcat_s(dprdc, sizeof(dprdc), "\n\n");
+
+    // DPROBE
+    // DPROBEの文字は、ファイル保存時に入力する。
+    for (i = 0; i < 20; i++)
+    {
+        ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8(&para, i);
+        // スペース区切りのパラメータを分割
+        token[0] = strtok_s(para.sprobe.para, " ", &context);
+        for (j = 1; j < 19; j++)
+        {
+            token[j] = strtok_s(NULL, " ", &context);
+        }
+        // パラメータ保存フォーマットへ変更
+        sprintf_s(dprobe[i], "ID%d\nAO0,", i);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[0]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), "\nOFAX,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[1]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",OFAY,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[2]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",OFAZ,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[3]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), "\nTTAX,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[4]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",TTAY,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[5]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",TTAZ,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[6]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), "\nOFBX,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[7]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",OFBY,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[8]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",OFBZ,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[9]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), "\nTTBX,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[10]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",TTBY,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[11]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",TTBZ,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[12]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), "\nOF0X,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[13]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",OF0Y,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[14]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",OF0Z,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[15]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), "\nTT0X,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[16]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",TT0Y,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[17]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), ",TT0Z,");
+        strcat_s(dprobe[i], sizeof(dprobe[i]), token[18]);
+        strcat_s(dprobe[i], sizeof(dprobe[i]), "\n");
+    }
+    // 枝番のパラメータ
+    for (i = 17; i < 20; i++)
+    {
+        for (k = 0; k < 15; k++)
+        {
+            ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8Ma(&para, i, k);
+            // スペース区切りのパラメータを分割
+            token[0] = strtok_s(para.sprobe.para, " ", &context);
+            for (j = 1; j < 19; j++)
+            {
+                token[j] = strtok_s(NULL, " ", &context);
+            }
+            // パラメータ保存フォーマットへ変更
+            sprintf_s(dprobema[i-17][k], "ID%d-%d\nAO0,", i, k);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[0]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nOFAX,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[1]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OFAY,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[2]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OFAZ,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[3]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nTTAX,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[4]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TTAY,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[5]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TTAZ,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[6]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nOFBX,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[7]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OFBY,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[8]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OFBZ,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[9]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nTTBX,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[10]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TTBY,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[11]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TTBZ,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[12]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nOF0X,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[13]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OF0Y,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[14]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OF0Z,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[15]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nTT0X,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[16]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TT0Y,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[17]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TT0Z,");
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[18]);
+            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\n");
+        }
+    }
+    strcat_s(dprobema[2][14], sizeof(dprobema[2][14]), "\n");
+
+    // DLEVEL
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Dlevel(para2);
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(dlevel, "DLEVEL\nSWLV,");
+    strcat_s(dlevel, sizeof(dlevel), para2);
+    strcat_s(dlevel, sizeof(dlevel), "\n\n");
+    memset(para2, 0, sizeof(para2)); // 初期化
+
+
+    // DCNT
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Dcnt(para2);
+    // パラメータ保存フォーマットへ変更
+    sprintf_s(dcnt, "DCNT\nDIR,");
+    strcat_s(dcnt, sizeof(dcnt), para2);
+    strcat_s(dcnt, sizeof(dcnt), "\n\n");
+    memset(para2, 0, sizeof(para2)); // 初期化
+
+    // DLIM
+    // DLIMの文字は、ファイル保存時に入力する。
+    for (i = 0; i < 7; i++)
+    {
+        ret |= HwCtrl::m_hVecCnt.VecCmd_Dlim(para2, i);
+        sprintf_s(dlim[i], sizeof(dlim[i]), "No.%d,", i);
+        strcat_s(dlim[i], sizeof(dlim[i]), para2);
+        strcat_s(dlim[i], sizeof(dlim[i]), "\n");
+    }
+    strcat_s(dlim[6], sizeof(dlim[6]), "\n");
+    memset(para2, 0, sizeof(para2)); // 初期化
+    
+    // DSERIAL
+    ret |= HwCtrl::m_hVecCnt.VecCmd_Dserial(para2);
+    sprintf_s(dserial, "DSERIAL\nNo,");
+    strcat_s(dserial, sizeof(dserial), para2);
+    strcat_s(dserial, sizeof(dcnt), "\n");
+
+    FILE* pf;
+    char cPath[256] = { 0 }; // ファイルのパス
+
+    // 年月日時分.vec8
+    SYSTEMTIME lpSys;
+    char time[64];
+    ::GetLocalTime(&lpSys);
+    sprintf_s(time, "%04d%02d%02d%02d%02d.vec8",
+                lpSys.wYear,
+                lpSys.wMonth,
+                lpSys.wDay,
+                lpSys.wHour,
+                lpSys.wMinute);
+
+    MakeSureDirectoryPathExists("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Log\\"); //フォルダが無ければ、作成する
+    sprintf_s(cPath, "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Log\\"); // ファイルパス
+    strcat_s(cPath, sizeof(cPath), time); // ファイル名
+    if ((fopen_s(&pf, cPath, "w")) == 0)
+    {
+        // ファイルへ書き込む
+        fputs((char*)&(test002), pf);
+        fputs((char*)&(test004), pf);
+        fputs((char*)&(test006), pf);
+        fputs((char*)&(test008), pf);
+        fputs((char*)&(test010), pf);
+        fputs((char*)&(test012), pf);
+        fputs((char*)&(test018), pf);
+        fputs((char*)&(dprdc), pf);
+        fputs("DPROBE\n", pf);
+        for (i = 0; i < 20; i++)
+        {
+            fputs(dprobe[i], pf);
+        }
+        for (i = 0; i < 3; i++)
+        {
+            for (j = 0; j < 15; j++)
+            {
+                fputs(dprobema[i][j], pf);
+            }
+        }
+        fputs((char*)&(dlevel), pf);
+        fputs((char*)&(dcnt), pf);
+        fputs("DLIM\n", pf);
+        for (i = 0; i < 7; i++)
+        {
+            fputs(dlim[i], pf);
+        }
+        fputs((char*)&(dserial), pf);
+
+        fclose(pf); //ファイルを閉じる
+    }
+    else
+    {
+        // ファイルを開くことができなかった
+    }
 }

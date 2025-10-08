@@ -167,7 +167,17 @@ public:
 	int VecCmd_Test004(CALIB_DATA* para);	// 2025.9.12 add eba
 	int VecCmd_Test006(CALIB_DATA* para);	// 2025.9.12 add eba
 	int VecCmd_Test008(CALIB_DATA* para);	// 2025.9.12 add eba
+	int VecCmd_Test010(CALIB_DATA* para);	// 2025.10.6yori
+	int VecCmd_Test012(CALIB_DATA* para);	// 2025.10.6yori
+	int VecCmd_Test018(CALIB_DATA* para);	// 2025.10.6yori
+	int VecCmd_Dprdc(CALIB_DATA* para);		// 2025.10.6yori
+	int VecCmd_Dprdc2(CALIB_DATA* para);		// 2025.10.6yori
 	int VecCmd_DprobeV8(CALIB_DATA* para, int psid);	// 2025.9.12 add eba
+	int VecCmd_DprobeV8Ma(CALIB_DATA* para, int psid, int branch); // 2025.10.6yori
+	int VecCmd_Dlevel(char* para); // 2025.10.7yori
+	int VecCmd_Dcnt(char* para); // 2025.10.7yori
+	int VecCmd_Dlim(char* para, int no); // 2025.10.7yori
+	int VecCmd_Dserial(char* para); // 2025.10.7yori
 	int VecCmd_Test003(CALIB_DATA* para);	// 2025.9.12 add eba
 	int VecCmd_Test005(CALIB_DATA* para);	// 2025.9.12 add eba
 	int VecCmd_Test007(CALIB_DATA* para);	// 2025.9.12 add eba

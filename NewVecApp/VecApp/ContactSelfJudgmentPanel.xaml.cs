@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CSH;
+using Microsoft.Win32;
+using System.IO; // 追加(2025.10.7yori)
 
 namespace VecApp
 {
@@ -43,6 +45,17 @@ namespace VecApp
         private void Click_ParamSaveBtn(object sender, RoutedEventArgs e)
         {
             CSH.Grp02.Cmd13(); // 有接触モードへ変更(2025.10.6yori)
+
+            var dialog = new SaveFileDialog
+            {
+                Title = "保存先を選択",
+                Filter = "VECTORON files (*.V8)|*.V8|"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+            }
+
             CSH.Grp02.ContactSelfJudgmentPanelSavePara(); // パラメータ保存(2025.10.6yori)
         }
         private void Click_ParamRestoreBtn(object sender, RoutedEventArgs e)

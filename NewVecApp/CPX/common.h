@@ -18,6 +18,8 @@
 #include "../Lib/VecCalib/VecCalPolyPgin.h" // 2025.9.3 eba
 #pragma comment(lib, "../Lib/VecCalib/VecCalPolyPgin.lib") // 2025.9.3 eba
 
+#include <imagehlp.h> // フォルダ作成用で追加(2025.10.7yori)
+#pragma comment(lib, "imagehlp.lib") // フォルダ作成用で追加(2025.10.7yori)
 
 using namespace std; //using namespace System→using namespace stdへ変更(2025.5.15yori)
 
