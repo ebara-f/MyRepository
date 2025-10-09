@@ -291,6 +291,7 @@ CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd11(); // 追加(2025.9.1yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd12(); // 追加(2025.10.6yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd13(); // 追加(2025.10.6yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactSelfJudgmentPanelSavePara(const TCHAR*); // 追加(2025.10.8yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactSelfJudgmentPanelRestorePara(const TCHAR*); // 追加(2025.10.9yori)
 
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelInit(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickStart(CALIB_PARA* para);

@@ -328,6 +328,25 @@ int Grp02::ContactSelfJudgmentPanelSavePara(const TCHAR* path)
 }
 
 
+
+/***********************************************************************
+
+    ContactSelfJudgmentPanelRestorePara
+    追加(2025.10.9yori)
+
+***********************************************************************/
+
+int Grp02::ContactSelfJudgmentPanelRestorePara(const TCHAR* path)
+{
+    int ret = 0;
+
+    HwCtrl::RestorePara(path);
+
+    return (ret);
+}
+
+
+
 /***********************************************************************
 
     ContactInspectionPanelInit

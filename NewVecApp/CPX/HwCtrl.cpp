@@ -3542,6 +3542,7 @@ int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid)
 }
 
 
+
 /***********************************************************************
 
     アームパラメータ保存
@@ -4165,4 +4166,191 @@ void HwCtrl::SavePara(const TCHAR* path)
     {
         // ファイルを開くことができなかった
     }
+}
+
+
+
+/***********************************************************************
+
+    アームパラメータ復元
+    2025.10.9yori)
+
+***********************************************************************/
+void HwCtrl::RestorePara(const TCHAR* path)
+{
+    int i = 0;
+    size_t len = 0;
+    FILE* pf;
+    char cPath[256] = { 0 }; // ファイルのパス
+    size_t converted = 0;
+    errno_t err;
+    char line[1024]; // 1行を読み込むバッファ
+    char* line2;
+    char* para_name = NULL;
+    char* para;
+    char* token;
+    char* context = NULL;
+    char para2[64] = { 0 };
+    char test002[1024] = { 0 };
+    char test002_ab[256] = { 0 };
+    char test002_ao[256] = { 0 };
+    char test004[1024] = { 0 };
+    char test006[1024] = { 0 };
+    char test008[512] = { 0 };
+    char test010[1024] = { 0 };
+    char test012[1024] = { 0 };
+    char test018[128] = { 0 };
+    char dprdc[512] = { 0 };
+    char dprobe[20][512] = { 0 };
+    char dprobema[3][15][512] = { 0 };
+    char dlevel[64] = { 0 };
+    char dcnt[32] = { 0 };
+    char dlim[7][256] = { 0 };
+    char dserial[32] = { 0 };
+
+    err = wcstombs_s(&converted, cPath, sizeof(cPath), path, _TRUNCATE); // wcstombs_sを使ってwchar_tからcharへ変換
+
+    if ((fopen_s(&pf, cPath, "r")) == 0)
+    {
+        // TEST@002
+        if (fgets(line, sizeof(line), pf) != NULL) // 1行を取得
+        {
+            if(strstr(line, "TEST@002")!= NULL)
+            {
+                // ARM1,2,3
+                fgets(line, sizeof(line), pf); // 1行を取得
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context);
+                while (para_name != NULL)
+                {
+                    para = strtok_s(NULL, ",", &context);
+                    strcat_s(test002, sizeof(test002), para);
+                    strcat_s(test002, sizeof(test002), " ");
+                    para_name = strtok_s(NULL, ",", &context);
+                }
+                // AB1,AO1
+                fgets(line, sizeof(line), pf); // 1行を取得
+                line[strcspn(line, "\n")] = '\0'; // 改行削除
+                para_name = strtok_s(line, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ab, sizeof(test002_ab), para);
+                strcat_s(test002_ab, sizeof(test002_ab), " ");
+                para_name = strtok_s(NULL, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ao, sizeof(test002_ao), para);
+                strcat_s(test002_ao, sizeof(test002_ao), " ");
+                // AB2,AO2
+                fgets(line, sizeof(line), pf); // 1行を取得
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ab, sizeof(test002_ab), para);
+                strcat_s(test002_ab, sizeof(test002_ab), " ");
+                para_name = strtok_s(NULL, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ao, sizeof(test002_ao), para);
+                strcat_s(test002_ao, sizeof(test002_ao), " ");
+                // AB3,AO3
+                fgets(line, sizeof(line), pf); // 1行を取得
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ab, sizeof(test002_ab), para);
+                strcat_s(test002_ab, sizeof(test002_ab), " ");
+                para_name = strtok_s(NULL, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ao, sizeof(test002_ao), para);
+                strcat_s(test002_ao, sizeof(test002_ao), " ");
+                // AB4,AO4
+                fgets(line, sizeof(line), pf); // 1行を取得
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ab, sizeof(test002_ab), para);
+                strcat_s(test002_ab, sizeof(test002_ab), " ");
+                para_name = strtok_s(NULL, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ao, sizeof(test002_ao), para);
+                strcat_s(test002_ao, sizeof(test002_ao), " ");
+                // AB5,AO5
+                fgets(line, sizeof(line), pf); // 1行を取得
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ab, sizeof(test002_ab), para);
+                strcat_s(test002_ab, sizeof(test002_ab), " ");
+                para_name = strtok_s(NULL, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ao, sizeof(test002_ao), para);
+                strcat_s(test002_ao, sizeof(test002_ao), " ");
+                // AB6,AO6
+                fgets(line, sizeof(line), pf); // 1行取得
+                line[strcspn(line, "\n")] = '\0'; // 改行削除
+                para_name = strtok_s(line, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ab, sizeof(test002_ab), para);
+                strcat_s(test002_ab, sizeof(test002_ab), " ");
+                para_name = strtok_s(NULL, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ao, sizeof(test002_ao), para);
+                strcat_s(test002_ao, sizeof(test002_ao), " ");
+                // AB7,AO7
+                fgets(line, sizeof(line), pf); // 1行取得
+                line[strcspn(line, "\n")] = '\0'; // 改行削除
+                para_name = strtok_s(line, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ab, sizeof(test002_ab), para);
+                strcat_s(test002_ab, sizeof(test002_ab), " ");
+                para_name = strtok_s(NULL, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ao, sizeof(test002_ao), para);
+                strcat_s(test002_ao, sizeof(test002_ao), " ");
+                // AB8,AO8
+                fgets(line, sizeof(line), pf); // 1行を取得
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ab, sizeof(test002_ab), para);
+                para_name = strtok_s(NULL, ",", &context); // カンマまでのパラメータ名を取得
+                para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
+                strcat_s(test002_ao, sizeof(test002_ao), para);
+                //ARM+AB+AO
+                strcat_s(test002, sizeof(test002), test002_ab);
+                strcat_s(test002, sizeof(test002), " ");
+                strcat_s(test002, sizeof(test002), test002_ao);
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // TEST@004
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "TEST@004") != NULL)
+            {
+                for (i = 0; i < 10; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    while (para_name != NULL)
+                    {
+                        para = strtok_s(NULL, ",", &context);
+                        strcat_s(test004, sizeof(test004), para);
+                        strcat_s(test004, sizeof(test004), " ");
+                        para_name = strtok_s(NULL, ",", &context);
+                    }
+                }
+                len = strlen(test004); // 文字列の長さを取得
+                if (len > 0) test004[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+            }
+        }
+
+        fclose(pf); //ファイルを閉じる
+    }
+    else
+    {
+        // ファイルを開くことができなかった
+    }
+
 }

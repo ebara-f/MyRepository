@@ -260,6 +260,24 @@ int WINAPI CPX_Grp02_ContactSelfJudgmentPanelSavePara(const TCHAR* path)
 
 /***********************************************************************
 
+    ContactSelfJudgmentPanelRestorePara
+    追加(2025.10.8yori)
+
+***********************************************************************/
+
+int WINAPI CPX_Grp02_ContactSelfJudgmentPanelRestorePara(const TCHAR* path)
+{
+    int     rc;
+
+    rc = Grp02::ContactSelfJudgmentPanelRestorePara(path);
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
     CPX_Grp02_ContactInspectionPanelInit
     2025.8.26 add eba
 

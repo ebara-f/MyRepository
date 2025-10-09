@@ -1678,6 +1678,15 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   開く に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String260 {
+            get {
+                return ResourceManager.GetString("String260", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   球中心(球ゲージ)： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String27 {

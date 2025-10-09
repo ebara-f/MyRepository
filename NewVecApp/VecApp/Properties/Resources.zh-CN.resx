@@ -901,4 +901,7 @@
   <data name="String258" xml:space="preserve">
     <value>名前を付けて保存</value>
   </data>
+  <data name="String260" xml:space="preserve">
+    <value>開く</value>
+  </data>
 </root>
