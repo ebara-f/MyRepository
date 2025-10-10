@@ -4173,24 +4173,21 @@ void HwCtrl::SavePara(const TCHAR* path)
 /***********************************************************************
 
     アームパラメータ復元
-    2025.10.9yori)
+    2025.10.10yori)
 
 ***********************************************************************/
 void HwCtrl::RestorePara(const TCHAR* path)
 {
-    int i = 0;
+    int i = 0, j = 0, k = 0;
     size_t len = 0;
     FILE* pf;
     char cPath[256] = { 0 }; // ファイルのパス
     size_t converted = 0;
     errno_t err;
     char line[1024]; // 1行を読み込むバッファ
-    char* line2;
     char* para_name = NULL;
-    char* para;
-    char* token;
+    char* para = NULL;;
     char* context = NULL;
-    char para2[64] = { 0 };
     char test002[1024] = { 0 };
     char test002_ab[256] = { 0 };
     char test002_ao[256] = { 0 };
@@ -4200,7 +4197,8 @@ void HwCtrl::RestorePara(const TCHAR* path)
     char test010[1024] = { 0 };
     char test012[1024] = { 0 };
     char test018[128] = { 0 };
-    char dprdc[512] = { 0 };
+    char dprdc[128] = { 0 };
+    char dprdc2[128] = { 0 };
     char dprobe[20][512] = { 0 };
     char dprobema[3][15][512] = { 0 };
     char dlevel[64] = { 0 };
@@ -4212,6 +4210,7 @@ void HwCtrl::RestorePara(const TCHAR* path)
 
     if ((fopen_s(&pf, cPath, "r")) == 0)
     {
+        // パラメータファイルの一番上から順番に1行ずつ取得し、各パラメータを取得する。
         // TEST@002
         if (fgets(line, sizeof(line), pf) != NULL) // 1行を取得
         {
@@ -4328,7 +4327,7 @@ void HwCtrl::RestorePara(const TCHAR* path)
         {
             if (strstr(line, "TEST@004") != NULL)
             {
-                for (i = 0; i < 10; i++)
+                for (i = 0; i < 9; i++)
                 {
                     fgets(line, sizeof(line), pf);
                     line[strcspn(line, "\n")] = '\0'; // 改行を削除
@@ -4345,6 +4344,294 @@ void HwCtrl::RestorePara(const TCHAR* path)
                 if (len > 0) test004[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
             }
         }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // TEST@006
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "TEST@006") != NULL)
+            {
+                for (i = 0; i < 9; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    while (para_name != NULL)
+                    {
+                        para = strtok_s(NULL, ",", &context);
+                        strcat_s(test006, sizeof(test006), para);
+                        strcat_s(test006, sizeof(test006), " ");
+                        para_name = strtok_s(NULL, ",", &context);
+                    }
+                }
+                len = strlen(test006); // 文字列の長さを取得
+                if (len > 0) test006[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // TEST@008
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "TEST@008") != NULL)
+            {
+                for (i = 0; i < 5; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    while (para_name != NULL)
+                    {
+                        para = strtok_s(NULL, ",", &context);
+                        strcat_s(test008, sizeof(test008), para);
+                        strcat_s(test008, sizeof(test008), " ");
+                        para_name = strtok_s(NULL, ",", &context);
+                    }
+                }
+                len = strlen(test008); // 文字列の長さを取得
+                if (len > 0) test008[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // TEST@010
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "TEST@010") != NULL)
+            {
+                for (i = 0; i < 16; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    while (para_name != NULL)
+                    {
+                        para = strtok_s(NULL, ",", &context);
+                        strcat_s(test010, sizeof(test010), para);
+                        strcat_s(test010, sizeof(test010), " ");
+                        para_name = strtok_s(NULL, ",", &context);
+                    }
+                }
+                len = strlen(test010); // 文字列の長さを取得
+                if (len > 0) test010[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // TEST@012
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "TEST@012") != NULL)
+            {
+                for (i = 0; i < 38; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    while (para_name != NULL)
+                    {
+                        para = strtok_s(NULL, ",", &context);
+                        strcat_s(test012, sizeof(test012), para);
+                        strcat_s(test012, sizeof(test012), " ");
+                        para_name = strtok_s(NULL, ",", &context);
+                    }
+                }
+                len = strlen(test012); // 文字列の長さを取得
+                if (len > 0) test012[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // TEST@018
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "TEST@018") != NULL)
+            {
+                for (i = 0; i < 3; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    while (para_name != NULL)
+                    {
+                        para = strtok_s(NULL, ",", &context);
+                        strcat_s(test018, sizeof(test018), para);
+                        strcat_s(test018, sizeof(test018), " ");
+                        para_name = strtok_s(NULL, ",", &context);
+                    }
+                }
+                len = strlen(test018); // 文字列の長さを取得
+                if (len > 0) test018[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // DPRDC、DPRDC2
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "DPRDC") != NULL)
+            {
+                // DPRDC
+                for (i = 0; i < 7; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    while (para_name != NULL)
+                    {
+                        para = strtok_s(NULL, ",", &context);
+                        strcat_s(dprdc, sizeof(dprdc), para);
+                        strcat_s(dprdc, sizeof(dprdc), " ");
+                        para_name = strtok_s(NULL, ",", &context);
+                    }
+                }
+                len = strlen(dprdc); // 文字列の長さを取得
+                if (len > 0) dprdc[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+
+                // DPRDC2
+                for (i = 0; i < 6; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    while (para_name != NULL)
+                    {
+                        para = strtok_s(NULL, ",", &context);
+                        strcat_s(dprdc2, sizeof(dprdc2), para);
+                        strcat_s(dprdc2, sizeof(dprdc2), " ");
+                        para_name = strtok_s(NULL, ",", &context);
+                    }
+                }
+                len = strlen(dprdc2); // 文字列の長さを取得
+                if (len > 0) dprdc2[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // DPROBE
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "DPROBE") != NULL)
+            {
+                for (i = 0; i < 20; i++)
+                {
+                    fgets(line, sizeof(line), pf); // ID番号の行
+
+                    for (j = 0; j < 7; j++)
+                    {
+                        fgets(line, sizeof(line), pf);
+                        line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                        para_name = strtok_s(line, ",", &context);
+                        while (para_name != NULL)
+                        {
+                            para = strtok_s(NULL, ",", &context);
+                            strcat_s(dprobe[i], sizeof(dprobe[i]), para);
+                            strcat_s(dprobe[i], sizeof(dprobe[i]), " ");
+                            para_name = strtok_s(NULL, ",", &context);
+                        }
+                    }
+                    len = strlen(dprobe[i]); // 文字列の長さを取得
+                    if (len > 0) dprobe[i][len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                }
+
+                // 枝番のパラメータ
+                for (i = 0; i < 3; i++)
+                {
+                    for (k = 0; k < 15; k++)
+                    {
+                        fgets(line, sizeof(line), pf); // ID番号の行
+
+                        for (j = 0; j < 7; j++)
+                        {
+                            fgets(line, sizeof(line), pf);
+                            line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                            para_name = strtok_s(line, ",", &context);
+                            while (para_name != NULL)
+                            {
+                                para = strtok_s(NULL, ",", &context);
+                                strcat_s(dprobema[i][k], sizeof(dprobema[i][k]), para);
+                                strcat_s(dprobema[i][k], sizeof(dprobema[i][k]), " ");
+                                para_name = strtok_s(NULL, ",", &context);
+                            }
+                        }
+                        len = strlen(dprobema[i][k]); // 文字列の長さを取得
+                        if (len > 0) dprobema[i][k][len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                    }
+                }
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // DLEVEL
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "DLEVEL") != NULL)
+            {
+                fgets(line, sizeof(line), pf);
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context);
+                para = strtok_s(NULL, ",", &context);
+                sprintf_s(dlevel, para);
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // DCNT
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "DCNT") != NULL)
+            {
+                fgets(line, sizeof(line), pf);
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context);
+                para = strtok_s(NULL, ",", &context);
+                sprintf_s(dcnt, para);
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // DLIM
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "DLIM") != NULL)
+            {
+                for (i = 0; i < 7; i++)
+                {
+                    fgets(line, sizeof(line), pf);
+                    line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                    para_name = strtok_s(line, ",", &context);
+                    para = strtok_s(NULL, ",", &context);
+                    sprintf_s(dlim[i], para);
+                }
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
+
+        // DSERIAL
+        if (fgets(line, sizeof(line), pf) != NULL)
+        {
+            if (strstr(line, "DSERIAL") != NULL)
+            {
+                fgets(line, sizeof(line), pf);
+                line[strcspn(line, "\n")] = '\0'; // 改行を削除
+                para_name = strtok_s(line, ",", &context);
+                para = strtok_s(NULL, ",", &context);
+                sprintf_s(dserial, para);
+            }
+        }
+
+        fgets(line, sizeof(line), pf); // 改行
 
         fclose(pf); //ファイルを閉じる
     }

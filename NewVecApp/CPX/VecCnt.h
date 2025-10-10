@@ -183,6 +183,7 @@ public:
 	int VecCmd_Test007(CALIB_DATA* para);	// 2025.9.12 add eba
 	int VecCmd_Test009(CALIB_DATA* para);	// 2025.9.12 add eba
 	int VecCmd_SprobeV8(CALIB_DATA* para, int psid);	// 2025.9.12 add eba
+	int VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch); // 2025.10.10yori
 	int VecCmd_Iso(void);	// 2025.9.12 add eba
 
 	int VecFunc_DataRequestEx(VecDtEx* PosiData, int iDataSize);

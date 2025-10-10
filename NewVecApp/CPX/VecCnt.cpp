@@ -2218,6 +2218,62 @@ int CVecCnt::VecCmd_SprobeV8(CALIB_DATA* para, int psid)
 
 /***********************************************************************
 
+	SPROBEV8MA
+	作成中
+	2025.10.10yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	char	cbranch[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(para->sprobe.cmd, sizeof(para->sprobe.cmd), "%s", "SPROBEV8MA");
+	sprintf_s(para->sprobe.para, sizeof(para->sprobe.para), "%d", psid);
+	sprintf_s(cbranch, sizeof(cbranch), " %d", branch);
+	strcat_s(para->sprobe.para, sizeof(para->sprobe.para), cbranch);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprobe.cmd, para->sprobe.para, 2);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->sprobe.para, &para->sprobe.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
 	TEST@ISO
 	2025.9.12 add eba
 
