@@ -69,14 +69,14 @@ namespace VecApp
 
         private void Click_MultiGaugeBtn01(object sender, RoutedEventArgs e)
         {
-            (Parent as SubWindow2).ContactInspectionValue.CalibPara.CalibType = 5; // 2025.10.6. add eba
+            (Parent as SubWindow2).ContactInspectionValue.CalibMseBox.CalibType = 5; // 2025.10.6. add eba
             Parent.CurrentPanel = Panel.ContactInspection; // 追加(2025.7.31yori)
         }
 
         private void Click_MultiGaugeBtn02(object sender, RoutedEventArgs e)
         {
-            //(Parent as SubWindow2).ContactInspectionValue.CalibPara.CalibType = 1; // 2025.8.27. add eba
-            (Parent as SubWindow2).ContactInspectionValue.CalibPara.CalibType = 4; // 2025.8.27. add eba
+            //(Parent as SubWindow2).ContactInspectionValue.CalibMseBox.CalibType = 1; // 2025.8.27. add eba
+            (Parent as SubWindow2).ContactInspectionValue.CalibMseBox.CalibType = 4; // 2025.8.27. add eba
             Parent.CurrentPanel = Panel.ContactInspection; // 追加(2025.7.31yori)
         }
 

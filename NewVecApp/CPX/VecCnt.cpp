@@ -2303,3 +2303,53 @@ int CVecCnt::VecCmd_Iso(void)
 
 	return ret_code;
 }
+
+
+/***********************************************************************
+
+	PC
+	2025.10.127add eba
+
+***********************************************************************/
+int CVecCnt::VecCmd_Pc(CALIB_PAPA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(para->cmd, sizeof(para->cmd), "%s", "PC");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->cmd, para->para, 9);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->para_in, &para->no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}

@@ -11,9 +11,9 @@ class CalibSetting : public CalibComm
 protected:
 	
 public:
-	static int Init(CALIB_PARA* para);
-	static int OkBtn(CALIB_PARA* para);
-	static int CancelBtn(CALIB_PARA* para);
+	static int Init(CALIB_MSEBOX* para);
+	static int OkBtn(CALIB_MSEBOX* para);
+	static int CancelBtn(CALIB_MSEBOX* para);
 
 
 

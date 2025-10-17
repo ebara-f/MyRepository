@@ -37,16 +37,17 @@ protected:
 	static CalibDataBuff	m_pData;
 	static CALIB_DATA		m_ArmParaTxt;
 public:
-	static int Init(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);
-	static int Start(CALIB_PARA* para);
-	static int Back(CALIB_PARA* para);
-	static int ReStart(CALIB_PARA* para);
-	static int Close(CALIB_PARA* para);
+	static int Init(CALIB_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);
+	static int Start(CALIB_MSEBOX* para);
+	static int Back(CALIB_MSEBOX* para);
+	static int ReStart(CALIB_MSEBOX* para);
+	static int Close(CALIB_MSEBOX* para);
 	static int GetDrawPath(TCHAR*& path, int count);
 	static int GetMesString(TCHAR*& mes, int count);
 	static int CntDataInputThread(void);
-	static int CntDataMesCallBack(CALIB_PARA* para);
-	static int ParaOutCallBack(CALIB_PARA* para);
+	static int CntDataMesCallBack(CALIB_MSEBOX* para);
+	static int ClickResoreBtn(CALIB_MSEBOX* para);
+	static int ParaOutCallBack(CALIB_MSEBOX* para);
 
 
 };

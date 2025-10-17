@@ -86,6 +86,6 @@ namespace VecApp
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         // Viewと関連付かない変数
-        public CalibPara CalibPara = new CalibPara(); // 2025.9.24 add eba
+        public CalibMseBox CalibMseBox = new CalibMseBox(); // 2025.9.24 add eba
     }
 }

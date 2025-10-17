@@ -214,6 +214,7 @@ typedef struct CalibSettingParamter
     CALIB_GAUGE     GaugePara;
 
     CALIB_RESULT    InspAndProbCkResult;   // 始業前とプローブ点検両方の結果が入る(2025.9.22 memo eba)
+    CALIB_RESULT    InspAndProbCkResult2;   // 定数変更後の点検結果を入れる 2025.10.17 add eba
     CALIB_JUDGE     ProbeCheckThreshold;
     CALIB_JUDGE_CK  InspectionThreshold;
     CALIB_JUDGE_FG      ProbeCheckResultFg;
@@ -231,7 +232,7 @@ typedef struct CalibSettingParamter
 
     int MesString;  // 2025.9.21 add eba 仮
 
-} CALIB_PARA;
+} CALIB_MSEBOX;
 
 
 CPX_DECLSPEC void WINAPI CPX_ErrMsg_SetCB( ER_CBFUNC );
@@ -293,19 +294,20 @@ CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd13(); // 追加(2025.10.6yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactSelfJudgmentPanelSavePara(const TCHAR*); // 追加(2025.10.8yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactSelfJudgmentPanelRestorePara(const TCHAR*); // 追加(2025.10.9yori)
 
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelInit(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickStart(CALIB_PARA* para);
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickBack(CALIB_PARA* para);
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickReStart(CALIB_PARA* para);
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelTerminate(CALIB_PARA* par);
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelMesCallBack(CALIB_PARA* para);
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelParaOutCallBack(CALIB_PARA* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelInit(CALIB_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickStart(CALIB_MSEBOX* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickBack(CALIB_MSEBOX* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickReStart(CALIB_MSEBOX* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelTerminate(CALIB_MSEBOX* par);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelMesCallBack(CALIB_MSEBOX* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickReStore(CALIB_MSEBOX* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelParaOutCallBack(CALIB_MSEBOX* para);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelGetPath(TCHAR*&, int);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelGetMes(TCHAR*&, int);
 
-CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelInit(CALIB_PARA* para);
-CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelOkBtn(CALIB_PARA* para);
-CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelCancelBtn(CALIB_PARA* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelInit(CALIB_MSEBOX* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelOkBtn(CALIB_MSEBOX* para);
+CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelCancelBtn(CALIB_MSEBOX* para);
 
 
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd01(); // 追加(2025.6.24yori)

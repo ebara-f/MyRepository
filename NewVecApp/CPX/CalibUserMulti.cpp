@@ -8,7 +8,7 @@
 
 
 
-int CalibUserMulti::InitSub(CALIB_PARA* para)
+int CalibUserMulti::InitSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -40,7 +40,7 @@ int CalibUserMulti::InitSub(CALIB_PARA* para)
 }
 
 
-int CalibUserMulti::StartSub(CALIB_PARA* para)
+int CalibUserMulti::StartSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	char path[256];
@@ -65,7 +65,7 @@ int CalibUserMulti::StartSub(CALIB_PARA* para)
 
 
 
-int CalibUserMulti::CntDataMesCallBackSub(CALIB_PARA* para)
+int CalibUserMulti::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -98,7 +98,7 @@ int CalibUserMulti::CntDataMesCallBackSub(CALIB_PARA* para)
 
 
 
-int CalibUserMulti::CntDataMesCallBackSub2(CALIB_PARA* para, VecCtEx2* data)
+int CalibUserMulti::CntDataMesCallBackSub2(CALIB_MSEBOX* para, VecCtEx2* data)
 {
 	int ret = 0;
 	double radius;
@@ -131,7 +131,7 @@ int CalibUserMulti::CntDataMesCallBackSub2(CALIB_PARA* para, VecCtEx2* data)
 
 
 
-int CalibUserMulti::ParaOutCallBackSub(CALIB_PARA* para)
+int CalibUserMulti::ParaOutCallBackSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 

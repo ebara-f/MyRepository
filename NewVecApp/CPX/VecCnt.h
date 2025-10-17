@@ -185,6 +185,7 @@ public:
 	int VecCmd_SprobeV8(CALIB_DATA* para, int psid);	// 2025.9.12 add eba
 	int VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch); // 2025.10.10yori
 	int VecCmd_Iso(void);	// 2025.9.12 add eba
+	int VecCmd_Pc(CALIB_PAPA* para);	// 2025.10.17 add eba
 
 	int VecFunc_DataRequestEx(VecDtEx* PosiData, int iDataSize);
 	int VecFunc_CntRequestEx(VecCtEx2* CntData, int iDataSize); // 追加(2025.6.18yori)

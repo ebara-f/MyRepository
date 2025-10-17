@@ -44,15 +44,15 @@ namespace VecApp
             this.ViewModel.IsTextBoxEnabled = true;
 
             // どのキャリブを立ち上げるのか引数で指定 2025.8.27 add eba
-            //CalibPara calibPara = new CalibPara(); // 2025.9.3 add eba
-            this.ViewModel.CalibPara.Language = 1;
-            //this.ViewModel.CalibPara.CalibType = this.ViewModel.CalibStyleFg;
+            //CalibMseBox calibPara = new CalibMseBox(); // 2025.9.3 add eba
+            this.ViewModel.CalibMseBox.Language = 1;
+            //this.ViewModel.CalibMseBox.CalibType = this.ViewModel.CalibStyleFg;
             string path;
             string mes;
-            CSH.Grp02.ContactInspectionPanelInit(ref this.ViewModel.CalibPara, out path, 512, out mes, 1024);
-            this.ViewModel.ImageSource = this.ViewModel.CalibPara.path;
-            this.ViewModel.SubtitleText = this.ViewModel.CalibPara.mes;
-            this.ViewModel.GaugeLength = this.ViewModel.CalibPara.GaugePara.BallBarLen.ToString("F4");
+            CSH.Grp02.ContactInspectionPanelInit(ref this.ViewModel.CalibMseBox, out path, 512, out mes, 1024);
+            this.ViewModel.ImageSource = this.ViewModel.CalibMseBox.path;
+            this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;
+            this.ViewModel.GaugeLength = this.ViewModel.CalibMseBox.GaugePara.BallBarLen.ToString("F4");
 
 
 
@@ -67,45 +67,45 @@ namespace VecApp
 
         public override void Terminate()
         {
-            CSH.Grp02.ContactInspectionPanelTerminate(ref this.ViewModel.CalibPara);
+            CSH.Grp02.ContactInspectionPanelTerminate(ref this.ViewModel.CalibMseBox);
            
         }
 
         public void MesCallBack()
         {
 
-            CSH.Grp02.ContactInspectionPanelMesCallBack(ref this.ViewModel.CalibPara);
-            this.ViewModel.ImageSource = this.ViewModel.CalibPara.path;
-            this.ViewModel.SubtitleText = this.ViewModel.CalibPara.mes;
+            CSH.Grp02.ContactInspectionPanelMesCallBack(ref this.ViewModel.CalibMseBox);
+            this.ViewModel.ImageSource = this.ViewModel.CalibMseBox.path;
+            this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;
 
-            UsrMessageBox.Show(this.ViewModel.CalibPara.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            UsrMessageBox.Show(this.ViewModel.CalibMseBox.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void ParaOutCallBack()
         {
 
-            CSH.Grp02.ContactInspectionPanelParaOutCallBack(ref this.ViewModel.CalibPara);
+            CSH.Grp02.ContactInspectionPanelParaOutCallBack(ref this.ViewModel.CalibMseBox);
 
-            switch((CalibType)this.ViewModel.CalibPara.CalibType)
+            switch((CalibType)this.ViewModel.CalibMseBox.CalibType)
             {
                 case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
                     this.ViewModel.ImageVisibility = Visibility.Hidden;
                     this.ViewModel.GridVisibility = Visibility.Visible;
 
-                    this.ViewModel.XMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[0].ToString("F3");
-                    this.ViewModel.YMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[1].ToString("F3");
-                    this.ViewModel.ZMaxMinValue = this.ViewModel.CalibPara.InspAndProbCkResult.pp[2].ToString("F3");
+                    this.ViewModel.XMaxMinValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.pp[0].ToString("F3");
+                    this.ViewModel.YMaxMinValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.pp[1].ToString("F3");
+                    this.ViewModel.ZMaxMinValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.pp[2].ToString("F3");
 
-                    this.ViewModel.XTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[0].ToString("F3");
-                    this.ViewModel.YTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[1].ToString("F3");
-                    this.ViewModel.ZTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[2].ToString("F3");
-                    this.ViewModel.DistanceTwoSigmaValue = this.ViewModel.CalibPara.InspAndProbCkResult.sigma2[3].ToString("F3");
+                    this.ViewModel.XTwoSigmaValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.sigma2[0].ToString("F3");
+                    this.ViewModel.YTwoSigmaValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.sigma2[1].ToString("F3");
+                    this.ViewModel.ZTwoSigmaValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.sigma2[2].ToString("F3");
+                    this.ViewModel.DistanceTwoSigmaValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.sigma2[3].ToString("F3");
 
-                    this.ViewModel.FaceDistanceValue = this.ViewModel.CalibPara.InspAndProbCkResult.plate.ToString("F3");
-                    this.ViewModel.MeasurementErrorValue = this.ViewModel.CalibPara.PlateErrVal.ToString("F3");
+                    this.ViewModel.FaceDistanceValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.plate.ToString("F3");
+                    this.ViewModel.MeasurementErrorValue = this.ViewModel.CalibMseBox.PlateErrVal.ToString("F3");
 
                     // OK・NG表示
-                    if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
+                    if (this.ViewModel.CalibMseBox.CalibInspectJudge == 0)
                     {
                         this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
                         this.ViewModel.ResultJudge = true;  // 背景色緑
@@ -116,7 +116,7 @@ namespace VecApp
                     }
 
                     // 各結果の背景色変更
-                    if (this.ViewModel.CalibPara.InspectionResultFg.pp[0] == 0)
+                    if (this.ViewModel.CalibMseBox.InspectionResultFg.pp[0] == 0)
                     {
                         this.ViewModel.XMaxMinJudge = true;
                     }
@@ -125,7 +125,7 @@ namespace VecApp
                         this.ViewModel.XMaxMinJudge = false;
                     }
 
-                    if (this.ViewModel.CalibPara.InspectionResultFg.pp[1] == 0)
+                    if (this.ViewModel.CalibMseBox.InspectionResultFg.pp[1] == 0)
                     {
                         this.ViewModel.YMaxMinJudge = true;
                     }
@@ -134,7 +134,7 @@ namespace VecApp
                         this.ViewModel.YMaxMinJudge = false;
                     }
 
-                    if (this.ViewModel.CalibPara.InspectionResultFg.pp[2] == 0)
+                    if (this.ViewModel.CalibMseBox.InspectionResultFg.pp[2] == 0)
                     {
                         this.ViewModel.ZMaxMinJudge = true;
                     }
@@ -143,7 +143,7 @@ namespace VecApp
                         this.ViewModel.ZMaxMinJudge = false;
                     }
 
-                    if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[0] == 0)
+                    if (this.ViewModel.CalibMseBox.InspectionResultFg.sigma2[0] == 0)
                     {
                         this.ViewModel.XTwoSigmaJudge = true;
                     }
@@ -152,7 +152,7 @@ namespace VecApp
                         this.ViewModel.XTwoSigmaJudge = false;
                     }
 
-                    if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[1] == 0)
+                    if (this.ViewModel.CalibMseBox.InspectionResultFg.sigma2[1] == 0)
                     {
                         this.ViewModel.YTwoSigmaJudge = true;
                     }
@@ -161,7 +161,7 @@ namespace VecApp
                         this.ViewModel.YTwoSigmaJudge = false;
                     }
 
-                    if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[2] == 0)
+                    if (this.ViewModel.CalibMseBox.InspectionResultFg.sigma2[2] == 0)
                     {
                         this.ViewModel.ZTwoSigmaJudge = true;
                     }
@@ -170,7 +170,7 @@ namespace VecApp
                         this.ViewModel.ZTwoSigmaJudge = false;
                     }
 
-                    if (this.ViewModel.CalibPara.InspectionResultFg.sigma2[3] == 0)
+                    if (this.ViewModel.CalibMseBox.InspectionResultFg.sigma2[3] == 0)
                     {
                         this.ViewModel.DistanceTwoSigmaJudge = true;
                     }
@@ -179,7 +179,7 @@ namespace VecApp
                         this.ViewModel.DistanceTwoSigmaJudge = false;
                     }
 
-                    if (this.ViewModel.CalibPara.InspectionResultFg.plate == 0)
+                    if (this.ViewModel.CalibMseBox.InspectionResultFg.plate == 0)
                     {
                         this.ViewModel.MeasurementErrorJudge = true;
                     }
@@ -193,13 +193,13 @@ namespace VecApp
                     // しきい値表示
                     this.ViewModel.ThresholdText =
                             "最大最小しきい値 : " +
-                            this.ViewModel.CalibPara.InspectionThreshold.pp.ToString("F2") +
+                            this.ViewModel.CalibMseBox.InspectionThreshold.pp.ToString("F2") +
                             "\n" +
                             "2σしきい値 : " +
-                            this.ViewModel.CalibPara.InspectionThreshold.sigma2.ToString("F2") +
+                            this.ViewModel.CalibMseBox.InspectionThreshold.sigma2.ToString("F2") +
                             "\n" +
                             "面間誤差しきい値 : " +
-                            this.ViewModel.CalibPara.InspectionThreshold.plate.ToString("F2");
+                            this.ViewModel.CalibMseBox.InspectionThreshold.plate.ToString("F2");
 
                     break;
 
@@ -209,7 +209,7 @@ namespace VecApp
                     this.ViewModel.GridVisibility2 = Visibility.Visible;
 
                     // OK・NG表示
-                    if (this.ViewModel.CalibPara.CalibInspectJudge == 0)
+                    if (this.ViewModel.CalibMseBox.CalibInspectJudge == 0)
                     {
                         this.ViewModel.ResultText2 = "OK";
                         this.ViewModel.ResultJudge2 = true;  // 背景色緑
@@ -220,7 +220,7 @@ namespace VecApp
                         this.ViewModel.ResultJudge2 = false; // 背景色赤
                     }
 
-                    //SetHistoryText(this.ViewModel.CalibPara.CalibResultVal.ToString("F0"));
+                    //SetHistoryText(this.ViewModel.CalibMseBox.CalibResultVal.ToString("F0"));
 
                     break;
 
@@ -238,22 +238,22 @@ namespace VecApp
 
         private void Click_StartBtn(object sender, RoutedEventArgs e)
         {
-            this.ViewModel.CalibPara.GaugePara.BallBarLen = Convert.ToDouble(this.ViewModel.GaugeLength);
-            CSH.Grp02.ContactInspectionPanelClickStart(ref this.ViewModel.CalibPara);
+            this.ViewModel.CalibMseBox.GaugePara.BallBarLen = Convert.ToDouble(this.ViewModel.GaugeLength);
+            CSH.Grp02.ContactInspectionPanelClickStart(ref this.ViewModel.CalibMseBox);
 
-            if(this.ViewModel.CalibPara.MesString ==0)
+            if(this.ViewModel.CalibMseBox.MesString ==0)
             {
                 this.ViewModel.IsStartBtnEnabled = false;
                 this.ViewModel.IsBackBtnEnabled = true;
                 this.ViewModel.IsReStartBtnEnabled = true;
                 this.ViewModel.IsTextBoxEnabled = false;
                 this.ViewModel.IsSettingBtnEnabled = false;
-                this.ViewModel.ImageSource = this.ViewModel.CalibPara.path;
-                this.ViewModel.SubtitleText = this.ViewModel.CalibPara.mes;
+                this.ViewModel.ImageSource = this.ViewModel.CalibMseBox.path;
+                this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;
             }
             else
             {
-                UsrMessageBox.Show(this.ViewModel.CalibPara.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                UsrMessageBox.Show(this.ViewModel.CalibMseBox.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
          
@@ -265,22 +265,22 @@ namespace VecApp
 
         private void Click_BackBtn(object sender, RoutedEventArgs e)
         {
-            CSH.Grp02.ContactInspectionPanelClickBack(ref this.ViewModel.CalibPara);
-            this.ViewModel.ImageSource = this.ViewModel.CalibPara.path;
-            this.ViewModel.SubtitleText = this.ViewModel.CalibPara.mes;
+            CSH.Grp02.ContactInspectionPanelClickBack(ref this.ViewModel.CalibMseBox);
+            this.ViewModel.ImageSource = this.ViewModel.CalibMseBox.path;
+            this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;
 
         }
 
 
         private void Click_FirstBackBtn(object sender, RoutedEventArgs e)
         {
-            CSH.Grp02.ContactInspectionPanelClickReStart(ref this.ViewModel.CalibPara);
+            CSH.Grp02.ContactInspectionPanelClickReStart(ref this.ViewModel.CalibMseBox);
             this.ViewModel.IsStartBtnEnabled = true;
             this.ViewModel.IsBackBtnEnabled = false;
             this.ViewModel.IsReStartBtnEnabled = false;
             this.ViewModel.IsTextBoxEnabled = true;
-            this.ViewModel.ImageSource = this.ViewModel.CalibPara.path;
-            this.ViewModel.SubtitleText = this.ViewModel.CalibPara.mes;
+            this.ViewModel.ImageSource = this.ViewModel.CalibMseBox.path;
+            this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;
 
 
             //確認用(ResutTextのOK/NGの切り替え)　アスタワン様サンプル
@@ -300,7 +300,7 @@ namespace VecApp
             DlgHistory dlg = new DlgHistory();
             bool? test = false;
 
-            switch ((CalibType)this.ViewModel.CalibPara.CalibType)
+            switch ((CalibType)this.ViewModel.CalibMseBox.CalibType)
             {
                 case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
 
@@ -308,7 +308,7 @@ namespace VecApp
 
                 case CalibType.ALIGNMENT_MULTI_GAUGE:
                 case CalibType.ALIGNMENT_BALL_GAUGE_STD:
-                    dlg.SetHistoryText(this.ViewModel.CalibPara.CalibResultVal.ToString("F0"));
+                    dlg.SetHistoryText(this.ViewModel.CalibMseBox.CalibResultVal.ToString("F0"));
 
                     break;
 
@@ -342,7 +342,7 @@ namespace VecApp
 
         private void Click_HelpBtn(object sender, RoutedEventArgs e)
         {
-            switch((CalibType)this.ViewModel.CalibPara.CalibType)
+            switch((CalibType)this.ViewModel.CalibMseBox.CalibType)
             {
                 case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
                     this.ViewModel.ImageSource = "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\chkpos_V8_Multi.png";
@@ -371,6 +371,7 @@ namespace VecApp
         private void Click_ContactBtn(object sender, RoutedEventArgs e)
         {
 
+            CSH.Grp02.ContactInspectionPanelClickReStore(ref this.ViewModel.CalibMseBox);
         }
     }
 }

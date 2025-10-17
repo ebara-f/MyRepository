@@ -2273,7 +2273,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   有接触キャリブ に類似しているローカライズされた文字列を検索します。
+        ///   元に戻す に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String86 {
             get {

@@ -21,7 +21,7 @@ CALIB_DATA		CalibComm::m_ArmParaTxt;
 
 ***********************************************************************/
 
-int CalibComm::Init(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count)
+int CalibComm::Init(CALIB_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count)
 {
 	int ret = 0;
 	int lang = 0;
@@ -64,7 +64,7 @@ int CalibComm::Init(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, in
 	に呼ぶ関数
 
 ***********************************************************************/
-int CalibComm::Start(CALIB_PARA* para)
+int CalibComm::Start(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	char path[256];
@@ -85,7 +85,30 @@ int CalibComm::Start(CALIB_PARA* para)
 		}
 	}
 
-	
+	// 判定フラグの初期化
+	para->CalibInspectJudge = 0;
+	// ゲージの値設定
+	CalibSetGaugeVal(para->GaugePara);
+
+	// しきい値の取得
+	ret |= CalibGetThreshold(&para->ProbeCheckThreshold, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
+	ret |= CalibGetThresholdCk(&para->InspectionThreshold);
+
+	// 初期パラメータ取得・設定
+	HwCtrl::GetArmParaV8(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
+	CalibCalParaIn(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
+
+	// データ初期化
+	CalibMesReset();
+	CalibMesOutPath(path);
+	CalibMesOutMesg(mesg1, mesg2);
+	sprintf_s(mesg, 512, "%s\n%s", mesg1, mesg2);
+
+	MultiByteToWideChar(CP_ACP, 0, path, -1, para->path, 128);
+	MultiByteToWideChar(CP_ACP, 0, mesg, -1, para->mes, 256);
+
+
+
 	HwCtrl::Func09();	// ステータス要求(現在のプローブIDが知りたい)
 	switch (CalibComm::m_CalibType)
 	{
@@ -110,28 +133,6 @@ int CalibComm::Start(CALIB_PARA* para)
 		goto exit;
 	}
 
-	// 判定フラグの初期化
-	para->CalibInspectJudge = 0;
-	// ゲージの値設定
-	CalibSetGaugeVal(para->GaugePara);
-
-	// しきい値の取得
-	ret |= CalibGetThreshold(&para->ProbeCheckThreshold, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
-	ret |= CalibGetThresholdCk(&para->InspectionThreshold);
-
-	// 初期パラメータ取得・設定
-	HwCtrl::GetArmParaV8(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
-	CalibCalParaIn(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
-
-	// データ初期化
-	CalibMesReset();
-	CalibMesOutPath(path);
-	CalibMesOutMesg(mesg1,mesg2);
-	sprintf_s(mesg, 512, "%s\n%s", mesg1, mesg2);
-
-	MultiByteToWideChar(CP_ACP, 0, path, -1, para->path, 128);
-	MultiByteToWideChar(CP_ACP, 0, mesg, -1, para->mes, 256); 
-
 exit:;
 	return (ret);
 }
@@ -143,7 +144,7 @@ exit:;
 	に呼ぶ関数
 
 ***********************************************************************/
-int CalibComm::Back(CALIB_PARA* para)
+int CalibComm::Back(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	char path[256];
@@ -190,7 +191,7 @@ int CalibComm::Back(CALIB_PARA* para)
 	に呼ぶ関数
 
 ***********************************************************************/
-int CalibComm::ReStart(CALIB_PARA* para)
+int CalibComm::ReStart(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	char path[256];
@@ -229,7 +230,7 @@ int CalibComm::ReStart(CALIB_PARA* para)
 	に呼ぶ関数
 
 ***********************************************************************/
-int CalibComm::Close(CALIB_PARA* para)
+int CalibComm::Close(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -318,7 +319,7 @@ int CalibComm::CntDataInputThread(void)
 	測定が終わったら、キャリブ
 
 ***********************************************************************/
-int CalibComm::CntDataMesCallBack(CALIB_PARA* para)
+int CalibComm::CntDataMesCallBack(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	int fg = 0;
@@ -377,13 +378,48 @@ int CalibComm::CntDataMesCallBack(CALIB_PARA* para)
 }
 
 
+
+/***********************************************************************
+
+	元に戻すボタン
+
+***********************************************************************/
+int CalibComm::ClickResoreBtn(CALIB_MSEBOX* para)
+{
+	int ret = 0;
+
+	CalibComm::m_CalibType = (CALIB_TYPE)para->CalibType;
+	switch (CalibComm::m_CalibType)
+	{
+	case CALIB_TYPE::INSPECT_MULTI_GAUGE_NEST_STD:
+		
+		break;
+
+	case CALIB_TYPE::ALIGNMENT_MULTI_GAUGE:
+		
+		break;
+
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
+		ret |= CalibProbeBallStd::ClickResoreBtnSub(para);
+		break;
+
+	default:
+		break;
+	}
+
+
+	return (ret);
+}
+
+
+
 /***********************************************************************
 
 	キャリブが成功したら、パラメータをアームに転送
 	キャリブ、点検結果をC#へ伝達
 
 ***********************************************************************/
-int CalibComm::ParaOutCallBack(CALIB_PARA* para)
+int CalibComm::ParaOutCallBack(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 

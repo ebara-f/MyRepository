@@ -6,9 +6,9 @@
 #include    "CalibComm.h"
 #include	"CalibProbeBallStd.h"
 
+CALIB_DATA CalibProbeBallStd::m_ArmParaTxtBackUp;
 
-
-int CalibProbeBallStd::InitSub(CALIB_PARA* para)
+int CalibProbeBallStd::InitSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -40,14 +40,15 @@ int CalibProbeBallStd::InitSub(CALIB_PARA* para)
 }
 
 
-int CalibProbeBallStd::StartSub(CALIB_PARA* para)
+int CalibProbeBallStd::StartSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	char path[256];
 	char mesg[512], mesg1[256], mesg2[256];
 
 
-	
+	// 戻すようにバックアップ
+	CalibProbeBallStd::m_ArmParaTxtBackUp = CalibComm::m_ArmParaTxt;
 	
 	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 2 ||
 		HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 1)
@@ -65,7 +66,7 @@ int CalibProbeBallStd::StartSub(CALIB_PARA* para)
 
 
 
-int CalibProbeBallStd::CntDataMesCallBackSub(CALIB_PARA* para)
+int CalibProbeBallStd::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -85,6 +86,9 @@ int CalibProbeBallStd::CntDataMesCallBackSub(CALIB_PARA* para)
 	}
 	para->CalibResultVal = result;
 
+	// キャリブ前点検結果
+	CalibCheckBallResult(&para->InspAndProbCkResult);	// ri, Ps
+
 
 	// 通常シーケンスにもどす
 	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ALIGNMENT_ING2;
@@ -98,19 +102,46 @@ int CalibProbeBallStd::CntDataMesCallBackSub(CALIB_PARA* para)
 
 
 
-int CalibProbeBallStd::ParaOutCallBackSub(CALIB_PARA* para)
+int CalibProbeBallStd::ParaOutCallBackSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
+	int no = 0;
+	int i = 0;
+	CALIB_PAPA data;
+
 
 	// 結果パラメータ転送
 	if (para->CalibInspectJudge == 0)	// // OKなら
 	{
-		HwCtrl::SetArmParaV8(&CalibComm::m_ArmParaTxt, 1);
+		HwCtrl::SetArmParaV8(&CalibComm::m_ArmParaTxt, 2);
 	}
 
 	ret |= CalibEnd();
 
+	
 
+	OutDataNo(&no);
+	for (i = 0; i < no; i++)
+	{
+		OutCntData(i+1, &data);
+		GetXYZData(i+1, &data);
+	}
+
+	// キャリブ後点検結果
+	CalibCheckBallResult(&para->InspAndProbCkResult2);	// ri, Ps
+
+
+	return (ret);
+
+}
+
+
+int CalibProbeBallStd::ClickResoreBtnSub(CALIB_MSEBOX* para)
+{
+	int ret = 0;
+
+	HwCtrl::SetArmParaV8(&CalibComm::m_ArmParaTxt, 2);
+	
 
 	return (ret);
 
