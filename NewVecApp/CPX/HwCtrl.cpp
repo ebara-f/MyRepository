@@ -4584,7 +4584,7 @@ void HwCtrl::RestorePara(const TCHAR* path)
                         len = strlen(para2.sprobe.para); // 文字列の長さを取得
                         if (len > 0) para2.sprobe.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
                         para2.sprobe.no = 21;
-                        ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8Ma(&para2, i, k); // ファイルから取得したパラメータをアームへ書き込む
+                        ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8Ma(&para2, i, k); // ファイルから取得したパラメータをアームへ書き込む // 作成中(2025.10.18yori)
                     }
                 }
             }
