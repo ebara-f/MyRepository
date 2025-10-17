@@ -1952,7 +1952,7 @@ int CVecCnt::VecCmd_Dlim(char* para, int no)
 	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
 
 	char	cRecvCmd[32] = { 0 };
-	char	cTransPara[32] = { 0 };
+	char	cSendData[32] = { 0 };
 	int		recv_count = 0;
 	int		ret_code_send;
 	int		ret_code_recv;
@@ -1960,8 +1960,8 @@ int CVecCnt::VecCmd_Dlim(char* para, int no)
 	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
 
 	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
-	sprintf_s(cTransPara, sizeof(cTransPara), "%d", no);
-	ret_code_send = Vec_CmdTrans(m_VecHandle, "DLIM", cTransPara, 1);
+	sprintf_s(cSendData, sizeof(cSendData), "%d", no);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "DLIM", cSendData, 1);
 	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para, &recv_count);
 	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
 	{
@@ -2181,6 +2181,186 @@ int CVecCnt::VecCmd_Test009(CALIB_DATA* para)
 }
 
 
+
+/***********************************************************************
+
+	TEST@011B
+	2025.10.16yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Test011(CALIB_DATA* para)
+{
+	int		ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(para->test010.cmd, sizeof(para->test010.cmd), "%s", "TEST@011B");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->test010.cmd, para->test010.para, para->test010.no);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	TEST@013B
+	2025.10.16yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Test013(CALIB_DATA* para)
+{
+	int		ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(para->test012.cmd, sizeof(para->test012.cmd), "%s", "TEST@013B");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->test012.cmd, para->test012.para, para->test012.no);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	TEST@019B
+	2025.10.16yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Test019(CALIB_DATA* para)
+{
+	int		ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(para->test018.cmd, sizeof(para->test018.cmd), "%s", "TEST@019B");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->test018.cmd, para->test018.para, para->test018.no);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	SPRDC
+	2025.10.17yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Sprdc(CALIB_DATA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cSendData[64] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(cSendData, sizeof(cSendData), "%s", para->sprdc.para);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "SPRDC", cSendData, para->sprdc.no);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	SPRDC2
+	2025.10.17yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Sprdc2(CALIB_DATA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cSendData[64] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(cSendData, sizeof(cSendData), "%s", para->sprdc2.para);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "SPRDC2", cSendData, para->sprdc2.no);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
 /***********************************************************************
 
 	SPROBEV8
@@ -2219,8 +2399,7 @@ int CVecCnt::VecCmd_SprobeV8(CALIB_DATA* para, int psid)
 /***********************************************************************
 
 	SPROBEV8MA
-	作成中
-	2025.10.10yori
+	2025.10.14yori
 
 ***********************************************************************/
 int CVecCnt::VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch)
@@ -2228,7 +2407,7 @@ int CVecCnt::VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch)
 	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
 
 	char	cRecvCmd[32] = { 0 };
-	char	cbranch[32] = { 0 };
+	char	cBranch[32] = { 0 };
 	int		ret_code_send;
 	int		ret_code_recv;
 
@@ -2238,31 +2417,167 @@ int CVecCnt::VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch)
 
 	sprintf_s(para->sprobe.cmd, sizeof(para->sprobe.cmd), "%s", "SPROBEV8MA");
 	sprintf_s(para->sprobe.para, sizeof(para->sprobe.para), "%d", psid);
-	sprintf_s(cbranch, sizeof(cbranch), " %d", branch);
-	strcat_s(para->sprobe.para, sizeof(para->sprobe.para), cbranch);
-	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprobe.cmd, para->sprobe.para, 2);
-	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->sprobe.para, &para->sprobe.no);
+	sprintf_s(cBranch, sizeof(cBranch), " %d", branch);
+	strcat_s(para->sprobe.para, sizeof(para->sprobe.para), cBranch);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprobe.cmd, para->sprobe.para, para->sprobe.no);
+	ret_code_recv = StdRecvCheck();
 	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
 	{
 		ret_code = ret_code_send;
 	}
 	else
 	{
-		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
-		{
-			ret_code = ret_code_recv;
-		}
-		else
-		{
-			if (cRecvCmd[0] == ACK)
-			{
-				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
-			}
-			else
-			{
-				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
-			}
-		}
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	SLEVEL
+	2025.10.17yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Slevel(char* para, int psid)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cSendData[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(cSendData, sizeof(cSendData), "%d ", psid);
+	strcat_s(cSendData, sizeof(cSendData), para);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "SLEVEL", cSendData, 2);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	MCNT
+	2025.10.17yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Mcnt(char* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cSendData[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(cSendData, sizeof(cSendData), "%s", para);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "MCNT", cSendData, 9);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	SLIM
+	2025.10.14yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Slim(char* para, int no)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cSendData[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(cSendData, sizeof(cSendData), "%d ", no);
+	strcat_s(cSendData, sizeof(cSendData), para);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "SLIM", cSendData, 3);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
+
+/***********************************************************************
+
+	SSERIAL
+	2025.10.14yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Sserial(char* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cSendData[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(cSendData, sizeof(cSendData), "%s", para);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, "SSERIAL", cSendData, 1);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
 	}
 
 	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);

@@ -182,8 +182,17 @@ public:
 	int VecCmd_Test005(CALIB_DATA* para);	// 2025.9.12 add eba
 	int VecCmd_Test007(CALIB_DATA* para);	// 2025.9.12 add eba
 	int VecCmd_Test009(CALIB_DATA* para);	// 2025.9.12 add eba
+	int VecCmd_Test011(CALIB_DATA* para);	// 2025.10.16yori
+	int VecCmd_Test013(CALIB_DATA* para);	// 2025.10.16yori
+	int VecCmd_Test019(CALIB_DATA* para);	// 2025.10.16yori
+	int VecCmd_Sprdc(CALIB_DATA* para);	// 2025.10.16yori
+	int VecCmd_Sprdc2(CALIB_DATA* para);	// 2025.10.16yori
 	int VecCmd_SprobeV8(CALIB_DATA* para, int psid);	// 2025.9.12 add eba
 	int VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch); // 2025.10.10yori
+	int VecCmd_Slevel(char* para, int psid); // 2025.10.16yori
+	int VecCmd_Mcnt(char* para); // 2025.10.16yori
+	int VecCmd_Slim(char* para, int no); // 2025.10.17yori
+	int VecCmd_Sserial(char* para); // 2025.10.14yori
 	int VecCmd_Iso(void);	// 2025.9.12 add eba
 
 	int VecFunc_DataRequestEx(VecDtEx* PosiData, int iDataSize);

@@ -4173,12 +4173,12 @@ void HwCtrl::SavePara(const TCHAR* path)
 /***********************************************************************
 
     アームパラメータ復元
-    2025.10.10yori)
+    2025.10.17yori)
 
 ***********************************************************************/
 void HwCtrl::RestorePara(const TCHAR* path)
 {
-    int i = 0, j = 0, k = 0;
+    int i = 0, j = 0, k = 0, ret = 0;
     size_t len = 0;
     FILE* pf;
     char cPath[256] = { 0 }; // ファイルのパス
@@ -4188,23 +4188,31 @@ void HwCtrl::RestorePara(const TCHAR* path)
     char* para_name = NULL;
     char* para = NULL;;
     char* context = NULL;
-    char test002[1024] = { 0 };
+    CALIB_DATA para2;
     char test002_ab[256] = { 0 };
     char test002_ao[256] = { 0 };
-    char test004[1024] = { 0 };
-    char test006[1024] = { 0 };
-    char test008[512] = { 0 };
-    char test010[1024] = { 0 };
-    char test012[1024] = { 0 };
-    char test018[128] = { 0 };
-    char dprdc[128] = { 0 };
-    char dprdc2[128] = { 0 };
-    char dprobe[20][512] = { 0 };
-    char dprobema[3][15][512] = { 0 };
-    char dlevel[64] = { 0 };
-    char dcnt[32] = { 0 };
-    char dlim[7][256] = { 0 };
-    char dserial[32] = { 0 };
+
+    // 初期化
+    memset(para2.test002.para, NULL, sizeof(para2.test002.para));
+    memset(para2.test004.para, NULL, sizeof(para2.test004.para));
+    memset(para2.test006.para, NULL, sizeof(para2.test006.para));
+    memset(para2.test008.para, NULL, sizeof(para2.test008.para));
+    memset(para2.test010.para, NULL, sizeof(para2.test010.para));
+    memset(para2.test012.para, NULL, sizeof(para2.test012.para));
+    memset(para2.test018.para, NULL, sizeof(para2.test018.para));
+    memset(para2.sprdc.para, NULL, sizeof(para2.sprdc.para));
+    memset(para2.sprdc2.para, NULL, sizeof(para2.sprdc2.para));
+    memset(para2.sprobe.para, NULL, sizeof(para2.sprobe.para));
+    para2.test002.no = 19;
+    para2.test004.no = 27;
+    para2.test006.no = 27;
+    para2.test008.no = 14;
+    para2.test010.no = 16;
+    para2.test012.no = 38;
+    para2.test018.no = 3;
+    para2.sprdc.no = 7;
+    para2.sprdc2.no = 6;
+    para2.sprobe.no = 20;
 
     err = wcstombs_s(&converted, cPath, sizeof(cPath), path, _TRUNCATE); // wcstombs_sを使ってwchar_tからcharへ変換
 
@@ -4223,8 +4231,8 @@ void HwCtrl::RestorePara(const TCHAR* path)
                 while (para_name != NULL)
                 {
                     para = strtok_s(NULL, ",", &context);
-                    strcat_s(test002, sizeof(test002), para);
-                    strcat_s(test002, sizeof(test002), " ");
+                    strcat_s(para2.test002.para, sizeof(para2.test002.para), para);
+                    strcat_s(para2.test002.para, sizeof(para2.test002.para), " ");
                     para_name = strtok_s(NULL, ",", &context);
                 }
                 // AB1,AO1
@@ -4314,9 +4322,10 @@ void HwCtrl::RestorePara(const TCHAR* path)
                 para = strtok_s(NULL, ",", &context); // カンマまでのパラメータを取得
                 strcat_s(test002_ao, sizeof(test002_ao), para);
                 //ARM+AB+AO
-                strcat_s(test002, sizeof(test002), test002_ab);
-                strcat_s(test002, sizeof(test002), " ");
-                strcat_s(test002, sizeof(test002), test002_ao);
+                strcat_s(para2.test002.para, sizeof(para2.test002.para), test002_ab);
+                strcat_s(para2.test002.para, sizeof(para2.test002.para), " ");
+                strcat_s(para2.test002.para, sizeof(para2.test002.para), test002_ao);
+                ret = HwCtrl::m_hVecCnt.VecCmd_Test003(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4335,13 +4344,14 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     while (para_name != NULL)
                     {
                         para = strtok_s(NULL, ",", &context);
-                        strcat_s(test004, sizeof(test004), para);
-                        strcat_s(test004, sizeof(test004), " ");
+                        strcat_s(para2.test004.para, sizeof(para2.test004.para), para);
+                        strcat_s(para2.test004.para, sizeof(para2.test004.para), " ");
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
-                len = strlen(test004); // 文字列の長さを取得
-                if (len > 0) test004[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                len = strlen(para2.test004.para); // 文字列の長さを取得
+                if (len > 0) para2.test004.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Test005(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4360,13 +4370,14 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     while (para_name != NULL)
                     {
                         para = strtok_s(NULL, ",", &context);
-                        strcat_s(test006, sizeof(test006), para);
-                        strcat_s(test006, sizeof(test006), " ");
+                        strcat_s(para2.test006.para, sizeof(para2.test006.para), para);
+                        strcat_s(para2.test006.para, sizeof(para2.test006.para), " ");
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
-                len = strlen(test006); // 文字列の長さを取得
-                if (len > 0) test006[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                len = strlen(para2.test006.para); // 文字列の長さを取得
+                if (len > 0) para2.test006.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Test007(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4385,13 +4396,14 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     while (para_name != NULL)
                     {
                         para = strtok_s(NULL, ",", &context);
-                        strcat_s(test008, sizeof(test008), para);
-                        strcat_s(test008, sizeof(test008), " ");
+                        strcat_s(para2.test008.para, sizeof(para2.test008.para), para);
+                        strcat_s(para2.test008.para, sizeof(para2.test008.para), " ");
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
-                len = strlen(test008); // 文字列の長さを取得
-                if (len > 0) test008[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                len = strlen(para2.test008.para); // 文字列の長さを取得
+                if (len > 0) para2.test008.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Test009(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4410,13 +4422,14 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     while (para_name != NULL)
                     {
                         para = strtok_s(NULL, ",", &context);
-                        strcat_s(test010, sizeof(test010), para);
-                        strcat_s(test010, sizeof(test010), " ");
+                        strcat_s(para2.test010.para, sizeof(para2.test010.para), para);
+                        strcat_s(para2.test010.para, sizeof(para2.test010.para), " ");
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
-                len = strlen(test010); // 文字列の長さを取得
-                if (len > 0) test010[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                len = strlen(para2.test010.para); // 文字列の長さを取得
+                if (len > 0) para2.test010.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Test011(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4435,13 +4448,14 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     while (para_name != NULL)
                     {
                         para = strtok_s(NULL, ",", &context);
-                        strcat_s(test012, sizeof(test012), para);
-                        strcat_s(test012, sizeof(test012), " ");
+                        strcat_s(para2.test012.para, sizeof(para2.test012.para), para);
+                        strcat_s(para2.test012.para, sizeof(para2.test012.para), " ");
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
-                len = strlen(test012); // 文字列の長さを取得
-                if (len > 0) test012[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                len = strlen(para2.test012.para); // 文字列の長さを取得
+                if (len > 0) para2.test012.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Test013(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4460,13 +4474,14 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     while (para_name != NULL)
                     {
                         para = strtok_s(NULL, ",", &context);
-                        strcat_s(test018, sizeof(test018), para);
-                        strcat_s(test018, sizeof(test018), " ");
+                        strcat_s(para2.test018.para, sizeof(para2.test018.para), para);
+                        strcat_s(para2.test018.para, sizeof(para2.test018.para), " ");
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
-                len = strlen(test018); // 文字列の長さを取得
-                if (len > 0) test018[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                len = strlen(para2.test018.para); // 文字列の長さを取得
+                if (len > 0) para2.test018.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Test019(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4486,13 +4501,14 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     while (para_name != NULL)
                     {
                         para = strtok_s(NULL, ",", &context);
-                        strcat_s(dprdc, sizeof(dprdc), para);
-                        strcat_s(dprdc, sizeof(dprdc), " ");
+                        strcat_s(para2.sprdc.para, sizeof(para2.sprdc.para), para);
+                        strcat_s(para2.sprdc.para, sizeof(para2.sprdc.para), " ");
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
-                len = strlen(dprdc); // 文字列の長さを取得
-                if (len > 0) dprdc[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                len = strlen(para2.sprdc.para); // 文字列の長さを取得
+                if (len > 0) para2.sprdc.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                ret = HwCtrl::m_hVecCnt.VecCmd_Sprdc(&para2); // ファイルから取得したパラメータをアームへ書き込む
 
                 // DPRDC2
                 for (i = 0; i < 6; i++)
@@ -4503,13 +4519,14 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     while (para_name != NULL)
                     {
                         para = strtok_s(NULL, ",", &context);
-                        strcat_s(dprdc2, sizeof(dprdc2), para);
-                        strcat_s(dprdc2, sizeof(dprdc2), " ");
+                        strcat_s(para2.sprdc2.para, sizeof(para2.sprdc2.para), para);
+                        strcat_s(para2.sprdc2.para, sizeof(para2.sprdc2.para), " ");
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
-                len = strlen(dprdc2); // 文字列の長さを取得
-                if (len > 0) dprdc2[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                len = strlen(para2.sprdc2.para); // 文字列の長さを取得
+                if (len > 0) para2.sprdc2.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Sprdc2(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4524,6 +4541,8 @@ void HwCtrl::RestorePara(const TCHAR* path)
                 {
                     fgets(line, sizeof(line), pf); // ID番号の行
 
+                    sprintf_s(para2.sprobe.para, sizeof(para2.sprobe.para), "%d ", i); // ID番号
+
                     for (j = 0; j < 7; j++)
                     {
                         fgets(line, sizeof(line), pf);
@@ -4532,17 +4551,18 @@ void HwCtrl::RestorePara(const TCHAR* path)
                         while (para_name != NULL)
                         {
                             para = strtok_s(NULL, ",", &context);
-                            strcat_s(dprobe[i], sizeof(dprobe[i]), para);
-                            strcat_s(dprobe[i], sizeof(dprobe[i]), " ");
+                            strcat_s(para2.sprobe.para, sizeof(para2.sprobe.para), para);
+                            strcat_s(para2.sprobe.para, sizeof(para2.sprobe.para), " ");
                             para_name = strtok_s(NULL, ",", &context);
                         }
                     }
-                    len = strlen(dprobe[i]); // 文字列の長さを取得
-                    if (len > 0) dprobe[i][len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                    len = strlen(para2.sprobe.para); // 文字列の長さを取得
+                    if (len > 0) para2.sprobe.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                    ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8(&para2, i); // ファイルから取得したパラメータをアームへ書き込む
                 }
 
                 // 枝番のパラメータ
-                for (i = 0; i < 3; i++)
+                for (i = 17; i < 20; i++)
                 {
                     for (k = 0; k < 15; k++)
                     {
@@ -4556,13 +4576,15 @@ void HwCtrl::RestorePara(const TCHAR* path)
                             while (para_name != NULL)
                             {
                                 para = strtok_s(NULL, ",", &context);
-                                strcat_s(dprobema[i][k], sizeof(dprobema[i][k]), para);
-                                strcat_s(dprobema[i][k], sizeof(dprobema[i][k]), " ");
+                                strcat_s(para2.sprobe.para, sizeof(para2.sprobe.para), para);
+                                strcat_s(para2.sprobe.para, sizeof(para2.sprobe.para), " ");
                                 para_name = strtok_s(NULL, ",", &context);
                             }
                         }
-                        len = strlen(dprobema[i][k]); // 文字列の長さを取得
-                        if (len > 0) dprobema[i][k][len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                        len = strlen(para2.sprobe.para); // 文字列の長さを取得
+                        if (len > 0) para2.sprobe.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                        para2.sprobe.no = 21;
+                        ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8Ma(&para2, i, k); // ファイルから取得したパラメータをアームへ書き込む
                     }
                 }
             }
@@ -4579,7 +4601,11 @@ void HwCtrl::RestorePara(const TCHAR* path)
                 line[strcspn(line, "\n")] = '\0'; // 改行を削除
                 para_name = strtok_s(line, ",", &context);
                 para = strtok_s(NULL, ",", &context);
-                sprintf_s(dlevel, para);
+                for (i = 0; i < 20; i++)
+                {
+                    para = strtok_s(NULL, " ", &context);
+                    ret |= HwCtrl::m_hVecCnt.VecCmd_Slevel(para, i); // ファイルから取得したパラメータをアームへ書き込む
+                }
             }
         }
 
@@ -4594,7 +4620,7 @@ void HwCtrl::RestorePara(const TCHAR* path)
                 line[strcspn(line, "\n")] = '\0'; // 改行を削除
                 para_name = strtok_s(line, ",", &context);
                 para = strtok_s(NULL, ",", &context);
-                sprintf_s(dcnt, para);
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Mcnt(para); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
 
@@ -4611,7 +4637,7 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     line[strcspn(line, "\n")] = '\0'; // 改行を削除
                     para_name = strtok_s(line, ",", &context);
                     para = strtok_s(NULL, ",", &context);
-                    sprintf_s(dlim[i], para);
+                    ret |= HwCtrl::m_hVecCnt.VecCmd_Slim(para, i); // ファイルから取得したパラメータをアームへ書き込む
                 }
             }
         }
@@ -4627,11 +4653,9 @@ void HwCtrl::RestorePara(const TCHAR* path)
                 line[strcspn(line, "\n")] = '\0'; // 改行を削除
                 para_name = strtok_s(line, ",", &context);
                 para = strtok_s(NULL, ",", &context);
-                sprintf_s(dserial, para);
+                ret |= HwCtrl::m_hVecCnt.VecCmd_Sserial(para); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
-
-        fgets(line, sizeof(line), pf); // 改行
 
         fclose(pf); //ファイルを閉じる
     }
@@ -4639,5 +4663,4 @@ void HwCtrl::RestorePara(const TCHAR* path)
     {
         // ファイルを開くことができなかった
     }
-
 }
