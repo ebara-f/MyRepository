@@ -13,7 +13,7 @@
 	�ɌĂԊ֐�
 
 ***********************************************************************/
-int CalibSetting::Init(CALIB_PARA* para)
+int CalibSetting::Init(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -32,7 +32,7 @@ int CalibSetting::Init(CALIB_PARA* para)
 	�ɌĂԊ֐�
 
 ***********************************************************************/
-int CalibSetting::OkBtn(CALIB_PARA* para)
+int CalibSetting::OkBtn(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -50,7 +50,7 @@ int CalibSetting::OkBtn(CALIB_PARA* para)
 	�ɌĂԊ֐�
 
 ***********************************************************************/
-int CalibSetting::CancelBtn(CALIB_PARA* para)
+int CalibSetting::CancelBtn(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 

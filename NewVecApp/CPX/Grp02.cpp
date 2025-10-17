@@ -354,7 +354,7 @@ int Grp02::ContactSelfJudgmentPanelRestorePara(const TCHAR* path)
 
 ***********************************************************************/
 
-int Grp02::ContactInspectionPanelInit(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count)
+int Grp02::ContactInspectionPanelInit(CALIB_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count)
 {
     int ret = 0;
 
@@ -372,7 +372,7 @@ int Grp02::ContactInspectionPanelInit(CALIB_PARA* para, TCHAR*& path, int p_coun
 
 ***********************************************************************/
 
-int Grp02::ContactInspectionPanelClickStart(CALIB_PARA* para)
+int Grp02::ContactInspectionPanelClickStart(CALIB_MSEBOX* para)
 {
     int ret = 0;
 
@@ -390,7 +390,7 @@ int Grp02::ContactInspectionPanelClickStart(CALIB_PARA* para)
 
 ***********************************************************************/
 
-int Grp02::ContactInspectionPanelClickBack(CALIB_PARA* para)
+int Grp02::ContactInspectionPanelClickBack(CALIB_MSEBOX* para)
 {
     int ret = 0;
 
@@ -408,7 +408,7 @@ int Grp02::ContactInspectionPanelClickBack(CALIB_PARA* para)
 
 ***********************************************************************/
 
-int Grp02::ContactInspectionPanelClickReStart(CALIB_PARA* para)
+int Grp02::ContactInspectionPanelClickReStart(CALIB_MSEBOX* para)
 {
     int ret = 0;
 
@@ -425,7 +425,7 @@ int Grp02::ContactInspectionPanelClickReStart(CALIB_PARA* para)
 
 ***********************************************************************/
 
-int Grp02::ContactInspectionPanelTerminate(CALIB_PARA* para)
+int Grp02::ContactInspectionPanelTerminate(CALIB_MSEBOX* para)
 {
     int ret = 0;
 
@@ -443,7 +443,7 @@ int Grp02::ContactInspectionPanelTerminate(CALIB_PARA* para)
 
 ***********************************************************************/
 
-int Grp02::ContactInspectionPanelMesCallBack(CALIB_PARA* para)
+int Grp02::ContactInspectionPanelMesCallBack(CALIB_MSEBOX* para)
 {
     int ret = 0;
 
@@ -456,12 +456,29 @@ int Grp02::ContactInspectionPanelMesCallBack(CALIB_PARA* para)
 
 /***********************************************************************
 
+    ContactInspectionPanelClickReStore
+    2025.10.17 add eba
+
+***********************************************************************/
+
+int Grp02::ContactInspectionPanelClickReStore(CALIB_MSEBOX* para)
+{
+    int ret = 0;
+
+    CalibComm::ClickResoreBtn(para);
+
+    return (ret);
+}
+
+
+/***********************************************************************
+
     ContactInspectionPanelParaOutCallBack
     2025.8.26 add eba
 
 ***********************************************************************/
 
-int Grp02::ContactInspectionPanelParaOutCallBack(CALIB_PARA* para)
+int Grp02::ContactInspectionPanelParaOutCallBack(CALIB_MSEBOX* para)
 {
     int ret = 0;
 
@@ -513,7 +530,7 @@ int Grp02::ContactInspectionPanelGetMes(TCHAR*& mes, int count)
 
 ***********************************************************************/
 
-int Grp02::SettingPanelInit(CALIB_PARA* para)
+int Grp02::SettingPanelInit(CALIB_MSEBOX* para)
 {
     int ret = 0;
 
@@ -530,7 +547,7 @@ int Grp02::SettingPanelInit(CALIB_PARA* para)
 
 ***********************************************************************/
 
-int Grp02::SettingPanelOkBtn(CALIB_PARA* para)
+int Grp02::SettingPanelOkBtn(CALIB_MSEBOX* para)
 {
     int ret = 0;
 
@@ -547,7 +564,7 @@ int Grp02::SettingPanelOkBtn(CALIB_PARA* para)
 
 ***********************************************************************/
 
-int Grp02::SettingPanelCancelBtn(CALIB_PARA* para)
+int Grp02::SettingPanelCancelBtn(CALIB_MSEBOX* para)
 {
     int ret = 0;
 

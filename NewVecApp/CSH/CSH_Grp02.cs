@@ -133,11 +133,12 @@ namespace CSH
     }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public struct CalibPara
+    public struct CalibMseBox
     {
         public CalibGauge GaugePara;
 
         public CalibResult InspAndProbCkResult;
+        public CalibResult InspAndProbCkResult2;
         public CalibJudge   ProbeCheckThreshold;
         public CalibJudgeCk InspectionThreshold;
         public CalibJudgeFg ProbeCheckResultFg;
@@ -221,34 +222,37 @@ namespace CSH
         public extern static int CPX_Grp02_ContactSelfJudgmentPanelRestorePara(string path); // 追加(2025.10.9yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_ContactInspectionPanelInit(ref CalibPara para, ref StringBuilder sb_p, int p_count, ref StringBuilder sb_m, int m_count); // 2025.8.26 add eba
+        public extern static int CPX_Grp02_ContactInspectionPanelInit(ref CalibMseBox para, ref StringBuilder sb_p, int p_count, ref StringBuilder sb_m, int m_count); // 2025.8.26 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_ContactInspectionPanelClickStart(ref CalibPara para); // 2025.8.26 add eba
+        public extern static int CPX_Grp02_ContactInspectionPanelClickStart(ref CalibMseBox para); // 2025.8.26 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_ContactInspectionPanelClickBack(ref CalibPara para); // 2025.9.22 add eba
+        public extern static int CPX_Grp02_ContactInspectionPanelClickBack(ref CalibMseBox para); // 2025.9.22 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_ContactInspectionPanelClickReStart(ref CalibPara para); // 2025.8.26 add eba
+        public extern static int CPX_Grp02_ContactInspectionPanelClickReStart(ref CalibMseBox para); // 2025.8.26 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_ContactInspectionPanelTerminate(ref CalibPara para); // 2025.8.26 add eba
+        public extern static int CPX_Grp02_ContactInspectionPanelTerminate(ref CalibMseBox para); // 2025.8.26 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_ContactInspectionPanelMesCallBack(ref CalibPara para); // 2025.9.2 add eba
+        public extern static int CPX_Grp02_ContactInspectionPanelMesCallBack(ref CalibMseBox para); // 2025.9.2 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_ContactInspectionPanelParaOutCallBack(ref CalibPara para); // 2025.9.10 add eba
+        public extern static int CPX_Grp02_ContactInspectionPanelParaOutCallBack(ref CalibMseBox para); // 2025.9.10 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_SettingPanelInit(ref CalibPara para);  // 2025.9.24 add eba
+        public extern static int CPX_Grp02_ContactInspectionPanelClickReStore(ref CalibMseBox para); // 2025.10.17 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_SettingPanelOkBtn(ref CalibPara para);  // 2025.9.25 add eba
+        public extern static int CPX_Grp02_SettingPanelInit(ref CalibMseBox para);  // 2025.9.24 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_SettingPanelCancelBtn(ref CalibPara para);  // 2025.9.25 add eba
+        public extern static int CPX_Grp02_SettingPanelOkBtn(ref CalibMseBox para);  // 2025.9.25 add eba
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_SettingPanelCancelBtn(ref CalibMseBox para);  // 2025.9.25 add eba
         #endregion
 
         /// <summary>
@@ -398,7 +402,7 @@ namespace CSH
         /// キャリブレーション画面のイニシャル処理 2025.8.26 add eba
         /// </summary>
 
-        static public int ContactInspectionPanelInit(ref CalibPara para, out string path, int p_count, out string mes, int m_count)
+        static public int ContactInspectionPanelInit(ref CalibMseBox para, out string path, int p_count, out string mes, int m_count)
         {
             int rc;
             StringBuilder sb_p = null;
@@ -438,7 +442,7 @@ namespace CSH
         /// <summary>
         /// 開始ボタンクリック 2025.8.26 add eba
         /// </summary>
-        static public int ContactInspectionPanelClickStart(ref CalibPara para)
+        static public int ContactInspectionPanelClickStart(ref CalibMseBox para)
         {
             return CPX_Grp02_ContactInspectionPanelClickStart(ref para);
         }
@@ -447,7 +451,7 @@ namespace CSH
         /// キャリブレーション画面のターミナル処理 2025.8.26 add eba
         /// </summary>
 
-        static public int ContactInspectionPanelTerminate(ref CalibPara para)
+        static public int ContactInspectionPanelTerminate(ref CalibMseBox para)
         {
             return CPX_Grp02_ContactInspectionPanelTerminate(ref para);
         }
@@ -455,7 +459,7 @@ namespace CSH
         /// <summary>
         /// 戻るボタンクリック2025.8.26 add eba
         /// </summary>
-        static public int ContactInspectionPanelClickBack(ref CalibPara para)
+        static public int ContactInspectionPanelClickBack(ref CalibMseBox para)
         {
             return CPX_Grp02_ContactInspectionPanelClickBack(ref para);
         }
@@ -463,7 +467,7 @@ namespace CSH
         /// <summary>
         /// 初めに戻るボタンクリック2025.8.26 add eba
         /// </summary>
-        static public int ContactInspectionPanelClickReStart(ref CalibPara para)
+        static public int ContactInspectionPanelClickReStart(ref CalibMseBox para)
         {
             return CPX_Grp02_ContactInspectionPanelClickReStart(ref para);
         }
@@ -472,7 +476,7 @@ namespace CSH
         /// <summary>
         /// データが入力された時のコールバック関数(データ入力処理) 2025.8.26 add eba
         /// </summary>
-        static public int ContactInspectionPanelMesCallBack(ref CalibPara para)
+        static public int ContactInspectionPanelMesCallBack(ref CalibMseBox para)
         {
             return CPX_Grp02_ContactInspectionPanelMesCallBack(ref para);
         }
@@ -481,16 +485,25 @@ namespace CSH
         /// <summary>
         /// データの入力が完了した時のコールバック関数(結果処理) 2025.8.26 add eba
         /// </summary>
-        static public int ContactInspectionPanelParaOutCallBack(ref CalibPara para)
+        static public int ContactInspectionPanelParaOutCallBack(ref CalibMseBox para)
         {
             return CPX_Grp02_ContactInspectionPanelParaOutCallBack(ref para);
         }
 
 
         /// <summary>
+        /// データの入力が完了した時のコールバック関数(結果処理) 2025.8.26 add eba
+        /// </summary>
+        static public int ContactInspectionPanelClickReStore(ref CalibMseBox para)
+        {
+            return CPX_Grp02_ContactInspectionPanelClickReStore(ref para);
+        }
+
+
+        /// <summary>
         /// 
         /// </summary>
-        static public int SettingPanelInit(ref CalibPara para)
+        static public int SettingPanelInit(ref CalibMseBox para)
         {
             return CPX_Grp02_SettingPanelInit(ref para);
         }
@@ -499,7 +512,7 @@ namespace CSH
         /// <summary>
         /// 
         /// </summary>
-        static public int SettingPanelOkBtn(ref CalibPara para)
+        static public int SettingPanelOkBtn(ref CalibMseBox para)
         {
             return CPX_Grp02_SettingPanelOkBtn(ref para);
         }
@@ -508,7 +521,7 @@ namespace CSH
         /// <summary>
         /// 
         /// </summary>
-        static public int SettingPanelCancelBtn(ref CalibPara para)
+        static public int SettingPanelCancelBtn(ref CalibMseBox para)
         {
             return CPX_Grp02_SettingPanelCancelBtn(ref para);
         }

@@ -8,7 +8,7 @@
 
 
 
-int CalibInspectMultiNestStd::InitSub(CALIB_PARA* para)
+int CalibInspectMultiNestStd::InitSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	
@@ -40,7 +40,7 @@ int CalibInspectMultiNestStd::InitSub(CALIB_PARA* para)
 }
 
 
-int CalibInspectMultiNestStd::StartSub(CALIB_PARA* para)
+int CalibInspectMultiNestStd::StartSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	char path[256];
@@ -64,7 +64,7 @@ int CalibInspectMultiNestStd::StartSub(CALIB_PARA* para)
 }
 
 
-int CalibInspectMultiNestStd::CntDataMesCallBackSub(CALIB_PARA* para)
+int CalibInspectMultiNestStd::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	int i = 0;

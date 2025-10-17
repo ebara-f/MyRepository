@@ -30,17 +30,18 @@ public:
     static int  ContactSelfJudgmentPanelSavePara(const TCHAR* path); // 追加(2025.10.8yori)
     static int  ContactSelfJudgmentPanelRestorePara(const TCHAR* path); // 追加(2025.10.9yori)
 
-    static int  ContactInspectionPanelInit(CALIB_PARA* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);  // 2025.8.26 add eba
-    static int  ContactInspectionPanelClickStart(CALIB_PARA* para);         // 2025.8.26 add eba
-    static int  ContactInspectionPanelClickBack(CALIB_PARA* para);          // 2025.8.26 add eba
-    static int  ContactInspectionPanelClickReStart(CALIB_PARA* para);     // 2025.8.26 add eba
-    static int  ContactInspectionPanelTerminate(CALIB_PARA* para);     // 2025.8.28 add eba
-    static int  ContactInspectionPanelMesCallBack(CALIB_PARA* para);    // 2025.9.2 add eba
-    static int  ContactInspectionPanelParaOutCallBack(CALIB_PARA* para);    // 2025.9.10 add eba
+    static int  ContactInspectionPanelInit(CALIB_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);  // 2025.8.26 add eba
+    static int  ContactInspectionPanelClickStart(CALIB_MSEBOX* para);         // 2025.8.26 add eba
+    static int  ContactInspectionPanelClickBack(CALIB_MSEBOX* para);          // 2025.8.26 add eba
+    static int  ContactInspectionPanelClickReStart(CALIB_MSEBOX* para);     // 2025.8.26 add eba
+    static int  ContactInspectionPanelTerminate(CALIB_MSEBOX* para);     // 2025.8.28 add eba
+    static int  ContactInspectionPanelMesCallBack(CALIB_MSEBOX* para);    // 2025.9.2 add eba
+    static int  ContactInspectionPanelParaOutCallBack(CALIB_MSEBOX* para);    // 2025.9.10 add eba
+    static int  ContactInspectionPanelClickReStore(CALIB_MSEBOX* para); // 2025.10.17 add eba
     static int  ContactInspectionPanelGetPath(TCHAR*& path, int count);     // 2025.9.1 add eba
     static int  ContactInspectionPanelGetMes(TCHAR*& mes, int count);     // 2025.9.1 add eba
 
-    static int  SettingPanelInit(CALIB_PARA* para); // 2025.9.25 add eba
-    static int  SettingPanelOkBtn(CALIB_PARA* para); // 2025.9.25 add eba
-    static int  SettingPanelCancelBtn(CALIB_PARA* para); // 2025.9.25 add eba
+    static int  SettingPanelInit(CALIB_MSEBOX* para); // 2025.9.25 add eba
+    static int  SettingPanelOkBtn(CALIB_MSEBOX* para); // 2025.9.25 add eba
+    static int  SettingPanelCancelBtn(CALIB_MSEBOX* para); // 2025.9.25 add eba
 };

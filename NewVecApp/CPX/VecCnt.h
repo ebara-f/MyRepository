@@ -194,6 +194,7 @@ public:
 	int VecCmd_Slim(char* para, int no); // 2025.10.17yori
 	int VecCmd_Sserial(char* para); // 2025.10.14yori
 	int VecCmd_Iso(void);	// 2025.9.12 add eba
+	int VecCmd_Pc(CALIB_PAPA* para);	// 2025.10.17 add eba
 
 	int VecFunc_DataRequestEx(VecDtEx* PosiData, int iDataSize);
 	int VecFunc_CntRequestEx(VecCtEx2* CntData, int iDataSize); // 追加(2025.6.18yori)

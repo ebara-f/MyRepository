@@ -982,6 +982,6 @@ namespace VecApp
         // Viewと関連付かない変数 2025.8.26 add eba
         public int CalibStyleFg = 0;
 
-        public CalibPara CalibPara = new CalibPara(); // 2025.9.3 add eba
+        public CalibMseBox CalibMseBox = new CalibMseBox(); // 2025.9.3 add eba
     }
 }

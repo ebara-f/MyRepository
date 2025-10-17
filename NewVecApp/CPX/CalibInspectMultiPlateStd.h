@@ -11,7 +11,7 @@
 class CalibInspectMultiPlateStd : public CalibComm
 {
 public:
-	static int CntDataMesCallBackSub(CALIB_PARA* para);
+	static int CntDataMesCallBackSub(CALIB_MSEBOX* para);
 	static int ParaOutCallBackSub(void);
 
 };
