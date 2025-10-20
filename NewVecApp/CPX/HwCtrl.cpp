@@ -4173,12 +4173,12 @@ void HwCtrl::SavePara(const TCHAR* path)
 /***********************************************************************
 
     アームパラメータ復元
-    2025.10.17yori)
+    2025.10.20yori)
 
 ***********************************************************************/
-void HwCtrl::RestorePara(const TCHAR* path)
+int HwCtrl::RestorePara(const TCHAR* path)
 {
-    int i = 0, j = 0, k = 0, ret = 0;
+    int i = 0, j = 0, k = 0, ret = -1;
     size_t len = 0;
     FILE* pf;
     char cPath[256] = { 0 }; // ファイルのパス
@@ -4568,6 +4568,8 @@ void HwCtrl::RestorePara(const TCHAR* path)
                     {
                         fgets(line, sizeof(line), pf); // ID番号の行
 
+                        memset(para2.sprobe.para, NULL, sizeof(para2.sprobe.para)); // 初期化
+
                         for (j = 0; j < 7; j++)
                         {
                             fgets(line, sizeof(line), pf);
@@ -4583,8 +4585,8 @@ void HwCtrl::RestorePara(const TCHAR* path)
                         }
                         len = strlen(para2.sprobe.para); // 文字列の長さを取得
                         if (len > 0) para2.sprobe.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
-                        para2.sprobe.no = 21;
-                        ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8Ma(&para2, i, k); // ファイルから取得したパラメータをアームへ書き込む // 作成中(2025.10.18yori)
+                        para2.sprobe.no = 21; // 枝番の場合のパラメータ数
+                        ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8Ma(&para2, i, k); // ファイルから取得したパラメータをアームへ書き込む
                     }
                 }
             }
@@ -4600,7 +4602,6 @@ void HwCtrl::RestorePara(const TCHAR* path)
                 fgets(line, sizeof(line), pf);
                 line[strcspn(line, "\n")] = '\0'; // 改行を削除
                 para_name = strtok_s(line, ",", &context);
-                para = strtok_s(NULL, ",", &context);
                 for (i = 0; i < 20; i++)
                 {
                     para = strtok_s(NULL, " ", &context);
@@ -4657,10 +4658,15 @@ void HwCtrl::RestorePara(const TCHAR* path)
             }
         }
 
+        //TEST@ISO
+        ret = HwCtrl::m_hVecCnt.VecCmd_Iso(); // パラメータをアームへ保存する。
+
         fclose(pf); //ファイルを閉じる
     }
     else
     {
         // ファイルを開くことができなかった
     }
+
+    return ret;
 }
