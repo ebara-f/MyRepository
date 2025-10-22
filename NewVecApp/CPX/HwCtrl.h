@@ -175,9 +175,9 @@ public:
     static int SendLineDataCheck2(int index);
     static void FileOutput(); // Debug用、スキャンデータファイル出力(2025.8.5yori)
 
-    // パラメータ保存復元関数(2025.10.9yori)
+    // パラメータ保存復元関数(2025.10.19yori)
     static void SavePara(const TCHAR* path);
-    static void RestorePara(const TCHAR* path);
+    static int RestorePara(const TCHAR* path);
 
 
     // 非接触点検、キャリブ用関数

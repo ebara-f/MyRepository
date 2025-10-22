@@ -2399,15 +2399,16 @@ int CVecCnt::VecCmd_SprobeV8(CALIB_DATA* para, int psid)
 /***********************************************************************
 
 	SPROBEV8MA
-	2025.10.14yori
+	2025.10.20yori
 
 ***********************************************************************/
 int CVecCnt::VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch)
 {
 	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
 
-	char	cRecvCmd[32] = { 0 };
-	char	cBranch[32] = { 0 };
+	char	cPsId[8] = { 0 };
+	char	cBranch[8] = { 0 };
+	char	cSendData[sizeof(cPsId) + sizeof(cBranch) + sizeof(para->sprobe.para)];
 	int		ret_code_send;
 	int		ret_code_recv;
 
@@ -2416,10 +2417,12 @@ int CVecCnt::VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch)
 	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
 
 	sprintf_s(para->sprobe.cmd, sizeof(para->sprobe.cmd), "%s", "SPROBEV8MA");
-	sprintf_s(para->sprobe.para, sizeof(para->sprobe.para), "%d", psid);
-	sprintf_s(cBranch, sizeof(cBranch), " %d", branch);
-	strcat_s(para->sprobe.para, sizeof(para->sprobe.para), cBranch);
-	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprobe.cmd, para->sprobe.para, para->sprobe.no);
+	sprintf_s(cPsId, sizeof(cPsId), "%d", psid);
+	sprintf_s(cBranch, sizeof(cBranch), " %d ", branch);
+	sprintf_s(cSendData, sizeof(cSendData), " %s", cPsId);
+	strcat_s(cSendData, sizeof(cSendData), cBranch);
+	strcat_s(cSendData, sizeof(cSendData), para->sprobe.para);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprobe.cmd, cSendData, para->sprobe.no);
 	ret_code_recv = StdRecvCheck();
 	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
 	{
