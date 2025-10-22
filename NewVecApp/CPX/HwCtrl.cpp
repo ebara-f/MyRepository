@@ -3504,9 +3504,10 @@ void HwCtrl::FileOutput()
 
     アームパラメータの取得(テキストデータ)
     2025.9.10 add eba
+    2025.10.20 mod 枝番対応引数追加 eba
 
 ***********************************************************************/
-int HwCtrl::GetArmParaV8(CALIB_DATA* para, int psid)
+int HwCtrl::GetArmParaV8(CALIB_DATA* para, int psid, int branch)
 {
     int ret = 0;
 
@@ -3514,7 +3515,15 @@ int HwCtrl::GetArmParaV8(CALIB_DATA* para, int psid)
     ret |= HwCtrl::m_hVecCnt.VecCmd_Test004(para);
     ret |= HwCtrl::m_hVecCnt.VecCmd_Test006(para);
     ret |= HwCtrl::m_hVecCnt.VecCmd_Test008(para);
-    ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8(para, psid);
+    if (psid == 17 || psid == 18 || psid == 19)
+    {
+        ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8Ma(para, psid, branch);
+    }
+    else
+    {
+        ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8(para, psid);
+    }
+    
 
     return (ret);
 }
@@ -3525,9 +3534,10 @@ int HwCtrl::GetArmParaV8(CALIB_DATA* para, int psid)
 
     アームパラメータの設定(テキストデータ)
     2025.9.10 add eba
+    2025.10.20 mod 枝番対応引数追加 eba
 
 ***********************************************************************/
-int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid)
+int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid, int branch)
 {
     int ret = 0;
 
@@ -3535,7 +3545,14 @@ int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid)
     ret |= HwCtrl::m_hVecCnt.VecCmd_Test005(para);
     ret |= HwCtrl::m_hVecCnt.VecCmd_Test007(para);
     ret |= HwCtrl::m_hVecCnt.VecCmd_Test009(para);
-    ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8(para, psid);
+    if (psid == 17 || psid == 18 || psid == 19)
+    {
+        ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8Ma(para, psid, branch);
+    }
+    else
+    {
+        ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8(para, psid);
+    }
     ret |= HwCtrl::m_hVecCnt.VecCmd_Iso();
 
     return (ret);

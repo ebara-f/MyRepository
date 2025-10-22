@@ -4,11 +4,11 @@
 
 ***********************************************************************/
 #include    "CalibComm.h"
-#include	"CalibProbeBallStd.h"
+#include	"CalibProbeBallExt.h"
 
-CALIB_DATA CalibProbeBallStd::m_ArmParaTxtBackUp;
+CALIB_DATA CalibProbeBallExt::m_ArmParaTxtBackUp;
 
-int CalibProbeBallStd::InitSub(CALIB_MSEBOX* para)
+int CalibProbeBallExt::InitSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -16,13 +16,13 @@ int CalibProbeBallStd::InitSub(CALIB_MSEBOX* para)
 	switch (CalibComm::m_Language)
 	{
 	case LANGUAGE::JAPANESE:
-		ret |= CalibInit(0, CALIB_MODE_SIMPLE_BALL);
+		ret |= CalibInit(0, CALIB_MODE_SIMPLE_BALL_EXT);
 		wcscpy_s(para->mes, 256, _T("プローブキャリブレーションをはじめます"));
 		wcscpy_s(para->path, 128, _T("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\probeCalib_ja.png"));
 		break;
 
 	case LANGUAGE::ENBLISH:
-		ret |= CalibInit(1, CALIB_MODE_SIMPLE_BALL);
+		ret |= CalibInit(1, CALIB_MODE_SIMPLE_BALL_EXT);
 		wcscpy_s(para->mes, 256, _T("Start User Calibration."));
 		wcscpy_s(para->path, 128, _T("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\probeCalib_en.png"));
 		break;
@@ -40,16 +40,17 @@ int CalibProbeBallStd::InitSub(CALIB_MSEBOX* para)
 }
 
 
-int CalibProbeBallStd::StartSub(CALIB_MSEBOX* para)
+int CalibProbeBallExt::StartSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	char path[256];
 	char mesg[512], mesg1[256], mesg2[256];
-
-	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 2 ||
-		HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 1)
+	
+	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId != 17 ||
+		HwCtrl::m_hVecCnt.m_Sts.m_iProbeId != 18 ||
+		HwCtrl::m_hVecCnt.m_Sts.m_iProbeId != 19)
 	{
-		HwCtrl::m_hVecCnt.VecCmd_ChangeProbe(2); // PS=2へ強制変更
+		
 	}
 	else
 	{
@@ -58,18 +59,17 @@ int CalibProbeBallStd::StartSub(CALIB_MSEBOX* para)
 	}
 	
 	// 初期パラメータ取得・設定
-	HwCtrl::GetArmParaV8(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, 0);
-	CalibCalParaIn(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
+	HwCtrl::GetArmParaV8(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, para->CalibProbeBranch);
+	CalibCalParaInEx(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, para->CalibProbeBranch);
 	// 戻すようにバックアップ
-	CalibProbeBallStd::m_ArmParaTxtBackUp = CalibComm::m_ArmParaTxt;
-
+	CalibProbeBallExt::m_ArmParaTxtBackUp = CalibComm::m_ArmParaTxt;
 
 	return (ret);
 }
 
 
 
-int CalibProbeBallStd::CntDataMesCallBackSub(CALIB_MSEBOX* para)
+int CalibProbeBallExt::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
@@ -78,7 +78,7 @@ int CalibProbeBallStd::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 	char mesg[512], mesg1[256], mesg2[256];
 
 	int result;
-	if (!CalibCalParaOut(&result, &CalibComm::m_ArmParaTxt, 2))	// PSIDは2
+	if (!CalibCalParaOutEx(&result, &CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, para->CalibProbeBranch))	// 指定の枝番
 	{
 		para->CalibInspectJudge = 1;
 		ret = 1;
@@ -105,7 +105,7 @@ int CalibProbeBallStd::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 
 
 
-int CalibProbeBallStd::ParaOutCallBackSub(CALIB_MSEBOX* para)
+int CalibProbeBallExt::ParaOutCallBackSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 	int no = 0;
@@ -116,7 +116,7 @@ int CalibProbeBallStd::ParaOutCallBackSub(CALIB_MSEBOX* para)
 	// 結果パラメータ転送
 	if (para->CalibInspectJudge == 0)	// // OKなら
 	{
-		HwCtrl::SetArmParaV8(&CalibComm::m_ArmParaTxt, 2, 0);
+		HwCtrl::SetArmParaV8(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, para->CalibProbeBranch);
 	}
 
 	ret |= CalibEnd();
@@ -139,11 +139,11 @@ int CalibProbeBallStd::ParaOutCallBackSub(CALIB_MSEBOX* para)
 }
 
 
-int CalibProbeBallStd::ClickResoreBtnSub(CALIB_MSEBOX* para)
+int CalibProbeBallExt::ClickResoreBtnSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
-	HwCtrl::SetArmParaV8(&CalibProbeBallStd::m_ArmParaTxtBackUp, 2, 0);
+	HwCtrl::SetArmParaV8(&CalibProbeBallExt::m_ArmParaTxtBackUp, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, para->CalibProbeBranch);
 	
 
 	return (ret);

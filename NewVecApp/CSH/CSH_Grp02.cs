@@ -150,6 +150,8 @@ namespace CSH
 
         public int Language;
         public int CalibType;
+        public int CalibProbeId;        // 2025.10.20 add eba キャリブ開始前についていたプローブの記録
+        public int CalibProbeBranch;    // 2025.10.20 add eba
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string path;
@@ -167,6 +169,7 @@ namespace CSH
         INSPECT_BALL_GAUGE,
         ALIGNMENT_MULTI_GAUGE,
         ALIGNMENT_BALL_GAUGE_STD,
+        ALIGNMENT_BALL_GAUGE_EXT,
 
         END
     }

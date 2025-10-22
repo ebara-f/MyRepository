@@ -60,6 +60,10 @@ int CalibInspectMultiNestStd::StartSub(CALIB_MSEBOX* para)
 		ret = 1;
 	}
 
+	// 初期パラメータ取得・設定
+	HwCtrl::GetArmParaV8(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, 0);
+	CalibCalParaIn(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
+
 	return (ret);
 }
 

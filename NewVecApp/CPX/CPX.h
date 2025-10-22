@@ -226,6 +226,8 @@ typedef struct CalibSettingParamter
 
     int Language;
     int CalibType;
+    int CalibProbeId;
+    int CalibProbeBranch;
 
     TCHAR   path[256];
     TCHAR   mes[512];

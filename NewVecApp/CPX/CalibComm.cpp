@@ -8,6 +8,7 @@
 #include	"CalibInspectMultiNestStd.h"
 #include	"CalibInspectMultiPlateStd.h"
 #include	"CalibProbeBallStd.h"
+#include	"CalibProbeBallExt.h"
 
 CALIB_TYPE		CalibComm::m_CalibType;
 LANGUAGE		CalibComm::m_Language;
@@ -46,6 +47,11 @@ int CalibComm::Init(CALIB_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, 
 		case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
 			ret |= CalibProbeBallStd::InitSub(para);
 			break;
+
+		case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_EXT:
+			ret |= CalibProbeBallExt::InitSub(para);
+			break;
+
 		default:
 			break;
 	}
@@ -94,19 +100,10 @@ int CalibComm::Start(CALIB_MSEBOX* para)
 	ret |= CalibGetThreshold(&para->ProbeCheckThreshold, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
 	ret |= CalibGetThresholdCk(&para->InspectionThreshold);
 
-	// 初期パラメータ取得・設定
-	HwCtrl::GetArmParaV8(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
-	CalibCalParaIn(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
-
-	// データ初期化
-	CalibMesReset();
-	CalibMesOutPath(path);
-	CalibMesOutMesg(mesg1, mesg2);
-	sprintf_s(mesg, 512, "%s\n%s", mesg1, mesg2);
-
-	MultiByteToWideChar(CP_ACP, 0, path, -1, para->path, 128);
-	MultiByteToWideChar(CP_ACP, 0, mesg, -1, para->mes, 256);
-
+	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId != para->CalibProbeId)
+	{
+		goto exit;
+	}
 
 
 	HwCtrl::Func09();	// ステータス要求(現在のプローブIDが知りたい)
@@ -124,6 +121,10 @@ int CalibComm::Start(CALIB_MSEBOX* para)
 		ret |= CalibProbeBallStd::StartSub(para);
 		break;
 
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_EXT:
+		ret |= CalibProbeBallExt::StartSub(para);
+		break;
+
 	default:
 		break;
 	}
@@ -132,6 +133,15 @@ int CalibComm::Start(CALIB_MSEBOX* para)
 	{
 		goto exit;
 	}
+
+	// データ初期化
+	CalibMesReset();
+	CalibMesOutPath(path);
+	CalibMesOutMesg(mesg1, mesg2);
+	sprintf_s(mesg, 512, "%s\n%s", mesg1, mesg2);
+
+	MultiByteToWideChar(CP_ACP, 0, path, -1, para->path, 128);
+	MultiByteToWideChar(CP_ACP, 0, mesg, -1, para->mes, 256);
 
 exit:;
 	return (ret);
@@ -175,6 +185,10 @@ int CalibComm::Back(CALIB_MSEBOX* para)
 	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
 
 		break;
+
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_EXT:
+
+		break;
 	default:
 		break;
 	}
@@ -211,6 +225,10 @@ int CalibComm::ReStart(CALIB_MSEBOX* para)
 
 	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
 		ret |= CalibProbeBallStd::InitSub(para);
+		break;
+
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_EXT:
+		ret |= CalibProbeBallExt::InitSub(para);
 		break;
 
 	default:
@@ -368,6 +386,10 @@ int CalibComm::CntDataMesCallBack(CALIB_MSEBOX* para)
 			ret |= CalibProbeBallStd::CntDataMesCallBackSub(para);
 			break;
 
+		case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_EXT:
+			ret |= CalibProbeBallExt::CntDataMesCallBackSub(para);
+			break;
+
 		default:
 			break;
 		}
@@ -403,6 +425,10 @@ int CalibComm::ClickResoreBtn(CALIB_MSEBOX* para)
 		ret |= CalibProbeBallStd::ClickResoreBtnSub(para);
 		break;
 
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_EXT:
+		ret |= CalibProbeBallExt::ClickResoreBtnSub(para);
+		break;
+
 	default:
 		break;
 	}
@@ -436,6 +462,10 @@ int CalibComm::ParaOutCallBack(CALIB_MSEBOX* para)
 
 	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_STD:
 		ret = CalibProbeBallStd::ParaOutCallBackSub(para);
+		break;
+
+	case CALIB_TYPE::ALIGNMENT_BALL_GAUGE_EXT:
+		ret = CalibProbeBallExt::ParaOutCallBackSub(para);
 		break;
 
 	default:

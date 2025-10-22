@@ -9,6 +9,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="ソース ファイル\Calib">
+      <UniqueIdentifier>{5ea8e476-d892-46d8-9539-7661048a76e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Calib">
+      <UniqueIdentifier>{17c35d22-0886-4a13-bf76-52ebb759bf02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CPX.h">
@@ -47,32 +53,35 @@
     <ClInclude Include="Grp03.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CalibUserMulti.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="CalibComm.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Calib</Filter>
     </ClInclude>
     <ClInclude Include="CalibDataBuff.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="CalibInspectMultiNestStd.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="CalibInspectMultiPlateStd.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="CalibSetting.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="CalibProbeBallStd.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Calib</Filter>
     </ClInclude>
     <ClInclude Include="CalibInspectMultiNestExt.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Calib</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibInspectMultiNestStd.h">
+      <Filter>ヘッダー ファイル\Calib</Filter>
     </ClInclude>
     <ClInclude Include="CalibInspectMultiPlateExt.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Calib</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibInspectMultiPlateStd.h">
+      <Filter>ヘッダー ファイル\Calib</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibProbeBallExt.h">
+      <Filter>ヘッダー ファイル\Calib</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibProbeBallStd.h">
+      <Filter>ヘッダー ファイル\Calib</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibSetting.h">
+      <Filter>ヘッダー ファイル\Calib</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibUserMulti.h">
+      <Filter>ヘッダー ファイル\Calib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,32 +133,35 @@
     <ClCompile Include="Grp03.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CalibUserMulti.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="CalibComm.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Calib</Filter>
     </ClCompile>
     <ClCompile Include="CalibDataBuff.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="CalibInspectMultiNestStd.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="CalibInspectMultiPlateStd.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="CalibSetting.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="CalibProbeBallStd.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Calib</Filter>
     </ClCompile>
     <ClCompile Include="CalibInspectMultiNestExt.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Calib</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibInspectMultiNestStd.cpp">
+      <Filter>ソース ファイル\Calib</Filter>
     </ClCompile>
     <ClCompile Include="CalibInspectMultiPlateExt.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Calib</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibInspectMultiPlateStd.cpp">
+      <Filter>ソース ファイル\Calib</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibProbeBallExt.cpp">
+      <Filter>ソース ファイル\Calib</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibProbeBallStd.cpp">
+      <Filter>ソース ファイル\Calib</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibSetting.cpp">
+      <Filter>ソース ファイル\Calib</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibUserMulti.cpp">
+      <Filter>ソース ファイル\Calib</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
