@@ -33,6 +33,8 @@ using namespace std; //using namespace System→using namespace stdへ変更(202
 #define MODEL_V8M	"VAR800M" // 追加(2025.6.10yori) // アーム型式へ変更(2025.9.26yori)
 #define MODEL_V8L	"VAR800L" // 追加(2025.6.10yori) // アーム型式へ変更(2025.9.26yori)
 #define MODEL_V8S	"VAR800S" // 追加(2025.9.29yori)
+#define MODEL_V7M	"VAR700M" // 追加(2025.10.23yori)
+#define MODEL_V7L	"VAR700L" // 追加(2025.10.23yori)
 #define MODEL_V7S	"BK100S" // 追加(2025.6.10yori) // アーム型式へ変更(2025.9.26yori)
 #define MODEL_V7SA	"BK100S-NC" // 追加 2025.7.2 eba add 仮これじゃダメ！ // アーム型式へ変更(2025.9.26yori)
 
