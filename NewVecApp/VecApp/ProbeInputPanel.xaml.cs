@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ComponentModel;
+using CSH;
 
 namespace VecApp
 {
@@ -25,8 +26,34 @@ namespace VecApp
             : base(parent, Panel.ProbeInput)
         {
             InitializeComponent();
-            // 以降、ViewModel対応による追加(2025.7.29yori)
             this.DataContext = model;
+            //// 追加(2025.10.24yori)
+            Status01 sts = new Status01();
+            CSH.AppMain.UpDateData01(out sts);
+            ViewModel.Id = sts.probe_id.ToString();
+            ViewModel.BallDiameter = sts.dia.ToString("F2");
+            if (sts.probe_id == 0) ViewModel.Name = sts.pobe_name0;
+            if (sts.probe_id == 1) ViewModel.Name = sts.pobe_name1;
+            if (sts.probe_id == 2) ViewModel.Name = sts.pobe_name2;
+            if (sts.probe_id == 3) ViewModel.Name = sts.pobe_name3;
+            if (sts.probe_id == 4) ViewModel.Name = sts.pobe_name4;
+            if (sts.probe_id == 5) ViewModel.Name = sts.pobe_name5;
+            if (sts.probe_id == 6) ViewModel.Name = sts.pobe_name6;
+            if (sts.probe_id == 7) ViewModel.Name = sts.pobe_name7;
+            if (sts.probe_id == 8) ViewModel.Name = sts.pobe_name8;
+            if (sts.probe_id == 9) ViewModel.Name = sts.pobe_name9;
+            if (sts.probe_id == 10) ViewModel.Name = sts.pobe_name10;
+            if (sts.probe_id == 11) ViewModel.Name = sts.pobe_name11;
+            if (sts.probe_id == 12) ViewModel.Name = sts.pobe_name12;
+            if (sts.probe_id == 13) ViewModel.Name = sts.pobe_name13;
+            if (sts.probe_id == 14) ViewModel.Name = sts.pobe_name14;
+            if (sts.probe_id == 15) ViewModel.Name = sts.pobe_name15;
+            if (sts.probe_id == 16) ViewModel.Name = sts.pobe_name16;
+            if (sts.probe_id == 17) ViewModel.Name = sts.pobe_name17;
+            if (sts.probe_id == 18) ViewModel.Name = sts.pobe_name18;
+            if (sts.probe_id == 19) ViewModel.Name = sts.pobe_name19;
+            if (sts.probe_id == 20) ViewModel.Name = sts.pobe_name20;
+            ////
         }
 
         private ProbeInputViewModel ViewModel
@@ -40,7 +67,7 @@ namespace VecApp
         }
         private void Click_CancelBtn(object sender, RoutedEventArgs e)
         {
-            Parent.CurrentPanel = Panel.ContactProperty;
+            Parent.CurrentPanel = Panel.None; // プローブ登録画面非表示(2025.10.24yori)
         }
     }
 }

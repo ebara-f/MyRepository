@@ -23,6 +23,7 @@
 #include "VecCnt.h"
 
 #define SEMAPHORE_VEC_STEP_SEQ_NAME	L"SEMAPHORE_VEC_STEP_SEQ"	// 2025.5.27 add eba
+#define PROBE_SET_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\probeset.ini" // 追加(2025.10.24yori)
 
 class HwCtrl
 {

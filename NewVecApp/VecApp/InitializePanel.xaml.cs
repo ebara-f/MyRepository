@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CSH;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace VecApp
@@ -27,8 +29,37 @@ namespace VecApp
             : base(parent, Panel.Initialize)
         {
             InitializeComponent();
-
             this.DataContext = model;
+
+            // 機種による関節No位置を場合分け(2025.10.24yori)
+            Status01 sts = new Status01();
+            CSH.AppMain.UpDateData01(out sts);
+            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
+            {
+                this.ViewModel.Marks = new ObservableCollection<InitializeMarkViewModel>
+                {
+                    new InitializeMarkViewModel { Text = "⓪", Visibility = Visibility.Hidden, X = 470, Y = 200 },
+                    new InitializeMarkViewModel { Text = "①", Visibility = Visibility.Hidden, X = 450, Y = 160 },
+                    new InitializeMarkViewModel { Text = "②", Visibility = Visibility.Hidden, X = 395, Y = 30 },
+                    new InitializeMarkViewModel { Text = "③", Visibility = Visibility.Hidden, X = 310, Y = 0 },
+                    new InitializeMarkViewModel { Text = "④", Visibility = Visibility.Hidden, X = 330, Y = 100 },
+                    new InitializeMarkViewModel { Text = "⑤", Visibility = Visibility.Hidden, X = 230, Y = 140 },
+                    new InitializeMarkViewModel { Text = "⑥", Visibility = Visibility.Hidden, X = 340, Y = 160 },
+                };
+            }
+            if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L")
+            {
+                this.ViewModel.Marks = new ObservableCollection<InitializeMarkViewModel>
+                {
+                    new InitializeMarkViewModel { Text = "⓪", Visibility = Visibility.Hidden, X = 380, Y = 190 },
+                    new InitializeMarkViewModel { Text = "①", Visibility = Visibility.Hidden, X = 440, Y = 150 },
+                    new InitializeMarkViewModel { Text = "②", Visibility = Visibility.Hidden, X = 400, Y = 20 },
+                    new InitializeMarkViewModel { Text = "③", Visibility = Visibility.Hidden, X = 315, Y = 0 },
+                    new InitializeMarkViewModel { Text = "④", Visibility = Visibility.Hidden, X = 290, Y = 80 },
+                    new InitializeMarkViewModel { Text = "⑤", Visibility = Visibility.Hidden, X = 355, Y = 120 },
+                    new InitializeMarkViewModel { Text = "⑥", Visibility = Visibility.Hidden, X = 250, Y = 140 },
+                };
+            }
         }
 
         private InitializeViewModel ViewModel

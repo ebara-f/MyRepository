@@ -130,6 +130,12 @@ namespace VecApp
             this.CurrentPanel = Panel.ArmNetworkSetting;
         }
 
+        // プローブ登録(2025.10.24yori)
+        private void Click_Btn07(object sender, RoutedEventArgs e)
+        {
+            this.CurrentPanel = Panel.ProbeInput;
+        }
+
         public override Panel CurrentPanel
         {
             get => MainContent.Content == null ? Panel.None : (MainContent.Content as PanelBase).Type;

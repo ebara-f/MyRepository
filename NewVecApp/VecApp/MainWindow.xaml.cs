@@ -664,7 +664,7 @@ namespace VecApp
 
             CSH.AppMain.UpDateData01(out sts);
 
-            if (sts.no0_fg == 0) // 0軸が無い場合は、0軸無しの画像へ変更し、0番を表示しない。(2025.7.15yori)
+            if ((sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") && sts.no0_fg == 0) // 0軸が無い場合は、0軸無しの画像へ変更し、0番を表示しない。(2025.7.15yori) // アーム型式追加(2025.10.24yori)
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -686,12 +686,34 @@ namespace VecApp
                     m_SubWnd01.InitializeValue.Labels[6].Visibility = Visibility.Visible;
                 });
             }
-            else // 0軸が有る場合は、0軸有りの画像へ変更し、0番を表示する。(2025.7.15yori)
+            if ((sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") && sts.no0_fg == 1) // 0軸が有る場合は、0軸有りの画像へ変更し、0番を表示する。(2025.7.15yori) // アーム型式追加(2025.10.24yori)
             {
                 // ViewModelへ変更(20257.16yori)
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     m_SubWnd01.InitializeValue.ImageSource = "Image/init_V8+VPR81.PNG";
+                    m_SubWnd01.InitializeValue.Marks[0].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Marks[1].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Marks[2].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Marks[3].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Marks[4].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Marks[5].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Marks[6].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Labels[0].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Labels[1].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Labels[2].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Labels[3].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Labels[4].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Labels[5].Visibility = Visibility.Visible;
+                    m_SubWnd01.InitializeValue.Labels[6].Visibility = Visibility.Visible;
+                });
+            }
+            if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L") // V7追加(2025.10.24yori)
+            {
+                // ViewModelへ変更(20257.16yori)
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    m_SubWnd01.InitializeValue.ImageSource = "Image/init_V7.png";
                     m_SubWnd01.InitializeValue.Marks[0].Visibility = Visibility.Visible;
                     m_SubWnd01.InitializeValue.Marks[1].Visibility = Visibility.Visible;
                     m_SubWnd01.InitializeValue.Marks[2].Visibility = Visibility.Visible;

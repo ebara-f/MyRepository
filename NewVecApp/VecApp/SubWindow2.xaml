@@ -19,10 +19,11 @@
 
         <!-- 左側メニュー -->
         <StackPanel Background="#2C3E50" VerticalAlignment="Stretch">
+            <!-- プローブ→プローブ設定へ変更、プローブ登録ボタン追加(2025.10.24yori) -->
             <TextBlock Text="{x:Static res:Resources.String224}" FontSize="20" FontWeight="Bold" Margin="20,20,0,10" Foreground="White" />
-
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String66}" Click="Click_Btn01" FontSize="20"/>
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String9}" Click="Click_Btn01" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String16}" Click="Click_Btn02" FontSize="20"/>
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String70}" Click="Click_Btn07" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String225}" Click="Click_Btn03" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String72}" Click="Click_Btn04" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String67}" Click="Click_Btn05" FontSize="20"/>

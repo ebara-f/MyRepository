@@ -33,6 +33,7 @@
     <None Remove="Image\connectSensor_Api_V8.PNG" />
     <None Remove="Image\init_machine10.PNG" />
     <None Remove="Image\init_No0.PNG" />
+    <None Remove="Image\init_V7.png" />
     <None Remove="Image\init_V8+Api.PNG" />
     <None Remove="Image\init_V8+VPR81.PNG" />
     <None Remove="Image\init_VPR81.PNG" />
@@ -77,6 +78,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\init_No0.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\init_V7.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\init_V8+Api.PNG">
