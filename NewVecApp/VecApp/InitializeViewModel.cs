@@ -138,7 +138,7 @@ namespace VecApp
         {
             Marks = new ObservableCollection<InitializeMarkViewModel>
             {
-                new InitializeMarkViewModel { Text = "⓪", Visibility = Visibility.Hidden, X = 470, Y = 200 }, // 追加(2025.7.16yori)
+                new InitializeMarkViewModel { Text = "⓪", Visibility = Visibility.Visible, X = 470, Y = 200 }, // 追加(2025.7.16yori)
                 new InitializeMarkViewModel { Text = "①", Visibility = Visibility.Hidden, X = 450, Y = 160 }, // Visible→Hiddenへ変更(2025.7.16yori)
                 new InitializeMarkViewModel { Text = "②", Visibility = Visibility.Hidden, X = 395, Y = 30 }, // Visible→Hiddenへ変更(2025.7.16yori)
                 new InitializeMarkViewModel { Text = "③", Visibility = Visibility.Hidden, X = 310, Y = 0 }, // Visible→Hiddenへ変更(2025.7.16yori)

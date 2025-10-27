@@ -1058,7 +1058,6 @@ void AppMain::ThreadProc()
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_ING;
                 if (!HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn01); // 接続メニュー表示(2025.6.5yori)
                 if (!HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Btn03); // C#側にイニシャライズ画面表示要求を出す 2025.5.28 add eba
-                UsrMsg::CallBack(UsrMsg::WM_InitPanel_Setup); // イニシャライズ画像、番号表示(2025.7.15yori)
             }
             else
             {

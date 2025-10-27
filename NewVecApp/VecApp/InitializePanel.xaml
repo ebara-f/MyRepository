@@ -9,7 +9,8 @@
              xmlns:local="clr-namespace:VecApp"
              xmlns:res="clr-namespace:VecApp.Properties"
              mc:Ignorable="d"
-             d:DesignHeight="480" d:DesignWidth="800">
+             d:DesignHeight="690" d:DesignWidth="800">
+    <!-- d:DesignHeight="480"→Height=690"へ変更(2025.10.26yori) -->
     <Grid>
         <Border Background="#2C3E50" CornerRadius="10" Padding="20">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
@@ -20,12 +21,14 @@
                     Foreground="White"
                     Margin="0,0,0,10"/>
 
-                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Height="396">
+                <!-- Height="396"→Height="615"(2025.10.26yori) -->
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Height="615">
                     <StackPanel>
                         <!-- 仮の画像スペース -->
-                        <Grid Height="252" Background="#DDD">
+                        <!-- Height="252"→Height="470"(2025.10.26yori) -->
+                        <Grid Height="470" Background="#DDD" >
                             <Image Source="{Binding ImageSource}"
-                                 Width="800" Height="252"
+                                 Width="800" Height="470"
                                  Stretch="Uniform"
                                  Canvas.Left="0"
                                  Canvas.Top="0"
