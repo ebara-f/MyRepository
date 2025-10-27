@@ -14,10 +14,13 @@ namespace VecApp
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<string> BallItems { get; set; }
+        public ObservableCollection<string> GaugeItems { get; set; } // 追加(2025.10.27yori)
         public ProbeInputViewModel()
         {
             BallItems = new ObservableCollection<string> { Resources.String214, Resources.String215, Resources.String216, Resources.String217 };
+            GaugeItems = new ObservableCollection<string> { Resources.String61, Resources.String62 };
             BallIndex = 0;
+            GaugeIndex = 0; // 追加(2025.10.27yori)
             ImageSource = "";
         }
 
@@ -49,6 +52,21 @@ namespace VecApp
             }
         }
 
+        // 追加(2025.10.27yori)
+        private string _probeAngle;
+        public string ProbeAngle
+        {
+            get => _probeAngle;
+            set
+            {
+                if (_probeAngle != value)
+                {
+                    _probeAngle = value;
+                    OnPropertyChanged(nameof(ProbeAngle));
+                }
+            }
+        }
+
         private string _ballDiameter;
         public string BallDiameter
         {
@@ -73,6 +91,21 @@ namespace VecApp
                 {
                     _ballIndex = value;
                     OnPropertyChanged(nameof(BallIndex));
+                }
+            }
+        }
+
+        // 追加(2025.10.27yori)
+        private int _gaugeIndex;
+        public int GaugeIndex
+        {
+            get => _gaugeIndex;
+            set
+            {
+                if (_gaugeIndex != value)
+                {
+                    _gaugeIndex = value;
+                    OnPropertyChanged(nameof(GaugeIndex));
                 }
             }
         }

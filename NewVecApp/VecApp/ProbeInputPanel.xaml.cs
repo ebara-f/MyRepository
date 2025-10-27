@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,8 +31,6 @@ namespace VecApp
             //// 追加(2025.10.24yori)
             Status01 sts = new Status01();
             CSH.AppMain.UpDateData01(out sts);
-            ViewModel.Id = sts.probe_id.ToString();
-            ViewModel.BallDiameter = sts.dia.ToString("F2");
             if (sts.probe_id == 0) ViewModel.Name = sts.pobe_name0;
             if (sts.probe_id == 1) ViewModel.Name = sts.pobe_name1;
             if (sts.probe_id == 2) ViewModel.Name = sts.pobe_name2;
@@ -53,6 +52,9 @@ namespace VecApp
             if (sts.probe_id == 18) ViewModel.Name = sts.pobe_name18;
             if (sts.probe_id == 19) ViewModel.Name = sts.pobe_name19;
             if (sts.probe_id == 20) ViewModel.Name = sts.pobe_name20;
+            ViewModel.Id = sts.probe_id.ToString();
+            ViewModel.ProbeAngle = sts.stylus_angle[sts.probe_id].ToString("F2");
+            ViewModel.BallDiameter = sts.dia.ToString("F2");
             ////
         }
 
@@ -68,6 +70,28 @@ namespace VecApp
         private void Click_CancelBtn(object sender, RoutedEventArgs e)
         {
             Parent.CurrentPanel = Panel.None; // プローブ登録画面非表示(2025.10.24yori)
+        }
+
+        // 追加(2025.10.27yori)
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (this.ViewModel.BallIndex)
+            {
+                case 0:
+                    this.ViewModel.ImageSource = "Image/standardProbeV7.PNG";
+                    break;
+                case 1:
+                    this.ViewModel.ImageSource = "Image/VPR81.PNG";
+                    break;
+                case 2:
+                    this.ViewModel.ImageSource = "Image/VPR103.PNG";
+                    break;
+                case 3:
+                    this.ViewModel.ImageSource = "Image/VPR105.PNG";
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

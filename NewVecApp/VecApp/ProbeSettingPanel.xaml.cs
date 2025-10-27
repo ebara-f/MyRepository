@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CSH;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VecApp
 {
@@ -33,32 +34,37 @@ namespace VecApp
             // MainWindow.xaml.csから移動(2025.9.1yori)
             Status01 sts = new Status01();
             CSH.AppMain.UpDateData01(out sts);
-            ViewModel.Name.Clear();
-            ViewModel.Name.Insert(0, sts.pobe_name0);
-            ViewModel.Name.Insert(1, sts.pobe_name1);
-            ViewModel.Name.Insert(2, sts.pobe_name2);
-            ViewModel.Name.Insert(3, sts.pobe_name3);
-            ViewModel.Name.Insert(4, sts.pobe_name4);
-            ViewModel.Name.Insert(5, sts.pobe_name5);
-            ViewModel.Name.Insert(6, sts.pobe_name6);
-            ViewModel.Name.Insert(7, sts.pobe_name7);
-            ViewModel.Name.Insert(8, sts.pobe_name8);
-            ViewModel.Name.Insert(9, sts.pobe_name9);
-            ViewModel.Name.Insert(10, sts.pobe_name10);
-            ViewModel.Name.Insert(11, sts.pobe_name11);
-            ViewModel.Name.Insert(12, sts.pobe_name12);
-            ViewModel.Name.Insert(13, sts.pobe_name13);
-            ViewModel.Name.Insert(14, sts.pobe_name14);
-            ViewModel.Name.Insert(15, sts.pobe_name15);
-            ViewModel.Name.Insert(16, sts.pobe_name16);
-            ViewModel.Name.Insert(17, sts.pobe_name17);
-            ViewModel.Name.Insert(18, sts.pobe_name18); 
-            ViewModel.Name.Insert(19, sts.pobe_name19);
-            ViewModel.Name.Insert(20, sts.pobe_name20);
-            ViewModel.NameIndex = sts.probe_id;
-            if(sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") ProbeName.IsEnabled = false; // V8の場合、ComboBoxを選択できないよう無効化する。(2025.9.8yori)
-            ViewModel.Id = sts.probe_id.ToString();
-            ViewModel.Diameter = sts.dia.ToString("F2");
+            this.ViewModel.Name.Clear();
+            this.ViewModel.Name.Insert(0, sts.pobe_name0);
+            this.ViewModel.Name.Insert(1, sts.pobe_name1);
+            this.ViewModel.Name.Insert(2, sts.pobe_name2);
+            this.ViewModel.Name.Insert(3, sts.pobe_name3);
+            this.ViewModel.Name.Insert(4, sts.pobe_name4);
+            this.ViewModel.Name.Insert(5, sts.pobe_name5);
+            this.ViewModel.Name.Insert(6, sts.pobe_name6);
+            this.ViewModel.Name.Insert(7, sts.pobe_name7);
+            this.ViewModel.Name.Insert(8, sts.pobe_name8);
+            this.ViewModel.Name.Insert(9, sts.pobe_name9);
+            this.ViewModel.Name.Insert(10, sts.pobe_name10);
+            this.ViewModel.Name.Insert(11, sts.pobe_name11);
+            this.ViewModel.Name.Insert(12, sts.pobe_name12);
+            this.ViewModel.Name.Insert(13, sts.pobe_name13);
+            this.ViewModel.Name.Insert(14, sts.pobe_name14);
+            this.ViewModel.Name.Insert(15, sts.pobe_name15);
+            this.ViewModel.Name.Insert(16, sts.pobe_name16);
+            this.ViewModel.Name.Insert(17, sts.pobe_name17);
+            this.ViewModel.Name.Insert(18, sts.pobe_name18); 
+            this.ViewModel.Name.Insert(19, sts.pobe_name19);
+            this.ViewModel.Name.Insert(20, sts.pobe_name20);
+            this.ViewModel.NameIndex = sts.probe_id;
+            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
+            {
+                ProbeName.IsEnabled = false; // V8の場合、ComboBoxを選択できないよう無効化する。(2025.9.8yori)
+                this.ViewModel.ProbeImage = "Image/standardProbeV8.PNG"; // 追加(2025.10.27yori)
+            }
+            this.ViewModel.Id = sts.probe_id.ToString();
+            this.ViewModel.Diameter = sts.dia.ToString("F2");
+            if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L") this.ViewModel.ProbeImage = "Image/standardProbeV7.PNG"; // 追加(2025.10.27yori)
         }
 
         private ProbeSettingViewModel ViewModel
@@ -71,13 +77,13 @@ namespace VecApp
             // プローブ設定画面からプローブ情報を取得し、アームへ送る。(2025.7.18yori)
             // CSH.Grp02.Cmd07関数に引数追加(2025.9.8yori)
             // スタイラスなしの場合は、直径=0mmに設定する。(2025.9.8yori)
-            if (ViewModel.BallIndex == 0)
+            if (this.ViewModel.BallIndex == 0)
             {
-                CSH.Grp02.Cmd07(int.Parse(ViewModel.Id), 0);
+                CSH.Grp02.Cmd07(int.Parse(this.ViewModel.Id), 0);
             }
             else
             {
-                CSH.Grp02.Cmd07(int.Parse(ViewModel.Id), double.Parse(ViewModel.Diameter));
+                CSH.Grp02.Cmd07(int.Parse(this.ViewModel.Id), double.Parse(this.ViewModel.Diameter));
             }
             Parent.CurrentPanel = Panel.None; // プローブ設定画面非表示(2025.7.17yori) // Content = null;から変更(2025.8.16yori)
 
@@ -103,15 +109,19 @@ namespace VecApp
         // 追加(2025.7.17yori)
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (ViewModel.BallIndex)
+            switch (this.ViewModel.BallIndex)
             { 
                 case 0:
-                    ViewModel.BallImage = "Image/VST28-0.1.PNG";
+                    this.ViewModel.BallImage = "Image/VST28-0.1.PNG";
                     Dia.IsEnabled = false; // スタイラスなしの場合、ComboBoxを選択できないよう無効化する。(2025.9.8yori)
-                    ViewModel.Diameter = "0.00"; // スタイラスなしの場合、直径=0.00mmと表示する。(2025.9.8yori)
+                    this.ViewModel.Diameter = "0.00"; // スタイラスなしの場合、直径=0.00mmと表示する。(2025.9.8yori)
                     break;
                 case 1:
-                    ViewModel.BallImage = "Image/BallProbe.PNG";
+                    // 機種区別追加(2025.10.27yori)
+                    Status01 sts = new Status01();
+                    CSH.AppMain.UpDateData01(out sts);
+                    if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") this.ViewModel.BallImage = "Image/BallProbe.PNG";
+                    if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L") this.ViewModel.BallImage = "Image/VST29-φ6.PNG";
                     Dia.IsEnabled = true; // スタイラスありの場合、ComboBoxを選択できるよう有効化する。(2025.9.8yori)
                     break;
                 default:
