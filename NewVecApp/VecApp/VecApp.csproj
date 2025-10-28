@@ -33,15 +33,20 @@
     <None Remove="Image\connectSensor_Api_V8.PNG" />
     <None Remove="Image\init_machine10.PNG" />
     <None Remove="Image\init_No0.PNG" />
+    <None Remove="Image\init_V7.png" />
     <None Remove="Image\init_V8+Api.PNG" />
     <None Remove="Image\init_V8+VPR81.PNG" />
     <None Remove="Image\init_VPR81.PNG" />
     <None Remove="Image\Invalid data.png" />
     <None Remove="Image\selfchk_ja.png" />
+    <None Remove="Image\standardProbeV7.PNG" />
     <None Remove="Image\standardProbeV8.PNG" />
     <None Remove="Image\VAC26.png" />
     <None Remove="Image\VAC39.png" />
     <None Remove="Image\VAC46.png" />
+    <None Remove="Image\VPR103.PNG" />
+    <None Remove="Image\VPR105.PNG" />
+    <None Remove="Image\VPR81.PNG" />
     <None Remove="Image\VST28-0.1.PNG" />
     <None Remove="Image\VST29-φ6.PNG" />
   </ItemGroup>
@@ -79,6 +84,9 @@
     <Resource Include="Image\init_No0.PNG">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Image\init_V7.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Image\init_V8+Api.PNG">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -90,6 +98,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\selfchk_ja.png" />
+    <Resource Include="Image\standardProbeV7.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Image\standardProbeV8.PNG">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -103,6 +114,15 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\Valid data Wide waveform.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\VPR103.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\VPR105.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\VPR81.PNG">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\VST28-0.1.PNG">

@@ -266,13 +266,17 @@ namespace VecApp
             {
 
             }
-            else if (msg == UsrMsg.WM_InitPanel_Setup)
+            else if (msg == UsrMsg.WM_InitPanel_Update) // 変更(2025.10.27yori)
             {
-                InitPanelSetup(); // 変更(2025.7.15yori)
-            }
-            else if (msg == UsrMsg.WM_InitPanel_Update)
-            {
-                InitPanelUpdate(); // 変更(2025.7.14yori)
+                // 現在表示されているPanelクラスを取得
+                var Content = m_SubWnd01.MainContent.Content;
+
+                // パネルが表示されており(非null)、表示されているパネルが目的のパネル(Panel.Initialize)が表示されているか確認
+                if (Content != null && (Content as PanelBase).Type == Panel.Initialize)
+                {
+                    // ContentがInitializePanelであればキャストしてアクセスする
+                    (Content as InitializePanel).InitPanelUpdate();
+                }
             }
             else if (msg == UsrMsg.WM_SubWnd01_Panel_Hide)
             {
@@ -653,133 +657,6 @@ namespace VecApp
                 m_SubWnd02.ProbeSettingValue.NameIndex = sts.probe_id;
                 m_SubWnd02.ProbeSettingValue.Id = sts.probe_id.ToString();
             });
-        }
-
-        /// <summary>
-        /// イニシャライズ画面の初期設定(2025.7.15yori)
-        /// </summary>
-        private void InitPanelSetup()
-        {
-            Status01 sts = new Status01();
-
-            CSH.AppMain.UpDateData01(out sts);
-
-            if (sts.no0_fg == 0) // 0軸が無い場合は、0軸無しの画像へ変更し、0番を表示しない。(2025.7.15yori)
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    // ViewModelへ変更(20257.16yori)
-                    m_SubWnd01.InitializeValue.ImageSource = "Image/init_machine10.PNG";
-                    m_SubWnd01.InitializeValue.Marks[0].Visibility = Visibility.Hidden;
-                    m_SubWnd01.InitializeValue.Marks[1].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[2].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[3].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[4].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[5].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[6].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[0].Visibility = Visibility.Hidden;
-                    m_SubWnd01.InitializeValue.Labels[1].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[2].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[3].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[4].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[5].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[6].Visibility = Visibility.Visible;
-                });
-            }
-            else // 0軸が有る場合は、0軸有りの画像へ変更し、0番を表示する。(2025.7.15yori)
-            {
-                // ViewModelへ変更(20257.16yori)
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    m_SubWnd01.InitializeValue.ImageSource = "Image/init_V8+VPR81.PNG";
-                    m_SubWnd01.InitializeValue.Marks[0].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[1].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[2].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[3].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[4].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[5].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Marks[6].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[0].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[1].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[2].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[3].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[4].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[5].Visibility = Visibility.Visible;
-                    m_SubWnd01.InitializeValue.Labels[6].Visibility = Visibility.Visible;
-                });
-            }
-        }
-
-        /// <summary>
-        /// イニシャライズ画面の更新(2025.7.14yori)
-        /// </summary>
-        private void InitPanelUpdate()
-        {
-            Status01 sts = new Status01();
-
-            CSH.AppMain.UpDateData01(out sts);
-
-             for (int i = 0; i < 7; i++) // i = 1→0へ変更(2025.7.15yori)
-            {
-                if (sts.init_sts[i] == 1)
-                {
-                    // ViewModelへ変更(2025.7.16yori)
-                    switch (i)
-                    {
-                        case 0:
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                m_SubWnd01.InitializeValue.Marks[0].Visibility = Visibility.Hidden;
-                                m_SubWnd01.InitializeValue.Labels[0].Visibility = Visibility.Hidden;
-                            });
-                            break;
-                        case 1:
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                m_SubWnd01.InitializeValue.Marks[1].Visibility = Visibility.Hidden;
-                                m_SubWnd01.InitializeValue.Labels[1].Visibility = Visibility.Hidden;
-                            });
-                            break;
-                        case 2:
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                m_SubWnd01.InitializeValue.Marks[2].Visibility = Visibility.Hidden;
-                                m_SubWnd01.InitializeValue.Labels[2].Visibility = Visibility.Hidden;
-                            });
-                            break;
-                        case 3:
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                m_SubWnd01.InitializeValue.Marks[3].Visibility = Visibility.Hidden;
-                                m_SubWnd01.InitializeValue.Labels[3].Visibility = Visibility.Hidden;
-                            });
-                            break;
-                        case 4:
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                m_SubWnd01.InitializeValue.Marks[4].Visibility = Visibility.Hidden;
-                                m_SubWnd01.InitializeValue.Labels[4].Visibility = Visibility.Hidden;
-                            });
-                            break;
-                        case 5:
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                m_SubWnd01.InitializeValue.Marks[5].Visibility = Visibility.Hidden;
-                                m_SubWnd01.InitializeValue.Labels[5].Visibility = Visibility.Hidden;
-                            });
-                            break;
-                        case 6:
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                m_SubWnd01.InitializeValue.Marks[6].Visibility = Visibility.Hidden;
-                                m_SubWnd01.InitializeValue.Labels[6].Visibility = Visibility.Hidden;
-                            });
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
         }
 
         /// <summary>

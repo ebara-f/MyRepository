@@ -1502,7 +1502,10 @@ int HwCtrl::Func51()
     コマンド52
     プローブ名称取得(2025.7.23yori)
     スタイラス角度取得(2025.7.31yori)
+    INIファイル名変更(2025.8.18yori)
     引数追加(2025.8.28yori)
+    INIファイルのリンクをdefineで定義(2025.10.24yori)
+    INIファイルが存在しない場合は作成する。(2025.10.24yori)
 
 ***********************************************************************/
 
@@ -1512,12 +1515,53 @@ void HwCtrl::Func52(wchar_t probe_name[21][32], wchar_t stylus_angle[21][32])
     {
         wchar_t id[8] = L"ID";
         wchar_t no[8];
+        wchar_t value[21][32];
 
         swprintf(no, 8, L"%d", i); // swprintfへ変更(2025.8.10yori)
         wcsncat_s(id, no, sizeof(id));
 
-        GetPrivateProfileString(id, TEXT("name"), TEXT("スタンダードプローブ"), probe_name[i], 32, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\probeset.ini")); // ファイル名変更(2025.8.18yori)
-        GetPrivateProfileString(id, TEXT("angle"), TEXT("0.0000"), stylus_angle[i], 32, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\probeset.ini")); // ファイル名変更(2025.8.18yori)
+        // キー名(name→OffsetProbName)変更(2025.10.24yori)
+        if (i == 0) GetPrivateProfileString(id, TEXT("OffsetProbName"), TEXT("スキャナ"), probe_name[i], 32, PROBE_SET_INI);
+        if (i == 1) GetPrivateProfileString(id, TEXT("OffsetProbName"), TEXT("テーパプローブ"), probe_name[i], 32, PROBE_SET_INI);
+        if (i == 2) GetPrivateProfileString(id, TEXT("OffsetProbName"), TEXT("スタンダードプローブ"), probe_name[i], 32, PROBE_SET_INI);
+        if (i > 2 && i < 20) GetPrivateProfileString(id, TEXT("OffsetProbName"), TEXT("オプションプローブ"), probe_name[i], 32, PROBE_SET_INI);
+        if (i == 20) GetPrivateProfileString(id, TEXT("OffsetProbName"), TEXT("プローブなし"), probe_name[i], 32, PROBE_SET_INI);
+
+        WritePrivateProfileString(id, TEXT("OffsetProbName"), probe_name[i], PROBE_SET_INI);
+
+        GetPrivateProfileString(id, TEXT("OffsetProbUseFlag"), TEXT("0"), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbUseFlag"), value[i], PROBE_SET_INI);
+
+        // キー名(angle→OffsetProbTipAngle)変更(2025.10.24yori)
+        GetPrivateProfileString(id, TEXT("OffsetProbTipAngle"), TEXT("0.0000"), stylus_angle[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbTipAngle"), stylus_angle[i], PROBE_SET_INI);
+
+        GetPrivateProfileString(id, TEXT("OffsetProbIjk2RotationAngle"), TEXT("0.0000"), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbIjk2RotationAngle"), value[i], PROBE_SET_INI);
+
+        GetPrivateProfileString(id, TEXT("OffsetProbTouchFlag"), TEXT("0"), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbTouchFlag"), value[i], PROBE_SET_INI);
+
+        if (i == 1) GetPrivateProfileString(id, TEXT("OffsetProbBallDiameterCalib"), TEXT("0.0000"), value[i], 32, PROBE_SET_INI);
+        else GetPrivateProfileString(id, TEXT("OffsetProbBallDiameterCalib"), TEXT("6.0000"), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbBallDiameterCalib"), value[i], PROBE_SET_INI);
+
+        GetPrivateProfileString(id, TEXT("OffsetProbBallDiameterMeas"), TEXT("6.0000"), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbBallDiameterMeas"), value[i], PROBE_SET_INI);
+
+        if (i == 1) GetPrivateProfileString(id, TEXT("OffsetProbTyp"), TEXT("0"), value[i], 32, PROBE_SET_INI);
+        else GetPrivateProfileString(id, TEXT("OffsetProbTyp"), TEXT("1"), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbTyp"), value[i], PROBE_SET_INI);
+
+        GetPrivateProfileString(id, TEXT("OffsetProbCalibStatus"), TEXT("0"), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbCalibStatus"), value[i], PROBE_SET_INI);
+
+        if (i == 1) GetPrivateProfileString(id, TEXT("OffsetProbBallDiameterMeasBackup"), TEXT("0.0000"), value[i], 32, PROBE_SET_INI);
+        else GetPrivateProfileString(id, TEXT("OffsetProbBallDiameterMeasBackup"), TEXT("6.0000"), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbBallDiameterMeasBackup"), value[i], PROBE_SET_INI);
+
+        GetPrivateProfileString(id, TEXT("OffsetProbeCode"), TEXT(""), value[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbeCode"), value[i], PROBE_SET_INI);
     }
 }
 

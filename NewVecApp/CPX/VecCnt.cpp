@@ -199,7 +199,7 @@ void CVecCnt::SetVecStatus(VecSt* get_status)
 		if (m_Sts.m_iInitFlg == 126) m_VecInitflag = true;
 		else                         m_VecInitflag = false;
 	}
-	else if (m_Sts.m_Model == MODEL_V7S)	// 2025.7.2 eba chg
+	else if (m_Sts.m_Model == MODEL_V7M || m_Sts.m_Model == MODEL_V7L || m_Sts.m_Model == MODEL_V7S) // 2025.7.2 eba chg // V7M.V7L追加(2025.10.23yori)
 	{
 		if (m_Sts.m_iInitFlg == 127) m_VecInitflag = true; // V7Sは、関節が無いNo.0,4はイニシャライズ完了済みとしている。(2024.6.10yori) //->→.変更(2025.5.15yori)
 		else                         m_VecInitflag = false;
@@ -554,6 +554,14 @@ int CVecCnt::VecCmd_GetVecVer()
 				if ((m_Sts.m_Ver.substr(0, 2) == "V8") && (m_Sts.m_Ver.substr(13, 1) == "S")) // 追加(2025.9.29yori)
 				{
 					m_Sts.m_Model = MODEL_V8S;
+				}
+				if ((m_Sts.m_Ver.substr(0, 2) == "V7") && (m_Sts.m_Ver.substr(13, 1) == "M")) // 追加(2025.10.23yori)
+				{
+					m_Sts.m_Model = MODEL_V7M;
+				}
+				if ((m_Sts.m_Ver.substr(0, 2) == "V7") && (m_Sts.m_Ver.substr(13, 1) == "L")) // 追加(2025.10.23yori)
+				{
+					m_Sts.m_Model = MODEL_V7L;
 				}
 				if ((m_Sts.m_Ver.substr(0, 2) == "V7") && (m_Sts.m_Ver.substr(13, 1) == "S"))
 				{
