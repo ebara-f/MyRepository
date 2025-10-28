@@ -2395,6 +2395,49 @@ int CVecCnt::VecCmd_SprobeV8(CALIB_DATA* para, int psid)
 }
 
 
+/***********************************************************************
+
+	SPROBE
+	2025.10.22 add eba
+	V7用プローブ定数設定コマンド
+***********************************************************************/
+int CVecCnt::VecCmd_Sprobe(int psid)
+{
+	int		ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+	int		ret_code_send;
+	int		ret_code_recv;
+	char	cmd[16];
+	char	para[256];
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
+
+	sprintf_s(cmd, sizeof(cmd), "%s", "SPROBE");
+	
+	if (psid < 0 || 19 < psid)
+	{
+		return (int)VEC_RET_CODE::RET_CODE__ARGMENT_ERROR;
+	}
+	sprintf_s(cmd, sizeof(cmd), "%d", psid);
+	
+	ret_code_send = Vec_CmdTrans(m_VecHandle, cmd, para, 1);
+	ret_code_recv = StdRecvCheck();
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		ret_code = ret_code_recv;
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
+
 
 /***********************************************************************
 
