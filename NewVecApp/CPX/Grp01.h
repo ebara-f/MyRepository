@@ -32,4 +32,5 @@ public:
     static int  Cmd14(); // 追加(2025.7.31yori)
     static int  Cmd15(); // 追加(2025.7.30yori)
     static int  Cmd16(); // 追加(2025.8.12yori)
+    static int  SensorConnectionPanelCancelButton(); // 追加(2025.10.28yori)
 };

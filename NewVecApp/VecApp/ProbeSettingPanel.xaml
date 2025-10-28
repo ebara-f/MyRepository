@@ -9,7 +9,7 @@
              xmlns:local="clr-namespace:VecApp"
              xmlns:res="clr-namespace:VecApp.Properties"
              mc:Ignorable="d"
-             d:DesignHeight="500" d:DesignWidth="800">
+             d:DesignHeight="515" d:DesignWidth="800">
     <Grid>
         <Border Background="#2C3E50" CornerRadius="10" Padding="20">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
@@ -29,12 +29,13 @@
                                 <ColumnDefinition Width="200" />
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,76,0" Height="300">
+                            <!-- Height="300"→Height="320"へ変更(2025.10.27yori) -->
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,76,0" Height="320">
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,20">
                                     <TextBlock Text="{x:Static res:Resources.String11}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
                                     <!-- TextBox→ComboBox変更(2025.7.22yori) -->
                                     <!-- x:Name="ProbeName"追加(2025.9.8yori) -->
-                                    <ComboBox x:Name="ProbeName" ItemsSource="{Binding Name}" SelectedIndex="{Binding NameIndex}" Width="200" FontSize="20" Margin="10,0,0,0"/>
+                                    <ComboBox x:Name="ProbeName" ItemsSource="{Binding Name}" SelectedIndex="{Binding NameIndex}" Width="200" FontSize="20" Margin="10,0,0,0" SelectionChanged="ProbeName_SelectionChanged"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,20">
                                     <TextBlock Text="{x:Static res:Resources.String12}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
@@ -48,8 +49,9 @@
                                     <TextBlock Text="{x:Static res:Resources.String14}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
                                     <ComboBox ItemsSource="{Binding BallItems}" SelectedIndex="{Binding BallIndex}" Width="100" FontSize="20" Margin="10,0,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
                                 </StackPanel>
+                                <!-- Height="69"→Height="90"へ変更(2025.10.27yori) -->
                                 <Border Background="#DDD" Margin="40,0,0,0" CornerRadius="6"
-                                    Grid.ColumnSpan="2" Height="69" Width="340">
+                                    Grid.ColumnSpan="2" Height="90" Width="340">
                                     <Image Source="{Binding BallImage}"
                                            Stretch="Uniform"
                                            VerticalAlignment="Center"

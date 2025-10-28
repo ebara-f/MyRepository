@@ -18,7 +18,8 @@
                        Foreground="White"
                        Margin="0,0,0,10"/>
 
-                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Height="396">
+                <!-- Height="396"→Height=400""へ変更(2025.10.28yori) -->
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Height="400">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -304,11 +305,13 @@
                                     Width="140" Height="40"
                                     Margin="0,0,10,0"
                                     Style="{StaticResource PanelButton2Style}" FontSize="20"/>
+                            <!-- 結果保存無効、後で追加する。(2025.10.28yori) -->
                             <Button Content="{x:Static res:Resources.String89}"
                                     Click="Click_SaveBtn"
                                     Width="100" Height="40"
                                     Margin="0,0,10,0"
-                                    Style="{StaticResource PanelButton2Style}" FontSize="20"/>
+                                    Style="{StaticResource PanelButton2Style}" FontSize="20"
+                                    IsEnabled="False"/>
                         </StackPanel>
                     </Grid>
                 </Border>

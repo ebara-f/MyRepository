@@ -34,7 +34,7 @@ namespace VecApp
 
         public InitializeViewModel InitializeValue = new InitializeViewModel();
 
-        public INotifyPropertyChanged SensorConnectionValue; /* TODO: Not yet implemented */
+        public SensorConnectionViewModel SensorConnectionValue = new SensorConnectionViewModel(); // 変更(2025.10.28yori)
 
         public _0AxisInitializeViewModel _0AxisInitializeValue = new _0AxisInitializeViewModel(); // 変更(2025.10.2yori)
 

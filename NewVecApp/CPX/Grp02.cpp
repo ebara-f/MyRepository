@@ -253,7 +253,6 @@ int Grp02::Cmd11()
 {
     int ret = 0;
 
-
     WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
 
     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE; // 有接触測定待ち

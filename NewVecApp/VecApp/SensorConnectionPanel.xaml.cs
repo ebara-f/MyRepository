@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ComponentModel;
+using CSH;
 
 namespace VecApp
 {
@@ -27,6 +28,17 @@ namespace VecApp
             InitializeComponent();
             this.DataContext = model; // 追加(2025.8.12)
             SlideSwitch.Value = 1; // 初期値はオン(2025.7.30yori)
+            // 機種場合分け追加(2025.10.28yori)
+            Status01 sts = new Status01();
+            CSH.AppMain.UpDateData01(out sts);
+            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") this.ViewModel.ConnectScannerImage = "Image/connectSensor_Api_V8.PNG";
+            if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L") this.ViewModel.ConnectScannerImage = "Image/connectSensor_Api_V7.PNG";
+        }
+
+        // 追加(2025.10.28yori)
+        private SensorConnectionViewModel ViewModel
+        {
+            get => this.DataContext as SensorConnectionViewModel;
         }
 
         private void Click_ConnectDoneBtn(object sender, RoutedEventArgs e)
@@ -51,6 +63,7 @@ namespace VecApp
         // キャンセルボタンをクリックした場合(2025.7.30)
         private void Click_ConnectCancelBtn(object sender, RoutedEventArgs e)
         {
+            CSH.Grp01.SensorConnectionPanelCancelButton(); //スキャナ接続手順のキャンセルボタンが押されたことをPolyWorks側に知らせる。(2025.10.28yori)
             Parent.CurrentPanel = Panel.None; // Content = null;から変更(2025.8.12yori)
         }
     }

@@ -68,6 +68,9 @@ namespace CSH
         [DllImport("CPX.dll")]
         public extern static int CPX_Grp01_Cmd16(); //追加(2025.8.12yori)
 
+        [DllImport("CPX.dll")]
+        public extern static int CPX_Grp01_SensorConnectionPanelCancelButton(); //追加(2025.10.28yori)
+
         #endregion
 
         /// <summary>
@@ -290,6 +293,15 @@ namespace CSH
         static public int Cmd16()
         {
             return CPX_Grp01_Cmd16();
+        }
+
+        /// <summary>
+        /// スキャナ接続手順のキャンセルボタンが押されたことをPolyWorks側に知らせる。(2025.10.28yori)
+        /// </summary>
+
+        static public int SensorConnectionPanelCancelButton()
+        {
+            return CPX_Grp01_SensorConnectionPanelCancelButton();
         }
     }
 }

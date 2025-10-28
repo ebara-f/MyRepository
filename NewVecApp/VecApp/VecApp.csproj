@@ -30,6 +30,7 @@
     <None Remove="Image\BallProbe.PNG" />
     <None Remove="Image\BK100S-NC.png" />
     <None Remove="Image\BK100S.png" />
+    <None Remove="Image\connectSensor_Api_V7.PNG" />
     <None Remove="Image\connectSensor_Api_V8.PNG" />
     <None Remove="Image\init_machine10.PNG" />
     <None Remove="Image\init_No0.PNG" />
@@ -73,6 +74,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\BK100S.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\connectSensor_Api_V7.PNG">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\connectSensor_Api_V8.PNG">
