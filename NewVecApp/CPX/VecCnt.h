@@ -191,6 +191,7 @@ public:
 	int VecCmd_Sprdc2(CALIB_DATA* para);	// 2025.10.16yori
 	int VecCmd_SprobeV8(CALIB_DATA* para, int psid);	// 2025.9.12 add eba
 	int VecCmd_SprobeV8Ma(CALIB_DATA* para, int psid, int branch); // 2025.10.10yori
+	int VecCmd_Sprobe(int psid); // 2025.10.22 add eba
 	int VecCmd_Slevel(char* para, int psid); // 2025.10.16yori
 	int VecCmd_Mcnt(char* para); // 2025.10.16yori
 	int VecCmd_Slim(char* para, int no); // 2025.10.17yori
