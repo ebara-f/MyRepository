@@ -30,7 +30,7 @@ namespace VecApp
             CSH.Grp02.SettingPanelInit(ref this.ViewModel.CalibMseBox);
             this.ViewModel.BallStylusDiameter = this.ViewModel.CalibMseBox.GaugePara.StylusDia.ToString("F3");
             this.ViewModel.Distance = this.ViewModel.CalibMseBox.GaugePara.PlateLen.ToString("F3"); ;
-            this.ViewModel.BallGaugeDiameter = this.ViewModel.CalibMseBox.GaugePara.BallDia.ToString("F3"); ;
+            this.ViewModel.BallGaugeDiameter = this.ViewModel.CalibMseBox.GaugePara.BallDia.ToString("F3");
             this.ViewModel.BallDiameter = this.ViewModel.CalibMseBox.GaugePara.ErrMax.ToString("F3"); ;
         }
 

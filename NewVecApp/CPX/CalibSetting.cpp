@@ -18,7 +18,7 @@ int CalibSetting::Init(CALIB_MSEBOX* para)
 	int ret = 0;
 
 	// ゲージ設定の取得
-	ret |= CalibInit(0, CALIB_MODE_CHECK);	// ダミー処理(DLL内の構造を改善するべき) 2025.9.25 memo eba
+	ret |= CalibInit(0, CALIB_MODE_BALL);	// ダミー処理(DLL内の構造を改善するべき) 2025.9.25 memo eba
 	ret |= CalibGetGaugeVal(&para->GaugePara);
 
 

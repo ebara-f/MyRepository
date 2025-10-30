@@ -1687,6 +1687,33 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   ボール間距離 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String261 {
+            get {
+                return ResourceManager.GetString("String261", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ボール間距離を入力・確認してください に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String262 {
+            get {
+                return ResourceManager.GetString("String262", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   キャンセル に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String263 {
+            get {
+                return ResourceManager.GetString("String263", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   球中心(球ゲージ)： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String27 {

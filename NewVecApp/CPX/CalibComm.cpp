@@ -97,13 +97,14 @@ int CalibComm::Start(CALIB_MSEBOX* para)
 	CalibSetGaugeVal(para->GaugePara);
 
 	// しきい値の取得
-	ret |= CalibGetThreshold(&para->ProbeCheckThreshold, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
-	ret |= CalibGetThresholdCk(&para->InspectionThreshold);
+	ret |= !CalibGetThreshold(&para->ProbeCheckThreshold, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId);
+	ret |= !CalibGetThresholdCk(&para->InspectionThreshold);
 
-	if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId != para->CalibProbeId)
-	{
-		goto exit;
-	}
+	// V7は確認してはならない
+	//if (HwCtrl::m_hVecCnt.m_Sts.m_iProbeId != para->CalibProbeId)
+	//{
+	//	goto exit;
+	//}
 
 
 	HwCtrl::Func09();	// ステータス要求(現在のプローブIDが知りたい)
@@ -454,6 +455,10 @@ int CalibComm::ParaOutCallBack(CALIB_MSEBOX* para)
 	{
 	case CALIB_TYPE::INSPECT_MULTI_GAUGE_NEST_STD:
 
+		break;
+
+	case CALIB_TYPE::INSPECT_MULTI_GAUGE_PLATE_STD:
+		ret = CalibInspectMultiPlateStd::ParaOutCallBackSub(para);
 		break;
 
 	case CALIB_TYPE::ALIGNMENT_MULTI_GAUGE:

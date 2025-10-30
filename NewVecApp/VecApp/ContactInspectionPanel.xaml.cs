@@ -52,7 +52,7 @@ namespace VecApp
             CSH.Grp02.ContactInspectionPanelInit(ref this.ViewModel.CalibMseBox, out path, 512, out mes, 1024);
             this.ViewModel.ImageSource = this.ViewModel.CalibMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;
-            this.ViewModel.GaugeLength = this.ViewModel.CalibMseBox.GaugePara.BallBarLen.ToString("F4");
+            //this.ViewModel.GaugeLength = this.ViewModel.CalibMseBox.GaugePara.BallBarLen.ToString("F4");
 
 
 
@@ -238,7 +238,34 @@ namespace VecApp
 
         private void Click_StartBtn(object sender, RoutedEventArgs e)
         {
-            this.ViewModel.CalibMseBox.GaugePara.BallBarLen = Convert.ToDouble(this.ViewModel.GaugeLength);
+            switch ((CalibType)this.ViewModel.CalibMseBox.CalibType)
+            {
+                case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
+                    break;
+
+                case CalibType.ALIGNMENT_MULTI_GAUGE:
+                    DlgBarLen dlg = new DlgBarLen();
+                    bool? result = null;
+
+                    dlg.ViewModel.Length = this.ViewModel.CalibMseBox.GaugePara.BallBarLen.ToString("F4");
+                    result = dlg.ShowDialog();
+                    if (result == true)
+                    {
+                        this.ViewModel.CalibMseBox.GaugePara.BallBarLen = Convert.ToDouble(dlg.ViewModel.Length);
+                    }
+
+                    break;
+
+                case CalibType.ALIGNMENT_BALL_GAUGE_STD:
+                    break;
+
+                default:
+                    break;
+            }
+
+
+            //this.ViewModel.CalibMseBox.GaugePara.BallBarLen = Convert.ToDouble(this.ViewModel.GaugeLength);
+
             CSH.Grp02.ContactInspectionPanelClickStart(ref this.ViewModel.CalibMseBox);
 
             if(this.ViewModel.CalibMseBox.MesString ==0)
@@ -281,7 +308,7 @@ namespace VecApp
             this.ViewModel.IsTextBoxEnabled = true;
             this.ViewModel.ImageSource = this.ViewModel.CalibMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;
-
+            this.ViewModel.IsSettingBtnEnabled = true;
 
             //確認用(ResutTextのOK/NGの切り替え)　アスタワン様サンプル
             //this.ViewModel.ResultText = this.ViewModel.ToggleResultText();

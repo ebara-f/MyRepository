@@ -906,4 +906,13 @@
   <data name="String260" xml:space="preserve">
     <value>開く</value>
   </data>
+  <data name="String261" xml:space="preserve">
+    <value>ボール間距離</value>
+  </data>
+  <data name="String262" xml:space="preserve">
+    <value>ボール間距離を入力・確認してください</value>
+  </data>
+  <data name="String263" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
 </root>

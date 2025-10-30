@@ -904,4 +904,13 @@
   <data name="String260" xml:space="preserve">
     <value>開く</value>
   </data>
+  <data name="String261" xml:space="preserve">
+    <value>BarLen</value>
+  </data>
+  <data name="String262" xml:space="preserve">
+    <value>Check BarLen</value>
+  </data>
+  <data name="String263" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

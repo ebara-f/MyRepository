@@ -39,7 +39,7 @@ int CalibInspectMultiPlateStd::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 }
 
 
-int CalibInspectMultiPlateStd::ParaOutCallBackSub(void)
+int CalibInspectMultiPlateStd::ParaOutCallBackSub(CALIB_MSEBOX* para)
 {
 	int ret = 0;
 
