@@ -325,3 +325,21 @@ int WINAPI CPX_Grp01_Cmd16()
 
     return(rc);
 }
+
+
+
+/***********************************************************************
+
+    CPX_Grp01_SensorConnectionPanelCancelButton
+    追加(2025.10.28yori)
+
+***********************************************************************/
+
+int WINAPI CPX_Grp01_SensorConnectionPanelCancelButton()
+{
+    int     rc;
+
+    rc = Grp01::SensorConnectionPanelCancelButton();
+
+    return(rc);
+}

@@ -279,6 +279,7 @@ CPX_DECLSPEC int  WINAPI CPX_Grp01_Cmd13(); // 追加(2025.7.30yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp01_Cmd14(); // 追加(2025.7.31yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp01_Cmd15(); // 追加(2025.7.31yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp01_Cmd16(); // 追加(2025.8.12yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp01_SensorConnectionPanelCancelButton(); // 追加(2025.10.28yori)
 
 CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd01();
 CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd02();

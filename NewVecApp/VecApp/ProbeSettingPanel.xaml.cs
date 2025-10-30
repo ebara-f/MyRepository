@@ -117,16 +117,23 @@ namespace VecApp
                     this.ViewModel.Diameter = "0.00"; // スタイラスなしの場合、直径=0.00mmと表示する。(2025.9.8yori)
                     break;
                 case 1:
-                    // 機種区別追加(2025.10.27yori)
+                    // 機種場合分け追加(2025.10.27yori)
                     Status01 sts = new Status01();
                     CSH.AppMain.UpDateData01(out sts);
                     if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") this.ViewModel.BallImage = "Image/BallProbe.PNG";
                     if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L") this.ViewModel.BallImage = "Image/VST29-φ6.PNG";
                     Dia.IsEnabled = true; // スタイラスありの場合、ComboBoxを選択できるよう有効化する。(2025.9.8yori)
+                    this.ViewModel.Diameter = sts.dia.ToString("F2"); // 追加(2025.10.27yori)
                     break;
                 default:
                     break;
             }
+        }
+
+        // 追加(2025.10.28yori)
+        private void ProbeName_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.ViewModel.Id = this.ViewModel.NameIndex.ToString(); // 名称変更と連動してIDも変更する。
         }
     }
 }

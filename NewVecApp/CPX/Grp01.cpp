@@ -193,9 +193,16 @@ int Grp01::Cmd07()
     int ret = 0;
 
     //WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE); // 一時的にコメントアウト、後で調査(2025.8.21yori)
-
-    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE0_REQ; // 有接触から非接触へ切り替える // SCANNER_INIT_REQ→INITIALIZE0_REQへ変更(2025.9.2yori)
-    HwCtrl::m_ScannerConnectBtnFg = true; // 接続完了ボタンが押された。(2025.9.2yori)
+    // 機種場合分け追加(2025.10.27yori)
+    if (HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR800M" || HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR800L")
+    {
+        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE0_REQ; // 有接触から非接触へ切り替える // SCANNER_INIT_REQ→INITIALIZE0_REQへ変更(2025.9.2yori)
+        HwCtrl::m_ScannerConnectBtnFg = true; // 接続完了ボタンが押された。(2025.9.2yori)
+    }
+    if(HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR700M" || HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR700L")
+    {
+        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_INIT_ING;
+    }
 
     //ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL); // 一時的にコメントアウト、後で調査(2025.8.21yori)
 
@@ -217,7 +224,7 @@ int Grp01::Cmd08()
 
     WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
 
-    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_CMP; // イニシャライズモード終了
+    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_CAN; // イニシャライズキャンセル(2025.10.28yori)
 
     ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
 
@@ -396,6 +403,28 @@ int Grp01::Cmd16()
     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MODE_SW_REQ; // モード切替
 
     ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
+
+    return (ret);
+}
+
+
+/***********************************************************************
+
+    SensorConnectionPanelCancelButton
+    追加(2025.10.28yori)
+
+***********************************************************************/
+
+int Grp01::SensorConnectionPanelCancelButton()
+{
+    int ret = 0;
+
+    // PolyWorksから接続した場合、スキャナ接続手順のキャンセルボタンが押されたことをPolyWorks側に知らせる。
+    if (HwCtrl::m_b_Button_ConnectFlag == false)
+    {
+        UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1を閉じる。
+        HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);
+    }
 
     return (ret);
 }

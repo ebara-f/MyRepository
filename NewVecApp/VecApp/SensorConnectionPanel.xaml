@@ -37,13 +37,15 @@
                             </StackPanel>
 
                             <!-- 仮の画像スペース -->
-                            <Border Background="#DDD" Margin="415,0,0,0" CornerRadius="6" Grid.ColumnSpan="2">
-                                <Image Source="Image/connectSensor_Api_V8.PNG"
+                            <!-- CornerRadius="6"削除(2025.10.28yori) -->
+                            <Border Background="#DDD" Margin="415,0,20,0" Grid.ColumnSpan="2">
+                                <!-- Image/connectSensor_Api_V8.PNG→{Binding Init0Image}へ変更(2025.10.28yori) -->
+                                <Image Source="{Binding ConnectScannerImage}"
                                        x:Name="PngImage"
                                        Stretch="Uniform"      
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
-                                       Height="240" Margin="5,5,0,20"/>
+                                       Height="240" Margin="0,0,0,0"/>
 
                             </Border>
                         </Grid>

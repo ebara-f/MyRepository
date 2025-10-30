@@ -213,7 +213,7 @@ namespace VecApp
         }
 
         // 実行ボタンの結果(2025.10.3yori)
-        private string _execButtonResult;
+        private string _execButtonResult = "―"; // 「ボタン」を押したときに文字が表示されないため、ここで初期文字追加(2025.10.28yori)
         public string ExecButtonResult
         {
             get => _execButtonResult;

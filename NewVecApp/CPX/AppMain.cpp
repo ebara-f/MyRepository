@@ -1101,6 +1101,23 @@ void AppMain::ThreadProc()
             }   
             break;
 
+        case VEC_STEP_SEQ::INITIALIZE_CAN: // イニシャライズをキャンセルした場合(2025.10.28yori)
+            if (!HwCtrl::m_b_Button_ConnectFlag) // アプリから接続していない場合
+            {
+                HwCtrl::AppCommandSend(APP_SEND_CMD::UNEXPECTED_DISCONNECION); // PolyWorksを切断状態する。
+                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_REQ;
+                UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1閉じる 2025.6.5yori
+            }
+            else
+            {
+                ret = HwCtrl::Func08(); // 有接触モードへ変更
+                if (ret == 0)
+                {
+                    UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Panel_Hide); // イニシャライズ画面非表示
+                }
+            }
+            break;
+
         case VEC_STEP_SEQ::INITIALIZE0_REQ: // 0軸イニシャライズ要求(2025.6.9yori)
             ret = HwCtrl::Func25(); // 0軸イニシャライズモードへ変更
             if (ret == 0)
@@ -1318,11 +1335,11 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_INIT_ING:
-            UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar2_Show); // VEC_STEP_SEQ::SCANNER_INIT_REQから移動(2025.9.2yori)
+            //UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar2_Show); // VEC_STEP_SEQ::SCANNER_INIT_REQから移動(2025.9.2yori) // 一時的にコメントアウト、後で調査(2025.10.27yori)
             ret = HwCtrl::Func14(); // ID0→非接触モードへ変更→スキャナ電源ON→接続→初期化
             if (ret == ERROR_CODE::ERROR_CODE_NONE) // ここで初期化が終わったかチェック
             {
-                UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar2_Close); // プログレスバーHIDE 2025.5.27 mwmo eba
+                //UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar2_Close); // プログレスバーHIDE 2025.5.27 mwmo eba // 一時的にコメントアウト、後で調査(2025.10.27yori)
                 if (HwCtrl::m_ScannerWarmUpMonitorFlag) // 暖機待ち処理追加(2025.7.30yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_WARMUP_ING;

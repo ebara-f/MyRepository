@@ -229,7 +229,7 @@ int CVecCnt::VecCmd_GetVecStatus()
 	//Monitor::Enter(m_Lock);			//ロック //コメントアウト、下記追加(2025.5.15yori)
 	WaitForSingleObject(hSEMA_VECCNT, INFINITE);
 
-	// 機種識別追加(2025.6.10)
+	// 機種場合分け追加(2025.6.10)
 	// m>Modelにm_Sts.追加(2025.8.20yori)
 	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{
@@ -1056,7 +1056,7 @@ int CVecCnt::VecFunc_DataRequestEx(VecDtEx* PosiData,int iDataSize)
 	int ret;
 	// 間違い int isize = sizeof(VecDtEx);
 
-	// 機種識別追加(2025.6.16)
+	// 機種場合分け追加(2025.6.16)
 	// m_Modelにm_Sts.追加(2025.8.20yori)
 	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{
@@ -1084,7 +1084,7 @@ int CVecCnt::VecFunc_CntRequestEx(VecCtEx2* CntData, int iDataSize)
 	int data_no = 0;
 	int ret;
 
-	// 機種識別追加(2025.6.16)
+	// 機種場合分け追加(2025.6.16)
 	// m_Modelにm_Sts.追加(2025.8.20yori)
 	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{

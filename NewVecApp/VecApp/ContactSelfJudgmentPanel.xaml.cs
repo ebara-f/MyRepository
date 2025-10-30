@@ -101,17 +101,23 @@ namespace VecApp
             this.ViewModel.GridVisibility4 = Visibility.Hidden; // カウントチェック1、2
             this.ViewModel.GridVisibility5 = Visibility.Hidden; // ZXスケール
             this.ViewModel.GridVisibility6 = Visibility.Hidden; // 温度センサ
+            // 機種場合分け追加(2025.10.28yori)
+            Status01 sts1 = new Status01();
+            CSH.AppMain.UpDateData01(out sts1);
             this.ViewModel.TriggerButtonStatus = "OFF";
             this.ViewModel.CancelButtonStatus = "OFF";
-            this.ViewModel.ExecButtonStatus = "OFF";
+            if(sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") this.ViewModel.ExecButtonStatus = "OFF";
+            if (sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") this.ViewModel.ExecButtonStatus = "―";
             this.ViewModel.LockButtonStatus = "OFF";
             this.ViewModel.TriggerButtonResult = "NG";
             this.ViewModel.CancelButtonResult = "NG";
-            this.ViewModel.ExecButtonResult = "NG";
+            if (sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") this.ViewModel.ExecButtonResult = "NG";
+            if (sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") this.ViewModel.ExecButtonResult = "―";
             this.ViewModel.LockButtonResult = "NG";
             this.ViewModel.BackgroundColor0 = Brushes.LightPink;
             this.ViewModel.BackgroundColor1 = Brushes.LightPink;
-            this.ViewModel.BackgroundColor2 = Brushes.LightPink;
+            if (sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") this.ViewModel.BackgroundColor2 = Brushes.LightPink;
+            if (sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") this.ViewModel.BackgroundColor2 = Brushes.White;
             this.ViewModel.BackgroundColor3 = Brushes.LightPink;
             this.ViewModel.SubtitleText = VecApp.Properties.Resources.String241;
             this.ViewModel.Item = JudgeItems.Button;
@@ -210,13 +216,18 @@ namespace VecApp
             this.ViewModel.Count[4] = sts4.cnt_data[4];
             this.ViewModel.Count[5] = sts4.cnt_data[5];
             this.ViewModel.Count[6] = sts4.cnt_data[6];
-            if (sts1.no0_fg == 0)
+            if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 0) // 機種場合分け追加(2025.10.28yori)
             {
                 this.ViewModel.CounterNo0Count = "―";
                 this.ViewModel.CounterNo0Result = "―";
                 this.ViewModel.BackgroundColor0 = Brushes.White;
             }
-            else if(sts1.no0_fg != 0)
+            if((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg != 0) // 機種場合分け追加(2025.10.28yori)
+            {
+                this.ViewModel.BackgroundColor0 = Brushes.LightPink;
+                this.ViewModel.CounterNo0Result = "NG";
+            }
+            if ((sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") && sts1.no0_fg != 0) // 機種場合分け追加(2025.10.28yori)
             {
                 this.ViewModel.BackgroundColor0 = Brushes.LightPink;
                 this.ViewModel.CounterNo0Result = "NG";
@@ -355,11 +366,11 @@ namespace VecApp
                             this.ViewModel.LockButtonResult = "OK";
                             this.ViewModel.BackgroundColor3 = Brushes.LightGreen;
                         }
-                        if ((sts4.btn & 0x10) != 0x10)
+                        if ((sts4.btn & 0x10) != 0x10 && (sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L")) // 機種場合分け追加(2025.10.28yori)
                         {
                             this.ViewModel.ExecButtonStatus = "OFF";
                         }
-                        if ((sts4.btn & 0x10) == 0x10)
+                        if ((sts4.btn & 0x10) == 0x10 && (sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L")) // 機種場合分け追加(2025.10.28yori)
                         {
                             this.ViewModel.ExecButtonStatus = "ON";
                             this.ViewModel.ExecButtonResult = "OK";
@@ -467,11 +478,16 @@ namespace VecApp
                         this.ViewModel.CounterNo4Count = sts4.cnt_data[4].ToString();
                         this.ViewModel.CounterNo5Count = sts4.cnt_data[5].ToString();
                         this.ViewModel.CounterNo6Count = sts4.cnt_data[6].ToString();
-                        if (sts1.no0_fg == 0)
+                        if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 0) // 機種場合分け追加(2025.10.28yori)
                         {
                             this.ViewModel.CounterNo0Count = "―";
                         }
-                        else if (sts1.no0_fg == 1 && Math.Abs(sts4.cnt_data[0] - this.ViewModel.Count[0]) > 1000)
+                        if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 1 && Math.Abs(sts4.cnt_data[0] - this.ViewModel.Count[0]) > 1000) // 機種場合分け追加(2025.10.28yori)
+                        {
+                            this.ViewModel.CounterNo0Result = "OK";
+                            this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                        }
+                        if ((sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") && Math.Abs(sts4.cnt_data[0] - this.ViewModel.Count[0]) > 1000) // 機種場合分け追加(2025.10.28yori)
                         {
                             this.ViewModel.CounterNo0Result = "OK";
                             this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
@@ -518,11 +534,16 @@ namespace VecApp
                         this.ViewModel.CounterNo4Count = sts4.cnt_data[4].ToString();
                         this.ViewModel.CounterNo5Count = sts4.cnt_data[5].ToString();
                         this.ViewModel.CounterNo6Count = sts4.cnt_data[6].ToString();
-                        if (sts1.no0_fg == 0)
+                        if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 0) // 機種場合分け追加(2025.10.28yori)
                         {
                             this.ViewModel.CounterNo0Count = "―";
                         }
-                        else if (sts1.no0_fg == 1 && Math.Abs(sts4.cnt_data[0]) <= 60)
+                        if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 1 && Math.Abs(sts4.cnt_data[0]) <= 60) // 機種場合分け追加(2025.10.28yori)
+                        {
+                            this.ViewModel.CounterNo0Result = "OK";
+                            this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                        }
+                        if ((sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") && Math.Abs(sts4.cnt_data[0]) <= 60) // 機種場合分け追加(2025.10.28yori)
                         {
                             this.ViewModel.CounterNo0Result = "OK";
                             this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
