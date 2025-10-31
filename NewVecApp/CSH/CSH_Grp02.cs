@@ -6,12 +6,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace CSH
 {
@@ -225,6 +226,9 @@ namespace CSH
         public extern static int CPX_Grp02_ContactSelfJudgmentPanelRestorePara(string path); // 追加(2025.10.9yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_ProbeInputPanelProbeResist(int id, string probename, int probetype); // 追加(2025.10.31yori)
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_Grp02_ContactInspectionPanelInit(ref CalibMseBox para, ref StringBuilder sb_p, int p_count, ref StringBuilder sb_m, int m_count); // 2025.8.26 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
@@ -399,6 +403,15 @@ namespace CSH
         static public int ContactSelfJudgmentPanelRestorePara(string path)
         {
             return CPX_Grp02_ContactSelfJudgmentPanelRestorePara(path);
+        }
+
+        /// <summary>
+        /// プローブ登録(2025.10.31yori)
+        /// </summary>
+
+        static public int ProbeInputPanelProbeResist(int id, string probename, int probetype)
+        {
+            return CPX_Grp02_ProbeInputPanelProbeResist(id, probename, probetype);
         }
 
         /// <summary>

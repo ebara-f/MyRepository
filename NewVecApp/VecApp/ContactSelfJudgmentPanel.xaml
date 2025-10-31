@@ -295,23 +295,30 @@
                         </StackPanel>
 
                         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+                            <!-- パラメータ保存無効(未作成のため)(2025.10.31yori) -->
                             <Button Content="{x:Static res:Resources.String104}"
                                     Click="Click_ParamSaveBtn"
                                     Width="140" Height="40"
                                     Margin="0,0,10,0"
-                                    Style="{StaticResource PanelButton2Style}" FontSize="20"/>
+                                    Style="{StaticResource PanelButton2Style}" FontSize="20"
+                                    IsEnabled="False"
+                                    Opacity="0.25"/>
+                            <!-- パラメータ復元無効(未作成のため)(2025.10.31yori) -->
                             <Button Content="{x:Static res:Resources.String105}"
                                     Click="Click_ParamRestoreBtn"
                                     Width="140" Height="40"
                                     Margin="0,0,10,0"
-                                    Style="{StaticResource PanelButton2Style}" FontSize="20"/>
-                            <!-- 結果保存無効、後で追加する。(2025.10.28yori) -->
+                                    Style="{StaticResource PanelButton2Style}" FontSize="20"
+                                    IsEnabled="False"
+                                    Opacity="0.25"/>
+                            <!-- 結果保存無効(未作成のため)(2025.10.31yori) -->
                             <Button Content="{x:Static res:Resources.String89}"
                                     Click="Click_SaveBtn"
                                     Width="100" Height="40"
                                     Margin="0,0,10,0"
                                     Style="{StaticResource PanelButton2Style}" FontSize="20"
-                                    IsEnabled="False"/>
+                                    IsEnabled="False"
+                                    Opacity="0.25"/>
                         </StackPanel>
                     </Grid>
                 </Border>

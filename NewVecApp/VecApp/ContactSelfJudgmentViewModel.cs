@@ -13,6 +13,7 @@ namespace VecApp
     // 自己診断項目(2025.10.5yori)
     public enum JudgeItems
     {
+        Default, // 追加(2025.10.30yori)
         Button,
         FirmVer,
         Cummunication,
@@ -27,11 +28,15 @@ namespace VecApp
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public long[] Count { get; set; } // カウンタ値(2025.10.6yori)
+        public int No0Fg { get; set; } // 0軸有無(2025.10.29yori)
+        public string Model { get; set; } // アーム型式(2025.10.29yori)
 
         public ContactSelfJudgmentViewModel()
         {
             ImageSource = "Image/selfchk_ja.png"; // 1-1-1.pngから変更(2025.10.2yori)
             Count = new long[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // カウンタ初期値(2025.10.6yori)
+            No0Fg = 0; // 0軸有無初期値(2025.10.29yori)
+            Model = "VAR700M"; // アーム型式初期文字(2025.10.29yori)
         }
 
         private Visibility _imageVisibility = Visibility.Visible;

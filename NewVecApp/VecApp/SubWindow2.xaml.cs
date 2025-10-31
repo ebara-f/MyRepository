@@ -118,9 +118,7 @@ namespace VecApp
 
         private void Click_Btn05(object sender, RoutedEventArgs e)
         {
-            // C++で実装した処理を実行
-            //CSH.Grp02.Cmd05();  // 追加(2025.6.11yori)
-
+            CSH.Grp02.Cmd05();  // 追加(2025.10.31yori)
             this.CurrentPanel = Panel.ArmTypeSetting;
         }
 

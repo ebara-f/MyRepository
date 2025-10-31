@@ -99,7 +99,7 @@ struct ST_VEC_STATUS {
 	double     m_CalTmp[7];	// キャリブ温度(2025.6.4yori)
 	int		   m_No0Fg;		// 0軸有無(2025.6.9yori)
 	int		   m_INIT0_REQ_Fg;	// 0軸イニシャライズ要求フラグ(2025.6.10yori) // CVecCntのpublicから移動、bool→intへ変更(値が保持されないため)(2025.8.22yori)
-	string     m_Model;	// 機種識別(2025.6.10yori) // CVecCntのpublicから移動(文字が保持されないため)、CPU基板のバージョン情報から取得するアーム型式(2025.8.20yori)
+	string     m_Model;	// アーム型式識別(2025.6.10yori) // CVecCntのpublicから移動(文字が保持されないため)、CPU基板のバージョン情報から取得するアーム型式(2025.8.20yori)
 	char	   m_ArmModel[16];	// アーム型式(2025.6.16yori) // veccal.iniから取得するアーム型式(2025.8.20yori) // wchar_t→charへ変更(2025.8.30)
 	char	   m_CntVer[32]; // カウンタバージョン(2025.6.16yori)
 	char	   m_Address[32]; // IPアドレス(2025.6.18yori)
@@ -173,7 +173,8 @@ public:
 	int VecCmd_Test012(CALIB_DATA* para);	// 2025.10.6yori
 	int VecCmd_Test018(CALIB_DATA* para);	// 2025.10.6yori
 	int VecCmd_Dprdc(CALIB_DATA* para);		// 2025.10.6yori
-	int VecCmd_Dprdc2(CALIB_DATA* para);		// 2025.10.6yori
+	int VecCmd_Dprdc2(CALIB_DATA* para);	// 2025.10.6yori
+	int VecCmd_Dprobe(CALIB_DATA* para);	// 2025.10.30yori
 	int VecCmd_DprobeV8(CALIB_DATA* para, int psid);	// 2025.9.12 add eba
 	int VecCmd_DprobeV8Ma(CALIB_DATA* para, int psid, int branch); // 2025.10.6yori
 	int VecCmd_Dlevel(char* para); // 2025.10.7yori

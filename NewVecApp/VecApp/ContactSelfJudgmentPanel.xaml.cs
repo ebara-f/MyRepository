@@ -30,7 +30,7 @@ namespace VecApp
         {
             InitializeComponent();
             this.DataContext = model;
-            //// 追加(2025.10.6yori)
+            // 追加(2025.10.6yori)
             this.ViewModel.ImageVisibility = Visibility.Visible; // 有接触自己診断
             this.ViewModel.GridVisibility = Visibility.Hidden; // ボタン
             this.ViewModel.GridVisibility2 = Visibility.Hidden; // ファームウェアVer.
@@ -39,7 +39,12 @@ namespace VecApp
             this.ViewModel.GridVisibility5 = Visibility.Hidden; // ZXスケール
             this.ViewModel.GridVisibility6 = Visibility.Hidden; // 温度センサ
             this.ViewModel.SubtitleText = VecApp.Properties.Resources.String253;
-            ////
+            //  0軸有無、アーム型式を取得(2025.10.28yori)
+            Status01 sts1 = new Status01();
+            CSH.AppMain.UpDateData01(out sts1);
+            this.ViewModel.Model = sts1.arm_model;
+            this.ViewModel.No0Fg = sts1.no0_fg;
+            this.ViewModel.Item = JudgeItems.Default; // 追加(2025.10.30yori)
         }
 
         private void Click_ParamSaveBtn(object sender, RoutedEventArgs e)
@@ -70,9 +75,11 @@ namespace VecApp
             var dialog = new OpenFileDialog
             {
                 Title = VecApp.Properties.Resources.String260,
-                Filter = "Parameter file (*.V8)|*.V8",
                 InitialDirectory = @"C:\ProgramData\Kosakalab\Kosaka CMM\Log\"// 初期ディレクトリを設定
             };
+
+            if (this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") dialog.Filter = "Parameter file (*.V8)|*.V8"; // アーム型式場合分け追加(2025.10.30yori)
+            if (this.ViewModel.Model == "VAR700M" || this.ViewModel.Model == "VAR700L") dialog.Filter = "Parameter file (*.V7)|*.V7"; // アーム型式場合分け追加(2025.10.30yori)
 
             if (dialog.ShowDialog() == true)
             {
@@ -101,23 +108,20 @@ namespace VecApp
             this.ViewModel.GridVisibility4 = Visibility.Hidden; // カウントチェック1、2
             this.ViewModel.GridVisibility5 = Visibility.Hidden; // ZXスケール
             this.ViewModel.GridVisibility6 = Visibility.Hidden; // 温度センサ
-            // 機種場合分け追加(2025.10.28yori)
-            Status01 sts1 = new Status01();
-            CSH.AppMain.UpDateData01(out sts1);
             this.ViewModel.TriggerButtonStatus = "OFF";
             this.ViewModel.CancelButtonStatus = "OFF";
-            if(sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") this.ViewModel.ExecButtonStatus = "OFF";
-            if (sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") this.ViewModel.ExecButtonStatus = "―";
+            if(this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") this.ViewModel.ExecButtonStatus = "OFF"; // アーム型式場合分け追加(2025.10.28yori)
+            if (this.ViewModel.Model == "VAR700M" || this.ViewModel.Model == "VAR700L") this.ViewModel.ExecButtonStatus = "―"; // アーム型式場合分け追加(2025.10.28yori)
             this.ViewModel.LockButtonStatus = "OFF";
             this.ViewModel.TriggerButtonResult = "NG";
             this.ViewModel.CancelButtonResult = "NG";
-            if (sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") this.ViewModel.ExecButtonResult = "NG";
-            if (sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") this.ViewModel.ExecButtonResult = "―";
+            if (this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") this.ViewModel.ExecButtonResult = "NG"; // アーム型式場合分け追加(2025.10.28yori)
+            if (this.ViewModel.Model == "VAR700M" || this.ViewModel.Model == "VAR700L") this.ViewModel.ExecButtonResult = "―"; // アーム型式場合分け追加(2025.10.28yori)
             this.ViewModel.LockButtonResult = "NG";
             this.ViewModel.BackgroundColor0 = Brushes.LightPink;
             this.ViewModel.BackgroundColor1 = Brushes.LightPink;
-            if (sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") this.ViewModel.BackgroundColor2 = Brushes.LightPink;
-            if (sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") this.ViewModel.BackgroundColor2 = Brushes.White;
+            if (this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") this.ViewModel.BackgroundColor2 = Brushes.LightPink; // アーム型式場合分け追加(2025.10.28yori)
+            if (this.ViewModel.Model == "VAR700M" || this.ViewModel.Model == "VAR700L") this.ViewModel.BackgroundColor2 = Brushes.White; // アーム型式場合分け追加(2025.10.28yori)
             this.ViewModel.BackgroundColor3 = Brushes.LightPink;
             this.ViewModel.SubtitleText = VecApp.Properties.Resources.String241;
             this.ViewModel.Item = JudgeItems.Button;
@@ -202,32 +206,31 @@ namespace VecApp
             this.ViewModel.BackgroundColor5 = Brushes.LightPink;
             this.ViewModel.BackgroundColor6 = Brushes.LightPink;
             this.ViewModel.SubtitleText = VecApp.Properties.Resources.String245;
-            this.ViewModel.Item = JudgeItems.Count1;
-            // 0軸有無を取得(2025.10.6yori)
-            Status01 sts1 = new Status01();
-            CSH.AppMain.UpDateData01(out sts1);
             // カウント値の最初の値を取得(2025.10.6yori)
             Status04 sts4 = new Status04();
-            CSH.AppMain.UpDateData06(out sts4);
-            this.ViewModel.Count[0] = sts4.cnt_data[0];
-            this.ViewModel.Count[1] = sts4.cnt_data[1];
-            this.ViewModel.Count[2] = sts4.cnt_data[2];
-            this.ViewModel.Count[3] = sts4.cnt_data[3];
-            this.ViewModel.Count[4] = sts4.cnt_data[4];
-            this.ViewModel.Count[5] = sts4.cnt_data[5];
-            this.ViewModel.Count[6] = sts4.cnt_data[6];
-            if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 0) // 機種場合分け追加(2025.10.28yori)
+            CSH.AppMain.CountCheck(out sts4); // UpDateData06(out sts4)から変更(2025.10.30yori)
+            if (sts4.count_fg == 1)  // カウント値を正常に取得できた場合(2025.10.30yori)
+            {
+                this.ViewModel.Count[0] = sts4.cnt_data[0];
+                this.ViewModel.Count[1] = sts4.cnt_data[1];
+                this.ViewModel.Count[2] = sts4.cnt_data[2];
+                this.ViewModel.Count[3] = sts4.cnt_data[3];
+                this.ViewModel.Count[4] = sts4.cnt_data[4];
+                this.ViewModel.Count[5] = sts4.cnt_data[5];
+                this.ViewModel.Count[6] = sts4.cnt_data[6];
+            }
+            if ((this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") && this.ViewModel.No0Fg == 0) // アーム型式場合分け追加(2025.10.28yori)
             {
                 this.ViewModel.CounterNo0Count = "―";
                 this.ViewModel.CounterNo0Result = "―";
                 this.ViewModel.BackgroundColor0 = Brushes.White;
             }
-            if((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg != 0) // 機種場合分け追加(2025.10.28yori)
+            if((this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") && this.ViewModel.No0Fg != 0) // アーム型式場合分け追加(2025.10.29yori)
             {
                 this.ViewModel.BackgroundColor0 = Brushes.LightPink;
                 this.ViewModel.CounterNo0Result = "NG";
             }
-            if ((sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") && sts1.no0_fg != 0) // 機種場合分け追加(2025.10.28yori)
+            if (this.ViewModel.Model == "VAR700M" || this.ViewModel.Model == "VAR700L") // アーム型式場合分け追加(2025.10.29yori)
             {
                 this.ViewModel.BackgroundColor0 = Brushes.LightPink;
                 this.ViewModel.CounterNo0Result = "NG";
@@ -238,6 +241,7 @@ namespace VecApp
             this.ViewModel.CounterNo4Result = "NG";
             this.ViewModel.CounterNo5Result = "NG";
             this.ViewModel.CounterNo6Result = "NG";
+            this.ViewModel.Item = JudgeItems.Count1; // カウントチェック1へ画面更新(2025.10.30yori)
         }
 
         // カウントチェック2(2025.10.6yori)
@@ -258,17 +262,18 @@ namespace VecApp
             this.ViewModel.BackgroundColor5 = Brushes.LightPink;
             this.ViewModel.BackgroundColor6 = Brushes.LightPink;
             this.ViewModel.SubtitleText = VecApp.Properties.Resources.String246;
-            this.ViewModel.Item = JudgeItems.Count2;
-            // 0軸有無を取得
-            Status01 sts1 = new Status01();
-            CSH.AppMain.UpDateData01(out sts1);
-            if (sts1.no0_fg == 0)
+            if ((this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") && this.ViewModel.No0Fg == 0) // アーム型式場合分け追加(2025.10.29yori)
             {
                 this.ViewModel.CounterNo0Count = "―";
                 this.ViewModel.CounterNo0Result = "―";
                 this.ViewModel.BackgroundColor0 = Brushes.White;
             }
-            else if (sts1.no0_fg != 0)
+            if ((this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") && this.ViewModel.No0Fg != 0) // アーム型式場合分け追加(2025.10.29yori)
+            {
+                this.ViewModel.BackgroundColor0 = Brushes.LightPink;
+                this.ViewModel.CounterNo0Result = "NG";
+            }
+            if (this.ViewModel.Model == "VAR700M" || this.ViewModel.Model == "VAR700L") // アーム型式場合分け追加(2025.10.29yori)
             {
                 this.ViewModel.BackgroundColor0 = Brushes.LightPink;
                 this.ViewModel.CounterNo0Result = "NG";
@@ -279,6 +284,7 @@ namespace VecApp
             this.ViewModel.CounterNo4Result = "NG";
             this.ViewModel.CounterNo5Result = "NG";
             this.ViewModel.CounterNo6Result = "NG";
+            this.ViewModel.Item = JudgeItems.Count2; // カウントチェック2へ画面更新(2025.10.30yori)
         }
 
         // ZXスケール(2025.10.6yori)
@@ -297,12 +303,12 @@ namespace VecApp
             this.ViewModel.BackgroundColor0 = Brushes.LightPink;
             this.ViewModel.BackgroundColor1 = Brushes.LightPink;
             this.ViewModel.SubtitleText = VecApp.Properties.Resources.String247;
-            this.ViewModel.Item = JudgeItems.ZXScale;
             // カウント値の最初の値を取得(2025.10.6yori)
             Status04 sts4 = new Status04();
-            CSH.AppMain.UpDateData06(out sts4);
+            CSH.AppMain.CountCheck(out sts4); // UpDateData06(out sts4)から変更(2025.10.30yori)
             this.ViewModel.Count[7] = sts4.cnt_data[7];
             this.ViewModel.Count[8] = sts4.cnt_data[8];
+            this.ViewModel.Item = JudgeItems.ZXScale; // ZXスケールへ画面更新(2025.10.30yori)
         }
 
         // 温度センサ(2025.10.5yori)
@@ -328,7 +334,6 @@ namespace VecApp
         // 画面更新(2025.10.3yori)
         public void PanelUpdate()
         {
-            Status01 sts1 = new Status01();
             Status04 sts4 = new Status04();
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -366,11 +371,11 @@ namespace VecApp
                             this.ViewModel.LockButtonResult = "OK";
                             this.ViewModel.BackgroundColor3 = Brushes.LightGreen;
                         }
-                        if ((sts4.btn & 0x10) != 0x10 && (sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L")) // 機種場合分け追加(2025.10.28yori)
+                        if ((sts4.btn & 0x10) != 0x10 && (this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L")) // アーム型式場合分け追加(2025.10.29yori)
                         {
                             this.ViewModel.ExecButtonStatus = "OFF";
                         }
-                        if ((sts4.btn & 0x10) == 0x10 && (sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L")) // 機種場合分け追加(2025.10.28yori)
+                        if ((sts4.btn & 0x10) == 0x10 && (this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L")) // アーム型式場合分け追加(2025.10.29yori)
                         {
                             this.ViewModel.ExecButtonStatus = "ON";
                             this.ViewModel.ExecButtonResult = "OK";
@@ -469,130 +474,137 @@ namespace VecApp
                         break;
 
                     case JudgeItems.Count1: // カウントチェック1(2025.10.6yori)
-                        CSH.AppMain.UpDateData01(out sts1);
                         CSH.AppMain.CountCheck(out sts4);
-                        this.ViewModel.CounterNo0Count = sts4.cnt_data[0].ToString();
-                        this.ViewModel.CounterNo1Count = sts4.cnt_data[1].ToString();
-                        this.ViewModel.CounterNo2Count = sts4.cnt_data[2].ToString();
-                        this.ViewModel.CounterNo3Count = sts4.cnt_data[3].ToString();
-                        this.ViewModel.CounterNo4Count = sts4.cnt_data[4].ToString();
-                        this.ViewModel.CounterNo5Count = sts4.cnt_data[5].ToString();
-                        this.ViewModel.CounterNo6Count = sts4.cnt_data[6].ToString();
-                        if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 0) // 機種場合分け追加(2025.10.28yori)
+                        if (sts4.count_fg == 1)  // カウント値を正常に取得できた場合(2025.10.30yori)
                         {
-                            this.ViewModel.CounterNo0Count = "―";
-                        }
-                        if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 1 && Math.Abs(sts4.cnt_data[0] - this.ViewModel.Count[0]) > 1000) // 機種場合分け追加(2025.10.28yori)
-                        {
-                            this.ViewModel.CounterNo0Result = "OK";
-                            this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
-                        }
-                        if ((sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") && Math.Abs(sts4.cnt_data[0] - this.ViewModel.Count[0]) > 1000) // 機種場合分け追加(2025.10.28yori)
-                        {
-                            this.ViewModel.CounterNo0Result = "OK";
-                            this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[1] - this.ViewModel.Count[1]) > 1000)
-                        {
-                            this.ViewModel.CounterNo1Result = "OK";
-                            this.ViewModel.BackgroundColor1 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[2] - this.ViewModel.Count[2]) > 1000)
-                        {
-                            this.ViewModel.CounterNo2Result = "OK";
-                            this.ViewModel.BackgroundColor2 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[3] - this.ViewModel.Count[3]) > 1000)
-                        {
-                            this.ViewModel.CounterNo3Result = "OK";
-                            this.ViewModel.BackgroundColor3 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[4] - this.ViewModel.Count[4]) > 1000)
-                        {
-                            this.ViewModel.CounterNo4Result = "OK";
-                            this.ViewModel.BackgroundColor4 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[5] - this.ViewModel.Count[5]) > 1000)
-                        {
-                            this.ViewModel.CounterNo5Result = "OK";
-                            this.ViewModel.BackgroundColor5 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[6] - this.ViewModel.Count[6]) > 1000)
-                        {
-                            this.ViewModel.CounterNo6Result = "OK";
-                            this.ViewModel.BackgroundColor6 = Brushes.LightGreen;
+                            this.ViewModel.CounterNo0Count = sts4.cnt_data[0].ToString();
+                            this.ViewModel.CounterNo1Count = sts4.cnt_data[1].ToString();
+                            this.ViewModel.CounterNo2Count = sts4.cnt_data[2].ToString();
+                            this.ViewModel.CounterNo3Count = sts4.cnt_data[3].ToString();
+                            this.ViewModel.CounterNo4Count = sts4.cnt_data[4].ToString();
+                            this.ViewModel.CounterNo5Count = sts4.cnt_data[5].ToString();
+                            this.ViewModel.CounterNo6Count = sts4.cnt_data[6].ToString();
+                            if ((this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") && this.ViewModel.No0Fg == 0) // アーム型式場合分け追加(2025.10.29yori)
+                            {
+                                this.ViewModel.CounterNo0Count = "―";
+                            }
+                            if ((this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") && this.ViewModel.No0Fg == 1 && Math.Abs(sts4.cnt_data[0] - this.ViewModel.Count[0]) > 1000) // アーム型式場合分け追加(2025.10.29yori)
+                            {
+                                this.ViewModel.CounterNo0Result = "OK";
+                                this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                            }
+                            if ((this.ViewModel.Model == "VAR700M" || this.ViewModel.Model == "VAR700L") && Math.Abs(sts4.cnt_data[0] - this.ViewModel.Count[0]) > 1000) // アーム型式場合分け追加(2025.10.29yori)
+                            {
+                                this.ViewModel.CounterNo0Result = "OK";
+                                this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[1] - this.ViewModel.Count[1]) > 1000)
+                            {
+                                this.ViewModel.CounterNo1Result = "OK";
+                                this.ViewModel.BackgroundColor1 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[2] - this.ViewModel.Count[2]) > 1000)
+                            {
+                                this.ViewModel.CounterNo2Result = "OK";
+                                this.ViewModel.BackgroundColor2 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[3] - this.ViewModel.Count[3]) > 1000)
+                            {
+                                this.ViewModel.CounterNo3Result = "OK";
+                                this.ViewModel.BackgroundColor3 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[4] - this.ViewModel.Count[4]) > 1000)
+                            {
+                                this.ViewModel.CounterNo4Result = "OK";
+                                this.ViewModel.BackgroundColor4 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[5] - this.ViewModel.Count[5]) > 1000)
+                            {
+                                this.ViewModel.CounterNo5Result = "OK";
+                                this.ViewModel.BackgroundColor5 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[6] - this.ViewModel.Count[6]) > 1000)
+                            {
+                                this.ViewModel.CounterNo6Result = "OK";
+                                this.ViewModel.BackgroundColor6 = Brushes.LightGreen;
+                            }
                         }
                         break;
 
-                    case JudgeItems.Count2: // カウントチェック1(2025.10.6yori)
-                        CSH.AppMain.UpDateData01(out sts1);
+                    case JudgeItems.Count2: // カウントチェック2(2025.10.6yori)
                         CSH.AppMain.CountCheck(out sts4);
-                        this.ViewModel.CounterNo0Count = sts4.cnt_data[0].ToString();
-                        this.ViewModel.CounterNo1Count = sts4.cnt_data[1].ToString();
-                        this.ViewModel.CounterNo2Count = sts4.cnt_data[2].ToString();
-                        this.ViewModel.CounterNo3Count = sts4.cnt_data[3].ToString();
-                        this.ViewModel.CounterNo4Count = sts4.cnt_data[4].ToString();
-                        this.ViewModel.CounterNo5Count = sts4.cnt_data[5].ToString();
-                        this.ViewModel.CounterNo6Count = sts4.cnt_data[6].ToString();
-                        if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 0) // 機種場合分け追加(2025.10.28yori)
+                        if (sts4.count_fg == 1)  // カウント値を正常に取得できた場合(2025.10.30yori)
                         {
-                            this.ViewModel.CounterNo0Count = "―";
-                        }
-                        if ((sts1.arm_model == "VAR800M" || sts1.arm_model == "VAR800L") && sts1.no0_fg == 1 && Math.Abs(sts4.cnt_data[0]) <= 60) // 機種場合分け追加(2025.10.28yori)
-                        {
-                            this.ViewModel.CounterNo0Result = "OK";
-                            this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
-                        }
-                        if ((sts1.arm_model == "VAR700M" || sts1.arm_model == "VAR700L") && Math.Abs(sts4.cnt_data[0]) <= 60) // 機種場合分け追加(2025.10.28yori)
-                        {
-                            this.ViewModel.CounterNo0Result = "OK";
-                            this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[1]) <= 60)
-                        {
-                            this.ViewModel.CounterNo1Result = "OK";
-                            this.ViewModel.BackgroundColor1 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[2]) <= 60)
-                        {
-                            this.ViewModel.CounterNo2Result = "OK";
-                            this.ViewModel.BackgroundColor2 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[3]) <= 60)
-                        {
-                            this.ViewModel.CounterNo3Result = "OK";
-                            this.ViewModel.BackgroundColor3 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[4]) <= 60)
-                        {
-                            this.ViewModel.CounterNo4Result = "OK";
-                            this.ViewModel.BackgroundColor4 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[5]) <= 60)
-                        {
-                            this.ViewModel.CounterNo5Result = "OK";
-                            this.ViewModel.BackgroundColor5 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[6]) <= 60)
-                        {
-                            this.ViewModel.CounterNo6Result = "OK";
-                            this.ViewModel.BackgroundColor6 = Brushes.LightGreen;
+                            this.ViewModel.CounterNo0Count = sts4.cnt_data[0].ToString();
+                            this.ViewModel.CounterNo1Count = sts4.cnt_data[1].ToString();
+                            this.ViewModel.CounterNo2Count = sts4.cnt_data[2].ToString();
+                            this.ViewModel.CounterNo3Count = sts4.cnt_data[3].ToString();
+                            this.ViewModel.CounterNo4Count = sts4.cnt_data[4].ToString();
+                            this.ViewModel.CounterNo5Count = sts4.cnt_data[5].ToString();
+                            this.ViewModel.CounterNo6Count = sts4.cnt_data[6].ToString();
+                            if ((this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") && this.ViewModel.No0Fg == 0) // アーム型式場合分け追加(2025.10.29yori)
+                            {
+                                this.ViewModel.CounterNo0Count = "―";
+                            }
+                            if ((this.ViewModel.Model == "VAR800M" || this.ViewModel.Model == "VAR800L") && this.ViewModel.No0Fg == 1 && Math.Abs(sts4.cnt_data[0]) <= 60) // アーム型式場合分け追加(2025.10.29yori)
+                            {
+                                this.ViewModel.CounterNo0Result = "OK";
+                                this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                            }
+                            if ((this.ViewModel.Model == "VAR700M" || this.ViewModel.Model == "VAR700L") && Math.Abs(sts4.cnt_data[0]) <= 60) // アーム型式場合分け追加(2025.10.29yori)
+                            {
+                                this.ViewModel.CounterNo0Result = "OK";
+                                this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[1]) <= 60)
+                            {
+                                this.ViewModel.CounterNo1Result = "OK";
+                                this.ViewModel.BackgroundColor1 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[2]) <= 60)
+                            {
+                                this.ViewModel.CounterNo2Result = "OK";
+                                this.ViewModel.BackgroundColor2 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[3]) <= 60)
+                            {
+                                this.ViewModel.CounterNo3Result = "OK";
+                                this.ViewModel.BackgroundColor3 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[4]) <= 60)
+                            {
+                                this.ViewModel.CounterNo4Result = "OK";
+                                this.ViewModel.BackgroundColor4 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[5]) <= 60)
+                            {
+                                this.ViewModel.CounterNo5Result = "OK";
+                                this.ViewModel.BackgroundColor5 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[6]) <= 60)
+                            {
+                                this.ViewModel.CounterNo6Result = "OK";
+                                this.ViewModel.BackgroundColor6 = Brushes.LightGreen;
+                            }
                         }
                         break;
 
-                    case JudgeItems.ZXScale: // カウントチェック1(2025.10.6yori)
+                    case JudgeItems.ZXScale: // ZXスケール(2025.10.6yori)
                         CSH.AppMain.CountCheck(out sts4);
-                        this.ViewModel.CounterNo8Count = sts4.cnt_data[7].ToString();
-                        this.ViewModel.CounterNo9Count = sts4.cnt_data[8].ToString();
-                        if (Math.Abs(sts4.cnt_data[7] - this.ViewModel.Count[7]) > 1000)
+                        if (sts4.count_fg == 1)  // カウント値を正常に取得できた場合(2025.10.30yori)
                         {
-                            this.ViewModel.CounterNo8Judge = "OK";
-                            this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
-                        }
-                        if (Math.Abs(sts4.cnt_data[8] - this.ViewModel.Count[8]) > 1000)
-                        {
-                            this.ViewModel.CounterNo9Judge = "OK";
-                            this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                            this.ViewModel.CounterNo8Count = sts4.cnt_data[7].ToString();
+                            this.ViewModel.CounterNo9Count = sts4.cnt_data[8].ToString();
+                            if (Math.Abs(sts4.cnt_data[7] - this.ViewModel.Count[7]) > 1000)
+                            {
+                                this.ViewModel.CounterNo8Judge = "OK";
+                                this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                            }
+                            if (Math.Abs(sts4.cnt_data[8] - this.ViewModel.Count[8]) > 1000)
+                            {
+                                this.ViewModel.CounterNo9Judge = "OK";
+                                this.ViewModel.BackgroundColor0 = Brushes.LightGreen;
+                            }
                         }
                         CSH.AppMain.UpDateData06(out sts4);
                         this.ViewModel.CounterNo8Ver = sts4.cnt_ver.Substring(14, 1);
@@ -600,6 +612,7 @@ namespace VecApp
                         break;
 
                     case JudgeItems.Temp: // 温度センサー(2025.10.6yori)
+                        Status01 sts1 = new Status01();
                         CSH.AppMain.UpDateData01(out sts1);
                         this.ViewModel.ArmTempA = sts1.tempature[0].ToString("F1");
                         this.ViewModel.ArmTempB = sts1.tempature[3].ToString("F1");

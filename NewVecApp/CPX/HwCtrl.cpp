@@ -84,7 +84,7 @@ int HwCtrl::Func01()
     // VECTORONと接続開始
     ret = HwCtrl::m_hVecCnt.VecOpen(20000, NULL);
 
-    // 機種を識別するため、バージョン取得する。(2025.6.10yori)
+    // アーム型式を識別するため、バージョン取得する。(2025.6.10yori)
     ret = HwCtrl::m_hVecCnt.VecCmd_GetVecVer();
 
     // アプリ単体でVECTORONと接続する場合もあるため、
@@ -1506,10 +1506,11 @@ int HwCtrl::Func51()
     引数追加(2025.8.28yori)
     INIファイルのリンクをdefineで定義(2025.10.24yori)
     INIファイルが存在しない場合は作成する。(2025.10.24yori)
+    プローブ種類追加(2025.10.31yori)
 
 ***********************************************************************/
 
-void HwCtrl::Func52(wchar_t probe_name[21][32], wchar_t stylus_angle[21][32])
+void HwCtrl::Func52(wchar_t probe_name[21][32], wchar_t stylus_angle[21][32], wchar_t probe_type[21][32])
 {
     for (int i = 0; i < 21; i++) // probeset.iniファイルからID=0～20までのプローブ情報取得(2025.7.24yori)
     {
@@ -1549,9 +1550,9 @@ void HwCtrl::Func52(wchar_t probe_name[21][32], wchar_t stylus_angle[21][32])
         GetPrivateProfileString(id, TEXT("OffsetProbBallDiameterMeas"), TEXT("6.0000"), value[i], 32, PROBE_SET_INI);
         WritePrivateProfileString(id, TEXT("OffsetProbBallDiameterMeas"), value[i], PROBE_SET_INI);
 
-        if (i == 1) GetPrivateProfileString(id, TEXT("OffsetProbTyp"), TEXT("0"), value[i], 32, PROBE_SET_INI);
-        else GetPrivateProfileString(id, TEXT("OffsetProbTyp"), TEXT("1"), value[i], 32, PROBE_SET_INI);
-        WritePrivateProfileString(id, TEXT("OffsetProbTyp"), value[i], PROBE_SET_INI);
+        if (i == 1) GetPrivateProfileString(id, TEXT("OffsetProbTyp"), TEXT("0"), probe_type[i], 32, PROBE_SET_INI);
+        else GetPrivateProfileString(id, TEXT("OffsetProbTyp"), TEXT("1"), probe_type[i], 32, PROBE_SET_INI);
+        WritePrivateProfileString(id, TEXT("OffsetProbTyp"), probe_type[i], PROBE_SET_INI);
 
         GetPrivateProfileString(id, TEXT("OffsetProbCalibStatus"), TEXT("0"), value[i], 32, PROBE_SET_INI);
         WritePrivateProfileString(id, TEXT("OffsetProbCalibStatus"), value[i], PROBE_SET_INI);
@@ -4060,7 +4061,16 @@ void HwCtrl::SavePara(const TCHAR* path)
     // DPROBEの文字は、ファイル保存時に入力する。
     for (i = 0; i < 20; i++)
     {
-        ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8(&para, i);
+        // アーム型式場合分け追加(2025.10.30yori)
+        if (m_hVecCnt.m_Sts.m_Model == "VAR800M" || m_hVecCnt.m_Sts.m_Model == "VAR800L")
+        {
+            ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8(&para, i);
+        }
+        if (m_hVecCnt.m_Sts.m_Model == "VAR700M" || m_hVecCnt.m_Sts.m_Model == "VAR700L")
+        {
+            ret |= HwCtrl::m_hVecCnt.VecCmd_ChangeProbe(i);
+            ret |= HwCtrl::m_hVecCnt.VecCmd_Dprobe(&para);
+        }
         // スペース区切りのパラメータを分割
         token[0] = strtok_s(para.sprobe.para, " ", &context);
         for (j = 1; j < 19; j++)
@@ -4109,60 +4119,64 @@ void HwCtrl::SavePara(const TCHAR* path)
         strcat_s(dprobe[i], sizeof(dprobe[i]), "\n");
     }
     // 枝番のパラメータ
-    for (i = 17; i < 20; i++)
+    // アーム型式場合分け追加(2025.10.30yori)
+    if (m_hVecCnt.m_Sts.m_Model == "VAR800M" || m_hVecCnt.m_Sts.m_Model == "VAR800L")
     {
-        for (k = 0; k < 15; k++)
+        for (i = 17; i < 20; i++)
         {
-            ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8Ma(&para, i, k);
-            // スペース区切りのパラメータを分割
-            token[0] = strtok_s(para.sprobe.para, " ", &context);
-            for (j = 1; j < 19; j++)
+            for (k = 0; k < 15; k++)
             {
-                token[j] = strtok_s(NULL, " ", &context);
+                ret |= HwCtrl::m_hVecCnt.VecCmd_DprobeV8Ma(&para, i, k);
+                // スペース区切りのパラメータを分割
+                token[0] = strtok_s(para.sprobe.para, " ", &context);
+                for (j = 1; j < 19; j++)
+                {
+                    token[j] = strtok_s(NULL, " ", &context);
+                }
+                // パラメータ保存フォーマットへ変更
+                sprintf_s(dprobema[i - 17][k], "ID%d-%d\nAO0,", i, k);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[0]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), "\nOFAX,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[1]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",OFAY,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[2]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",OFAZ,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[3]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), "\nTTAX,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[4]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",TTAY,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[5]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",TTAZ,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[6]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), "\nOFBX,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[7]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",OFBY,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[8]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",OFBZ,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[9]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), "\nTTBX,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[10]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",TTBY,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[11]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",TTBZ,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[12]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), "\nOF0X,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[13]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",OF0Y,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[14]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",OF0Z,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[15]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), "\nTT0X,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[16]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",TT0Y,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[17]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), ",TT0Z,");
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), token[18]);
+                strcat_s(dprobema[i - 17][k], sizeof(dprobema[i - 17][k]), "\n");
             }
-            // パラメータ保存フォーマットへ変更
-            sprintf_s(dprobema[i-17][k], "ID%d-%d\nAO0,", i, k);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[0]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nOFAX,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[1]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OFAY,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[2]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OFAZ,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[3]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nTTAX,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[4]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TTAY,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[5]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TTAZ,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[6]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nOFBX,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[7]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OFBY,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[8]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OFBZ,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[9]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nTTBX,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[10]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TTBY,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[11]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TTBZ,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[12]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nOF0X,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[13]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OF0Y,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[14]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",OF0Z,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[15]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\nTT0X,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[16]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TT0Y,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[17]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), ",TT0Z,");
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), token[18]);
-            strcat_s(dprobema[i-17][k], sizeof(dprobema[i-17][k]), "\n");
         }
+        strcat_s(dprobema[2][14], sizeof(dprobema[2][14]), "\n");
     }
-    strcat_s(dprobema[2][14], sizeof(dprobema[2][14]), "\n");
 
     // DLEVEL
     ret |= HwCtrl::m_hVecCnt.VecCmd_Dlevel(para2);
@@ -4194,10 +4208,14 @@ void HwCtrl::SavePara(const TCHAR* path)
     memset(para2, 0, sizeof(para2)); // 初期化
     
     // DSERIAL
-    ret |= HwCtrl::m_hVecCnt.VecCmd_Dserial(para2);
-    sprintf_s(dserial, "DSERIAL\nNo,");
-    strcat_s(dserial, sizeof(dserial), para2);
-    strcat_s(dserial, sizeof(dcnt), "\n");
+    // アーム型式場合分け追加(2025.10.30yori)
+    if (m_hVecCnt.m_Sts.m_Model == "VAR800M" || m_hVecCnt.m_Sts.m_Model == "VAR800L")
+    {
+        ret |= HwCtrl::m_hVecCnt.VecCmd_Dserial(para2);
+        sprintf_s(dserial, "DSERIAL\nNo,");
+        strcat_s(dserial, sizeof(dserial), para2);
+        strcat_s(dserial, sizeof(dcnt), "\n");
+    }
 
     FILE* pf;
     char cPath[256] = { 0 }; // ファイルのパス
@@ -4251,6 +4269,7 @@ void HwCtrl::SavePara(const TCHAR* path)
 
     アームパラメータ復元
     2025.10.20yori)
+    作成中(2025.10.31yori))
 
 ***********************************************************************/
 int HwCtrl::RestorePara(const TCHAR* path)
@@ -4263,11 +4282,14 @@ int HwCtrl::RestorePara(const TCHAR* path)
     errno_t err;
     char line[1024]; // 1行を読み込むバッファ
     char* para_name = NULL;
-    char* para = NULL;;
+    char* para = NULL;
     char* context = NULL;
     CALIB_DATA para2;
     char test002_ab[256] = { 0 };
     char test002_ao[256] = { 0 };
+    char test004_OF1_8[2048] = { 0 }; // 追加(2025.10.30)
+    char test006_TT1_8[2048] = { 0 }; // 追加(2025.10.31)
+    char test008[2024] = { 0 }; // 追加(2025.10.31)
 
     // 初期化
     memset(para2.test002.para, NULL, sizeof(para2.test002.para));
@@ -4423,11 +4445,21 @@ int HwCtrl::RestorePara(const TCHAR* path)
                         para = strtok_s(NULL, ",", &context);
                         strcat_s(para2.test004.para, sizeof(para2.test004.para), para);
                         strcat_s(para2.test004.para, sizeof(para2.test004.para), " ");
+                        if ((m_hVecCnt.m_Sts.m_Model == "VA700M" || m_hVecCnt.m_Sts.m_Model == "VAR700L") && i != 0)  // アーム型式場合分け追加(2025.10.30yori)
+                        {
+                            strcat_s(test004_OF1_8, sizeof(test004_OF1_8), para);
+                            strcat_s(test004_OF1_8, sizeof(test004_OF1_8), " ");
+                        }
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
                 len = strlen(para2.test004.para); // 文字列の長さを取得
                 if (len > 0) para2.test004.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                if ((m_hVecCnt.m_Sts.m_Model == "VA700M" || m_hVecCnt.m_Sts.m_Model == "VAR700L") && i != 0)  // アーム型式場合分け追加(2025.10.30yori)
+                {
+                    len = strlen(test004_OF1_8); // 文字列の長さを取得
+                    if (len > 0) test004_OF1_8[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                }
                 ret |= HwCtrl::m_hVecCnt.VecCmd_Test005(&para2); // ファイルから取得したパラメータをアームへ書き込む
             }
         }
@@ -4449,6 +4481,11 @@ int HwCtrl::RestorePara(const TCHAR* path)
                         para = strtok_s(NULL, ",", &context);
                         strcat_s(para2.test006.para, sizeof(para2.test006.para), para);
                         strcat_s(para2.test006.para, sizeof(para2.test006.para), " ");
+                        if ((m_hVecCnt.m_Sts.m_Model == "VA700M" || m_hVecCnt.m_Sts.m_Model == "VAR700L") && i != 0)  // アーム型式場合分け追加(2025.10.31yori)
+                        {
+                            strcat_s(test004_OF1_8, sizeof(test006_TT1_8), para);
+                            strcat_s(test004_OF1_8, sizeof(test006_TT1_8), " ");
+                        }
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
@@ -4475,6 +4512,11 @@ int HwCtrl::RestorePara(const TCHAR* path)
                         para = strtok_s(NULL, ",", &context);
                         strcat_s(para2.test008.para, sizeof(para2.test008.para), para);
                         strcat_s(para2.test008.para, sizeof(para2.test008.para), " ");
+                        if ((m_hVecCnt.m_Sts.m_Model == "VA700M" || m_hVecCnt.m_Sts.m_Model == "VAR700L") && para == "AB0")  // アーム型式場合分け追加(2025.10.31yori)
+                        {
+                            sprintf_s(para2.test008.para, sizeof(para2.test008.para), "%s", para);
+                            strcat_s(para2.test008.para, sizeof(para2.test008.para), " ");
+                        }
                         para_name = strtok_s(NULL, ",", &context);
                     }
                 }
@@ -4630,12 +4672,56 @@ int HwCtrl::RestorePara(const TCHAR* path)
                             para = strtok_s(NULL, ",", &context);
                             strcat_s(para2.sprobe.para, sizeof(para2.sprobe.para), para);
                             strcat_s(para2.sprobe.para, sizeof(para2.sprobe.para), " ");
+                            if (m_hVecCnt.m_Sts.m_Model == "VAR700M" || m_hVecCnt.m_Sts.m_Model == "VAR700L") // アーム型式場合分け追加(2025.10.31yori)
+                            {
+                                if (i == 5)
+                                {
+                                    sprintf_s(para2.test004.para, sizeof(para2.test004.para), "%s", para);
+                                    strcat_s(para2.test004.para, sizeof(para2.test004.para), " ");
+                                }
+                                else if (i == 6)
+                                {
+                                    sprintf_s(para2.test006.para, sizeof(para2.test006.para), "%s", para);
+                                    strcat_s(para2.test006.para, sizeof(para2.test006.para), " ");
+                                }
+                                else if (i == 0)
+                                {
+                                    sprintf_s(test008, sizeof(test008), "%s", para);
+                                    strcat_s(test008, sizeof(test008), " ");
+                                }
+                                else
+                                {
+                                    strcat_s(test008, sizeof(test008), para);
+                                    strcat_s(test008, sizeof(test008), " ");
+                                }
+                            }
                             para_name = strtok_s(NULL, ",", &context);
                         }
                     }
-                    len = strlen(para2.sprobe.para); // 文字列の長さを取得
-                    if (len > 0) para2.sprobe.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
-                    ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8(&para2, i); // ファイルから取得したパラメータをアームへ書き込む
+
+                    if (m_hVecCnt.m_Sts.m_Model == "VAR800M" || m_hVecCnt.m_Sts.m_Model == "VAR800L") // アーム型式場合分け追加(2025.10.30yori)
+                    {
+                        len = strlen(para2.sprobe.para); // 文字列の長さを取得
+                        if (len > 0) para2.sprobe.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                        ret |= HwCtrl::m_hVecCnt.VecCmd_SprobeV8(&para2, i); // ファイルから取得したパラメータをアームへ書き込む
+                    }
+
+                    if (m_hVecCnt.m_Sts.m_Model == "VAR700M" || m_hVecCnt.m_Sts.m_Model == "VAR700L") // アーム型式場合分け追加(2025.10.31yori)
+                    {
+                        ret |= HwCtrl::m_hVecCnt.VecCmd_ChangeProbe(i); // プローブID変更
+                        len = strlen(para2.test004.para); // 文字列の長さを取得
+                        if (len > 0) para2.test004.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                        len = strlen(para2.test006.para); // 文字列の長さを取得
+                        if (len > 0) para2.test006.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                        len = strlen(para2.test008.para); // 文字列の長さを取得
+                        if (len > 0) para2.test008.para[len - 1] = '\0'; // 末尾の文字を削除(ヌル文字を末尾に書き込む)
+                        strcat_s(para2.test004.para, sizeof(para2.test004.para), test004_OF1_8);
+                        strcat_s(para2.test006.para, sizeof(para2.test006.para), test006_TT1_8);
+                        strcat_s(para2.test008.para, sizeof(para2.test008.para), test008);
+                        ret |= HwCtrl::m_hVecCnt.VecCmd_Test005(&para2); // ファイルから取得したパラメータをアームへ書き込む
+                        ret |= HwCtrl::m_hVecCnt.VecCmd_Test007(&para2); // ファイルから取得したパラメータをアームへ書き込む
+                        ret |= HwCtrl::m_hVecCnt.VecCmd_Test009(&para2); // ファイルから取得したパラメータをアームへ書き込む
+                    }
                 }
 
                 // 枝番のパラメータ
@@ -4746,4 +4832,25 @@ int HwCtrl::RestorePara(const TCHAR* path)
     }
 
     return ret;
+}
+
+
+/***********************************************************************
+
+    プローブ登録
+    2025.10.31yori)
+
+***********************************************************************/
+void HwCtrl::ProbeResit(int psid, const TCHAR* probename, int probetype)
+{
+    wchar_t id[8] = L"ID";
+    wchar_t no[8];
+    wchar_t type[8];
+
+    swprintf(no, 8, L"%d", psid);
+    wcsncat_s(id, no, sizeof(id));
+    swprintf(type, 8, L"%d", probetype);
+
+    WritePrivateProfileString(id, TEXT("OffsetProbName"), probename, PROBE_SET_INI);
+    WritePrivateProfileString(id, TEXT("OffsetProbTyp"), type, PROBE_SET_INI);
 }

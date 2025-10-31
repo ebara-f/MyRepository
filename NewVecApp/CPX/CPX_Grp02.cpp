@@ -278,6 +278,24 @@ int WINAPI CPX_Grp02_ContactSelfJudgmentPanelRestorePara(const TCHAR* path)
 
 /***********************************************************************
 
+    CPX_Grp02_ProbeInputPanelProbeResist
+    追加(2025.10.31yori)
+
+***********************************************************************/
+
+int WINAPI CPX_Grp02_ProbeInputPanelProbeResist(int id, const TCHAR* probename, int probetype)
+{
+    int     rc;
+
+    rc = Grp02::ProbeInputPanelProbeResist(id, probename, probetype);
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
     CPX_Grp02_ContactInspectionPanelInit
     2025.8.26 add eba
 

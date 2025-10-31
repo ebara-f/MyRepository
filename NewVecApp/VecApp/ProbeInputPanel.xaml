@@ -45,35 +45,40 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="15,10,0,5">
                                     <TextBlock Text="{x:Static res:Resources.String12}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
+                                    <!-- プローブIDは変更できないよう無効(2025.10.31yori) -->
                                     <TextBox Width="70"
                                         FontSize="20"
                                         Margin="73,0,0,0"
                                         VerticalContentAlignment="Center"
                                         Background="Black"
                                         Foreground="White"
-                                        Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}"/>
+                                        Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="False"/>
                                 </StackPanel>
                                 <!-- 角度追加(2025.10.27yori) -->
+                                <!-- 角度は仕様不明なため無効(2025.10.31yori) -->
                                 <StackPanel Orientation="Horizontal" Margin="15,10,0,5">
-                                    <TextBlock Text="{x:Static res:Resources.String18}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static res:Resources.String18}" Foreground="White" FontSize="20" VerticalAlignment="Center" Opacity="0.25"/>
                                     <TextBox Width="70"
                                         FontSize="20"
                                         Margin="20,0,0,0"
                                         VerticalContentAlignment="Center"
                                         Background="Black"
                                         Foreground="White"
-                                        Text="{Binding ProbeAngle, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <TextBlock Text="deg." Foreground="White" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                        Text="{Binding ProbeAngle, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                                    <TextBlock Text="deg." Foreground="White" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="0.25"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="15,10,0,5">
                                     <TextBlock Text="{x:Static res:Resources.String75}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
+                                    <!-- ボール直径は変更できないよう無効(2025.10.31yori) -->
                                     <TextBox Width="70"
                                         FontSize="20"
                                         Margin="20,0,0,0"
                                         VerticalContentAlignment="Center"
                                         Background="Black"
                                         Foreground="White"
-                                        Text="{Binding BallDiameter, UpdateSourceTrigger=PropertyChanged}"/>
+                                        Text="{Binding BallDiameter, UpdateSourceTrigger=PropertyChanged}"
+                                        IsEnabled="False"/>
                                     <TextBlock Text="mm" Foreground="White" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="15,10,0,5">
@@ -81,10 +86,11 @@
                                     <ComboBox ItemsSource="{Binding BallItems}" SelectedIndex="{Binding BallIndex}" Width="152" FontSize="20" Margin="10,0,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
                                 </StackPanel>
                                 <!-- ゲージタイプ追加(2025.10.27yori) -->
+                                <!-- キャリブレーション未作成のため、ゲージタイプ無効(2025.10.31yori) -->
                                 <StackPanel Orientation="Horizontal" Margin="15,10,0,5">
-                                    <TextBlock Text="{x:Static res:Resources.String37}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
-                                    <TextBlock Text="：" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
-                                    <ComboBox ItemsSource="{Binding GaugeItems}" SelectedIndex="{Binding GaugeIndex}" Width="152" FontSize="20" Margin="10,0,0,0"/>
+                                    <TextBlock Text="{x:Static res:Resources.String37}" Foreground="White" FontSize="20" VerticalAlignment="Center" Opacity="0.25"/>
+                                    <TextBlock Text="：" Foreground="White" FontSize="20" VerticalAlignment="Center" Opacity="0.25"/>
+                                    <ComboBox ItemsSource="{Binding GaugeItems}" SelectedIndex="{Binding GaugeIndex}" Width="152" FontSize="20" Margin="10,0,0,0" IsEnabled="False" Opacity="0.25"/>
                                 </StackPanel>
                             </StackPanel>
 
@@ -99,9 +105,14 @@
 
                             <StackPanel Grid.Column="2" VerticalAlignment="Top" Orientation="Vertical" Margin="0,0,0,0">
                                 <!-- Margin="0,50,0,5"→Margin="0,0,0,5"へ変更(2025.10.27yori) -->
+                                <!-- キャプション開始未作成のため、無効(2025.10.31yori) -->
+                                <!-- プローブ登録追加(2025.10.31yori) -->
                                 <Button Content="{x:Static res:Resources.String59}"
                                     Margin="0,0,0,5"
-                                    Width="215" Height="40" Click="Click_StartBtn" Style="{StaticResource PanelStartButtonStyle}" FontSize="20"/>
+                                    Width="215" Height="40" Click="Click_StartBtn" Style="{StaticResource PanelStartButtonStyle}" FontSize="20" IsEnabled="False" Opacity="0.25"/>
+                                <Button Content="{x:Static res:Resources.String70}"
+                                    Margin="0,10,0,5"
+                                    Width="215" Height="40" Click="Click_ResistBtn" Style="{StaticResource PanelDoneButtonStyle}" FontSize="20"/>
                                 <Button Content="{x:Static res:Resources.String56}"
                                     Margin="0,10,0,5"
                                     Width="215" Height="40" Click="Click_CancelBtn" Style="{StaticResource PanelCancelButtonStyle}" FontSize="20"/>

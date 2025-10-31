@@ -120,7 +120,7 @@ int Grp02::Cmd05()
 
     WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
 
-    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_REQ; // アーム設定要求(2025.6.11)
+    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_REQ2; // アーム設定要求(2025.10.31)
 
     ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
 
@@ -340,6 +340,30 @@ int Grp02::ContactSelfJudgmentPanelRestorePara(const TCHAR* path)
     int ret = 0;
 
     HwCtrl::RestorePara(path);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    ProbeInputPanelProbeResist
+    追加(2025.10.31yori)
+
+***********************************************************************/
+
+int Grp02::ProbeInputPanelProbeResist(int id, const TCHAR* probename, int probetype)
+{
+    int ret = 0;
+
+    HwCtrl::ProbeResit(id, probename, probetype);
+
+    WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
+
+    if (ret == 0) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE; // 有接触測定待ち
+
+    ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
 
     return (ret);
 }

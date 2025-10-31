@@ -1714,6 +1714,15 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   テーパ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String264 {
+            get {
+                return ResourceManager.GetString("String264", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   球中心(球ゲージ)： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String27 {
