@@ -14,7 +14,8 @@
         Title="BeakMater Plug-in SoftWare(beta)" Height="240" Width="486" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
     <Grid Margin="5,5,5,5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <!-- *→1.5*へ変更(2025.11.3yori) -->
+            <ColumnDefinition Width="1.5*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Button Content="{x:Static res:Resources.String220}" Height="35" Margin="10,10,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn01" FontSize="20"/>

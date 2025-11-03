@@ -99,11 +99,10 @@ namespace VecApp
         // 閉じるボタンをクリックしたときの処理(2025.8.12yori)
         private void Terminate(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            CSH.Grp03.Cmd05(); // 追加(2025.9.3yori)
-
             // 2025.09.04  Modify by GeomLab
             if (m_AllowClose == false)
             {
+                CSH.Grp03.Cmd05(); // if外からif内へ移動(2025.11.2yori)
                 e.Cancel = true;
                 this.CurrentPanel = Panel.None;
                 this.Hide();

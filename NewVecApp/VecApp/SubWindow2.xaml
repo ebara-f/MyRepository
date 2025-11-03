@@ -1,4 +1,5 @@
 ﻿<!-- 全体のFontSize="20"へ変更(2025.9.28yori) -->
+<!-- ウィンドウサイズ固定(2025.11.4yori) -->
 <local:SubWindowBase
         x:Class="VecApp.SubWindow2"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,7 +9,7 @@
         xmlns:local="clr-namespace:VecApp"
         xmlns:res="clr-namespace:VecApp.Properties"
         mc:Ignorable="d"
-        Title="BeakMater Plug-in SoftWare(beta)" Height="770" Width="1100" Closing="Terminate">
+        Title="BeakMater Plug-in SoftWare(beta)" Height="770" Width="1100" Closing="Terminate" ResizeMode="NoResize">
     <!-- Loaded="Window_Loaded"削除(2025.10.1yori) -->
     <!-- Height="550"→Height=770"へ変更(2025.9.27yori) -->
     <Grid Background="#2C3E50">
@@ -20,10 +21,11 @@
         <!-- 左側メニュー -->
         <StackPanel Background="#2C3E50" VerticalAlignment="Stretch">
             <!-- プローブ→プローブ設定へ変更、プローブ登録ボタン追加(2025.10.24yori) -->
+            <!-- プローブ登録ボタン順番変更(2025.11.1yori) -->
             <TextBlock Text="{x:Static res:Resources.String224}" FontSize="20" FontWeight="Bold" Margin="20,20,0,10" Foreground="White" />
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String9}" Click="Click_Btn01" FontSize="20"/>
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String16}" Click="Click_Btn02" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String70}" Click="Click_Btn07" FontSize="20"/>
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String16}" Click="Click_Btn02" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String225}" Click="Click_Btn03" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String72}" Click="Click_Btn04" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String67}" Click="Click_Btn05" FontSize="20"/>
