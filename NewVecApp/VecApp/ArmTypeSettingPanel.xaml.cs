@@ -32,10 +32,12 @@ namespace VecApp
             // 追加(2025.8.31yori)
             Status01 sts = new Status01();
             CSH.AppMain.UpDateData01(out sts);
-            if (sts.arm_model == "VAR800M") ViewModel.ArmTypeIndex = 0;
-            if (sts.arm_model == "VAR800L") ViewModel.ArmTypeIndex = 1;
-            if (sts.arm_model == "BK100S") ViewModel.ArmTypeIndex = 2;
-            if (sts.arm_model == "BK100S-NC") ViewModel.ArmTypeIndex = 3;
+            if (sts.arm_model == "VAR700M") ViewModel.ArmTypeIndex = 0; // 追加(2025.11.1yori)
+            if (sts.arm_model == "VAR700L") ViewModel.ArmTypeIndex = 1; // 追加(2025.11.1yori)
+            if (sts.arm_model == "VAR800M") ViewModel.ArmTypeIndex = 2;
+            if (sts.arm_model == "VAR800L") ViewModel.ArmTypeIndex = 3;
+            if (sts.arm_model == "BK100S") ViewModel.ArmTypeIndex = 4;
+            if (sts.arm_model == "BK100S-NC") ViewModel.ArmTypeIndex = 5;
         }
 
         private void Click_DoneBtn(object sender, RoutedEventArgs e)
@@ -60,15 +62,21 @@ namespace VecApp
             switch (ViewModel.ArmTypeIndex)
             {
                 case 0:
-                    ViewModel.ArmTypeImage = "Image/init_machine10.PNG";
+                    ViewModel.ArmTypeImage = "Image/init_V7.PNG"; // 追加(2025.11.1yori)
                     break;
                 case 1:
-                    ViewModel.ArmTypeImage = "Image/init_machine10.PNG";
+                    ViewModel.ArmTypeImage = "Image/init_V7.PNG"; // 追加(2025.11.1yori)
                     break;
                 case 2:
-                    ViewModel.ArmTypeImage = "Image/BK100S.png";
+                    ViewModel.ArmTypeImage = "Image/init_machine10.PNG";
                     break;
                 case 3:
+                    ViewModel.ArmTypeImage = "Image/init_machine10.PNG";
+                    break;
+                case 4:
+                    ViewModel.ArmTypeImage = "Image/BK100S.png";
+                    break;
+                case 5:
                     ViewModel.ArmTypeImage = "Image/BK100S-NC.PNG";
                     break;
                 default:

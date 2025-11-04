@@ -193,7 +193,7 @@ int Grp01::Cmd07()
     int ret = 0;
 
     //WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE); // 一時的にコメントアウト、後で調査(2025.8.21yori)
-    // 機種場合分け追加(2025.10.27yori)
+    // アーム型式場合分け追加(2025.10.27yori)
     if (HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR800M" || HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR800L")
     {
         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE0_REQ; // 有接触から非接触へ切り替える // SCANNER_INIT_REQ→INITIALIZE0_REQへ変更(2025.9.2yori)

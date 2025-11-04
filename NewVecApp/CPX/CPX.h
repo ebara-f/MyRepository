@@ -46,8 +46,9 @@ typedef struct Status01
     int probe_id; // プローブID(2025.6.11yori)
     double dia; // スタイラス直径(2025.6.11yori)
     double dia_meas; // スタイラス直径(2025.7.17yori)
-    char pobe_name[21][32]; // プローブ名称(2025.7.24yori) // wchar_t→charへ変更(2025.8.28yori)
+    char probe_name[21][32]; // プローブ名称(2025.7.24yori) // wchar_t→charへ変更(2025.8.28yori)
     double stylus_angle[21]; // スタイラス角度(2025.7.31yori)
+    int probe_type[21]; // プローブ種類(2025.10.31yori)
     double tempature[7]; // アーム内温度(2025.6.4yori)
     double cal_tempature[7]; // キャリブ温度(2025.6.18yori)
     char arm_model[16]; // アーム型式(2025.6.16yori)
@@ -65,6 +66,7 @@ typedef struct Status04
     int comm_check[9]; // 通信チェック
     char cnt_ver[32]; // カウンタバージョン
     long long cnt_data[9]; // カウント値
+    int  count_fg; // カウント値取得フラグ(2025.10.30yori)
 
 } STATUS04;
 
@@ -296,6 +298,7 @@ CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd12(); // 追加(2025.10.6yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_Cmd13(); // 追加(2025.10.6yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactSelfJudgmentPanelSavePara(const TCHAR*); // 追加(2025.10.8yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactSelfJudgmentPanelRestorePara(const TCHAR*); // 追加(2025.10.9yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ProbeInputPanelProbeResist(int id, const TCHAR* probename, int probetype); // 追加(2025.10.31yori)
 
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelInit(CALIB_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ContactInspectionPanelClickStart(CALIB_MSEBOX* para);

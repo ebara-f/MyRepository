@@ -80,7 +80,7 @@ public:
     static BOOL Func49(); // 追加(2025.7.2yori)
     static int  Func50(int id, double dia); // 追加(2025.7.18yori) // 引数追加(2025.9.8yori)
     static int  Func51(); // 追加(2025.7.18yori)
-    static void Func52(wchar_t probe_name[21][32], wchar_t stylus_angle[21][32]); // 追加(2025.7.22yori) // 引数追加(2025.8.28yori)
+    static void Func52(wchar_t probe_name[21][32], wchar_t stylus_angle[21][32], wchar_t probe_type[21][32]); // 追加(2025.7.22yori) // 引数追加(2025.8.28yori) // プローブ種類追加(2025.10.31yori)
     static BOOL Func53(BOOL*); // 追加(2025.7.29yori)
     static int  Func54(CALIB_JUDGE_CK* th, CALIB_JUDGE th2[20], CALIB_GAUGE* gauge, int id); // 追加(2025.8.1yori)  // 引数追加(2025.9.22yori)
     static int  Func55(CALIB_JUDGE_CK* th, CALIB_JUDGE th2[20], int id); // 追加(2025.8.1yori) // 引数追加(2025.9.22yori)
@@ -176,10 +176,12 @@ public:
     static int SendLineDataCheck2(int index);
     static void FileOutput(); // Debug用、スキャンデータファイル出力(2025.8.5yori)
 
+    // プローブ登録(2025.10.31yori)
+    static void ProbeResit(int psid, const TCHAR* probename, int probetype);
+
     // パラメータ保存復元関数(2025.10.19yori)
     static void SavePara(const TCHAR* path);
     static int RestorePara(const TCHAR* path);
-
 
     // 非接触点検、キャリブ用関数
     static void CalibCheckAndCalcu(CalibResult* ptCalibResultt, ChkScnResult* ptChkResult);

@@ -186,7 +186,7 @@ int AppMain::UpDateData01(STATUS01* sts)
     int i = 0;
     int j = 0; // 追加(2025.2.24yori)
     int ret = 0; // 追加(2025.6.4yori)
-    wchar_t probe_name[21][32], stylus_angle[21][32]; // 追加(2025.8.28yori)
+    wchar_t probe_name[21][32], stylus_angle[21][32], probe_type[21][32]; // 追加(2025.8.28yori) // プローブ種類追加(2025.10.31yori)
 
     // ステータスチェック(2025.6.4yori)
     ret = HwCtrl::Func09();
@@ -213,16 +213,17 @@ int AppMain::UpDateData01(STATUS01* sts)
 
     // プローブ情報取得(2025.7.24yori)
     // Func52へ引数追加に伴う変更(2025.8.28yori)
-    HwCtrl::Func52(probe_name, stylus_angle);
+    HwCtrl::Func52(probe_name, stylus_angle, probe_type);
 
     for (int i = 0; i < 21; i++)
     {
         // wcstombs_s を使って変換(2025.8.28yori)
         size_t converted = 0; // 変換されたバイト数を格納する変数
         errno_t err; // エラーコードを格納する変数
-        err = wcstombs_s(&converted, sts->pobe_name[i], sizeof(sts->pobe_name[i]), probe_name[i], _TRUNCATE);
+        err = wcstombs_s(&converted, sts->probe_name[i], sizeof(sts->probe_name[i]), probe_name[i], _TRUNCATE);
 
         sts->stylus_angle[i] = _wtof(stylus_angle[i]);
+        sts->probe_type[i] = _wtoi(probe_type[i]); // プローブ種類(2025.10.31yori)
     }
 
     // アーム内温度取得(2025.6.4yori)
@@ -324,12 +325,17 @@ int AppMain::CountCheck(STATUS04* sts)
 
     VecCtEx2 cntdata;
     ret = HwCtrl::Func28(&cntdata);
-    if (ret == 0)
+    if (ret == 0 && (cntdata.no == -1 || cntdata.no >= 0)) // cntdata.noの条件追加、cntdata.no=-858993460が取得される場合がある。(2025.10.30yori)
     {
         for (i = 0; i < 9; i++)
         {
             sts->cnt_data[i] = cntdata.cnt[i];
         }
+        sts->count_fg = 1; // カウント値を正常に取得できた場合(2025.10.30yori)
+    }
+    else
+    {
+        sts->count_fg = 0; // カウント値を正常に取得できなかった場合(2025.10.30yori)
     }
 
     return(0);
@@ -1286,6 +1292,10 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::ARM_SET_REQ: // アーム設定要求(2025.9.1yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_ING;
+            break;
+
+        case VEC_STEP_SEQ::ARM_SET_REQ2: // アーム設定要求(2025.10.31yori)
+            // 何もしない。
             break;
 
         case VEC_STEP_SEQ::ARM_SET_ING: // アーム設定中(2025.9.1yori)

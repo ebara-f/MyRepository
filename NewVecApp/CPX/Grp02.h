@@ -29,6 +29,7 @@ public:
     static int  Cmd13(); // 追加(2025.10.6yori)
     static int  ContactSelfJudgmentPanelSavePara(const TCHAR* path); // 追加(2025.10.8yori)
     static int  ContactSelfJudgmentPanelRestorePara(const TCHAR* path); // 追加(2025.10.9yori)
+    static int  ProbeInputPanelProbeResist(int id, const TCHAR* probename, int probetype); // 追加(2025.10.31yori)
 
     static int  ContactInspectionPanelInit(CALIB_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count);  // 2025.8.26 add eba
     static int  ContactInspectionPanelClickStart(CALIB_MSEBOX* para);         // 2025.8.26 add eba

@@ -229,7 +229,7 @@ int CVecCnt::VecCmd_GetVecStatus()
 	//Monitor::Enter(m_Lock);			//ロック //コメントアウト、下記追加(2025.5.15yori)
 	WaitForSingleObject(hSEMA_VECCNT, INFINITE);
 
-	// 機種場合分け追加(2025.6.10)
+	// アーム型式場合分け追加(2025.6.10)
 	// m>Modelにm_Sts.追加(2025.8.20yori)
 	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{
@@ -541,7 +541,7 @@ int CVecCnt::VecCmd_GetVecVer()
 			{
 				m_Sts.m_Ver = string(cRecvData); // バージョン情報 //->→.、gcnew String()→stringへ変更(2025.5.15yori)
 
-				// バージョン情報から機種を識別する。(2025.6.10yori)
+				// バージョン情報からアーム型式を識別する。(2025.6.10yori)
 				// m_Modelにm_Sts.追加(2025.8.20yori) // #defineをアーム型式へ変更(2025.9.26yori)
 				if ((m_Sts.m_Ver.substr(0, 2) == "V8") && (m_Sts.m_Ver.substr(13, 1) == "M"))
 				{
@@ -1056,7 +1056,7 @@ int CVecCnt::VecFunc_DataRequestEx(VecDtEx* PosiData,int iDataSize)
 	int ret;
 	// 間違い int isize = sizeof(VecDtEx);
 
-	// 機種場合分け追加(2025.6.16)
+	// アーム型式場合分け追加(2025.6.16)
 	// m_Modelにm_Sts.追加(2025.8.20yori)
 	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{
@@ -1084,7 +1084,7 @@ int CVecCnt::VecFunc_CntRequestEx(VecCtEx2* CntData, int iDataSize)
 	int data_no = 0;
 	int ret;
 
-	// 機種場合分け追加(2025.6.16)
+	// アーム型式場合分け追加(2025.6.16)
 	// m_Modelにm_Sts.追加(2025.8.20yori)
 	if (m_Sts.m_Model == MODEL_V8M || m_Sts.m_Model == MODEL_V8L || m_Sts.m_Model == MODEL_V8S) // V8をS/M/Lに分割(2025.9.29yori)
 	{
@@ -1737,6 +1737,58 @@ int CVecCnt::VecCmd_Dprdc2(CALIB_DATA* para)
 
 	return ret_code;
 }
+
+
+
+/***********************************************************************
+
+	DPROBE
+	2025.10.6yori
+
+***********************************************************************/
+int CVecCnt::VecCmd_Dprobe(CALIB_DATA* para)
+{
+	int	  ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	char	cRecvCmd[32] = { 0 };
+	int		ret_code_send;
+	int		ret_code_recv;
+
+	if (m_VecHandle == NULL) return (int)VEC_RET_CODE::RET_CODE__DO_NOT;
+
+	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);	// veccom.dll内で排他処理してるので不要ではないか？2025.9.12 eba memo
+
+	sprintf_s(para->sprobe.cmd, sizeof(para->sprobe.cmd), "%s", "DPROBE");
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->sprobe.cmd, NULL, 0);
+	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->sprobe.para, &para->sprobe.no);
+	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
+	{
+		ret_code = ret_code_send;
+	}
+	else
+	{
+		if (ret_code_recv != (int)VEC_RET_CODE::RET_CODE__OK)
+		{
+			ret_code = ret_code_recv;
+		}
+		else
+		{
+			if (cRecvCmd[0] == ACK)
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__OK;
+			}
+			else
+			{
+				ret_code = (int)VEC_RET_CODE::RET_CODE__UNKNOWN;
+			}
+		}
+	}
+
+	//ReleaseSemaphore(hSEMA_VECCNT, 1, NULL);
+
+	return ret_code;
+}
+
 
 
 

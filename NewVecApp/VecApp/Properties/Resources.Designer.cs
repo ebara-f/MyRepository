@@ -70,7 +70,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///    種類 に類似しているローカライズされた文字列を検索します。
+        ///   種類 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String10 {
             get {
@@ -369,7 +369,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///    スタイラス に類似しているローカライズされた文字列を検索します。
+        ///   スタイラス に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String13 {
             get {
@@ -1074,7 +1074,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///    アーム に類似しているローカライズされた文字列を検索します。
+        ///   アーム に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String20 {
             get {
@@ -1173,7 +1173,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///    スキャナ に類似しているローカライズされた文字列を検索します。
+        ///   スキャナ に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String21 {
             get {
@@ -1710,6 +1710,15 @@ namespace VecApp.Properties {
         public static string String263 {
             get {
                 return ResourceManager.GetString("String263", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   テーパ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String264 {
+            get {
+                return ResourceManager.GetString("String264", resourceCulture);
             }
         }
         

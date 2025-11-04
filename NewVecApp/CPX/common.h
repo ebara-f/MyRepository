@@ -113,6 +113,7 @@ enum class VEC_STEP_SEQ {	// 2025.5.23 作成 eba
 	ARM_SELFCHECK_CMP,	// 追加(2025.6.11yori)
 	// アーム設定は下記のシーケンスで共通で使用できるよう整理中(2025.9.1yori)
 	ARM_SET_REQ,	// 追加(2025.9.1yori)
+	ARM_SET_REQ2,	// 追加(2025.10.31yori)
 	ARM_SET_ING,	// 追加(2025.9.1yori)
 	SENS_CHECK_REQ,	// 追加(2025.7.2yori)
 	SENS_CHECK_ING,	// 追加(2025.7.2yori)

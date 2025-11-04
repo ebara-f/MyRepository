@@ -31,30 +31,53 @@ namespace VecApp
             //// 追加(2025.10.24yori)
             Status01 sts = new Status01();
             CSH.AppMain.UpDateData01(out sts);
-            if (sts.probe_id == 0) ViewModel.Name = sts.pobe_name0;
-            if (sts.probe_id == 1) ViewModel.Name = sts.pobe_name1;
-            if (sts.probe_id == 2) ViewModel.Name = sts.pobe_name2;
-            if (sts.probe_id == 3) ViewModel.Name = sts.pobe_name3;
-            if (sts.probe_id == 4) ViewModel.Name = sts.pobe_name4;
-            if (sts.probe_id == 5) ViewModel.Name = sts.pobe_name5;
-            if (sts.probe_id == 6) ViewModel.Name = sts.pobe_name6;
-            if (sts.probe_id == 7) ViewModel.Name = sts.pobe_name7;
-            if (sts.probe_id == 8) ViewModel.Name = sts.pobe_name8;
-            if (sts.probe_id == 9) ViewModel.Name = sts.pobe_name9;
-            if (sts.probe_id == 10) ViewModel.Name = sts.pobe_name10;
-            if (sts.probe_id == 11) ViewModel.Name = sts.pobe_name11;
-            if (sts.probe_id == 12) ViewModel.Name = sts.pobe_name12;
-            if (sts.probe_id == 13) ViewModel.Name = sts.pobe_name13;
-            if (sts.probe_id == 14) ViewModel.Name = sts.pobe_name14;
-            if (sts.probe_id == 15) ViewModel.Name = sts.pobe_name15;
-            if (sts.probe_id == 16) ViewModel.Name = sts.pobe_name16;
-            if (sts.probe_id == 17) ViewModel.Name = sts.pobe_name17;
-            if (sts.probe_id == 18) ViewModel.Name = sts.pobe_name18;
-            if (sts.probe_id == 19) ViewModel.Name = sts.pobe_name19;
-            if (sts.probe_id == 20) ViewModel.Name = sts.pobe_name20;
-            ViewModel.Id = sts.probe_id.ToString();
-            ViewModel.ProbeAngle = sts.stylus_angle[sts.probe_id].ToString("F2");
-            ViewModel.BallDiameter = sts.dia.ToString("F2");
+            if (sts.probe_id == 0) this.ViewModel.Name = sts.pobe_name0;
+            if (sts.probe_id == 1) this.ViewModel.Name = sts.pobe_name1;
+            if (sts.probe_id == 2) this.ViewModel.Name = sts.pobe_name2;
+            if (sts.probe_id == 3) this.ViewModel.Name = sts.pobe_name3;
+            if (sts.probe_id == 4) this.ViewModel.Name = sts.pobe_name4;
+            if (sts.probe_id == 5) this.ViewModel.Name = sts.pobe_name5;
+            if (sts.probe_id == 6) this.ViewModel.Name = sts.pobe_name6;
+            if (sts.probe_id == 7) this.ViewModel.Name = sts.pobe_name7;
+            if (sts.probe_id == 8) this.ViewModel.Name = sts.pobe_name8;
+            if (sts.probe_id == 9) this.ViewModel.Name = sts.pobe_name9;
+            if (sts.probe_id == 10) this.ViewModel.Name = sts.pobe_name10;
+            if (sts.probe_id == 11) this.ViewModel.Name = sts.pobe_name11;
+            if (sts.probe_id == 12) this.ViewModel.Name = sts.pobe_name12;
+            if (sts.probe_id == 13) this.ViewModel.Name = sts.pobe_name13;
+            if (sts.probe_id == 14) this.ViewModel.Name = sts.pobe_name14;
+            if (sts.probe_id == 15) this.ViewModel.Name = sts.pobe_name15;
+            if (sts.probe_id == 16) this.ViewModel.Name = sts.pobe_name16;
+            if (sts.probe_id == 17) this.ViewModel.Name = sts.pobe_name17;
+            if (sts.probe_id == 18) this.ViewModel.Name = sts.pobe_name18;
+            if (sts.probe_id == 19) this.ViewModel.Name = sts.pobe_name19;
+            if (sts.probe_id == 20) this.ViewModel.Name = sts.pobe_name20;
+            this.ViewModel.Id = sts.probe_id.ToString();
+            this.ViewModel.ProbeAngle = sts.stylus_angle[sts.probe_id].ToString("F2");
+            this.ViewModel.BallDiameter = sts.dia.ToString("F2");
+            ////
+            //// プローブ種類画像追加(2025.10.31yori)
+            switch (sts.pobe_type[sts.probe_id])
+            {
+                case 0:
+                    this.ViewModel.ImageSource = "Image/taperProbeV7.PNG";
+                    break;
+                case 1:
+                    this.ViewModel.ImageSource = "Image/standardProbeV7.PNG";
+                    break;
+                case 2:
+                    this.ViewModel.ImageSource = "Image/VPR81.PNG";
+                    break;
+                case 3:
+                    this.ViewModel.ImageSource = "Image/VPR103.PNG";
+                    break;
+                case 4:
+                    this.ViewModel.ImageSource = "Image/VPR105.PNG";
+                    break;
+                default:
+                    break;
+            }
+            this.ViewModel.BallIndex = sts.pobe_type[sts.probe_id];
             ////
         }
 
@@ -78,20 +101,30 @@ namespace VecApp
             switch (this.ViewModel.BallIndex)
             {
                 case 0:
-                    this.ViewModel.ImageSource = "Image/standardProbeV7.PNG";
+                    this.ViewModel.ImageSource = "Image/taperProbeV7.PNG";
                     break;
                 case 1:
-                    this.ViewModel.ImageSource = "Image/VPR81.PNG";
+                    this.ViewModel.ImageSource = "Image/standardProbeV7.PNG";
                     break;
                 case 2:
-                    this.ViewModel.ImageSource = "Image/VPR103.PNG";
+                    this.ViewModel.ImageSource = "Image/VPR81.PNG";
                     break;
                 case 3:
+                    this.ViewModel.ImageSource = "Image/VPR103.PNG";
+                    break;
+                case 4:
                     this.ViewModel.ImageSource = "Image/VPR105.PNG";
                     break;
                 default:
                     break;
             }
+        }
+
+        // プローブ登録ボタン(2025.10.31yori)
+        private void Click_ResistBtn(object sender, RoutedEventArgs e)
+        {
+            CSH.Grp02.ProbeInputPanelProbeResist(int.Parse(this.ViewModel.Id), this.ViewModel.Name, this.ViewModel.BallIndex);
+            Parent.CurrentPanel = Panel.None;
         }
     }
 }

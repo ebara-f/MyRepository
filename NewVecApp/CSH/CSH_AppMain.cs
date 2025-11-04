@@ -74,6 +74,8 @@ namespace CSH
         public string pobe_name20; // プローブ名称(2025.7.24yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
         public double[] stylus_angle; // スタイラス角度(2025.7.31yori)
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public int[] pobe_type; // プローブ種類(2025.7.31yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         public double[] tempature; // アーム内温度(2025.6.4yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
@@ -113,6 +115,7 @@ namespace CSH
         public string cnt_ver; // カウンタバージョン
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         public long[] cnt_data; // カウント値
+        public int count_fg; // カウント値取得フラグ(2025.10.30yori)
     }
 
     // スキャナステータスの構造体(2025.6.19yori)

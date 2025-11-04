@@ -17,7 +17,7 @@ namespace VecApp
         public ObservableCollection<string> GaugeItems { get; set; } // 追加(2025.10.27yori)
         public ProbeInputViewModel()
         {
-            BallItems = new ObservableCollection<string> { Resources.String214, Resources.String215, Resources.String216, Resources.String217 };
+            BallItems = new ObservableCollection<string> { Resources.String264, Resources.String214, Resources.String215, Resources.String216, Resources.String217 }; // テーパ追加(2025.10.31yori)
             GaugeItems = new ObservableCollection<string> { Resources.String61, Resources.String62 };
             BallIndex = 0;
             GaugeIndex = 0; // 追加(2025.10.27yori)

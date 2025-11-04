@@ -1,4 +1,5 @@
 ﻿<!-- 全体のFontSize="20"へ変更(2025.9.28yori) -->
+<!-- ウィンドウサイズ固定(2025.11.4yori) -->
 <local:SubWindowBase
         x:Class="VecApp.SubWindow1"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -10,7 +11,7 @@
         xmlns:res="clr-namespace:VecApp.Properties"
         mc:Ignorable="d"
         Closing="Terminate"
-        Title="BeakMater Plug-in SoftWare(beta)" Height="770" Width="1100">
+        Title="BeakMater Plug-in SoftWare(beta)" Height="770" Width="1100" ResizeMode="NoResize">
     <!-- Height="560"→Height=770"へ変更(2025.10.26yori) -->
     <Grid Background="#2C3E50">
         <Grid.ColumnDefinitions>

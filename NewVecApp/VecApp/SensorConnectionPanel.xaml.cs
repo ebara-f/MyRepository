@@ -28,7 +28,7 @@ namespace VecApp
             InitializeComponent();
             this.DataContext = model; // 追加(2025.8.12)
             SlideSwitch.Value = 1; // 初期値はオン(2025.7.30yori)
-            // 機種場合分け追加(2025.10.28yori)
+            // アーム型式場合分け追加(2025.10.28yori)
             Status01 sts = new Status01();
             CSH.AppMain.UpDateData01(out sts);
             if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") this.ViewModel.ConnectScannerImage = "Image/connectSensor_Api_V8.PNG";

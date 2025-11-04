@@ -15,10 +15,10 @@ namespace VecApp
         public ObservableCollection<string> ArmTypeItems { get; set; }
         public ArmTypeSettingViewModel()
         {
-            ArmTypeItems = new ObservableCollection<string> { "VAR800M", "VAR800L", "BK100S", "BK100-NC" }; // "VAR700M", "VAR700L", "VAR700LT", "VAR600", "VAR600MII"削除、"BK100S", "BK100NC"追加(2025.8.30yori)
+            ArmTypeItems = new ObservableCollection<string> { "VAR700M", "VAR700L", "VAR800M", "VAR800L", "BK100S", "BK100-NC" }; // "VAR700M", "VAR700L", "VAR700LT", "VAR600", "VAR600MII"削除、"BK100S", "BK100NC"追加(2025.8.30yori) // "VAR700M", "VAR700L"追加(2025.11.1yori)
             ArmTypeIndex = 0;
-            ArmTypeItem = "VAR800M"; // 追加(2025.9.1yori)
-            ArmTypeImage = "Image/init_machine10.png"; //画像変更(他の画像と共通で使用する)(2025.8.30yori)
+            ArmTypeItem = "VAR700M"; // 追加(2025.9.1yori) // "VAR800M"から変更(2025.11.1yori)
+            ArmTypeImage = "Image/init_V7.PNG"; //画像変更(他の画像と共通で使用する)(2025.8.30yori) // init_machine10.pngから変更(2025.11.1yori)
         }
 
         private int _armTypeIndex;
