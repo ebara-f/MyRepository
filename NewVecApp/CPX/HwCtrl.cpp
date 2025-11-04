@@ -3585,7 +3585,7 @@ int HwCtrl::GetArmParaV8(CALIB_DATA* para, int psid, int branch)
     アームパラメータの設定(テキストデータ)
     2025.9.10 add eba
     2025.10.20 mod 枝番対応引数追加 eba
-
+    2025.10.31 ISO別関数へ eba
 ***********************************************************************/
 int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid, int branch)
 {
@@ -3613,6 +3613,23 @@ int HwCtrl::SetArmParaV8(CALIB_DATA* para, int psid, int branch)
         ret |= HwCtrl::m_hVecCnt.VecCmd_Sprobe(psid);
     }
     
+    //ret |= HwCtrl::m_hVecCnt.VecCmd_Iso();    // 202510.31 del eba
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    パラメータの書き込み
+    2025.10.31 add eba
+    
+***********************************************************************/
+int HwCtrl::WriteParaISO(void)
+{
+    int ret = 0;
+
     ret |= HwCtrl::m_hVecCnt.VecCmd_Iso();
 
     return (ret);

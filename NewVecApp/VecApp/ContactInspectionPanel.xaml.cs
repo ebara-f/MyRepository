@@ -79,6 +79,7 @@ namespace VecApp
             this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;
 
             UsrMessageBox.Show(this.ViewModel.CalibMseBox.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.ViewModel.CalibMseBox.MesString = 0;
         }
 
         public void ParaOutCallBack()
@@ -281,6 +282,7 @@ namespace VecApp
             else
             {
                 UsrMessageBox.Show(this.ViewModel.CalibMseBox.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.ViewModel.CalibMseBox.MesString = 0;
             }
 
          

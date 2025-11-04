@@ -128,6 +128,13 @@ int CalibUserMulti::CntDataMesCallBackSub2(CALIB_MSEBOX* para, VecCtEx2* data)
 		}
 		ret |= 1;
 	}
+	
+	if (ret)
+	{
+		CalibMesBack();
+	}
+
+
 
 	return (ret);
 }
@@ -143,6 +150,7 @@ int CalibUserMulti::ParaOutCallBackSub(CALIB_MSEBOX* para)
 	if (para->CalibInspectJudge == 0)	// // OK‚È‚ç
 	{
 		HwCtrl::SetArmParaV8(&CalibComm::m_ArmParaTxt, 1, 0);
+		HwCtrl::WriteParaISO();
 	}
 
 	ret |= CalibEnd();

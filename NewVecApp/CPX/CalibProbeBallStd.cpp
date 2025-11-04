@@ -119,10 +119,6 @@ int CalibProbeBallStd::ParaOutCallBackSub(CALIB_MSEBOX* para)
 		HwCtrl::SetArmParaV8(&CalibComm::m_ArmParaTxt, 2, 0);
 	}
 
-	ret |= CalibEnd();
-
-	
-
 	OutDataNo(&no);
 	for (i = 0; i < no; i++)
 	{
@@ -132,6 +128,8 @@ int CalibProbeBallStd::ParaOutCallBackSub(CALIB_MSEBOX* para)
 
 	// ƒLƒƒƒŠƒuŒã“_ŒŸŒ‹‰Ê
 	CalibCheckBallResult(&para->InspAndProbCkResult2);	// ri, Ps
+
+	ret |= CalibEnd();
 
 
 	return (ret);
@@ -144,7 +142,7 @@ int CalibProbeBallStd::ClickResoreBtnSub(CALIB_MSEBOX* para)
 	int ret = 0;
 
 	HwCtrl::SetArmParaV8(&CalibProbeBallStd::m_ArmParaTxtBackUp, 2, 0);
-	
+	HwCtrl::WriteParaISO();
 
 	return (ret);
 

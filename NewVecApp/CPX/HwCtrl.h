@@ -193,6 +193,7 @@ public:
     // 有接触点検、キャリブ用関数
     static int GetArmParaV8(CALIB_DATA* para, int psid, int branch);
     static int SetArmParaV8(CALIB_DATA* para, int psid, int branch);
+    static int WriteParaISO(void);
     //
     
      

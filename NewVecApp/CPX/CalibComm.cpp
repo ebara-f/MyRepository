@@ -349,15 +349,12 @@ int CalibComm::CntDataMesCallBack(CALIB_MSEBOX* para)
 
 	CalibComm::m_pData.GetData(&CntData);
 
+	CalibMesIn(&CntData);
+
 	// 測定データのチェック
 	if (CalibComm::m_CalibType == CALIB_TYPE::ALIGNMENT_MULTI_GAUGE)
 	{
 		fg = CalibUserMulti::CntDataMesCallBackSub2(para, &CntData);
-		if(fg==0) CalibMesIn(&CntData);
-	}
-	else
-	{
-		CalibMesIn(&CntData);
 	}
 
 	CalibMesOutPath(path);
