@@ -31,6 +31,7 @@ OneLineData2*   HwCtrl::ptlinedata2025 = NULL;
 int             HwCtrl::m_iXSize = 0;
 double          HwCtrl::m_dXPitch = 0.0;
 bool            HwCtrl::m_bmeasfg = false;
+bool            HwCtrl::m_bbuttonfg = false; // 追加(2025.11.5yori)
 NCON_MEAS_SEQ   HwCtrl::m_ScanDataStepCounter;
 DWORD           HwCtrl::m_StepStartTime;
 bool            HwCtrl::m_bSwSts = false;
@@ -2306,13 +2307,14 @@ void HwCtrl::GetScanDataThread_new()
             else {
                 m_ScanDataStepCounter = NCON_MEAS_SEQ::BREAK;			// 中断
             }
-            if (iMeasType == TDS_MEASTYPE_NORMAL)						//追加(2022.4.7yori)
-            {
-                if (m_b_Button_ConnectFlag == false)                    // アプリから接続した場合は、PolyWorksへデータを送信しない。(2025.7.3yori)
-                {
-                    TriggerButtonAndMeasDataStatusTransfer(true, false); //トリガボタンを押した。ダミースキャンデータ(2021.11.25yori)
-                }
-            }
+            // 削除予定(不要？)(2025.11.5yori)
+            //if (iMeasType == TDS_MEASTYPE_NORMAL)						//追加(2022.4.7yori)
+            //{
+            //    if (m_b_Button_ConnectFlag == false)                    // アプリから接続した場合は、PolyWorksへデータを送信しない。(2025.7.3yori)
+            //    {
+            //        TriggerButtonAndMeasDataStatusTransfer(true, false); //トリガボタンを押した。ダミースキャンデータ(2021.11.25yori)
+            //    }
+            //}
             m_bmeasfg = false;
             break;
         case NCON_MEAS_SEQ::DUMMY_MEAS:
@@ -2377,7 +2379,8 @@ void HwCtrl::GetScanDataThread_new()
                         TriggerButtonAndMeasDataStatusTransfer(true, true);	//トリガボタンを押した。測定スキャンデータ(2021.11.25yori)
                     }
                 }
-                m_bmeasfg = true;						                // 測定データ判定Fg追加(2021.6.11yori)
+                m_bbuttonfg = false; // 追加(2025.11.5yori)
+                m_bmeasfg = true;						                // 測定データ判定Fg追加(2021.6.11yori
             }
             else
             {
@@ -3068,6 +3071,7 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
         ptlinedata2025->iDataNum_Rec = iRec;
         ptlinedata2025->iDataNum = iDataNum;
         ptlinedata2025->bMeasDataFg = m_bmeasfg;
+        ptlinedata2025->bButtonFg = m_bbuttonfg; // 追加(2025.11.5yori)
 
         // デバッグ用(2025.8.5yori)
         //if (ptlinedata2025[index].bMeasDataFg == true) // 測定データのみ出力

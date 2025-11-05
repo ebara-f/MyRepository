@@ -133,6 +133,7 @@ public:
     static int m_iXSize; // スキャン幅 スレット起動時にセットされる
     static double m_dXPitch; // ピッチ
     static bool m_bmeasfg;
+    static bool m_bbuttonfg; // 追加(2025.11.5yori)
     static NCON_MEAS_SEQ  m_ScanDataStepCounter;    // 測定サンプリングスレッドのシーケンスカウンタ
     static DWORD m_StepStartTime;                   // ステップ開始時間
     static bool m_bSwSts;                           // スイッチ状態
