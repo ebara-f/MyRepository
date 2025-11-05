@@ -646,7 +646,7 @@ namespace VecApp
                 }
             }
         }
-        public Brush ResultBackground3 => ResultJudge3 ? Brushes.LightGreen : Brushes.LightPink;
+        public Brush ResultBackground3 => ResultJudge3 ? Brushes.LightGreen : Brushes.LightYellow;
 
         /// <summary>
         /// ////////

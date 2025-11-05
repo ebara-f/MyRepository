@@ -80,12 +80,12 @@ int CalibUserMulti::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 	int result;
 	if (!CalibCalParaOut(&result, &CalibComm::m_ArmParaTxt, 1))	// ŽŽ‚µ‚ÉPSID‚Í‚P
 	{
-		para->CalibInspectJudge = 1;	// NG
+		para->CalibResultJudge = 1;	// NG
 		ret = 1;
 	}
 	else
 	{
-		para->CalibInspectJudge = 0;	// OK
+		para->CalibResultJudge = 0;	// OK
 	}
 	para->CalibResultVal = result;
 

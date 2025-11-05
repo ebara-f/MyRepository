@@ -147,6 +147,7 @@ namespace CSH
 
         public double PlateErrVal;
         public int CalibInspectJudge;
+        public int CalibResultJudge;
         public int CalibResultVal;
 
         public int Language;

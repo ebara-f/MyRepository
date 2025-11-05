@@ -1723,6 +1723,42 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   結果を確認して閉じるボタンをクリックしてください に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String265 {
+            get {
+                return ResourceManager.GetString("String265", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   補正値作成成功 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String266 {
+            get {
+                return ResourceManager.GetString("String266", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   補正値作成失敗 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String267 {
+            get {
+                return ResourceManager.GetString("String267", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   補正値作成成功 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String268 {
+            get {
+                return ResourceManager.GetString("String268", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   球中心(球ゲージ)： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String27 {

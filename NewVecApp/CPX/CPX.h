@@ -223,7 +223,8 @@ typedef struct CalibSettingParamter
     CALIB_JUDGE_CK_FG  InspectionResultFg;
 
     double PlateErrVal;
-    int CalibInspectJudge; 
+    int CalibInspectJudge;  // 結果が改善したか、もしくはしきい値以内か否か
+    int CalibResultJudge;   // 収束したか否か  
     int CalibResultVal;
 
     int Language;

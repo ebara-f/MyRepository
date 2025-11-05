@@ -2729,7 +2729,7 @@ int CVecCnt::VecCmd_Iso(void)
 /***********************************************************************
 
 	PC
-	2025.10.127add eba
+	2025.10.17add eba
 
 ***********************************************************************/
 int CVecCnt::VecCmd_Pc(CALIB_PAPA* para)
@@ -2745,7 +2745,7 @@ int CVecCnt::VecCmd_Pc(CALIB_PAPA* para)
 	//WaitForSingleObject(hSEMA_VECCNT, INFINITE);
 
 	sprintf_s(para->cmd, sizeof(para->cmd), "%s", "PC");
-	ret_code_send = Vec_CmdTrans(m_VecHandle, para->cmd, para->para, 9);
+	ret_code_send = Vec_CmdTrans(m_VecHandle, para->cmd, para->para, 10);
 	ret_code_recv = Vec_CmdReceive(m_VecHandle, cRecvCmd, para->para_in, &para->no);
 	if (ret_code_send != (int)VEC_RET_CODE::RET_CODE__OK)
 	{

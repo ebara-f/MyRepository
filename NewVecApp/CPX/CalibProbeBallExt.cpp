@@ -80,12 +80,12 @@ int CalibProbeBallExt::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 	int result;
 	if (!CalibCalParaOutEx(&result, &CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, para->CalibProbeBranch))	// 指定の枝番
 	{
-		para->CalibInspectJudge = 1;
+		para->CalibResultJudge = 1;
 		ret = 1;
 	}
 	else
 	{
-		para->CalibInspectJudge = 0;
+		para->CalibResultJudge = 0;
 	}
 	para->CalibResultVal = result;
 
@@ -114,20 +114,31 @@ int CalibProbeBallExt::ParaOutCallBackSub(CALIB_MSEBOX* para)
 
 
 	// 結果パラメータ転送
-	if (para->CalibInspectJudge == 0)	// // OKなら
+	if (para->CalibResultJudge == 0)	// // OKなら
 	{
 		HwCtrl::SetArmParaV8(&CalibComm::m_ArmParaTxt, HwCtrl::m_hVecCnt.m_Sts.m_iProbeId, para->CalibProbeBranch);
+		HwCtrl::WriteParaISO();
 	}
 
 	OutDataNo(&no);
 	for (i = 0; i < no; i++)
 	{
 		OutCntData(i+1, &data);
+		HwCtrl::VecCmd_Pc(&data);
 		GetXYZData(i+1, &data);
 	}
 
 	// キャリブ後点検結果
 	CalibCheckBallResult(&para->InspAndProbCkResult2);	// ri, Ps
+
+	if (para->InspAndProbCkResult.ri < para->InspAndProbCkResult2.ri)
+	{
+		para->CalibInspectJudge = 1;
+	}
+	if (para->InspAndProbCkResult.Ps < para->InspAndProbCkResult2.Ps)
+	{
+		para->CalibInspectJudge = 1;
+	}
 
 	ret |= CalibEnd();
 

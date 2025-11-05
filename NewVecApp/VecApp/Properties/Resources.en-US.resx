@@ -911,4 +911,16 @@ Meshing</value>
   <data name="String264" xml:space="preserve">
     <value>Taper</value>
   </data>
+  <data name="String265" xml:space="preserve">
+    <value>Check the results and click the Close button.</value>
+  </data>
+  <data name="String266" xml:space="preserve">
+    <value>Correction successfully</value>
+  </data>
+  <data name="String267" xml:space="preserve">
+    <value>Correction failure</value>
+  </data>
+  <data name="String268" xml:space="preserve">
+    <value />
+  </data>
 </root>

@@ -918,4 +918,16 @@
   <data name="String264" xml:space="preserve">
     <value>テーパ</value>
   </data>
+  <data name="String265" xml:space="preserve">
+    <value>結果を確認して閉じるボタンをクリックしてください</value>
+  </data>
+  <data name="String266" xml:space="preserve">
+    <value>補正値作成成功</value>
+  </data>
+  <data name="String267" xml:space="preserve">
+    <value>補正値作成失敗</value>
+  </data>
+  <data name="String268" xml:space="preserve">
+    <value>補正値作成成功</value>
+  </data>
 </root>

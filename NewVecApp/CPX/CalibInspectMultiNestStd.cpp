@@ -74,17 +74,12 @@ int CalibInspectMultiNestStd::CntDataMesCallBackSub(CALIB_MSEBOX* para)
 	int i = 0;
 	char path[256];
 	char mesg[512], mesg1[256], mesg2[256];
-	//CALIB_RESULT result;
-	//CALIB_JUDGE judge;
 
 	ret = CalibCheckResult(&para->InspAndProbCkResult);
 	ret |= CalibEnd();
 
 	for (i = 0; i < 3; i++)
 	{
-		//para->IncpectionResult.pp[i] = result.pp[i];
-		//para->IncpectionResult.sigma2[i] = result.sigma2[i];
-
 		if (para->InspectionThreshold.pp < para->InspAndProbCkResult.pp[i])
 		{
 			para->InspectionResultFg.pp[i] = 1;

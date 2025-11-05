@@ -124,7 +124,7 @@
                             <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding DiaAftValue, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Background="{Binding DiaAftBackground}" TextAlignment="Right" VerticalContentAlignment="Center" FontSize="25"/>
 
                             <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding ThresholdText3, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,10,0,0" Grid.ColumnSpan="2"  VerticalContentAlignment="Center" Background="#2A2A2A" Foreground="White"/>
-                            <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding ResultText3, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,10,0,0" VerticalAlignment="Center" TextAlignment="Center" Background="{Binding ResultBackground3}" FontSize="35"/>
+                            <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding ResultText3, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,10,0,0" VerticalAlignment="Center" TextAlignment="Center" Background="{Binding ResultBackground3}" Height="65" FontSize="15"/> 
 
                         </Grid>
 

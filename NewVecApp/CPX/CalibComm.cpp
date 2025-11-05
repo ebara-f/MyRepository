@@ -93,6 +93,7 @@ int CalibComm::Start(CALIB_MSEBOX* para)
 
 	// 判定フラグの初期化
 	para->CalibInspectJudge = 0;
+	para->CalibResultJudge = 0;
 	// ゲージの値設定
 	CalibSetGaugeVal(para->GaugePara);
 

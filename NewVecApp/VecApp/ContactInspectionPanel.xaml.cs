@@ -86,8 +86,9 @@ namespace VecApp
         {
 
             CSH.Grp02.ContactInspectionPanelParaOutCallBack(ref this.ViewModel.CalibMseBox);
+            this.ViewModel.SubtitleText = VecApp.Properties.Resources.String265;
 
-            switch((CalibType)this.ViewModel.CalibMseBox.CalibType)
+            switch ((CalibType)this.ViewModel.CalibMseBox.CalibType)
             {
                 case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
                     this.ViewModel.ImageVisibility = Visibility.Hidden;
@@ -205,12 +206,11 @@ namespace VecApp
                     break;
 
                 case CalibType.ALIGNMENT_MULTI_GAUGE:
-                case CalibType.ALIGNMENT_BALL_GAUGE_STD:
                     this.ViewModel.ImageVisibility = Visibility.Hidden;
                     this.ViewModel.GridVisibility2 = Visibility.Visible;
 
                     // OK・NG表示
-                    if (this.ViewModel.CalibMseBox.CalibInspectJudge == 0)
+                    if (this.ViewModel.CalibMseBox.CalibResultJudge == 0)
                     {
                         this.ViewModel.ResultText2 = "OK";
                         this.ViewModel.ResultJudge2 = true;  // 背景色緑
@@ -222,6 +222,48 @@ namespace VecApp
                     }
 
                     //SetHistoryText(this.ViewModel.CalibMseBox.CalibResultVal.ToString("F0"));
+
+                    break;
+
+                case CalibType.ALIGNMENT_BALL_GAUGE_STD:
+                    this.ViewModel.ImageVisibility = Visibility.Hidden;
+                    this.ViewModel.GridVisibility3 = Visibility.Visible;
+
+                    this.ViewModel.CenterBefValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.ri.ToString("F3");
+                    this.ViewModel.DiaBefValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.Ps.ToString("F3");
+                    this.ViewModel.CenterAftValue = this.ViewModel.CalibMseBox.InspAndProbCkResult2.ri.ToString("F3");
+                    this.ViewModel.DiaAftValue = this.ViewModel.CalibMseBox.InspAndProbCkResult2.Ps.ToString("F3");
+
+                    // しきい値表示
+                    this.ViewModel.ThresholdText3 =
+                            "最大最小しきい値 : " +
+                            this.ViewModel.CalibMseBox.InspectionThreshold.pp.ToString("F2") +
+                            "\n" +
+                            "2σしきい値 : " +
+                            this.ViewModel.CalibMseBox.InspectionThreshold.sigma2.ToString("F2") +
+                            "\n" +
+                            "面間誤差しきい値 : " +
+                            this.ViewModel.CalibMseBox.InspectionThreshold.plate.ToString("F2");
+
+                    // 収束したかどうか
+                    if (this.ViewModel.CalibMseBox.CalibResultJudge == 0)
+                    {  
+                        this.ViewModel.ResultText3 = VecApp.Properties.Resources.String266;
+                    }
+                    else
+                    {
+                        this.ViewModel.ResultText3 = VecApp.Properties.Resources.String267;
+                    }
+
+                    // 精度が改善したかどうか
+                    if (this.ViewModel.CalibMseBox.CalibInspectJudge == 0)
+                    {
+                        this.ViewModel.ResultJudge3 = true;  // 背景色緑
+                    }
+                    else
+                    {
+                        this.ViewModel.ResultJudge3 = false; // 背景色黄色
+                    }
 
                     break;
 

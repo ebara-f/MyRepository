@@ -196,6 +196,7 @@ public:
     static int GetArmParaV8(CALIB_DATA* para, int psid, int branch);
     static int SetArmParaV8(CALIB_DATA* para, int psid, int branch);
     static int WriteParaISO(void);
+    static int VecCmd_Pc(CALIB_PAPA* para);
     //
     
      

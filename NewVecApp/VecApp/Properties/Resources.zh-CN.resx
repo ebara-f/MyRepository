@@ -916,4 +916,16 @@
   <data name="String264" xml:space="preserve">
     <value>Taper</value>
   </data>
+  <data name="String265" xml:space="preserve">
+    <value>Check the results and click the Close button.</value>
+  </data>
+  <data name="String266" xml:space="preserve">
+    <value>補正値作成成功</value>
+  </data>
+  <data name="String267" xml:space="preserve">
+    <value>補正値作成失敗</value>
+  </data>
+  <data name="String268" xml:space="preserve">
+    <value />
+  </data>
 </root>
