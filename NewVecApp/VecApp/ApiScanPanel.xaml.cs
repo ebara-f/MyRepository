@@ -29,22 +29,29 @@ namespace VecApp
             // 以降、ViewModel対応による追加
             this.DataContext = model;
 
+            // TreeViewItem.Expandedイベントを監視(2025.11.7yori)
+            ApiScanTree.AddHandler(TreeViewItem.ExpandedEvent,
+                new RoutedEventHandler(TreeViewItem_Expanded), true);
+
             // MainWindow.xaml.csから移動(2025.8.21yori)
             Status02 sts = new Status02();
             CSH.AppMain.UpDateData02(out sts);
 
             // 計測モード(2025.8.11yori)
-            ViewModel.ApiScanItems1.Clear();
-            ViewModel.ApiScanItems1.Insert(0, sts.mode0_info);
-            ViewModel.ApiScanItems1.Insert(1, sts.mode1_info);
-            ViewModel.ApiScanItems1.Insert(2, sts.mode2_info);
-            ViewModel.ApiScanItems1.Insert(3, sts.mode3_info);
-            ViewModel.ApiScanItems1.Insert(4, sts.mode4_info);
-            ViewModel.ApiScanItems1.Insert(5, sts.mode5_info);
-            ViewModel.ApiScanIndex1 = sts.mode;
+            this.ViewModel.ApiScanItems1.Clear();
+            this.ViewModel.ApiScanItems1.Insert(0, sts.mode0_info);
+            this.ViewModel.ApiScanItems1.Insert(1, sts.mode1_info);
+            this.ViewModel.ApiScanItems1.Insert(2, sts.mode2_info);
+            this.ViewModel.ApiScanItems1.Insert(3, sts.mode3_info);
+            this.ViewModel.ApiScanItems1.Insert(4, sts.mode4_info);
+            this.ViewModel.ApiScanItems1.Insert(5, sts.mode5_info);
+            this.ViewModel.ApiScanIndex1 = sts.mode;
+
+            // 点間ピッチ(2025.11.6yori)
+            this.ViewModel.ApiScanText = sts.pitch[0].ToString("F3"); // 1/1
 
             // 感度(2025.8.18yori)
-            var Item1 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Sensitivity");
+            var Item1 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Sensitivity");
             if (Item1?.Options != null)
             {
                 Item1.Options.Clear();
@@ -56,8 +63,8 @@ namespace VecApp
                 Item1.SelectedOption = "Normal";
             }
 
-            // 距離マスク(2025.8.22yori) // Item4→Item3へ変更(ViewModelの番号と合わせる。)(2025.8.26yori)
-            var Item3 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
+                // 距離マスク(2025.8.22yori) // Item4→Item3へ変更(ViewModelの番号と合わせる。)(2025.8.26yori)
+                var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
             if (Item3?.IsChecked1 != null) // 追加(2025.8.26yori)
             {
                 switch (sts.mode)
@@ -150,7 +157,7 @@ namespace VecApp
                         break;
                 }
             }
-            var parent3 = ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "DistanceMask1");
+            var parent3 = this.ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "DistanceMask1");
             if (parent3?.SlideSwitchValue != null) // 追加(2025.8.26yori)
             {
                 if (parent3.SlideSwitchValue == 0)
@@ -160,7 +167,7 @@ namespace VecApp
             }
 
             // 輝度スライス(2025.8.23yori)
-            var Item5 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
+            var Item5 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
             if (Item5?.InputText12 != null) // 追加(2025.8.26yori)
             {
                 // スタンダード
@@ -174,7 +181,7 @@ namespace VecApp
             }
 
             // 感度スライス(2025.8.23yori)
-            var Item6 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "SensitivitySlice");
+            var Item6 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "SensitivitySlice");
             if (Item6?.InputText18 != null) // 追加(2025.8.26yori)
             {
                 // スタンダード
@@ -188,7 +195,7 @@ namespace VecApp
             }
 
             // ガイドレーザーパワー(2025.8.21yori) // Item3→Item7へ変更(ViewModelの番号と合わせる。)(2025.8.26yori)
-            var Item7 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "GuideLaserPower");
+            var Item7 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "GuideLaserPower");
             if (Item7?.Options3 != null)
             {
                 Item7.Options3.Clear();
@@ -199,21 +206,21 @@ namespace VecApp
             }
 
             // 角度マスク(2025.8.24yori)
-            var Item9 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
+            var Item9 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
             if (Item9?.InputText25 != null) // 追加(2025.8.26yori)
             {
                 Item9.InputText25 = sts.angle.ToString("F1");
             }
 
             // 2ピークマスク(2028.8.25yori)
-            var Item10 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "TwoPeakMask");
+            var Item10 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "TwoPeakMask");
             if (Item10?.OptionIndex4 != null) // 追加(2025.8.26yori)
             {
                 Item10.OptionIndex4 = sts.two_peak;
             }
 
             // エッジマスク(2028.8.25yori)
-            var Item11 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
+            var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
             if (Item11?.InputText26 != null) // 追加(2025.8.26yori)
             {
                 Item11.InputText26 = sts.edge.ToString();
@@ -252,13 +259,13 @@ namespace VecApp
                 // スキャナへの変更はComboBox変更時に行う。(2025.9.4yori)
 
                 // 距離マスク(2025.8.23yori)
-                var parent3 = ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "DistanceMask1");
+                var parent3 = this.ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "DistanceMask1");
                 if (parent3?.SlideSwitchValue != null) // 追加(2025.8.26yori)
                 {
                     if (parent3.SlideSwitchValue == 1) // 距離マスクがオンの場合
                     {
                         // Item4→Item3へ変更(ViewModelの番号と合わせる。)(2025.8.26yori)
-                        var Item3 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
+                        var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
                         if (Item3?.IsChecked1 != null) // 追加(2025.8.26yori)
                         {
                             switch (sts.mode)
@@ -357,7 +364,7 @@ namespace VecApp
                 }
 
                 // 輝度スライス(2025.8.24yori)
-                var Item5 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
+                var Item5 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
                 if (Item5?.InputText15 != null) // 追加(2025.8.26yori)
                 {
                     sts.brightslice[0] = ushort.Parse(Item5.InputText15);
@@ -368,7 +375,7 @@ namespace VecApp
                 }
 
                 // 感度スライス(2025.8.24yori)
-                var Item6 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "SensitivitySlice");
+                var Item6 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "SensitivitySlice");
                 if (Item6?.InputText21 != null) // 追加(2025.8.26yori)
                 {
                     sts.sens_slice[0] = ushort.Parse(Item6.InputText21);
@@ -379,7 +386,7 @@ namespace VecApp
                 }
 
                 // 角度マスク(2025.8.24yori)
-                var Item9 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
+                var Item9 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
                 if (Item9?.InputText25 != null) // 追加(2025.8.26yori)
                 {
                     sts.angle = double.Parse(Item9.InputText25);
@@ -388,7 +395,7 @@ namespace VecApp
                 }
 
                 // エッジマスク(2028.8.25yori)
-                var Item11 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
+                var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
                 if (Item11?.InputText26 != null) // 追加(2025.8.26yori)
                 {
                     sts.edge = int.Parse(Item11.InputText26);
@@ -435,19 +442,19 @@ namespace VecApp
                 case MessageBoxResult.Yes:
                     // スキャナパラメータを初期値へ設定する。(2025.8.26yori)
                     // 感度
-                    var Item = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Sensitivity");
+                    var Item = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Sensitivity");
                     if (Item?.OptionIndex1 != null)
                     {
                         Item.OptionIndex1 = 0; // 感度をNormalに表示
                     }
                     
                     // 距離マスク
-                    var parent3 = ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "DistanceMask1");
+                    var parent3 = this.ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "DistanceMask1");
                     if (parent3?.SlideSwitchValue != null)
                     {
                         parent3.SlideSwitchValue = 0;
                     }
-                    var Item3 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
+                    var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
                     if (Item3?.IsChecked1 != null)
                     {
                         Item3.IsChecked1 = false;
@@ -465,7 +472,7 @@ namespace VecApp
                     }
 
                     // 輝度スライス
-                    var Item5 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
+                    var Item5 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
                     if (Item5?.InputText15 != null)
                     {
                         // アドバンス
@@ -475,7 +482,7 @@ namespace VecApp
                     }
 
                     // 感度スライス
-                    var Item6 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "SensitivitySlice");
+                    var Item6 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "SensitivitySlice");
                     if (Item6?.InputText21 != null)
                     {
                         // アドバンス
@@ -485,35 +492,35 @@ namespace VecApp
                     }
 
                     // ガイドレーザーパワー
-                    var Item7 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "GuideLaserPower");
+                    var Item7 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "GuideLaserPower");
                     if (Item7?.Options3 != null)
                     {
                         Item7.OptionIndex3 = 1; // ガイドレーザーパワーを中に表示
                     }
 
                     // 補間(Xピッチ)
-                    var Item8 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Interpolation");
+                    var Item8 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Interpolation");
                     if (Item8?.Options3 != null)
                     {
                         Item8.SlideSwitchValue7 = 0;
                     }
 
                     // 角度マスク
-                    var Item9 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
+                    var Item9 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
                     if (Item9?.InputText25 != null)
                     {
                         Item9.InputText25 = "70.0";
                     }
 
                     // 2ピークマスク
-                    var Item10 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "TwoPeakMask");
+                    var Item10 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "TwoPeakMask");
                     if (Item10?.OptionIndex4 != null)
                     {
                         Item10.OptionIndex4 = 0; // 2ピークマスクをデータ無効に表示
                     }
 
                     // エッジマスク
-                    var Item11 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
+                    var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
                     if (Item11?.InputText26 != null)
                     {
                         Status02 sts = new Status02();
@@ -543,7 +550,7 @@ namespace VecApp
                 {
                     treeItem.SlideSwitch = true;
                     // 距離マスクがONなら各(左右遠近)CheckBoxを有効にする。(2025.8.26yori)
-                    var Item3 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
+                    var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
                     if (Item3?.IsCheckBoxEnabled != null)
                     {
                         Item3.IsCheckBoxEnabled = true;
@@ -553,7 +560,7 @@ namespace VecApp
                 {
                     treeItem.SlideSwitch = false;
                     // 距離マスクがOFFなら各(左右遠近)CheckBoxを無効にする。(2025.8.26yori)
-                    var Item3 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
+                    var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
                     if (Item3?.IsCheckBoxEnabled != null)
                     {
                         Item3.IsCheckBoxEnabled = false;
@@ -619,11 +626,19 @@ namespace VecApp
                 {
                     treeItem.SlideSwitch7 = true;
                     CSH.Grp03.Cmd09(treeItem.SlideSwitchValue7); // スキャナへの変更はSlider切替時に行う。(2025.9.4yori)
+                    // 点間ピッチを画面表示する。(2025.11.6yori)
+                    Status02 sts = new Status02();
+                    CSH.AppMain.UpDateData02(out sts);
+                    this.ViewModel.ApiScanText = sts.pitch[0].ToString("F3");
                 }
                 else
                 {
                     treeItem.SlideSwitch7 = false;
                     CSH.Grp03.Cmd09(treeItem.SlideSwitchValue7); // スキャナへの変更はSlider切替時に行う。(2025.9.4yori)
+                    // 点間ピッチを画面表示する。(2025.11.6yori)
+                    Status02 sts = new Status02();
+                    CSH.AppMain.UpDateData02(out sts);
+                    this.ViewModel.ApiScanText = sts.pitch[0].ToString("F3");
                 }
 
                 if (treeItem.SlideSwitch8)
@@ -650,10 +665,12 @@ namespace VecApp
         private void ComboBox_SelectionChanged_Mode(object sender, SelectionChangedEventArgs e)
         {
             CSH.Grp03.Cmd06(ViewModel.ApiScanIndex1);
-            // エッジマスク点数は計測モードによって異なるため、画面表示を変更する。(2028.8.27yori)
             Status02 sts = new Status02();
             CSH.AppMain.UpDateData02(out sts);
-            var Item11 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
+            // 点間ピッチは計測モードによって異なるため、画面表示を変更する。(2025.11.6yori)
+            this.ViewModel.ApiScanText = sts.pitch[0].ToString("F3");
+            // エッジマスク点数は計測モードによって異なるため、画面表示を変更する。(2025.8.27yori)
+            var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
             if (Item11?.InputText26 != null)
             {
                 Item11.InputText26 = sts.edge.ToString();
@@ -665,13 +682,13 @@ namespace VecApp
         {
             Status02 sts = new Status02();
             CSH.AppMain.UpDateData02(out sts);
-            //ViewModel.ApiScanText = sts.pitch[ViewModel.ApiScanIndex2].ToString("F3");
+            //this.ViewModel.ApiScanText = sts.pitch[this.ViewModel.ApiScanIndex2].ToString("F3");
         }
 
         // 感度を変更する。(2025.8.21yori)
         private void ComboBox_SelectionChanged_Sens(object sender, SelectionChangedEventArgs e)
         {
-            var Item1 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Sensitivity");
+            var Item1 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Sensitivity");
             if (Item1?.OptionIndex1 != null)
             {
                 CSH.Grp03.Cmd07(Item1.OptionIndex1);
@@ -679,7 +696,7 @@ namespace VecApp
             // エッジマスク点数は感度によって異なるため、画面表示を変更する。(2028.8.27yori)
             Status02 sts = new Status02();
             CSH.AppMain.UpDateData02(out sts);
-            var Item11 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
+            var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
             if (Item11?.InputText26 != null)
             {
                 Item11.InputText26 = sts.edge.ToString();
@@ -690,7 +707,7 @@ namespace VecApp
         private void ComboBox_SelectionChanged_Guide(object sender, SelectionChangedEventArgs e)
         {
             // スキャナへの変更はComboBox変更時に行う。(2025.9.4yori)
-            var Item7 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "GuideLaserPower");
+            var Item7 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "GuideLaserPower");
             if (Item7?.OptionIndex3 != null)
             {
                 CSH.Grp03.Cmd08(Item7.OptionIndex3);
@@ -700,7 +717,7 @@ namespace VecApp
         // 2ピークマスクを変更する。(2025.8.25yori)
         private void ComboBox_SelectionChanged_TwoPeak(object sender, SelectionChangedEventArgs e)
         {
-            var Item10 = ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "TwoPeakMask");
+            var Item10 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "TwoPeakMask");
             if (Item10?.OptionIndex4 != null) // 追加(2025.8.26yori)
             {
                 switch (Item10.OptionIndex4)
@@ -718,6 +735,36 @@ namespace VecApp
                         break;
                 }
                 CSH.Grp03.Cmd14(Item10.OptionIndex4);
+            }
+        }
+
+        // ツリーの展開を無効化(2025.11.7yori)
+        private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
+        {
+            // 展開されたアイテムを取得
+            if (e.OriginalSource is TreeViewItem item)
+            {
+                // バインドされているデータ
+                if (item.DataContext is TreeItem treeItem)
+                {
+                    // 特定のアイテムの展開を無効化
+                    if (treeItem.Name == VecApp.Properties.Resources.String122 ||   // 輝度マスク
+                        treeItem.Name == VecApp.Properties.Resources.String127 ||   // 距離マスク
+                        treeItem.Name == VecApp.Properties.Resources.String128 ||   // 点群補正/フィルタ
+                        treeItem.Name == VecApp.Properties.Resources.String129 ||   // 輝度スライス
+                        treeItem.Name == VecApp.Properties.Resources.String130 ||   // 感度スライス
+                        treeItem.Name == VecApp.Properties.Resources.String136 ||   // 角度マスク
+                        treeItem.Name == VecApp.Properties.Resources.String137 ||   // 2ピークマスク
+                        treeItem.Name == VecApp.Properties.Resources.String141 ||   // エッジマスク
+                        treeItem.Name == VecApp.Properties.Resources.String142)     // メモ
+                    {
+                        // 展開をキャンセル
+                        item.IsExpanded = false;
+
+                        // イベントを処理済みに設定
+                        e.Handled = true;
+                    }
+                }
             }
         }
     }

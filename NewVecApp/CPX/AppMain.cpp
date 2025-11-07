@@ -886,7 +886,7 @@ void AppMain::ThreadProc()
             switch (cmd_no) {
             case APP_CMD::CONNECT:
                 if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::START ||
-                    HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::DISCONNECT_CMP)
+                    HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::FINISH) // 切断後に接続できるようDISCONNECT_CMP→FINISHへ変更(2025.11.7yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     HwCtrl::m_b_Button_ConnectFlag = false; // ポリ側から接続を行った 2025.7.4 eba add // true→falseへ修正(2025.7.18yori)
@@ -937,9 +937,18 @@ void AppMain::ThreadProc()
                 }
                 break;
 
+            case APP_CMD::VEC_HEAD_TYPE_PROBE: // 追加(2025.11.7yori)
+                // 何もしない。処理が必要な場合は、追加する。(2025.11.7yori)
+                break;
+
+            case APP_CMD::VEC_HEAD_TYPE_SCANNER: // 追加(2025.11.7yori)
+                // 何もしない。処理が必要な場合は、追加する。(2025.11.7yori)
+                break;
+
             case APP_CMD::NONCONTACT_SCAN_START:
                 if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::SCANNER_INIT_CMP ||
-                    HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP)
+                    HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP ||
+                    HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL) // SCANNER_SCAN_MEAS_IDEL追加(2025.11.6yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_START_REQ;
                 }

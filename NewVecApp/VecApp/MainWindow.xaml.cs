@@ -483,7 +483,11 @@ namespace VecApp
                 //m_SubWnd01.ShowDialog();
 
                 // Window のアクティブ化
-                UIPlus.ForceActive(m_SubWnd01.hWnd); // m_hWnd→hWnd(2025.7.29yori)
+                //UIPlus.ForceActive(m_SubWnd01.hWnd); // m_hWnd→hWnd(2025.7.29yori)
+                // SetForegroundWindowの代わりにTopmostを使用する。(2025.11.7yori)
+                m_SubWnd01.Topmost = true;  // 一時的に最前面にする。
+                m_SubWnd01.Activate();      // ウィンドウをアクティブ化
+                m_SubWnd01.Topmost = false; // 元に戻す。
             }
         }
 
@@ -511,7 +515,12 @@ namespace VecApp
                 //m_SubWnd02.ShowDialog();
 
                 // Window のアクティブ化
-                UIPlus.ForceActive(m_SubWnd02.hWnd); // m_hWnd→hWnd(2025.7.29yori)
+                //UIPlus.ForceActive(m_SubWnd02.hWnd); // m_hWnd→hWnd(2025.7.29yori)
+                // 1.アプリ起動→2.PolyWorks起動→3.接続→4.SubWindowを起動すると、フリーズ状態(SetForegroundWindow関数が戻らない)となるため、
+                // SetForegroundWindowの代わりにTopmostを使用する。(2025.11.7yori)
+                m_SubWnd02.Topmost = true;  // 一時的に最前面にする。
+                m_SubWnd02.Activate();      // ウィンドウをアクティブ化
+                m_SubWnd02.Topmost = false; // 元に戻す。
             }
         }
 
@@ -543,7 +552,11 @@ namespace VecApp
                 //m_SubWnd03.ShowDialog();
 
                 // Window のアクティブ化
-                UIPlus.ForceActive(m_SubWnd03.hWnd); // m_hWnd→hWnd(2025.7.29yori)
+                //UIPlus.ForceActive(m_SubWnd03.hWnd); // m_hWnd→hWnd(2025.7.29yori)
+                // SetForegroundWindowの代わりにTopmostを使用する。(2025.11.7yori)
+                m_SubWnd03.Topmost = true;  // 一時的に最前面にする。
+                m_SubWnd03.Activate();      // ウィンドウをアクティブ化
+                m_SubWnd03.Topmost = false; // 元に戻す。
             }
         }
 
