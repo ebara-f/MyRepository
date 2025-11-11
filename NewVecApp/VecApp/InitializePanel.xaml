@@ -96,7 +96,8 @@
                                     IsSnapToTickEnabled="True"
                                     ValueChanged="SlideSwitch_ValueChanged"
                                     Value="{Binding _SlideSwitch}" VerticalAlignment="Center"
-                                    IsEnabled="False"/>
+                                    IsEnabled="False"
+                                    Opacity="0.25"/>
                                 
                                 <!-- 未作成のため、半透明化(2025.11.11yori) -->
                                 <TextBlock

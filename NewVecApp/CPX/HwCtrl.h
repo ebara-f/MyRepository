@@ -115,6 +115,7 @@ public:
     static bool	m_ScannerWarmUpMonitorCancelFlag; // 非接触暖機監視キャンセルフラグ(2025.8.22yori)
     static bool m_ScannerConnectBtnFg; // スキャナ暖機完了ボタンフラグ(2025.9.2yori)
     static bool	m_MaintModeFlag; // メンテナンスモードフラグ(2025.10.6yori)
+    static bool	m_ScannerSettingCloseFlag; // 非接触測定メニュー閉じるボタンフラグ(2025.11.11yori)
 
     static HANDLE m_hGetScanDataThread;
     static void GetScanDataThread_new(); // スキャンデータ取得レッド

@@ -242,6 +242,14 @@ namespace VecApp
             {
                 if (m_SubWnd01 != null) m_SubWnd01.Hide(); // 追加(2025.6.5yori)
             }
+            else if (msg == UsrMsg.WM_SubWnd03_Close)
+            {
+                if (m_SubWnd03 != null) // 追加(2025.11.11yori)
+                {
+                    CSH.Grp03.Cmd05();
+                    m_SubWnd03.Hide(); 
+                }
+            }
             else if (msg == UsrMsg.WM_SubWnd02_Btn01)
             {
 

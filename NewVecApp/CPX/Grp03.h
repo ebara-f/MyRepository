@@ -33,4 +33,5 @@ public:
     static int  Cmd15(); // 追加(2025.8.25yori)
     static int  Cmd16(); // 追加(2025.8.27yori)
     static int  Cmd17(); // 追加(2025.8.27yori)
+    static int  Cmd18(); // 追加(2025.11.11yori)
 };
