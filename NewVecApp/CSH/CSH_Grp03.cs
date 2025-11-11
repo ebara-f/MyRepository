@@ -70,6 +70,9 @@ namespace CSH
         [DllImport("CPX.dll")]
         public extern static int CPX_Grp03_Cmd17(); // 追加(2025.8.27yori)
 
+        [DllImport("CPX.dll")]
+        public extern static int CPX_Grp03_Cmd18(); // 追加(2025.11.11yori)
+
         #endregion
 
         /// <summary>
@@ -228,6 +231,15 @@ namespace CSH
         static public int Cmd17()
         {
             return CPX_Grp03_Cmd17();
+        }
+
+        /// <summary>
+        /// Cmd18
+        /// 追加(2025.11.11yori)
+        /// </summary>
+        static public int Cmd18()
+        {
+            return CPX_Grp03_Cmd18();
         }
     }
 }

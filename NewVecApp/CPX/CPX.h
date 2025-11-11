@@ -334,6 +334,7 @@ CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd14(int); // 追加(2025.8.25yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd15(); // 追加(2025.8.25yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd16(); // 追加(2025.8.27yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd17(); // 追加(2025.8.27yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd18(); // 追加(2025.11.11yori)
 
 #ifdef __cplusplus
 }

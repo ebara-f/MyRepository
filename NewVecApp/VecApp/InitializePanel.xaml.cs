@@ -128,6 +128,8 @@ namespace VecApp
                 this.ViewModel.Labels[5].Visibility = Visibility.Visible;
                 this.ViewModel.Labels[6].Visibility = Visibility.Visible;
             }
+
+            this.ViewModel.SlideSwitch = false; // 後でコーディングするため、暖機処理待ちオフ(2025.11.11yori)
         }
 
         private InitializeViewModel ViewModel

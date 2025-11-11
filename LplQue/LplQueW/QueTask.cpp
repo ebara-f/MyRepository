@@ -66,7 +66,7 @@ UINT  QueThread(LPVOID pParm)
 
 //>>[CHG:1006] 2010.12.7 yamade
 //		Sleep(100);
-		Sleep(5); //Sleep(10);
+		Sleep(5); // Sleep(10)Ç©ÇÁïœçX(2025.11.11yori)
 //<<[CHG:1006] 2010.12.7 yamade
 		for (QNo = 1; QNo <= QueEntry; QNo++) {
 			if(hBoxMutex[QNo-1]) WaitForSingleObject(hBoxMutex[QNo-1], INFINITE);	//[ADD:1006] 2010.12.7 yamade

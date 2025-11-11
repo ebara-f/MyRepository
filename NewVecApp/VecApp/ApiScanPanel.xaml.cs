@@ -540,6 +540,7 @@ namespace VecApp
         private void Click_CloseBtn(object sender, RoutedEventArgs e)
         {
             Parent.CurrentPanel = Panel.None; // 追加(2025.8.21yori)
+            CSH.Grp03.Cmd18(); // SubWindow3非表示(2025.11.11yori)
         }
 
         private void SlideSwitch_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

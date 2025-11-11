@@ -998,22 +998,12 @@ void AppMain::ThreadProc()
                 ret = HwCtrl::Func75(); // 関節リミットビープ音のON(2025.9.1yori)
                 ret = HwCtrl::Func05(&PosiData); // 接続時にプローブID変更フラグ初期値取得のため、追加(2025.10.2)
 
-                if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 0) //温度が正常な場合(2025.7.17yori)
+                if (HwCtrl::m_hVecCnt.m_Sts.m_Warm != 0) // 温度が正常ではない場合(2025.11.11yori)
                 {
-                    if (HwCtrl::m_hVecCnt.m_VecInitflag) // 初期化が完了していたら
-                    {
-                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_CMP;
-                    }
-                    else
-                    {
-                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_CMP;
-                    }
-                }
-                else // 温度が正常ではない場合は温度監視のプログレスバーを表示する。(2025.7.17yori)
-                {
-                    if(HwCtrl::m_ArmWarmUpMonitorFlag) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_WARMUP_REQ;
+                    //if(HwCtrl::m_ArmWarmUpMonitorFlag) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_WARMUP_REQ; // 暖機処理を無視するため、コメントアウト、後でコーディング(2025.11.11yori)
                 }
 
+                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_CMP; // 追加(2025.11.10yori)
                 if(!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_SUCCESS); // 接続に成功したことをPolyWorks側に知らせる(2025.6.9yori)
             }
             else
@@ -1041,14 +1031,14 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::ARM_WARMUP_REQ: // アーム温度監視要求(2025.7.16yori)
-            if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 3 || HwCtrl::m_hVecCnt.m_Sts.m_Warm == 4 ) UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Show); // 3： 暖機未完了、4： 暖気スキップ禁止の場合のみプログレスバー表示(2025.9.8yori)
+            if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 3 || HwCtrl::m_hVecCnt.m_Sts.m_Warm == 4 ) UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Show); // 3:暖機未完了、4:暖気スキップ禁止の場合のみプログレスバー表示(2025.9.8yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_WARMUP_ING;
             break;
 
         case VEC_STEP_SEQ::ARM_WARMUP_ING: // アーム温度監視中(2025.7.17yori)
-            if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 0 ||
-                HwCtrl::m_hVecCnt.m_Sts.m_Warm == 1 ||
-                HwCtrl::m_hVecCnt.m_Sts.m_Warm == 2)
+            if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 0 ||  // 0:正常
+                HwCtrl::m_hVecCnt.m_Sts.m_Warm == 1 ||  // 1:温度勾配警告
+                HwCtrl::m_hVecCnt.m_Sts.m_Warm == 2)    // 2:温度補正不可能
             {
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_WARMUP_CMP;
             }
@@ -1067,22 +1057,31 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::INITIALIZE_REQ:
-            ret = HwCtrl::Func07(); // イニシャライズモードへ変更
-            if (ret == 0)
+            ret = HwCtrl::Func09(); // ステータスチェック(2025.11.11yori)
+            if (!HwCtrl::m_b_Button_ConnectFlag && HwCtrl::m_hVecCnt.m_VecInitflag) // PolyWorksから接続かつ初期化が完了していた場合
             {
-                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_ING;
-                if (!HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn01); // 接続メニュー表示(2025.6.5yori)
-                if (!HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Btn03); // C#側にイニシャライズ画面表示要求を出す 2025.5.28 add eba
+                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_CMP;
             }
             else
             {
-                // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
+                ret = HwCtrl::Func07(); // イニシャライズモードへ変更
+                if (ret == 0)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_ING;
+                    if (!HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn01); // 接続メニュー表示(2025.6.5yori)
+                    if (!HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Btn03); // C#側にイニシャライズ画面表示要求を出す 2025.5.28 add eba
+                }
+                else
+                {
+                    // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
+                }
             }
+
             break;
 
         case VEC_STEP_SEQ::INITIALIZE_ING:
             ret = HwCtrl::Func09(); // ステータスチェック
-            if (ret == 0 && HwCtrl::m_hVecCnt.m_VecInitflag)   // 初期化が完了していたら
+            if (ret == 0 && HwCtrl::m_hVecCnt.m_VecInitflag) // 初期化が完了したら
             {
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_CMP;
             }
@@ -1403,15 +1402,19 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL:
+        case VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP:
+            // PolyWorksから接続かつ非接触設定メニューの閉じるボタンを押した場合(2025.11.11yori)
+            if (HwCtrl::m_b_Button_ConnectFlag == false && HwCtrl::m_ScannerSettingCloseFlag == true)
+            {
+                UsrMsg::CallBack(UsrMsg::WM_SubWnd03_Close); // SubWindow3非表示(2025.11.11yori)
+                HwCtrl::m_ScannerSettingCloseFlag = false;
+            }
+            Sleep(100);
             break;
 
         case VEC_STEP_SEQ::SCANNER_SCAN_STOP_REQ:
             HwCtrl::Func20(); // スキャン停止
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP;
-            break;
-
-        case VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP:
-            Sleep(100);
             break;
         
         case VEC_STEP_SEQ::OPEN_SCANNER_MEAS_DIALOG_REQ: // PolyWorksの設定ボタンが押され、非接触設定メニューを表示する。(2025.9.3yori)
