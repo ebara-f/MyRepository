@@ -1006,14 +1006,15 @@ void AppMain::ThreadProc()
                     }
                     else
                     {
-                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_CMP;
+                        //HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_CMP; // 後で削除予定(2025.11.10yori)
                     }
                 }
                 else // 温度が正常ではない場合は温度監視のプログレスバーを表示する。(2025.7.17yori)
                 {
-                    if(HwCtrl::m_ArmWarmUpMonitorFlag) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_WARMUP_REQ;
+                    //if(HwCtrl::m_ArmWarmUpMonitorFlag) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_WARMUP_REQ; // 暖機処理を無視するため、コメントアウト、後でコーディング(2025.11.10yori)
                 }
 
+                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_CMP; // 追加(2025.11.10yori)
                 if(!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_SUCCESS); // 接続に成功したことをPolyWorks側に知らせる(2025.6.9yori)
             }
             else
@@ -1041,14 +1042,14 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::ARM_WARMUP_REQ: // アーム温度監視要求(2025.7.16yori)
-            if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 3 || HwCtrl::m_hVecCnt.m_Sts.m_Warm == 4 ) UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Show); // 3： 暖機未完了、4： 暖気スキップ禁止の場合のみプログレスバー表示(2025.9.8yori)
+            if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 3 || HwCtrl::m_hVecCnt.m_Sts.m_Warm == 4 ) UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Show); // 3:暖機未完了、4:暖気スキップ禁止の場合のみプログレスバー表示(2025.9.8yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_WARMUP_ING;
             break;
 
         case VEC_STEP_SEQ::ARM_WARMUP_ING: // アーム温度監視中(2025.7.17yori)
-            if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 0 ||
-                HwCtrl::m_hVecCnt.m_Sts.m_Warm == 1 ||
-                HwCtrl::m_hVecCnt.m_Sts.m_Warm == 2)
+            if (HwCtrl::m_hVecCnt.m_Sts.m_Warm == 0 ||  // 0:正常
+                HwCtrl::m_hVecCnt.m_Sts.m_Warm == 1 ||  // 1:温度勾配警告
+                HwCtrl::m_hVecCnt.m_Sts.m_Warm == 2)    // 2:温度補正不可能
             {
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_WARMUP_CMP;
             }
