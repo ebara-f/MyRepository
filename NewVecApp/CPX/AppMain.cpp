@@ -1286,7 +1286,9 @@ void AppMain::ThreadProc()
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_ING;
             break;
 
-        case VEC_STEP_SEQ::PROBE_PROPETY_REQ: // PolyWorksへスタイラス直径を送り、表示する。(2025.7.18yori)
+        // PolyWorksへスタイラス直径を送り、表示する。(2025.7.18yori)
+        // PolyWorksからイニシャライズ完了後に要求される。(2025.11.12yori)
+        case VEC_STEP_SEQ::PROBE_PROPETY_REQ:
             ret = HwCtrl::Func51();
             if (ret == 0)
             {
