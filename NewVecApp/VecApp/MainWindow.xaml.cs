@@ -274,6 +274,18 @@ namespace VecApp
             {
 
             }
+            else if (msg == UsrMsg.WM_InitPanel_Setup) // イニシャライズ画面の初期設定(2025.11.12yori)
+            {
+                // 現在表示されているPanelクラスを取得
+                var Content = m_SubWnd01.MainContent.Content;
+
+                // パネルが表示されており(非null)、表示されているパネルが目的のパネル(Panel.Initialize)が表示されているか確認
+                if (Content != null && (Content as PanelBase).Type == Panel.Initialize)
+                {
+                     // ContentがInitializePanelであればキャストしてアクセスする
+                     (Content as InitializePanel).InitPanelSetup();
+                }
+            }
             else if (msg == UsrMsg.WM_InitPanel_Update) // 変更(2025.10.27yori)
             {
                 // 現在表示されているPanelクラスを取得

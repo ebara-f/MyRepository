@@ -32,23 +32,29 @@ namespace VecApp
             InitializeComponent();
             this.DataContext = model;
 
-            // イニシャライズ画面の初期設定(2025.7.15yori) // MainWindow.xaml.csのInitPanelSetupから移動、InitPanelSetupは不要となるため、削除(2025.10.27yori)
+            // イニシャライズ画面の初期設定(2025.10.27yori)
+            // ここは一度だけ呼び出されるため、再イニシャライズする場合はInitPanelSetup()を呼び出す。(2025.11.12yori)
             Status01 sts = new Status01();
             CSH.AppMain.UpDateData01(out sts);
             if ((sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") && sts.no0_fg == 0) // 0軸が無い場合は、0軸無しの画像へ変更し、0番を表示しない。
             {
                 this.ViewModel.ImageSource = "Image/init_machine10.PNG";
 
-                this.ViewModel.Marks = new ObservableCollection<InitializeMarkViewModel>
-                {
-                    new InitializeMarkViewModel { Text = "⓪", Visibility = Visibility.Hidden, X = 430, Y = 365 },
-                    new InitializeMarkViewModel { Text = "①", Visibility = Visibility.Hidden, X = 530, Y = 350 },
-                    new InitializeMarkViewModel { Text = "②", Visibility = Visibility.Hidden, X = 415, Y = 70 },
-                    new InitializeMarkViewModel { Text = "③", Visibility = Visibility.Hidden, X = 285, Y = 30 },
-                    new InitializeMarkViewModel { Text = "④", Visibility = Visibility.Hidden, X = 190, Y = 220 },
-                    new InitializeMarkViewModel { Text = "⑤", Visibility = Visibility.Hidden, X = 320, Y = 275 },
-                    new InitializeMarkViewModel { Text = "⑥", Visibility = Visibility.Hidden, X = 145, Y = 320 },
-                };
+                // new InitializeMarkViewModel...から変更(2025.11.12yori)
+                this.ViewModel.Marks[0].X = 430;
+                this.ViewModel.Marks[0].Y = 365;
+                this.ViewModel.Marks[1].X = 530;
+                this.ViewModel.Marks[1].Y = 350;
+                this.ViewModel.Marks[2].X = 415;
+                this.ViewModel.Marks[2].Y = 70;
+                this.ViewModel.Marks[3].X = 285;
+                this.ViewModel.Marks[3].Y = 30;
+                this.ViewModel.Marks[4].X = 190;
+                this.ViewModel.Marks[4].Y = 220;
+                this.ViewModel.Marks[5].X = 320;
+                this.ViewModel.Marks[5].Y = 275;
+                this.ViewModel.Marks[6].X = 145;
+                this.ViewModel.Marks[6].Y = 320;
 
                 this.ViewModel.ImageSource = "Image/init_machine10.PNG";
                 this.ViewModel.Marks[0].Visibility = Visibility.Hidden;
@@ -71,16 +77,21 @@ namespace VecApp
             {
                 this.ViewModel.ImageSource = "Image/init_V8+VPR81.PNG";
 
-                this.ViewModel.Marks = new ObservableCollection<InitializeMarkViewModel>
-                {
-                    new InitializeMarkViewModel { Text = "⓪", Visibility = Visibility.Hidden, X = 430, Y = 365 },
-                    new InitializeMarkViewModel { Text = "①", Visibility = Visibility.Hidden, X = 530, Y = 350 },
-                    new InitializeMarkViewModel { Text = "②", Visibility = Visibility.Hidden, X = 415, Y = 70 },
-                    new InitializeMarkViewModel { Text = "③", Visibility = Visibility.Hidden, X = 285, Y = 30 },
-                    new InitializeMarkViewModel { Text = "④", Visibility = Visibility.Hidden, X = 190, Y = 220 },
-                    new InitializeMarkViewModel { Text = "⑤", Visibility = Visibility.Hidden, X = 320, Y = 275 },
-                    new InitializeMarkViewModel { Text = "⑥", Visibility = Visibility.Hidden, X = 145, Y = 320 },
-                };
+                // new InitializeMarkViewModel...から変更(2025.11.12yori)
+                this.ViewModel.Marks[0].X = 430;
+                this.ViewModel.Marks[0].Y = 365;
+                this.ViewModel.Marks[1].X = 530;
+                this.ViewModel.Marks[1].Y = 350;
+                this.ViewModel.Marks[2].X = 415;
+                this.ViewModel.Marks[2].Y = 70;
+                this.ViewModel.Marks[3].X = 285;
+                this.ViewModel.Marks[3].Y = 30;
+                this.ViewModel.Marks[4].X = 190;
+                this.ViewModel.Marks[4].Y = 220;
+                this.ViewModel.Marks[5].X = 320;
+                this.ViewModel.Marks[5].Y = 275;
+                this.ViewModel.Marks[6].X = 145;
+                this.ViewModel.Marks[6].Y = 320;
 
                 this.ViewModel.Marks[0].Visibility = Visibility.Visible;
                 this.ViewModel.Marks[1].Visibility = Visibility.Visible;
@@ -102,16 +113,21 @@ namespace VecApp
             {
                 this.ViewModel.ImageSource = "Image/init_V7.png";
 
-                this.ViewModel.Marks = new ObservableCollection<InitializeMarkViewModel>
-                {
-                    new InitializeMarkViewModel { Text = "⓪", Visibility = Visibility.Visible, X = 430, Y = 365 },
-                    new InitializeMarkViewModel { Text = "①", Visibility = Visibility.Visible, X = 500, Y = 315 },
-                    new InitializeMarkViewModel { Text = "②", Visibility = Visibility.Visible, X = 420, Y = 60 },
-                    new InitializeMarkViewModel { Text = "③", Visibility = Visibility.Visible, X = 305, Y = 30 },
-                    new InitializeMarkViewModel { Text = "④", Visibility = Visibility.Visible, X = 250, Y = 190 },
-                    new InitializeMarkViewModel { Text = "⑤", Visibility = Visibility.Visible, X = 340, Y = 245 },
-                    new InitializeMarkViewModel { Text = "⑥", Visibility = Visibility.Visible, X = 180, Y = 290 },
-                };
+                // new InitializeMarkViewModel...から変更(2025.11.12yori)
+                this.ViewModel.Marks[0].X = 430;
+                this.ViewModel.Marks[0].Y = 365;
+                this.ViewModel.Marks[1].X = 500;
+                this.ViewModel.Marks[1].Y = 315;
+                this.ViewModel.Marks[2].X = 420;
+                this.ViewModel.Marks[2].Y = 60;
+                this.ViewModel.Marks[3].X = 305;
+                this.ViewModel.Marks[3].Y = 30;
+                this.ViewModel.Marks[4].X = 250;
+                this.ViewModel.Marks[4].Y = 190;
+                this.ViewModel.Marks[5].X = 340;
+                this.ViewModel.Marks[5].Y = 245;
+                this.ViewModel.Marks[6].X = 180;
+                this.ViewModel.Marks[6].Y = 290;
 
                 this.ViewModel.Marks[0].Visibility = Visibility.Visible;
                 this.ViewModel.Marks[1].Visibility = Visibility.Visible;
@@ -191,6 +207,126 @@ namespace VecApp
                     this.ViewModel.Labels[i].Visibility = Visibility.Visible;
                 }
                 this.Parent.CurrentPanel = Panel.None;
+            }
+        }
+
+        // イニシャライズ画面の初期設定(2025.7.15yori) // MainWindow.xaml.csのInitPanelSetupから移動(2025.11.12yori)
+        public void InitPanelSetup()
+        {
+            Status01 sts = new Status01();
+            CSH.AppMain.UpDateData01(out sts);
+            if ((sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") && sts.no0_fg == 0) // 0軸が無い場合は、0軸無しの画像へ変更し、0番を表示しない。
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    this.ViewModel.ImageSource = "Image/init_machine10.PNG";
+
+                    this.ViewModel.Marks[0].X = 430;
+                    this.ViewModel.Marks[0].Y = 365;
+                    this.ViewModel.Marks[1].X = 530;
+                    this.ViewModel.Marks[1].Y = 350;
+                    this.ViewModel.Marks[2].X = 415;
+                    this.ViewModel.Marks[2].Y = 70;
+                    this.ViewModel.Marks[3].X = 285;
+                    this.ViewModel.Marks[3].Y = 30;
+                    this.ViewModel.Marks[4].X = 190;
+                    this.ViewModel.Marks[4].Y = 220;
+                    this.ViewModel.Marks[5].X = 320;
+                    this.ViewModel.Marks[5].Y = 275;
+                    this.ViewModel.Marks[6].X = 145;
+                    this.ViewModel.Marks[6].Y = 320;
+
+                    this.ViewModel.Marks[0].Visibility = Visibility.Hidden;
+                    this.ViewModel.Marks[1].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[2].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[3].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[4].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[5].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[6].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[0].Visibility = Visibility.Hidden;
+                    this.ViewModel.Labels[1].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[2].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[3].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[4].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[5].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[6].Visibility = Visibility.Visible;
+                });
+            }
+
+            if ((sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") && sts.no0_fg == 1) // 0軸が有る場合は、0軸有りの画像へ変更し、0番を表示する。
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    this.ViewModel.ImageSource = "Image/init_V8+VPR81.PNG";
+
+                    this.ViewModel.Marks[0].X = 430;
+                    this.ViewModel.Marks[0].Y = 365;
+                    this.ViewModel.Marks[1].X = 530;
+                    this.ViewModel.Marks[1].Y = 350;
+                    this.ViewModel.Marks[2].X = 415;
+                    this.ViewModel.Marks[2].Y = 70;
+                    this.ViewModel.Marks[3].X = 285;
+                    this.ViewModel.Marks[3].Y = 30;
+                    this.ViewModel.Marks[4].X = 190;
+                    this.ViewModel.Marks[4].Y = 220;
+                    this.ViewModel.Marks[5].X = 320;
+                    this.ViewModel.Marks[5].Y = 275;
+                    this.ViewModel.Marks[6].X = 145;
+                    this.ViewModel.Marks[6].Y = 320;
+
+                    this.ViewModel.Marks[0].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[1].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[2].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[3].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[4].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[5].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[6].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[0].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[1].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[2].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[3].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[4].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[5].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[6].Visibility = Visibility.Visible;
+                });
+            }
+
+            if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L")
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    this.ViewModel.ImageSource = "Image/init_V7.png";
+
+                    this.ViewModel.Marks[0].X = 430;
+                    this.ViewModel.Marks[0].Y = 365;
+                    this.ViewModel.Marks[1].X = 500;
+                    this.ViewModel.Marks[1].Y = 315;
+                    this.ViewModel.Marks[2].X = 420;
+                    this.ViewModel.Marks[2].Y = 60;
+                    this.ViewModel.Marks[3].X = 305;
+                    this.ViewModel.Marks[3].Y = 30;
+                    this.ViewModel.Marks[4].X = 250;
+                    this.ViewModel.Marks[4].Y = 190;
+                    this.ViewModel.Marks[5].X = 340;
+                    this.ViewModel.Marks[5].Y = 245;
+                    this.ViewModel.Marks[6].X = 180;
+                    this.ViewModel.Marks[6].Y = 290;
+
+                    this.ViewModel.Marks[0].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[1].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[2].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[3].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[4].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[5].Visibility = Visibility.Visible;
+                    this.ViewModel.Marks[6].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[0].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[1].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[2].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[3].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[4].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[5].Visibility = Visibility.Visible;
+                    this.ViewModel.Labels[6].Visibility = Visibility.Visible;
+                });
             }
         }
 
