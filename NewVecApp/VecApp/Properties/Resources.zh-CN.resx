@@ -926,6 +926,15 @@
     <value>補正値作成失敗</value>
   </data>
   <data name="String268" xml:space="preserve">
-    <value />
+    <value>Error</value>
+  </data>
+  <data name="String269" xml:space="preserve">
+    <value>Unable to connect</value>
+  </data>
+  <data name="String270" xml:space="preserve">
+    <value>Communication error</value>
+  </data>
+  <data name="String271" xml:space="preserve">
+    <value>Scanner error</value>
   </data>
 </root>

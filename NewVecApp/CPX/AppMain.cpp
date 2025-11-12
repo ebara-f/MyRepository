@@ -24,7 +24,7 @@
 // xcopy /D /Y /I ..\..\LplQue\Lib64\LplQue.dll ..\_exec\$(Configuration)\
 ////
 #include "UsrMsg.h"
-
+#include "UsrMsgBox.h"  // 2025.11.12 add eba
 #include "CalibComm.h"
 
 //// 追加(2025.5.15yori)
@@ -868,6 +868,7 @@ void AppMain::ThreadProc()
     errno_t err; // 追加(2025.9.26yori)
     wchar_t armtype[16]; // 追加(2025.9.26yori)
     char model[16];// 追加(2025.9.26yori)
+    int     resultMsg = 0;
 
     while( 1 )
     {
@@ -1009,13 +1010,15 @@ void AppMain::ThreadProc()
             else
             {
                 if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_FAILURE); // 接続に失敗したことをPolyWorks側に知らせる(2025.6.9yori)
+                
+                // 接続エラー
+                UsrMsgBox::CallBack(269, 268, 0, 16);
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::START;
-                // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
             }
             break;
 
         case VEC_STEP_SEQ::CONNECT_CMP:
-            ret = HwCtrl::Func09();
+            ret = HwCtrl::Func05(&PosiData);    //ret = HwCtrl::Func09(); 2025.11.12 mod eba
             if (ret == 0)
             {
                 UsrMsg::CallBack(UsrMsg::WM_UpdateData1); // C#側にステータス更新要求を送る 2025.7.2 add eba
@@ -1026,7 +1029,17 @@ void AppMain::ThreadProc()
             }
             else
             {
-                // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 6)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
             }
             break;
 
@@ -1073,7 +1086,16 @@ void AppMain::ThreadProc()
                 }
                 else
                 {
-                    // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
+                    // 通信エラー
+                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                    if (resultMsg == 6)
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                    }
+                    else
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                    }
                 }
             }
 
@@ -1111,7 +1133,16 @@ void AppMain::ThreadProc()
             }
             else
             {
-                // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                if (resultMsg == 6)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
             }   
             break;
 
@@ -1129,6 +1160,19 @@ void AppMain::ThreadProc()
                 {
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Panel_Hide); // イニシャライズ画面非表示
                 }
+                else
+                {
+                    // 通信エラー
+                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                    if (resultMsg == 6)
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                    }
+                    else
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                    }
+                }
             }
             break;
 
@@ -1142,7 +1186,16 @@ void AppMain::ThreadProc()
             }
             else
             {
-                  // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                if (resultMsg == 6)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
             }
             break;
 
@@ -1165,7 +1218,16 @@ void AppMain::ThreadProc()
             }
             else
             {
-                // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                if (resultMsg == 6)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
             }
             break;
 
@@ -1188,7 +1250,16 @@ void AppMain::ThreadProc()
                 }
                 else
                 {
-                    // C#へ通信エラーメッセージを送る必要あり 2025.7.4 eba memo
+                    // 通信エラー
+                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                    if (resultMsg == 6)
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                    }
+                    else
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                    }
                 }
             }
             else // スキャナ接続完了ボタンが押されていれば非接触モードへ変更する。(2025.9.2yori)
@@ -1222,7 +1293,7 @@ void AppMain::ThreadProc()
             }
             else
             {
-                // C#へ通信エラーメッセージを送る必要あり
+                // C#へ通信エラーメッセージは保留(通信コマンドでは無いため)2025.11.12 eba memo
             }
             break;
 
@@ -1236,18 +1307,6 @@ void AppMain::ThreadProc()
         case VEC_STEP_SEQ::SCANNER_SET_CMP: // スキャナパラメータ設定完了(2025.8.10yori)
             break;
 
-      /*  case VEC_STEP_SEQ::INSPECTION_REQ: // 始業前点検(2025.6.11yori)
-            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INSPECTION_ING;
-            UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Btn02); // SubWindow2へプローブ情報を送る。(2025.6.11yori)
-            break;
-
-        case VEC_STEP_SEQ::INSPECTION_ING: // 始業前点検中(2025.6.11yori)
-            break;
-
-        case VEC_STEP_SEQ::INSPECTION_CMP: // 始業前点検終了(2025.6.11yori)
-            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
-            break;
-            */
         case VEC_STEP_SEQ::ALIGNMENT_REQ: // アライメント(2025.6.11yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ALIGNMENT_ING;
             //UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Btn03); // SubWindow2へプローブ情報を送る。(2025.6.11yori)
@@ -1256,6 +1315,19 @@ void AppMain::ThreadProc()
         case VEC_STEP_SEQ::ALIGNMENT_ING: // データ取り込み、計算シーケンス中(2025.6.11yori)
             ret = CalibComm::CntDataInputThread();
             if (ret == 1) UsrMsg::CallBack(UsrMsg::WM_ContactInspectionPanel_MesCallBack);
+            else if (ret == -1)
+            {
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                if (resultMsg == 6)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
+            }
             break;
         case VEC_STEP_SEQ::ALIGNMENT_ING2: // データと転送、表示シーケンス中 2025.9.10 add eba
             UsrMsg::CallBack(UsrMsg::WM_ContactInspectionPanel_ParaOutCallBack);
@@ -1277,6 +1349,19 @@ void AppMain::ThreadProc()
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SELFCHECK_ING2;
                 }
+                else
+                {
+                    // 通信エラー
+                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                    if (resultMsg == 6)
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                    }
+                    else
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                    }
+                }
                 
             }
             UsrMsg::CallBack(UsrMsg::WM_ContactSelfJudgmentPanel_Update); // C#側に有接触自己診断更新要求(2025.10.3yori)
@@ -1289,6 +1374,19 @@ void AppMain::ThreadProc()
                 if (ret == 0)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SELFCHECK_ING;
+                }
+                else
+                {
+                    // 通信エラー
+                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                    if (resultMsg == 6)
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                    }
+                    else
+                    {
+                        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                    }
                 }
             }
             UsrMsg::CallBack(UsrMsg::WM_ContactSelfJudgmentPanel_Update); // C#側に有接触自己診断更新要求
@@ -1340,6 +1438,20 @@ void AppMain::ThreadProc()
                     }
                 }
             }
+            else
+            {
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 6)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
+            }
             break;
 
         case VEC_STEP_SEQ::SCANNER_INIT_REQ:
@@ -1369,7 +1481,12 @@ void AppMain::ThreadProc()
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1非表示(2025.8.22yori)
                     UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn03); // SubWindow3表示(2025.8.22yori)
                 }
-            }            
+            }
+            else
+            {
+                UsrMsgBox::CallBack(271, 268, 0, 16);
+                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+            }
             break;
 
         case VEC_STEP_SEQ::SCANNER_WARMUP_ING:

@@ -1750,11 +1750,20 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   補正値作成成功 に類似しているローカライズされた文字列を検索します。
+        ///   エラー に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String268 {
             get {
                 return ResourceManager.GetString("String268", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   接続できません に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String269 {
+            get {
+                return ResourceManager.GetString("String269", resourceCulture);
             }
         }
         
@@ -1764,6 +1773,24 @@ namespace VecApp.Properties {
         public static string String27 {
             get {
                 return ResourceManager.GetString("String27", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   通信エラー発生 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String270 {
+            get {
+                return ResourceManager.GetString("String270", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   スキャナ説即エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String271 {
+            get {
+                return ResourceManager.GetString("String271", resourceCulture);
             }
         }
         

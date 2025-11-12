@@ -114,7 +114,8 @@ namespace VecApp
             // コールバック関数のセット
             CSH.ErrMsg.SetCB( ShowErr );  // エラー表示
 			CSH.UsrMsg.SetCB( SendMsg );  // Windowsメッセージ送信
-		}
+            CSH.UsrMsgBox.SetCB(UsrMessageBox.ShowCallBack);  // Windowsメッセージ送信
+        }
 
 		/// <summary>
 		/// 終了処理

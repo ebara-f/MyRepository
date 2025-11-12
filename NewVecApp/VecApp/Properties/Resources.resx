@@ -928,6 +928,15 @@
     <value>補正値作成失敗</value>
   </data>
   <data name="String268" xml:space="preserve">
-    <value>補正値作成成功</value>
+    <value>エラー</value>
+  </data>
+  <data name="String269" xml:space="preserve">
+    <value>接続できません</value>
+  </data>
+  <data name="String270" xml:space="preserve">
+    <value>通信エラー発生</value>
+  </data>
+  <data name="String271" xml:space="preserve">
+    <value>スキャナ説即エラー</value>
   </data>
 </root>
