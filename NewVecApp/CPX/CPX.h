@@ -32,6 +32,7 @@ extern "C"{
 
 typedef void (*ER_CBFUNC)( int );
 typedef void (*SM_CBFUNC)( int );
+typedef int (*UMB_CBFUNC)(int, int, int, int);     // 2025.11.12 add eba
 
 // ステータス更新用の構造体
 // 有接触ステータス更新用の構造体(2025.9.1yori)
@@ -244,6 +245,8 @@ CPX_DECLSPEC void WINAPI CPX_ErrMsg_SetCB( ER_CBFUNC );
 CPX_DECLSPEC int  WINAPI CPX_ErrMsg_GetMsg( int, TCHAR*&, int );
 
 CPX_DECLSPEC void WINAPI CPX_UsrMsg_SetCB( SM_CBFUNC );
+
+CPX_DECLSPEC void WINAPI CPX_UsrMsgBox_SetCB(UMB_CBFUNC);   // 2025.11.12 add eba
 
 CPX_DECLSPEC int  WINAPI CPX_AppMain_Init();
 CPX_DECLSPEC int  WINAPI CPX_AppMain_Term();

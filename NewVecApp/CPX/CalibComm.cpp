@@ -320,12 +320,19 @@ int CalibComm::CntDataInputThread(void)
 	int i = 0;
 
 	VecCtEx2 CntData;
-	i = HwCtrl::Func28(&CntData); // 2025.9.2 add eba 
+	ret = HwCtrl::Func28(&CntData); // 2025.9.2 add eba 
 
-	if ((CntData.button & 0x01) && (i == VEC_OK))
+	if (ret == 0)
 	{
-		CalibComm::m_pData.PutData(CntData);
-		ret = 1;
+		if ((CntData.button & 0x01) && (ret == VEC_OK))
+		{
+			CalibComm::m_pData.PutData(CntData);
+			ret = 1;
+		}
+	}
+	else
+	{
+		ret = -1;
 	}
 	
 	return (ret);

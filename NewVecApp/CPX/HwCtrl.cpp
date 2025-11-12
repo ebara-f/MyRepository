@@ -82,9 +82,7 @@ int             HwCtrl::m_PointerCheckLineNo = 1; // ポインタ位置チェッ
 int HwCtrl::Func01()
 {
     int ret = 0;
-
-    timeBeginPeriod(1); // 追加(2025.11.11yori)
-
+//    timeBeginPeriod(1); // 2025.11.11 add eba
     // VECTORONと接続開始
     ret = HwCtrl::m_hVecCnt.VecOpen(20000, NULL);
 
@@ -167,9 +165,7 @@ int HwCtrl::Func04()
 
     // アプリ単体でVECTORONと接続する場合もあるため、
     // PolyWorksへのコマンド送信はここでは行わない(2025.6.9yori)
-
-    timeEndPeriod(1); // 追加(2025.11.11yori)
-
+    //timeEndPeriod(1); // 2025.11.11 add eba
     return ret;
 }
 
