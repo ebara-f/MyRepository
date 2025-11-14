@@ -986,9 +986,12 @@ void AppMain::ThreadProc()
             slp_tm = 100;
             break;
         case VEC_STEP_SEQ::CONNECT_REQ:
+            UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Show);   // test eba
             ret = HwCtrl::Func01(); // 有接触接続
             if (ret == 0)
             {
+                UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Close);   // test eba
+
                 // 接続時にファームウェアからアーム型式を自動変更する。(2025.9.29yori)
                 if (HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR800S") strcpy_s(model, 16, "BK100S"); // VAR800Sは、BK100Sで点検、キャリブを行う。(2025.9.29yori)
                 else strcpy_s(model, 16, HwCtrl::m_hVecCnt.m_Sts.m_Model.c_str());
@@ -1013,6 +1016,7 @@ void AppMain::ThreadProc()
                 
                 // 接続エラー
                 UsrMsgBox::CallBack(269, 268, 0, 16);
+                UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Close);   // test eba
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::START;
             }
             break;

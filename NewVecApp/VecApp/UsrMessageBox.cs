@@ -49,6 +49,7 @@ namespace VecApp
         {
             string text = "";
             string caption = "";
+            int result;
 
             switch (msgID)
             {
@@ -110,8 +111,16 @@ namespace VecApp
                 Top = SystemParameters.WorkArea.Height / 2
             };
             topmostWindow.Show();
+            
+            result = (int)MessageBox.Show(topmostWindow, text, caption, (MessageBoxButton)button, (MessageBoxImage)icon);
 
-            return (int)MessageBox.Show(topmostWindow, text, caption, (MessageBoxButton)button, (MessageBoxImage)icon);
+            topmostWindow.Close();
+            
+            return (result);
+            
+            
+            
+            //return (int)MessageBox.Show(text, caption, (MessageBoxButton)button, (MessageBoxImage)icon);
 
         }
 

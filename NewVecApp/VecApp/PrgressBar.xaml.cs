@@ -36,9 +36,19 @@ namespace VecApp
         public PrgressBar()
         {
             InitializeComponent();
+            this.DataContext = new PrgressBarViewModel();
 
-			// ウィンドウズハンドルの取得
-			m_hWnd = new WindowInteropHelper(this).EnsureHandle();
+            // ウィンドウズハンドルの取得
+            m_hWnd = new WindowInteropHelper(this).EnsureHandle();
+        }
+
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public PrgressBarViewModel ViewModel
+        {
+            get => this.DataContext as PrgressBarViewModel;
         }
 
         /// <summary>

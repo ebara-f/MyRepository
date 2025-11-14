@@ -69,6 +69,7 @@ namespace VecApp
         private DlgPrgBar1 m_DlgPrgBar1 = null;	// 2025.5.30 add eba // プログレスバー追加のため番号追加(2025.7.30yori)
         private DlgPrgBar2 m_DlgPrgBar2 = null;	// 追加(2025.7.30yori)
         private DlgPrgBar3 m_DlgPrgBar3 = null;	// 追加(2025.7.31yori)
+        private PrgressBar m_PrgressBar = null;	// 2025.11.14 add eba
 
         /// <summary>
         /// 初期化処理
@@ -110,6 +111,7 @@ namespace VecApp
             //m_DlgPrgBar2 = new DlgPrgBar2(); // 追加(2025.7.30yori)
             //
             m_DlgPrgBar3 = new DlgPrgBar3(); // 追加(2025.7.31yori) 2025.8.29 これがあるとプロセスが残る
+            m_PrgressBar = new PrgressBar(); // 2025.11.14 add eba
 
             // コールバック関数のセット
             CSH.ErrMsg.SetCB( ShowErr );  // エラー表示
@@ -165,6 +167,13 @@ namespace VecApp
                 m_DlgPrgBar3.m_AllowClose = true;   // 2025.09.04  Modify by GeomLab
                 m_DlgPrgBar3.Dispose();
                 m_DlgPrgBar3.Close();
+            }
+
+            if (m_PrgressBar != null)   // 2025.11.14 add eba
+            {
+                m_PrgressBar.m_AllowClose = true;
+                m_PrgressBar.Dispose();
+                m_PrgressBar.Close();
             }
 
         }
@@ -305,11 +314,16 @@ namespace VecApp
             }
             else if (msg == UsrMsg.WM_DlgPrgBar1_Show)
             {
-                CmdDlgPrgBar1(); // プログレスバー1表示(2025.7.17yori)
+                //CmdDlgPrgBar1(); // プログレスバー1表示(2025.7.17yori)
+                m_PrgressBar.ViewModel.TitleText = "ぷろぐれすばー";
+                m_PrgressBar.ViewModel.Text1 = "処理ちゅうデス！";
+                CmdPrgressBar(); // test eba
             }
             else if (msg == UsrMsg.WM_DlgPrgBar1_Close)
             {
-                m_DlgPrgBar1.Hide();// プログレスバー1非表示(2025.7.17yori)
+                //m_DlgPrgBar1.Hide();// プログレスバー1非表示(2025.7.17yori)
+                //m_DlgPrgBar1.Dispose();// プログレスバー1非表示(2025.7.17yori)
+                m_PrgressBar.Hide();    // test eba                        // 
             }
             else if (msg == UsrMsg.WM_DlgPrgBar2_Show)
             {
@@ -605,7 +619,7 @@ namespace VecApp
                 UIPlus.ForceActive(m_DlgPrgBar1.m_hWnd);
             }
         }
-
+        
         /// <summary>
         /// DlgPrgBar2の表示(2025.7.30yori)
         /// </summary>
@@ -652,6 +666,32 @@ namespace VecApp
                 // Window のアクティブ化
                 //UIPlus.ForceActive(m_DlgPrgBar2.m_hWnd);
                 UIPlus.ForceActive(m_DlgPrgBar3.m_hWnd);    // 2025.09.04 修正 by GeomLab
+            }
+        }
+
+
+        /// <summary>
+        /// DlgPrgBar1の表示
+        /// プログレスバー追加のため番号追加(2025.7.30yori)
+        /// </summary>
+        private void CmdPrgressBar()
+        {
+            // 2025.09.04  Add by GeomLab 
+            if (m_PrgressBar == null) return;
+
+            if (m_PrgressBar.IsVisible == false)
+            {
+                m_PrgressBar.Owner = Application.Current.MainWindow;
+                m_PrgressBar.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                // モーダレスダイアログとして表示
+                m_PrgressBar.Show();
+
+                // モーダルダイアログとして表示
+                //m_DlgPrgBar1.ShowDialog();
+
+                // Window のアクティブ化
+                UIPlus.ForceActive(m_PrgressBar.m_hWnd);
             }
         }
 
