@@ -2308,14 +2308,13 @@ void HwCtrl::GetScanDataThread_new()
             else {
                 m_ScanDataStepCounter = NCON_MEAS_SEQ::BREAK;			// 中断
             }
-            // 削除予定(不要？)(2025.11.5yori)
-            //if (iMeasType == TDS_MEASTYPE_NORMAL)						//追加(2022.4.7yori)
-            //{
-            //    if (m_b_Button_ConnectFlag == false)                    // アプリから接続した場合は、PolyWorksへデータを送信しない。(2025.7.3yori)
-            //    {
-            //        TriggerButtonAndMeasDataStatusTransfer(true, false); //トリガボタンを押した。ダミースキャンデータ(2021.11.25yori)
-            //    }
-            //}
+            if (iMeasType == TDS_MEASTYPE_NORMAL)						//追加(2022.4.7yori)
+            {
+                if (m_b_Button_ConnectFlag == false)                    // アプリから接続した場合は、PolyWorksへデータを送信しない。(2025.7.3yori)
+                {
+                    TriggerButtonAndMeasDataStatusTransfer(true, false); //トリガボタンを押した。ダミースキャンデータ(2021.11.25yori)
+                }
+            }
             m_bmeasfg = false;
             break;
         case NCON_MEAS_SEQ::DUMMY_MEAS:

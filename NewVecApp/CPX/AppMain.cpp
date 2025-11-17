@@ -887,6 +887,7 @@ void AppMain::ThreadProc()
             switch (cmd_no) {
             case APP_CMD::CONNECT:
                 if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::START ||
+                    HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::DISCONNECT_CMP || // DISCONNECT_CMPは切断完了のため追加(2025.11.17yori)
                     HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::FINISH) // 切断後に接続できるようDISCONNECT_CMP→FINISHへ変更(2025.11.7yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
