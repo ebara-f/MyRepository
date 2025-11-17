@@ -56,10 +56,15 @@ namespace VecApp
             ViewModel.ProbeName.Insert(19, sts.pobe_name19);
             ViewModel.ProbeName.Insert(20, sts.pobe_name20);
             ViewModel.ProbeNameIndex = sts.probe_id;
-            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") ProbeName.IsEnabled = false; // V8の場合、ComboBoxを選択できないよう無効化する。
+            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
+            {
+                ProbeName.IsEnabled = false; // V8の場合、ComboBoxを選択できないよう無効化する。
+                this.ViewModel.ProbeImage = "Image/standardProbeV8.PNG"; // 追加(2025.11.14yori)
+            }
             ViewModel.ProbeId = sts.probe_id.ToString();
             ViewModel.ProbeAngle = sts.stylus_angle[sts.probe_id].ToString("F2");
             ViewModel.ProbeBallDiameter = sts.dia.ToString("F2");
+            if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L") this.ViewModel.ProbeImage = "Image/standardProbeV7.PNG"; // 追加(2025.10.27yori)
         }
 
         private InspectionViewModel ViewModel

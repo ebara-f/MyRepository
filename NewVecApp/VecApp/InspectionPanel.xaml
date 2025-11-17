@@ -83,7 +83,8 @@
 
                             <!-- 仮の画像スペース -->
                             <Border Background="#DDD" Margin="489,0,0,57" CornerRadius="6" Grid.ColumnSpan="2">
-                                <Image Source="Image/standardProbeV8.PNG"
+                                <!-- Image Source="Image/standardProbeV8.PNG"から"{Binding ProbeImage}"へ変更(2025.11.14yori)-->
+                                <Image Source="{Binding ProbeImage}"
                                    Stretch="Uniform"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center" Height="145"/>

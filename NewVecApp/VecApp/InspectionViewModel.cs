@@ -93,6 +93,21 @@ namespace VecApp
             }
         }
 
+        // 追加(2025.11.14yori)
+        private string _probeImage;
+        public string ProbeImage
+        {
+            get => _probeImage;
+            set
+            {
+                if (_probeImage != value)
+                {
+                    _probeImage = value;
+                    OnPropertyChanged(nameof(ProbeImage));
+                }
+            }
+        }
+
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

@@ -104,8 +104,8 @@ namespace VecApp
         {
             // C++で実装した処理を実行
             CSH.Grp02.Cmd03();  // 追加(2025.6.11yori)
-
-            this.CurrentPanel = Panel.ContactProperty;
+            //this.CurrentPanel = Panel.ContactProperty;
+            this.CurrentPanel = Panel.ContactInspection; // 上記から変更(2025.11.14yori)
         }
 
         private void Click_Btn04(object sender, RoutedEventArgs e)

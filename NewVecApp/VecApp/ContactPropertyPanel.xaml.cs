@@ -58,7 +58,7 @@ namespace VecApp
         }
         private void Click_CloseBtn(object sender, RoutedEventArgs e)
         {
-
+            Parent.CurrentPanel = Panel.None; // 追加(2025.11.14yori)
         }
         private void Click_ContactBtn(object sender, RoutedEventArgs e)
         {
