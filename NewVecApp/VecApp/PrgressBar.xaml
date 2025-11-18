@@ -19,6 +19,6 @@
 
         <TextBlock   Grid.Row="0" Margin="10,4" VerticalAlignment="Center" Text="{Binding Text1, UpdateSourceTrigger=PropertyChanged}" />
         <ProgressBar Grid.Row="1" Margin="10,4" Height="25" IsIndeterminate="true" Background="White" Foreground="Orange" x:Name="Prg"/>
-        <Button      Grid.Row="2" Width="120" Height="30" Content="Cancel!" Click="Button_Click_Btn01" Background="DarkGray" Foreground="Black"/>
+        <!--<Button      Grid.Row="2" Width="120" Height="30" Content="Cancel!" Click="Button_Click_Btn01" Background="DarkGray" Foreground="Black"/>-->
     </Grid>
 </Window>

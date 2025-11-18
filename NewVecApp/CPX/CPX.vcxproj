@@ -132,6 +132,7 @@
     <ClInclude Include="Grp02.h" />
     <ClInclude Include="Grp03.h" />
     <ClInclude Include="HwCtrl.h" />
+    <ClInclude Include="ProgBar.h" />
     <ClInclude Include="SharedMemory.h" />
     <ClInclude Include="UsrMsg.h" />
     <ClInclude Include="UsrMsgBox.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="CPX_Grp01.cpp" />
     <ClCompile Include="CPX_Grp02.cpp" />
     <ClCompile Include="CPX_Grp03.cpp" />
+    <ClCompile Include="CPX_ProgBar.cpp" />
     <ClCompile Include="CPX_UsrMsg.cpp" />
     <ClCompile Include="CPX_UsrMsgBox.cpp" />
     <ClCompile Include="dllmain.cpp" />
@@ -163,6 +165,7 @@
     <ClCompile Include="Grp02.cpp" />
     <ClCompile Include="Grp03.cpp" />
     <ClCompile Include="HwCtrl.cpp" />
+    <ClCompile Include="ProgBar.cpp" />
     <ClCompile Include="UsrMsg.cpp" />
     <ClCompile Include="UsrMsgBox.cpp" />
     <ClCompile Include="VecCnt.cpp" />

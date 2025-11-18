@@ -1795,6 +1795,15 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   接続中 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String272 {
+            get {
+                return ResourceManager.GetString("String272", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   球直径(球ゲージ)： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String28 {

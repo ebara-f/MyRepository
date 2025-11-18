@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 
 namespace VecApp
@@ -97,22 +98,6 @@ namespace VecApp
         }
 
         /// <summary>
-        /// ダイアログを表示し処理を開始する
-        /// </summary>
-        public void ShowAndStart( Window owner = null )
-        {
-            if ( owner != null )  this.Owner = owner;
-        
-            this.Show();        // ウィンドウの表示
-            this.Activate();    // ウィンドウをフォアグラウンドへ
-
-            if ( m_IsRunning == false ) {
-                _ = StartAsync();  // _ は「使わない変数」を表す特別な記号
-                                   // 戻り値は無視する
-            }
-        }
-
-        /// <summary>
         /// 処理開始（二重起動不可）
         /// </summary>
         public async Task StartAsync()
@@ -201,6 +186,29 @@ namespace VecApp
                 m_CTS.Cancel();
                 m_CTS.Dispose();
                 m_CTS = null;
+            }
+        }
+
+
+        // 
+        public const int PGB_ID1 = 1;
+
+
+        public void SetId(int id)
+        {
+            switch (id)
+            {
+
+
+                case PGB_ID1:
+                    ViewModel.Text1 = VecApp.Properties.Resources.String272;
+                    ViewModel.TitleText = VecApp.Properties.Resources.String272;
+                    break;
+
+                default:
+                    ViewModel.Text1 = "No Message";
+                    ViewModel.TitleText = "No Message";
+                    break;
             }
         }
     }
