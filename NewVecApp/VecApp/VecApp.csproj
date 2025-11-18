@@ -7,6 +7,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>K-CMM</AssemblyName>
     <ApplicationIcon>K-CMM.ico</ApplicationIcon>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <Copyright>Copyright 2025 Kosaka Laboratory Ltd.</Copyright>
+    <Company>Kosaka Laboratory Ltd.</Company>
+    <Description>K-CMM</Description>
+    <Version>1.0.0.1</Version>
+	<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <PackageId>$(AssemblyName)</PackageId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -82,7 +82,7 @@ int             HwCtrl::m_PointerCheckLineNo = 1; // ポインタ位置チェッ
 int HwCtrl::Func01()
 {
     int ret = 0;
-//    timeBeginPeriod(1); // 2025.11.11 add eba
+    timeBeginPeriod(1); // 2025.11.11 add eba // スキャンデータ取得遅延対応のため、コメントアウト解除(2025.11.18yori)
     // VECTORONと接続開始
     ret = HwCtrl::m_hVecCnt.VecOpen(20000, NULL);
 
@@ -165,7 +165,7 @@ int HwCtrl::Func04()
 
     // アプリ単体でVECTORONと接続する場合もあるため、
     // PolyWorksへのコマンド送信はここでは行わない(2025.6.9yori)
-    //timeEndPeriod(1); // 2025.11.11 add eba
+    timeEndPeriod(1); // 2025.11.11 add eba // スキャンデータ取得遅延対応のため、コメントアウト解除(2025.11.18yori)
     return ret;
 }
 
@@ -2308,6 +2308,7 @@ void HwCtrl::GetScanDataThread_new()
             else {
                 m_ScanDataStepCounter = NCON_MEAS_SEQ::BREAK;			// 中断
             }
+            // コメントアウト解除(2025.11.18yori)
             if (iMeasType == TDS_MEASTYPE_NORMAL)						//追加(2022.4.7yori)
             {
                 if (m_b_Button_ConnectFlag == false)                    // アプリから接続した場合は、PolyWorksへデータを送信しない。(2025.7.3yori)

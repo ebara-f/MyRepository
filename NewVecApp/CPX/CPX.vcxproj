@@ -106,6 +106,8 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <Version>
+      </Version>
     </Link>
     <PostBuildEvent>
       <Command> xcopy /D /Y /I $(OutDir)$(TargetName).dll ..\_exec\$(Configuration)\
@@ -132,6 +134,7 @@
     <ClInclude Include="Grp02.h" />
     <ClInclude Include="Grp03.h" />
     <ClInclude Include="HwCtrl.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SharedMemory.h" />
     <ClInclude Include="UsrMsg.h" />
     <ClInclude Include="UsrMsgBox.h" />
@@ -166,6 +169,9 @@
     <ClCompile Include="UsrMsg.cpp" />
     <ClCompile Include="UsrMsgBox.cpp" />
     <ClCompile Include="VecCnt.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CPX1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
