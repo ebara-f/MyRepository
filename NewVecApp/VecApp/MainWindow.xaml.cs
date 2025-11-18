@@ -69,7 +69,7 @@ namespace VecApp
         private DlgPrgBar1 m_DlgPrgBar1 = null;	// 2025.5.30 add eba // プログレスバー追加のため番号追加(2025.7.30yori)
         private DlgPrgBar2 m_DlgPrgBar2 = null;	// 追加(2025.7.30yori)
         private DlgPrgBar3 m_DlgPrgBar3 = null;	// 追加(2025.7.31yori)
-        private PrgressBar m_PrgressBar = null;	// 2025.11.14 add eba
+        private static PrgressBar m_PrgressBar = null;	// 2025.11.14 add eba
 
         /// <summary>
         /// 初期化処理
@@ -116,7 +116,9 @@ namespace VecApp
             // コールバック関数のセット
             CSH.ErrMsg.SetCB( ShowErr );  // エラー表示
 			CSH.UsrMsg.SetCB( SendMsg );  // Windowsメッセージ送信
-            CSH.UsrMsgBox.SetCB(UsrMessageBox.ShowCallBack);  // Windowsメッセージ送信
+            CSH.UsrMsgBox.SetCB(UsrMessageBox.ShowCallBack);  // エラーダイアログ表示
+            CSH.ProgBar.SetCB1(PrgressBarShiwTopMost);  // プログレスバーShow
+            CSH.ProgBar.SetCB2(PrgressBarHide);  // プログレスバーHide
         }
 
 		/// <summary>
@@ -314,16 +316,12 @@ namespace VecApp
             }
             else if (msg == UsrMsg.WM_DlgPrgBar1_Show)
             {
-                //CmdDlgPrgBar1(); // プログレスバー1表示(2025.7.17yori)
-                m_PrgressBar.ViewModel.TitleText = "ぷろぐれすばー";
-                m_PrgressBar.ViewModel.Text1 = "処理ちゅうデス！";
-                CmdPrgressBar(); // test eba
+                CmdDlgPrgBar1(); // プログレスバー1表示(2025.7.17yori)
             }
             else if (msg == UsrMsg.WM_DlgPrgBar1_Close)
             {
-                //m_DlgPrgBar1.Hide();// プログレスバー1非表示(2025.7.17yori)
+                m_DlgPrgBar1.Hide();// プログレスバー1非表示(2025.7.17yori)
                 //m_DlgPrgBar1.Dispose();// プログレスバー1非表示(2025.7.17yori)
-                m_PrgressBar.Hide();    // test eba                        // 
             }
             else if (msg == UsrMsg.WM_DlgPrgBar2_Show)
             {
@@ -778,5 +776,59 @@ namespace VecApp
 				UsrMsg.SendMsg( m_hWnd, msgID );
 			}
 		}
+
+
+        /// <summary>
+        /// DlgPrgBar1の表示
+        /// プログレスバー追加のため番号追加(2025.7.30yori)
+        /// </summary>
+        public static void PrgressBarShiwTopMost(int id)
+        {
+            // 現在がUIスレッドでなければDispatcher経由で実行
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(() => PrgressBarShiwTopMost(id));
+            }
+
+            if (m_PrgressBar == null) return;
+
+            if (m_PrgressBar.IsVisible == false)
+            {
+                m_PrgressBar.SetId(id);
+
+                m_PrgressBar.Owner = Application.Current.MainWindow;
+                m_PrgressBar.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                // モーダレスダイアログとして表示
+                m_PrgressBar.Show();
+
+                // モーダルダイアログとして表示
+                //m_DlgPrgBar1.ShowDialog();
+
+                // Window のアクティブ化
+                UIPlus.ForceActive(m_PrgressBar.m_hWnd);
+            }
+        }
+
+        /// <summary>
+        /// DlgPrgBar1の表示
+        /// プログレスバー追加のため番号追加(2025.7.30yori)
+        /// </summary>
+        public static void PrgressBarHide()
+        {
+            // 現在がUIスレッドでなければDispatcher経由で実行
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(() => PrgressBarHide());
+            }
+
+            if (m_PrgressBar == null) return;
+
+            if (m_PrgressBar.IsVisible == true)
+            {
+                m_PrgressBar.Hide();
+            }
+        }
+
     }
 }

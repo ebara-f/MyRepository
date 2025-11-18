@@ -25,6 +25,7 @@
 ////
 #include "UsrMsg.h"
 #include "UsrMsgBox.h"  // 2025.11.12 add eba
+#include "ProgBar.h"  // 2025.11.18 add eba
 #include "CalibComm.h"
 
 //// 追加(2025.5.15yori)
@@ -987,11 +988,11 @@ void AppMain::ThreadProc()
             slp_tm = 100;
             break;
         case VEC_STEP_SEQ::CONNECT_REQ:
-            UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Show);   // test eba
+            ProgBar::CallBackShow(1);   // test eba
             ret = HwCtrl::Func01(); // 有接触接続
             if (ret == 0)
             {
-                UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Close);   // test eba
+                ProgBar::CallBackHide();     // test eba
 
                 // 接続時にファームウェアからアーム型式を自動変更する。(2025.9.29yori)
                 if (HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR800S") strcpy_s(model, 16, "BK100S"); // VAR800Sは、BK100Sで点検、キャリブを行う。(2025.9.29yori)
@@ -1016,8 +1017,8 @@ void AppMain::ThreadProc()
                 if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_FAILURE); // 接続に失敗したことをPolyWorks側に知らせる(2025.6.9yori)
                 
                 // 接続エラー
-                UsrMsgBox::CallBack(269, 268, 0, 16);
-                UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar1_Close);   // test eba
+                ProgBar::CallBackHide();     // test eba
+                resultMsg = UsrMsgBox::CallBack(269, 268, 0, 16);
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::START;
             }
             break;
