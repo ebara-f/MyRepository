@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>K-CMM</AssemblyName>
+    <ApplicationIcon>K-CMM.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -52,6 +53,10 @@
     <None Remove="Image\VPR81.PNG" />
     <None Remove="Image\VST28-0.1.PNG" />
     <None Remove="Image\VST29-φ6.PNG" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="K-CMM.ico" />
   </ItemGroup>
 
   <ItemGroup>
