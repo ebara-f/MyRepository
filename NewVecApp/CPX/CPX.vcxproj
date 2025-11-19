@@ -173,9 +173,6 @@
     <ClCompile Include="UsrMsgBox.cpp" />
     <ClCompile Include="VecCnt.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="CPX1.rc" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

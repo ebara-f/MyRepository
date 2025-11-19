@@ -988,11 +988,11 @@ void AppMain::ThreadProc()
             slp_tm = 100;
             break;
         case VEC_STEP_SEQ::CONNECT_REQ:
-            ProgBar::CallBackShow(1);   // test eba
+            //ProgBar::CallBackShow(1);   // test eba // コメントアウト(2025.11.19yori)
             ret = HwCtrl::Func01(); // 有接触接続
             if (ret == 0)
             {
-                ProgBar::CallBackHide();     // test eba
+                //ProgBar::CallBackHide();     // test eba // コメントアウト(2025.11.19yori)
 
                 // 接続時にファームウェアからアーム型式を自動変更する。(2025.9.29yori)
                 if (HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR800S") strcpy_s(model, 16, "BK100S"); // VAR800Sは、BK100Sで点検、キャリブを行う。(2025.9.29yori)
@@ -1010,7 +1010,11 @@ void AppMain::ThreadProc()
                 }
 
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_CMP; // 追加(2025.11.10yori)
-                if(!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_SUCCESS); // 接続に成功したことをPolyWorks側に知らせる(2025.6.9yori)
+                if (!HwCtrl::m_b_Button_ConnectFlag)
+                {
+                    HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_SUCCESS); // 接続に成功したことをPolyWorks側に知らせる(2025.6.9yori)
+                    UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Connected); // C#側にPolyWorks側から接続したことを知らせる。(2025.11.19yori)
+                }
             }
             else
             {
@@ -1590,7 +1594,11 @@ void AppMain::ThreadProc()
             ret |= HwCtrl::Func04(); // 有接触切断
             if (ret == 0)
             {
-                if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_SUCCESS); // 切断に成功したことをPolyWorks側に知らせる(2025.6.9yori)
+                if (!HwCtrl::m_b_Button_ConnectFlag)
+                {
+                    HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_SUCCESS); // 切断に成功したことをPolyWorks側に知らせる(2025.6.9yori)
+                    UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Disconnected); // C#側にPolyWorks側から切断したことを知らせる。(2025.11.19yori)
+                }
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_CMP;
             }
             else

@@ -41,7 +41,7 @@ namespace VecApp
         public SubWindow1()
         {
             InitializeComponent();
-            //this.DataContext = new SubWindow1_ViewModel(); // コメントアウト(2025.8.12yori)
+            this.DataContext = new SubWindow1_ViewModel(); // コメントアウト(2025.8.12yori) // コメントアウト解除(2025.11.19yori)
 
             // ウィンドウズハンドルの取得
             //m_hWnd = new WindowInteropHelper(this).EnsureHandle(); // 削除予定(2025.7.28yori)
@@ -61,20 +61,42 @@ namespace VecApp
             }
         }
 
+        // 接続
         private void Click_Btn01(object sender, RoutedEventArgs e)
         {
             // C++で実装した処理を実行
             CSH.Grp01.Cmd01();  // 追加(2025.4.28yori)
 
             // this.CurrentPanel = Panel.Initialize; // ここではイニシャライズを実施しない。(2025.7.30yori)
+
+            // 0軸イニシャライズボタン有効無効の機種場合分け追加(2025.11.19yori)
+            Status01 sts = new Status01();
+            CSH.AppMain.UpDateData01(out sts);
+            SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
+            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
+            {
+                vm.IsBtn04Enabled = true;
+                vm.Btn04Opacity = 1.0;
+            }
+            else
+            {
+                vm.IsBtn04Enabled = false;
+                vm.Btn04Opacity = 0.25;
+            }
         }
 
+        // 切断
         private void Click_Btn02(object sender, RoutedEventArgs e)
         {
             // C++で実装した処理を実行
             CSH.Grp01.Cmd04();  // 追加(2025.4.28yori)
+            // 0軸イニシャライズボタンの状態をでデフォルトに戻す。(2025.11.19yori)
+            SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
+            vm.IsBtn04Enabled = true;
+            vm.Btn04Opacity = 1.0;
         }
 
+        // イニシャライズ
         private void Click_Btn03(object sender, RoutedEventArgs e)
         {
             // C++で実装した処理を実行
@@ -82,14 +104,21 @@ namespace VecApp
 
             this.CurrentPanel = Panel.Initialize;
         }
+
+        // 0軸イニシャライズ
         private void Click_Btn04(object sender, RoutedEventArgs e)
         {
-        	// C++で実装した処理を実行
-            CSH.Grp01.Cmd06();  // 追加(2025.6.9yori)
-
-            this.CurrentPanel = Panel._0AxisInitialize;
+            // 機種場合分け追加(2025.11.19yori)
+            Status01 sts = new Status01();
+            CSH.AppMain.UpDateData01(out sts);
+            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
+            {
+                CSH.Grp01.Cmd06();  // 追加(2025.6.9yori)
+                this.CurrentPanel = Panel._0AxisInitialize;
+            }
         }
 
+        // モード切替
         private void Click_Btn05(object sender, RoutedEventArgs e)
         {
             CSH.Grp01.Cmd16();  // 追加(2025.8.12yori)

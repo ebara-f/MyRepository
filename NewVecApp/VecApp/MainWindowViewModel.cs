@@ -199,5 +199,35 @@ namespace VecApp
             Sts01.tempature = new double[7];
 
         }
-	}
+
+        // ボタン1、2、3の有効無効を設定する。(2025.11.19yori)
+        private bool _isBtnEnabled = true; // 初期状態は有効
+        public bool IsBtnEnabled
+        {
+            get { return _isBtnEnabled; }
+            set
+            {
+                if (_isBtnEnabled != value)
+                {
+                    _isBtnEnabled = value;
+                    OnPropertyChanged(nameof(IsBtnEnabled));
+                }
+            }
+        }
+
+        // ボタン1、2、3の不透明度を設定する。(2025.11.19yori)
+        private double _btnOpacity = 1.0; // デフォルトは不透明
+        public double BtnOpacity
+        {
+            get => _btnOpacity;
+            set
+            {
+                if (_btnOpacity != value)
+                {
+                    _btnOpacity = value;
+                    OnPropertyChanged(nameof(BtnOpacity));
+                }
+            }
+        }
+    }
 }

@@ -94,5 +94,8 @@ namespace VecApp
 
         public const int WM_Init0Panel_Setup = WM_USER + 41; // 追加(2025.10.2yori)
         public const int WM_ContactSelfJudgmentPanel_Update = WM_USER + 42; // 追加(2025.10.3yori)
+
+        public static int WM_MainWnd_OtherApp_Connected = WM_USER + 43; // 他アプリ(PolyWorks)から接続した場合(2025.11.19yori)
+        public static int WM_MainWnd_OtherApp_Disconnected = WM_USER + 44; // 他アプリ(PolyWorks)から切断した場合(2025.11.19yori)
     }
 }

@@ -42,17 +42,17 @@ namespace VecApp
 		[DllImport("user32.dll")]
 		private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-		private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			const int GWL_STYLE = -16;
-			const int WS_SYSMENU = 0x80000;
+            const int GWL_STYLE = -16;
+            const int WS_SYSMENU = 0x00080000;
 
-			// SYSMENUを非表示にする
-			var hwnd = new WindowInteropHelper((Window)sender).Handle;
-			SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);	// 2025.4.22 eba del
-		}
+            //SYSMENUを非表示にする
+            var hwnd = new WindowInteropHelper((Window)sender).Handle;
+            //SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU); // 2025.4.22 eba del // 最小化、閉じるボタン有効にするため、コメントアウト(2025.11.19yori)
+        }
 
-		#endregion
+        #endregion
 
         /// <summary>
         /// メンバー変数
@@ -69,7 +69,10 @@ namespace VecApp
         private DlgPrgBar1 m_DlgPrgBar1 = null;	// 2025.5.30 add eba // プログレスバー追加のため番号追加(2025.7.30yori)
         private DlgPrgBar2 m_DlgPrgBar2 = null;	// 追加(2025.7.30yori)
         private DlgPrgBar3 m_DlgPrgBar3 = null;	// 追加(2025.7.31yori)
-        private static PrgressBar m_PrgressBar = null;	// 2025.11.14 add eba
+        private static PrgressBar m_PrgressBar = null;  // 2025.11.14 add eba
+
+        // スタイルを変更するためのインデックス(2025.11.19yori)
+        private const int GWL_STYLE = -16;
 
         /// <summary>
         /// 初期化処理
@@ -78,7 +81,10 @@ namespace VecApp
 		{
 			InitializeComponent();
 
-			this.DataContext = new MainWindowViewModel();
+            // メインウィンドウ起動時に最小化する。(2025.11.19yori)
+            this.WindowState = System.Windows.WindowState.Minimized;
+
+            this.DataContext = new MainWindowViewModel();
 
 			// ウィンドウズハンドルの取得
 			m_hWnd = new WindowInteropHelper(this).EnsureHandle();
@@ -121,10 +127,15 @@ namespace VecApp
             CSH.ProgBar.SetCB2(PrgressBarHide);  // プログレスバーHide
         }
 
-		/// <summary>
-		/// 終了処理
-		/// </summary>
-		protected virtual void Terminate(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MainWindow_SourceInitialized(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 終了処理
+        /// </summary>
+        protected virtual void Terminate(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			// メッセージループをフックする関数を解除
 			HwndSource source = HwndSource.FromHwnd(m_hWnd);
@@ -378,6 +389,18 @@ namespace VecApp
                     // ContentがContactSelfJudgmentPanelであればキャストしてアクセスする
                     (Content as ContactSelfJudgmentPanel).PanelUpdate();
                 }
+            }
+            else if (msg == UsrMsg.WM_MainWnd_OtherApp_Connected) // 追加(2025.11.19yori)
+            {
+                MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+                vm.IsBtnEnabled = false;
+                vm.BtnOpacity = 0.25;
+            }
+            else if (msg == UsrMsg.WM_MainWnd_OtherApp_Disconnected) // 追加(2025.11.19yori)
+            {
+                MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+                vm.IsBtnEnabled = true;
+                vm.BtnOpacity = 1.0;
             }
 
             return IntPtr.Zero;
@@ -709,19 +732,15 @@ namespace VecApp
             //CSH.Grp01.CmdXX(out Tmp1, ref sts1, sts1_count);  // 2025.5.22 add eba test
             CSH.AppMain.UpDateData01(out sts);  // 2025.5.28 add eba test
 
-            // メインデータ更新
-            ValA.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-            ValB.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-
-            MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
-			//vm.A = Tmp1;
-			//vm.B = sts1;
-			vm.MODE = sts.mode;
-			vm.TMP1 = sts.tempature[0];
-
+            // 未使用のため、コメントアウト、削除予定(2025.11.19yori)
+            //MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+            //vm.A = Tmp1;
+            //vm.B = sts1;
+            //vm.MODE = sts.mode;
+            //vm.TMP1 = sts.tempature[0];
             // メイン表示更新
-            ValA.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-            ValB.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+            //ValA.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+            //ValB.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
 
             // プローブ名称とID更新(2025.9.8yori)
             Application.Current.Dispatcher.Invoke(() => // AppMain.cppのスレッドからC#側のGUI操作を行う場合のコード

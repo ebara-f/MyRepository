@@ -26,7 +26,8 @@
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String220}" Click="Click_Btn01" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String221}" Click="Click_Btn02" FontSize="20"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String1}" Click="Click_Btn03" FontSize="20"/>
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String222}" Click="Click_Btn04" FontSize="20"/>
+            <!-- Btn04バインディング追加(2025.11.19yori) -->
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String222}" Click="Click_Btn04" FontSize="20" IsEnabled="{Binding IsBtn04Enabled}" Opacity="{Binding Btn04Opacity}"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String223}" Click="Click_Btn05" FontSize="20"/>
         </StackPanel>
 

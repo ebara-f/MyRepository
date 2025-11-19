@@ -1,0 +1,12 @@
+void sub_180007320(double* pMtx);
+int sub_180008730(double* a1, double a2, double* a3, double* a4, int a5, double a6, double* a7, double* a8, double* a9, double* a10, double* a11, double* a12);
+int sub_180003790(double* a1, double* a2, double* a3, double* a4);
+int sub_1800079F0(double* a1, double* a2, double* a3, double* a4, double* a5, double* a6);
+double sub_180007660(double* a1, double* a2);
+double sub_1800075F0(double* a1, double* a2);
+int sub_1800076C0(double* a1, double* a2, double* a3);
+int sub_180003120(double a1, double* a2, double* a3, double a4, double* a5);
+int sub_180002f60(double* param_1, double* param_2);
+int sub_180007540(double* a1, double* a2, double* a3, double* a4);
+int sub_180007430(double* a1, double* a2, double* a3);
+int sub_1800083C0(double* param_1, double* param_2);
