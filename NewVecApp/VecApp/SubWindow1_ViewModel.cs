@@ -48,5 +48,36 @@ namespace VecApp
         public SubWindow1_ViewModel()
 		{
 		}
-	}
+
+        // 0軸イニシャライズボタンの有効無効を設定する。(2025.11.19yori)
+        private bool _isBtn04Enabled = true; // 初期状態は有効
+
+        public bool IsBtn04Enabled
+        {
+            get { return _isBtn04Enabled; }
+            set
+            {
+                if (_isBtn04Enabled != value)
+                {
+                    _isBtn04Enabled = value;
+                    OnPropertyChanged(nameof(IsBtn04Enabled));
+                }
+            }
+        }
+
+        // 0軸イニシャライズボタンの不透明度を設定する。(2025.11.19yori)
+        private double _btn04Opacity = 1.0; // デフォルトは不透明
+        public double Btn04Opacity
+        {
+            get => _btn04Opacity;
+            set
+            {
+                if (_btn04Opacity != value)
+                {
+                    _btn04Opacity = value;
+                    OnPropertyChanged(nameof(Btn04Opacity));
+                }
+            }
+        }
+    }
 }
