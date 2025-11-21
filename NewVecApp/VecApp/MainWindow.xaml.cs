@@ -259,6 +259,19 @@ namespace VecApp
             }
             else if (msg == UsrMsg.WM_SubWnd01_Btn05)
             {
+                // SubWindow1のボタン無効化(2025.11.20yori)
+                SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
+                m_SubWnd01.DataContext = SubWnd01ViewModel;
+                SubWnd01ViewModel.IsBtn01Enabled = false;
+                SubWnd01ViewModel.IsBtn02Enabled = false;
+                SubWnd01ViewModel.IsBtn03Enabled = false;
+                SubWnd01ViewModel.IsBtn04Enabled = false;
+                SubWnd01ViewModel.IsBtn05Enabled = false;
+                SubWnd01ViewModel.Btn01Opacity = 0.25;
+                SubWnd01ViewModel.Btn02Opacity = 0.25;
+                SubWnd01ViewModel.Btn03Opacity = 0.25;
+                SubWnd01ViewModel.Btn04Opacity = 0.25;
+                SubWnd01ViewModel.Btn05Opacity = 0.25;
                 m_SubWnd01.CurrentPanel = Panel.SensorConnection; // スキャナ接続手順画面表示(2025.9.2yori)
             }
             else if (msg == UsrMsg.WM_SubWnd01_Close)
@@ -415,6 +428,7 @@ namespace VecApp
 			//CmdDlg01();	// 2025.4.23 eba del
 			CmdSubWnd01();  // 2025.4.23 eba add
             m_SubWnd03.ApiScanValue.IsButtonEnabled = true; // アプリ側から接続した場合にスキャナのスタートとリセットボタンを押せるようにする。(2025.9.3yori)
+            m_SubWnd03.ApiScanValue.ButtonOpacity = 1.0; // 追加(2025.11.20yori)
 
             //UpdateData1();	// 2025.5.22 test ebs
         }

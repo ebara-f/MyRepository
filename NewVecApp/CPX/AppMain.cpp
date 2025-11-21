@@ -1479,6 +1479,7 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::SCANNER_INIT_ING:
             //UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar2_Show); // VEC_STEP_SEQ::SCANNER_INIT_REQから移動(2025.9.2yori) // 一時的にコメントアウト、後で調査(2025.10.27yori)
+            if (HwCtrl::Func09() == 0) HwCtrl::m_ProbeIdBeforeScanner = HwCtrl::m_hVecCnt.m_Sts.m_iProbeId; // 非接触モードへ変更する前のプローブID取得(2025.11.20yori)
             ret = HwCtrl::Func14(); // ID0→非接触モードへ変更→スキャナ電源ON→接続→初期化
             if (ret == ERROR_CODE::ERROR_CODE_NONE) // ここで初期化が終わったかチェック
             {
@@ -1553,8 +1554,9 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ: // スキャナ切断処理(2025.9.3yori)
-            HwCtrl::Func76(); // スキャナ電源OFF→スキャナ終了処理→スキャナ測定音ON
+            HwCtrl::Func76(); // スキャナ終了前のモード取得→スキャナ電源OFF→スキャナ終了処理→スキャナ測定音ON
             HwCtrl::Func08(); //有接触モードへ変更
+            if(HwCtrl::Func09() == 0) HwCtrl::Func50(HwCtrl::m_ProbeIdBeforeScanner, HwCtrl::m_hVecCnt.m_Sts.m_dia); // 非接触モードへ切り替える前のプローブIDへ戻す。(2025.11.20yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_DISCONNECT_CMP;
             break;
 

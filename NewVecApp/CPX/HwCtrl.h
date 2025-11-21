@@ -24,6 +24,7 @@
 
 #define SEMAPHORE_VEC_STEP_SEQ_NAME	L"SEMAPHORE_VEC_STEP_SEQ"	// 2025.5.27 add eba
 #define PROBE_SET_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\probeset.ini" // 追加(2025.10.24yori)
+#define SCANNER_INFO_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\scannerinfo.ini" // 追加(2025.11.21yori)
 
 class HwCtrl
 {
@@ -105,6 +106,8 @@ public:
     static int Func74(const TCHAR* armmodel); // 追加(2025.8.31yori)
     static int Func75(); // 追加(2025.9.1yori)
     static BOOL Func76(); // 追加(2025.9.3yori)
+    static void GetIniScanMode(int* mode); // 追加(2025.11.21yori)
+    static void WriteIniScanMode(int mode); // 追加(2025.11.21yori)
     static CVecCnt m_hVecCnt;
 
     static int pbid_chg_old_fg; // プローブID の変更があったことを知らせる一つ前のフラグ(2025.9.8yori)
@@ -116,6 +119,8 @@ public:
     static bool m_ScannerConnectBtnFg; // スキャナ暖機完了ボタンフラグ(2025.9.2yori)
     static bool	m_MaintModeFlag; // メンテナンスモードフラグ(2025.10.6yori)
     static bool	m_ScannerSettingCloseFlag; // 非接触測定メニュー閉じるボタンフラグ(2025.11.11yori)
+
+    static int	m_ProbeIdBeforeScanner; // 非接触へ切り替える前のプローブID(2025.11.20yori)
 
     static HANDLE m_hGetScanDataThread;
     static void GetScanDataThread_new(); // スキャンデータ取得レッド

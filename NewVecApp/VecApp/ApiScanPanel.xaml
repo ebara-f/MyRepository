@@ -728,10 +728,11 @@
             <StackPanel Orientation="Horizontal" Margin="0,40,0,0">
                 <!-- x:Name="SartStopButton"追加(2025.8.12yori) -->
                 <!-- IsEnabled="{Binding IsButtonEnabled}"追加(2025.9.3yori) -->
+                <!-- Opacity="{Binding ButtonOpacity}"追加(2025.11.20yori) -->
                 <Button x:Name="SartStopButton" Content="{x:Static res:Resources.String188}" Margin="5,0,0,0" Click="Click_StartBtn" 
-                        Style="{StaticResource PanelStartButton3Style}" Width="90" Height="40" IsEnabled="{Binding IsButtonEnabled}"/>
+                        Style="{StaticResource PanelStartButton3Style}" Width="90" Height="40" IsEnabled="{Binding IsButtonEnabled}" Opacity="{Binding ButtonOpacity}"/>
                 <Button Content="{x:Static res:Resources.String189}" Margin="10,0,0,0" Click="Click_ResetBtn"
-                        Style="{StaticResource PanelInitialValueButton2Style}" Width="90" Height="40" IsEnabled="{Binding IsButtonEnabled}"/>
+                        Style="{StaticResource PanelInitialValueButton2Style}" Width="90" Height="40" IsEnabled="{Binding IsButtonEnabled}" Opacity="{Binding ButtonOpacity}"/>
             </StackPanel>
             <!-- カラーマップ、オートメッシンング、表示ボタンを非表示(2025.8.10yori) -->
                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0">

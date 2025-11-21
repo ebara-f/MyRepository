@@ -21,7 +21,8 @@
             <TextBlock Text="{x:Static res:Resources.String226}" FontSize="20" FontWeight="Bold" Margin="20,20,0,10" Foreground="White" />
 
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String227}" Click="Click_Btn01" FontSize="20"/>
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String72}" Click="Click_Btn02" FontSize="20"/>
+            <!-- 非接触自己診断作成のため、無効化(2025.11.20yori) -->
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String72}" Click="Click_Btn02" FontSize="20" IsEnabled="False" Opacity="0.25"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String65}" Click="Click_Btn03" FontSize="20"/>
         </StackPanel>
 

@@ -90,8 +90,7 @@ namespace VecApp
             }
         }
 
-        //// 追加(2025.9.3yori)
-        // Buttonの有効無効を設定する。
+        // Buttonの有効無効を設定する。(2025.9.3yori)
         private bool _isButtonEnabled = false; // 初期状態は無効
 
         public bool IsButtonEnabled
@@ -106,7 +105,22 @@ namespace VecApp
                 }
             }
         }
-        ////
+
+        // Buttonの不透明度を設定する。(2025.11.20yori)
+        private double _buttonOpacity = 0.25; // デフォルトは不透明度：0.25
+
+        public double ButtonOpacity
+        {
+            get { return _buttonOpacity; }
+            set
+            {
+                if (_buttonOpacity != value)
+                {
+                    _buttonOpacity = value;
+                    OnPropertyChanged(nameof(ButtonOpacity));
+                }
+            }
+        }
 
         private ObservableCollection<TreeItem> CreateTreeItems()
         {

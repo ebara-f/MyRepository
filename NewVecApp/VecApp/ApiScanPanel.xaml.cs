@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -203,6 +204,13 @@ namespace VecApp
                 Item7.Options3.Insert(1, "中");
                 Item7.Options3.Insert(2, "高");
                 Item7.OptionIndex3 = sts.power;
+            }
+
+            // 補間(Xピッチ)(2025.11.21yori)
+            var Item8 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Interpolation");
+            if (Item8?.SlideText7 != null)
+            {
+                Item8.SlideSwitch7 = false;
             }
 
             // 角度マスク(2025.8.24yori)
@@ -500,7 +508,7 @@ namespace VecApp
 
                     // 補間(Xピッチ)
                     var Item8 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Interpolation");
-                    if (Item8?.Options3 != null)
+                    if (Item8?.SlideText7 != null) // 誤記(Options3)修正(2025.11.21yori)
                     {
                         Item8.SlideSwitchValue7 = 0;
                     }

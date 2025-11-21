@@ -53,6 +53,7 @@ bool	        HwCtrl::m_ScannerWarmUpMonitorCancelFlag = false; // 追加(2025.8.
 bool            HwCtrl::m_ScannerConnectBtnFg = false; // 追加(2025.9.2yori)
 bool            HwCtrl::m_MaintModeFlag = false; // 追加(2025.10.6yori)
 bool            HwCtrl::m_ScannerSettingCloseFlag = false; // 追加(2025.11.11yori)
+int             HwCtrl::m_ProbeIdBeforeScanner = 2; // 追加(2025.11.20yori)
 unsigned short  HwCtrl::m_BrightSlice[5] = { 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0 }; // 輝度スライス(2025.8.25yori)
 unsigned short  HwCtrl::m_SensSlice[5] = { 0x0CCC, 0x04B0, 0x0CCC, 0x0CCC, 0x0CCC }; // 感度スライス(2025.8.25yori)
 double          HwCtrl::m_Angle = 70.0; // 角度マスク(2025.8.25yori)
@@ -423,6 +424,7 @@ int HwCtrl::Func15()
     ERROR_CODE ErrorCode = ERROR_CODE::ERROR_CODE_NONE;
     char address[4][8], subnet_dummy[4][8], gateway_dummy[4][8], dns_dummy[4][8]; // 追加(2025.8.28yori)
     DWORD d_address; // 追加(2025.8.28yori)
+    int mode = TDS_MEASMODE_E; // 追加(2025.11.21yori)
 
     // INIファイルを出力するフォルダーのパスを設定
     TdsVecSetIniFilePath("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles");
@@ -451,7 +453,8 @@ int HwCtrl::Func15()
         bFg = TdsVecBufferClear(); // スキャナバッファクリア
         if ( bFg )
         {
-            TdsVecChangeMode(TDS_MEASMODE_E);
+            GetIniScanMode(&mode); // INIファイルに保存された測定モード取得(2025.11.21yori)
+            TdsVecChangeMode(mode); // TDS_MEASMODE_EからINIファイルに保存された測定モードに変更(2025.11.21yori)
             int     iXSize = 0;
             double	dXPitch = 0.0;
             int		iMeasMode = Func34(); // 変更(2025.8.12yori)
@@ -2108,7 +2111,7 @@ int HwCtrl::Func75()
 /***********************************************************************
 
     コマンド75
-    スキャナ電源OFF→スキャナ終了処理→スキャナ測定音ON
+    スキャナ終了前のモード取得→スキャナ電源OFF→スキャナ終了処理→スキャナ測定音ON
     追加(2025.9.3yori)
 
 ***********************************************************************/
@@ -2117,11 +2120,47 @@ BOOL HwCtrl::Func76()
 {
     BOOL fg = FALSE;
 
+    WriteIniScanMode(Func34()); // INIファイルに測定モード書き込み(2025.11.21yori)
     fg = TdsVecScannerPowerOff();
     TdsVecMeasExit();
     fg |= WritePrivateProfileString(TEXT("Buzzer"), TEXT("0"), TEXT("1"), TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\TDSUser.ini"));
 
     return fg;
+}
+
+
+
+/***********************************************************************
+
+    GetIniScanMode
+    INIファイルからスキャナの測定モードを取得する。
+    追加(2025.11.21yori)
+
+***********************************************************************/
+
+void HwCtrl::GetIniScanMode(int* mode)
+{
+    wchar_t wc_mode[8];
+    GetPrivateProfileString(TEXT("MODE"), TEXT("current"), TEXT("4"), wc_mode, 8, SCANNER_INFO_INI);
+    WritePrivateProfileString(TEXT("MODE"), TEXT("current"), wc_mode, SCANNER_INFO_INI);
+    *mode = _wtoi(wc_mode);
+}
+
+
+
+/***********************************************************************
+
+    WriteIniScanMode
+    INIファイルにスキャナの測定モードを書き込む。
+    追加(2025.11.21yori)
+
+***********************************************************************/
+
+void HwCtrl::WriteIniScanMode(int mode)
+{
+    wchar_t wc_mode[8];
+    swprintf(wc_mode, 8, L"%d", mode);
+    WritePrivateProfileString(TEXT("MODE"), TEXT("current"), wc_mode, SCANNER_INFO_INI);
 }
 
 

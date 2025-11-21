@@ -22,13 +22,12 @@
         <!-- 左側メニュー -->
         <StackPanel Background="#2C3E50" VerticalAlignment="Stretch">
             <TextBlock Text="{x:Static res:Resources.String219}" FontSize="20" FontWeight="Bold" Margin="20,20,0,10" Foreground="White" />
-
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String220}" Click="Click_Btn01" FontSize="20"/>
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String221}" Click="Click_Btn02" FontSize="20"/>
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String1}" Click="Click_Btn03" FontSize="20"/>
-            <!-- Btn04バインディング追加(2025.11.19yori) -->
+            <!-- Buttonバインディング追加(2025.11.20yori) -->
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String220}" Click="Click_Btn01" FontSize="20" IsEnabled="{Binding IsBtn01Enabled}" Opacity="{Binding Btn01Opacity}"/>
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String221}" Click="Click_Btn02" FontSize="20" IsEnabled="{Binding IsBtn02Enabled}" Opacity="{Binding Btn02Opacity}"/>
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String1}" Click="Click_Btn03" FontSize="20" IsEnabled="{Binding IsBtn03Enabled}" Opacity="{Binding Btn03Opacity}"/>
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String222}" Click="Click_Btn04" FontSize="20" IsEnabled="{Binding IsBtn04Enabled}" Opacity="{Binding Btn04Opacity}"/>
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String223}" Click="Click_Btn05" FontSize="20"/>
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String223}" Click="Click_Btn05" FontSize="20" IsEnabled="{Binding IsBtn05Enabled}" Opacity="{Binding Btn05Opacity}"/>
         </StackPanel>
 
         <!-- 右側：メインパネル -->
