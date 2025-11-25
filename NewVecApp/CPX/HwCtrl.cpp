@@ -424,7 +424,10 @@ int HwCtrl::Func15()
     ERROR_CODE ErrorCode = ERROR_CODE::ERROR_CODE_NONE;
     char address[4][8], subnet_dummy[4][8], gateway_dummy[4][8], dns_dummy[4][8]; // 追加(2025.8.28yori)
     DWORD d_address; // 追加(2025.8.28yori)
-    int mode = TDS_MEASMODE_E; // 追加(2025.11.21yori)
+    int mode = TDS_MEASMODE_E; // Eモード(2025.11.25yori)
+    int sens = TDS_SIMPLESENS_0; // Normal(2025.11.25yori)
+    int power = TDS_GUIDEPOWER_1; // 中(2025.11.25yori)
+    int interp = TDS_INTERPOLATIONX_NONE; // 補間なし(2025.11.25yori)
 
     // INIファイルを出力するフォルダーのパスを設定
     TdsVecSetIniFilePath("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles");
@@ -453,12 +456,15 @@ int HwCtrl::Func15()
         bFg = TdsVecBufferClear(); // スキャナバッファクリア
         if ( bFg )
         {
-            GetIniScanMode(&mode); // INIファイルに保存された測定モード取得(2025.11.21yori)
-            TdsVecChangeMode(mode); // TDS_MEASMODE_EからINIファイルに保存された測定モードに変更(2025.11.21yori)
-            int     iXSize = 0;
-            double	dXPitch = 0.0;
-            int		iMeasMode = Func34(); // 変更(2025.8.12yori)
-            TdsVecSetInterpolationX(TDS_INTERPOLATIONX_NONE); //補間なしに設定
+            GetIniScanPara(&mode, &power, &interp); // INIファイルに保存された測定モード取得(2025.11.25yori)
+            GetIniScanSens(&sens); // INIファイルに保存された測定モード取得(2025.11.25yori)
+            Func61(mode); // TDS_MEASMODE_EからINIファイルに保存されたパラメータに変更(2025.11.25yori)
+            Func62(sens); // 感度をINIファイルに保存されたパラメータに変更(2025.11.25yori)
+            Func63(power); // ガイドレーザーパワーをINIファイルに保存されたパラメータに変更(2025.11.25yori)
+            Func64(interp); // TDS_INTERPOLATIONX_NONEからINIファイルに保存されたパラメータに変更(2025.11.25yori)
+            //int     iXSize = 0; // 不要？削除予定(2025.11.25yori)
+            //double	dXPitch = 0.0; // 不要？削除予定(2025.11.25yori)
+            //int		iMeasMode = Func34(); // 変更(2025.8.12yori) // 不要？削除予定(2025.11.25yori)
         }
         else
         {
@@ -1794,6 +1800,7 @@ BOOL HwCtrl::Func61(int scanmode)
     コマンド62
     感度変更
     追加(2025.8.21yori)
+    感度取得関数が無いため、直前で変更した感度をINIファイルに保存(2025.11.25yori))
 
 ***********************************************************************/
 
@@ -1802,6 +1809,7 @@ BOOL HwCtrl::Func62(int sens)
     BOOL fg = FALSE;
 
     fg = TdsVecChangeSimpleSens(sens);
+    WriteIniScanSens(sens);
 
     return fg;
 }
@@ -2111,7 +2119,7 @@ int HwCtrl::Func75()
 /***********************************************************************
 
     コマンド75
-    スキャナ終了前のモード取得→スキャナ電源OFF→スキャナ終了処理→スキャナ測定音ON
+    スキャナ終了前のパラメータ取得→スキャナ電源OFF→スキャナ終了処理→スキャナ測定音ON
     追加(2025.9.3yori)
 
 ***********************************************************************/
@@ -2119,8 +2127,15 @@ int HwCtrl::Func75()
 BOOL HwCtrl::Func76()
 {
     BOOL fg = FALSE;
+    int sens;  // 追加(2025.11.25yori)
+    int power; // 追加(2025.11.25yori)
+    int interp; // 追加(2025.11.25yori)
 
-    WriteIniScanMode(Func34()); // INIファイルに測定モード書き込み(2025.11.21yori)
+    GetIniScanSens(&sens); // 感度取得(2025.11.25yori)
+    Func39(&power); // ガイドレーザーのパワーを取得(2025.11.25yori)
+    Func40(&interp); // X点間補間の設定を取得(2025.11.25yori)
+    WriteIniScanPara(Func34(), power, interp); // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
+    WriteIniScanSens(sens); // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
     fg = TdsVecScannerPowerOff();
     TdsVecMeasExit();
     fg |= WritePrivateProfileString(TEXT("Buzzer"), TEXT("0"), TEXT("1"), TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\TDSUser.ini"));
@@ -2132,35 +2147,80 @@ BOOL HwCtrl::Func76()
 
 /***********************************************************************
 
-    GetIniScanMode
-    INIファイルからスキャナの測定モードを取得する。
-    追加(2025.11.21yori)
+    GetIniScanPara
+    INIファイルからスキャナのパラメータを取得する。
+    追加(2025.11.25yori)
 
 ***********************************************************************/
 
-void HwCtrl::GetIniScanMode(int* mode)
+void HwCtrl::GetIniScanPara(int* mode, int* power, int* interp)
 {
-    wchar_t wc_mode[8];
-    GetPrivateProfileString(TEXT("MODE"), TEXT("current"), TEXT("4"), wc_mode, 8, SCANNER_INFO_INI);
-    WritePrivateProfileString(TEXT("MODE"), TEXT("current"), wc_mode, SCANNER_INFO_INI);
-    *mode = _wtoi(wc_mode);
+    wchar_t wc_para[8];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("mode"), TEXT("4"), wc_para, 8, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("mode"), wc_para, SCANNER_PARA_INI);
+    *mode = _wtoi(wc_para);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("power"), TEXT("1"), wc_para, 8, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("power"), wc_para, SCANNER_PARA_INI);
+    *power = _wtoi(wc_para);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("interp"), TEXT("0"), wc_para, 8, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("interp"), wc_para, SCANNER_PARA_INI);
+    *interp = _wtoi(wc_para);
 }
 
 
 
 /***********************************************************************
 
-    WriteIniScanMode
-    INIファイルにスキャナの測定モードを書き込む。
-    追加(2025.11.21yori)
+    GetIniScanSens
+    INIファイルからスキャナの感度を取得する。
+    追加(2025.11.25yori)
 
 ***********************************************************************/
 
-void HwCtrl::WriteIniScanMode(int mode)
+void HwCtrl::GetIniScanSens(int* sens)
 {
-    wchar_t wc_mode[8];
-    swprintf(wc_mode, 8, L"%d", mode);
-    WritePrivateProfileString(TEXT("MODE"), TEXT("current"), wc_mode, SCANNER_INFO_INI);
+    wchar_t wc_para[8];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens"), TEXT("0"), wc_para, 8, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens"), wc_para, SCANNER_PARA_INI);
+    *sens = _wtoi(wc_para);
+}
+
+
+
+/***********************************************************************
+
+    WriteIniScanPara
+    INIファイルにスキャナのパラメータを書き込む。
+    追加(2025.11.25yori)
+
+***********************************************************************/
+
+void HwCtrl::WriteIniScanPara(int mode, int power, int interp)
+{
+    wchar_t wc_para[8];
+    swprintf(wc_para, 8, L"%d", mode);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("mode"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 8, L"%d", power);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("power"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 8, L"%d", interp);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("interp"), wc_para, SCANNER_PARA_INI);
+}
+
+
+
+/***********************************************************************
+
+    WriteIniScanSens
+    INIファイルにスキャナの感度を書き込む。
+    追加(2025.11.25yori)
+
+***********************************************************************/
+
+void HwCtrl::WriteIniScanSens(int sens)
+{
+    wchar_t wc_para[8];
+    swprintf(wc_para, 8, L"%d", sens);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens"), wc_para, SCANNER_PARA_INI);
 }
 
 

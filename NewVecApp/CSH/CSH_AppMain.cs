@@ -149,6 +149,7 @@ namespace CSH
         public string sens_name3; // 感度名称(2025.6.23yori)、char→stringへ変更(2025.8.14yori)
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 50)]
         public string sens_name4; // 感度名称(2025.6.23yori)、char→stringへ変更(2025.8.14yori)
+        public int sens; // 感度(2025.11.25yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6 * 3 * 2)]
         public int[] use; // 距離マスク使用の有無(1=使用する/0=使用しない)(2025.6.20yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6 * 3 * 2)]

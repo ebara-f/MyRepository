@@ -61,11 +61,11 @@ namespace VecApp
                 if (sts.sens_use[2] == 1) Item1.Options.Insert(2, sts.sens_name2);
                 if (sts.sens_use[3] == 1) Item1.Options.Insert(3, sts.sens_name3);
                 if (sts.sens_use[4] == 1) Item1.Options.Insert(4, sts.sens_name4);
-                Item1.SelectedOption = "Normal";
+                Item1.OptionIndex1 = sts.sens; // Item1.SelectedOption = "Normal";からスキャナに設定されている感度を表示する。(2025.11.25yori)
             }
 
-                // 距離マスク(2025.8.22yori) // Item4→Item3へ変更(ViewModelの番号と合わせる。)(2025.8.26yori)
-                var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
+            // 距離マスク(2025.8.22yori) // Item4→Item3へ変更(ViewModelの番号と合わせる。)(2025.8.26yori)
+            var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
             if (Item3?.IsChecked1 != null) // 追加(2025.8.26yori)
             {
                 switch (sts.mode)
@@ -210,7 +210,9 @@ namespace VecApp
             var Item8 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Interpolation");
             if (Item8?.SlideText7 != null)
             {
-                Item8.SlideSwitch7 = false;
+                // スキャナに設定されている補間を表示する。(2025.11.25yori)
+                if (sts.xpitch_onoff == 0) Item8.SlideSwitch7 = false;
+                if (sts.xpitch_onoff == 1) Item8.SlideSwitch7 = true;
             }
 
             // 角度マスク(2025.8.24yori)

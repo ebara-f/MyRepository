@@ -81,6 +81,7 @@ typedef struct Status02
     double pitch[10]; // 点間ピッチ間引き(2025.8.11yori)
     int sens_use[5]; // 感度の有効無効(2025.6.23yori)
     char sens_name[5][50]; // 感度名称(2025.6.23yori)
+    int sens; // 感度(2025.11.25yori)
     int	dist_use[6][3][2]; // 距離マスク使用の有無(1=使用する/0=使用しない)(2025.6.20yori)
     double dist_data[6][3][2]; // 距離マスク設定値(2025.6.20yori)
     unsigned short brightslice[5]; // 輝度スライス(2025.6.20yori)

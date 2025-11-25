@@ -376,6 +376,7 @@ int AppMain::UpDateData02(STATUS02* sts)
 
     // 感度取得
     HwCtrl::Func35(sts->sens_use, sts->sens_name);
+    HwCtrl::GetIniScanSens(&sts->sens); // 現在の感度取得(2025.11.25yori)
 
     // 距離マスク取得
     fg = HwCtrl::Func36();

@@ -24,7 +24,7 @@
 
 #define SEMAPHORE_VEC_STEP_SEQ_NAME	L"SEMAPHORE_VEC_STEP_SEQ"	// 2025.5.27 add eba
 #define PROBE_SET_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\probeset.ini" // 追加(2025.10.24yori)
-#define SCANNER_INFO_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\scannerinfo.ini" // 追加(2025.11.21yori)
+#define SCANNER_PARA_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\scanpara.ini" // 追加(2025.11.25yori)
 
 class HwCtrl
 {
@@ -106,8 +106,10 @@ public:
     static int Func74(const TCHAR* armmodel); // 追加(2025.8.31yori)
     static int Func75(); // 追加(2025.9.1yori)
     static BOOL Func76(); // 追加(2025.9.3yori)
-    static void GetIniScanMode(int* mode); // 追加(2025.11.21yori)
-    static void WriteIniScanMode(int mode); // 追加(2025.11.21yori)
+    static void GetIniScanPara(int* mode, int* power, int* interp); // 追加(2025.11.25yori)
+    static void GetIniScanSens(int* sens); // 追加(2025.11.25yori)
+    static void WriteIniScanPara(int mode, int power, int interp); // 追加(2025.11.25yori)
+    static void WriteIniScanSens(int sens); // 追加(2025.11.25yori)
     static CVecCnt m_hVecCnt;
 
     static int pbid_chg_old_fg; // プローブID の変更があったことを知らせる一つ前のフラグ(2025.9.8yori)
@@ -150,7 +152,7 @@ public:
     static int m_iSn;                               // スキャナNo等 0でのみ使用
     static int m_iSw;
     static int m_ScanShotNo;                        // ショットNo
-    static bool m_bReadThreadStopFlag;		        //読出しスレッド停止フラグ
+    static bool m_bReadThreadStopFlag;		        // 読出しスレッド停止フラグ
     static bool EndFg;
     static const double INVALID_CHECK;              // 無効値判断値 (無効値は999999.0 floatデータのため
     static unsigned short m_BrightSlice[5];         // 輝度スライス(2025.8.25yori)
