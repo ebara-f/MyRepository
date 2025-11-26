@@ -963,7 +963,7 @@ BOOL HwCtrl::Func32()
     wcscat_s(s_para, &net[1][0]);
     wcscat_s(s_para, &net[2][0]);
     wcscat_s(s_para, &net[3][0]);
-    WritePrivateProfileString(TEXT("Scanner"), TEXT("IP_Address"), s_para, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    WritePrivateProfileString(TEXT("Scanner"), TEXT("IP_Address"), s_para, NETWORK_SET_INI);
 
     // サブネットマスク
     memset(net, 0, sizeof(net));
@@ -983,7 +983,7 @@ BOOL HwCtrl::Func32()
     wcscat_s(s_para, &net[1][0]);
     wcscat_s(s_para, &net[2][0]);
     wcscat_s(s_para, &net[3][0]);
-    WritePrivateProfileString(TEXT("Scanner"), TEXT("Subnet_Mask"), s_para, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    WritePrivateProfileString(TEXT("Scanner"), TEXT("Subnet_Mask"), s_para, NETWORK_SET_INI);
 
     // デフォルトゲイトウェイ
     memset(net, 0, sizeof(net));
@@ -1003,7 +1003,7 @@ BOOL HwCtrl::Func32()
     wcscat_s(s_para, &net[1][0]);
     wcscat_s(s_para, &net[2][0]);
     wcscat_s(s_para, &net[3][0]);
-    WritePrivateProfileString(TEXT("Scanner"), TEXT("Default_Gateway"), s_para, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    WritePrivateProfileString(TEXT("Scanner"), TEXT("Default_Gateway"), s_para, NETWORK_SET_INI);
 
     // DNSサーバー
     memset(net, 0, sizeof(net));
@@ -1023,7 +1023,7 @@ BOOL HwCtrl::Func32()
     wcscat_s(s_para, &net[1][0]);
     wcscat_s(s_para, &net[2][0]);
     wcscat_s(s_para, &net[3][0]);
-    WritePrivateProfileString(TEXT("Scanner"), TEXT("DNS_Server"), s_para, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    WritePrivateProfileString(TEXT("Scanner"), TEXT("DNS_Server"), s_para, NETWORK_SET_INI);
 
     return fg;
 }
@@ -1054,7 +1054,8 @@ void HwCtrl::Func33(char address[4][8], char subnet[4][8], char gateway[4][8], c
     memset(c_network, 0, sizeof(c_network)); // 追加(2025.8.29yori)
 
     // IPアドレス
-    GetPrivateProfileString(TEXT("Scanner"), TEXT("IP_Address"), TEXT("192.168.10.200"), w_network, size, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    GetPrivateProfileString(TEXT("Scanner"), TEXT("IP_Address"), TEXT("192.168.10.200"), w_network, size, NETWORK_SET_INI);
+    WritePrivateProfileString(TEXT("Scanner"), TEXT("IP_Address"), w_network, NETWORK_SET_INI); // 追加、INIファイルがない場合は、新規作成(2025.11.26yori)
     err = wcstombs_s(&converted, c_network, 32, w_network, _TRUNCATE); // wcstombs_sを使ってwchar_tからcharへ変換(2025.8.29yori)
     for (i = 0; i < 4; i++)
     {
@@ -1074,7 +1075,8 @@ void HwCtrl::Func33(char address[4][8], char subnet[4][8], char gateway[4][8], c
     k = 0;
     memset(w_network, 0, sizeof(w_network));
     memset(c_network, 0, sizeof(c_network)); // 追加(2025.8.29yori)
-    GetPrivateProfileString(TEXT("Scanner"), TEXT("Subnet_Mask"), TEXT("255.255.255.0"), w_network, size, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    GetPrivateProfileString(TEXT("Scanner"), TEXT("Subnet_Mask"), TEXT("255.255.255.0"), w_network, size, NETWORK_SET_INI);
+    WritePrivateProfileString(TEXT("Scanner"), TEXT("Subnet_Mask"), w_network, NETWORK_SET_INI); // 追加(2025.11.26yori)
     err = wcstombs_s(&converted, c_network, 32, w_network, _TRUNCATE); // wcstombs_sを使ってwchar_tからcharへ変換(2025.8.29yori)
     for (i = 0; i < 4; i++)
     {
@@ -1094,7 +1096,8 @@ void HwCtrl::Func33(char address[4][8], char subnet[4][8], char gateway[4][8], c
     k = 0;
     memset(w_network, 0, sizeof(w_network));
     memset(c_network, 0, sizeof(c_network)); // 追加(2025.8.29yori)
-    GetPrivateProfileString(TEXT("Scanner"), TEXT("Default_Gateway"), TEXT("192.168.10.1"), w_network, size, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    GetPrivateProfileString(TEXT("Scanner"), TEXT("Default_Gateway"), TEXT("192.168.10.1"), w_network, size, NETWORK_SET_INI);
+    WritePrivateProfileString(TEXT("Scanner"), TEXT("Default_Gateway"), w_network, NETWORK_SET_INI); // 追加(2025.11.26yori)
     err = wcstombs_s(&converted, c_network, 32, w_network, _TRUNCATE); // wcstombs_sを使ってwchar_tからcharへ変換(2025.8.29yori)
     for (i = 0; i < 4; i++)
     {
@@ -1114,7 +1117,8 @@ void HwCtrl::Func33(char address[4][8], char subnet[4][8], char gateway[4][8], c
     k = 0;
     memset(w_network, 0, sizeof(w_network));
     memset(c_network, 0, sizeof(c_network)); // 追加(2025.8.29yori)
-    GetPrivateProfileString(TEXT("Scanner"), TEXT("DNS_Server"), TEXT("0.0.0.0"), w_network, size, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    GetPrivateProfileString(TEXT("Scanner"), TEXT("DNS_Server"), TEXT("0.0.0.0"), w_network, size, NETWORK_SET_INI);
+    WritePrivateProfileString(TEXT("Scanner"), TEXT("DNS_Server"), w_network, NETWORK_SET_INI); // 追加(2025.11.26yori)
     err = wcstombs_s(&converted, c_network, 32, w_network, _TRUNCATE); // wcstombs_sを使ってwchar_tからcharへ変換(2025.8.29yori)
     for (i = 0; i < 4; i++)
     {
@@ -2066,8 +2070,8 @@ int HwCtrl::Func73()
     }
     err = mbstowcs_s(&converted, address, 32, m_hVecCnt.m_Sts.m_Address, _TRUNCATE);
 
-    WritePrivateProfileString(TEXT("LAN"), TEXT("VECADDR"), address, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\veccom.ini"));
-    WritePrivateProfileString(TEXT("Arm"), TEXT("IP_Address"), address, TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini"));
+    WritePrivateProfileString(TEXT("LAN"), TEXT("VECADDR"), address, VECCOM_INI);
+    WritePrivateProfileString(TEXT("Arm"), TEXT("IP_Address"), address, NETWORK_SET_INI);
 
     return ret;
 }

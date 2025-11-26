@@ -25,6 +25,8 @@
 #define SEMAPHORE_VEC_STEP_SEQ_NAME	L"SEMAPHORE_VEC_STEP_SEQ"	// 2025.5.27 add eba
 #define PROBE_SET_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\probeset.ini" // 追加(2025.10.24yori)
 #define SCANNER_PARA_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\scanpara.ini" // 追加(2025.11.25yori)
+#define NETWORK_SET_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini" // 追加(2025.11.26yori)
+#define VECCOM_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\veccom.ini" // 追加(2025.11.26yori)
 
 class HwCtrl
 {

@@ -1479,6 +1479,7 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_INIT_ING:
+            UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // VEC_STEP_SEQ::SCANNER_WARMUP_CMPから移動、接続完了ボタンを押したら、SubWindwow1を閉じる。(2025.11.25yori)
             //UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar2_Show); // VEC_STEP_SEQ::SCANNER_INIT_REQから移動(2025.9.2yori) // 一時的にコメントアウト、後で調査(2025.10.27yori)
             if (HwCtrl::Func09() == 0) HwCtrl::m_ProbeIdBeforeScanner = HwCtrl::m_hVecCnt.m_Sts.m_iProbeId; // 非接触モードへ変更する前のプローブID取得(2025.11.20yori)
             ret = HwCtrl::Func14(); // ID0→非接触モードへ変更→スキャナ電源ON→接続→初期化
@@ -1514,7 +1515,7 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::SCANNER_WARMUP_CMP: // 暖機監視終了(2025.8.22yori)
             UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar3_Close); // 暖機監視プログレスバー非表示(2025.7.29yori) // VEC_STEP_SEQ::SCANNER_WARMUP_INGから移動(2025.8.22yori)
-            UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1非表示(2025.6.10yori) // VEC_STEP_SEQ::SCANNER_INIT_CMPから移動し、修正(2025.8.21yori)
+            //UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1非表示(2025.6.10yori) // VEC_STEP_SEQ::SCANNER_INIT_CMPから移動し、修正(2025.8.21yori) // コメントアウト(2025.11.25yori)
             if (HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn03); // アプリから接続した場合は、SubWindow3を表示する。(2025.6.10yori) // VEC_STEP_SEQ::SCANNER_INIT_CMPから移動し、修正(2025.8.21yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_INIT_CMP;
             break;
