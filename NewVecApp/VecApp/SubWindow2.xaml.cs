@@ -74,6 +74,8 @@ namespace VecApp
 
         public ArmNetworkSettingViewModel ArmNetworkSettingValue = new ArmNetworkSettingViewModel();
 
+        public ScannerAlignmentViewModel ScannerAlignmentValue = new ScannerAlignmentViewModel();
+
         public SubWindow2()
         {
             InitializeComponent();
@@ -98,14 +100,15 @@ namespace VecApp
             CSH.Grp02.Cmd02();  // 追加(2025.6.11yori)
 
             this.CurrentPanel = Panel.Inspection;
+            this.InspectionValue.Title = VecApp.Properties.Resources.String16; // 追加(2025.12.2yori)
         }
 
         private void Click_Btn03(object sender, RoutedEventArgs e)
         {
-            // C++で実装した処理を実行
-            CSH.Grp02.Cmd03();  // 追加(2025.6.11yori)
             //this.CurrentPanel = Panel.ContactProperty;
-            this.CurrentPanel = Panel.ContactInspection; // 上記から変更(2025.11.14yori)
+            //this.CurrentPanel = Panel.ContactInspection; // 上記から変更(2025.11.14yori)
+            this.CurrentPanel = Panel.Inspection; // 上記から変更(2025.12.2yori)
+            this.InspectionValue.Title = VecApp.Properties.Resources.String225; // 追加(2025.12.2yori)
         }
 
         private void Click_Btn04(object sender, RoutedEventArgs e)
@@ -182,6 +185,9 @@ namespace VecApp
                             break;
                         case Panel.ArmNetworkSetting:
                             MainContent.Content = new ArmNetworkSettingPanel(this, ArmNetworkSettingValue);
+                            break;
+                        case Panel.ScannerAlignment: // 追加(2025.12.3yori)
+                            MainContent.Content = new ScannerAlignmentPanel(this, ScannerAlignmentValue);
                             break;
                         default:
                             Debug.Assert(false);

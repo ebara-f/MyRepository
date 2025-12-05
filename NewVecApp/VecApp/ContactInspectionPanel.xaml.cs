@@ -73,7 +73,6 @@ namespace VecApp
 
         public void MesCallBack()
         {
-
             CSH.Grp02.ContactInspectionPanelMesCallBack(ref this.ViewModel.CalibMseBox);
             this.ViewModel.ImageSource = this.ViewModel.CalibMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibMseBox.mes;

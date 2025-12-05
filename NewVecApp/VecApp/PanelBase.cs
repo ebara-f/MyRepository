@@ -27,6 +27,7 @@ namespace VecApp
         ApiScan,
         NonContactSelfJudgment,
         SensorNetworkSetting,
+        ScannerAlignment, // 追加(2025.12.3yori)
     }
 
     /// <summary>

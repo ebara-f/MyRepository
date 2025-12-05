@@ -92,6 +92,12 @@
     <ClInclude Include="ProgBar.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="CalibScannerMakeMatrix.h">
+      <Filter>ヘッダー ファイル\Calib</Filter>
+    </ClInclude>
+    <ClInclude Include="CalibScannerFull.h">
+      <Filter>ヘッダー ファイル\Calib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -183,6 +189,12 @@
     </ClCompile>
     <ClCompile Include="ProgBar.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibScannerMakeMatrix.cpp">
+      <Filter>ソース ファイル\Calib</Filter>
+    </ClCompile>
+    <ClCompile Include="CalibScannerFull.cpp">
+      <Filter>ソース ファイル\Calib</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

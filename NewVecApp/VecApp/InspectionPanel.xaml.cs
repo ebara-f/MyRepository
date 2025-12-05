@@ -34,28 +34,28 @@ namespace VecApp
             Status01 sts = new Status01();
             CSH.AppMain.UpDateData01(out sts);
             ViewModel.ProbeName.Clear();
-            ViewModel.ProbeName.Insert(0, sts.pobe_name0);
-            ViewModel.ProbeName.Insert(1, sts.pobe_name1);
-            ViewModel.ProbeName.Insert(2, sts.pobe_name2);
-            ViewModel.ProbeName.Insert(3, sts.pobe_name3);
-            ViewModel.ProbeName.Insert(4, sts.pobe_name4);
-            ViewModel.ProbeName.Insert(5, sts.pobe_name5);
-            ViewModel.ProbeName.Insert(6, sts.pobe_name6);
-            ViewModel.ProbeName.Insert(7, sts.pobe_name7);
-            ViewModel.ProbeName.Insert(8, sts.pobe_name8);
-            ViewModel.ProbeName.Insert(9, sts.pobe_name9);
-            ViewModel.ProbeName.Insert(10, sts.pobe_name10);
-            ViewModel.ProbeName.Insert(11, sts.pobe_name11);
-            ViewModel.ProbeName.Insert(12, sts.pobe_name12);
-            ViewModel.ProbeName.Insert(13, sts.pobe_name13);
-            ViewModel.ProbeName.Insert(14, sts.pobe_name14);
-            ViewModel.ProbeName.Insert(15, sts.pobe_name15);
-            ViewModel.ProbeName.Insert(16, sts.pobe_name16);
-            ViewModel.ProbeName.Insert(17, sts.pobe_name17);
-            ViewModel.ProbeName.Insert(18, sts.pobe_name18);
-            ViewModel.ProbeName.Insert(19, sts.pobe_name19);
-            ViewModel.ProbeName.Insert(20, sts.pobe_name20);
-            ViewModel.ProbeNameIndex = sts.probe_id;
+            //ViewModel.ProbeName.Insert(0, sts.pobe_name0); // スキャナは表示しない。(2025.12.2yori)
+            ViewModel.ProbeName.Insert(0, sts.pobe_name1);
+            ViewModel.ProbeName.Insert(1, sts.pobe_name2);
+            ViewModel.ProbeName.Insert(2, sts.pobe_name3);
+            ViewModel.ProbeName.Insert(3, sts.pobe_name4);
+            ViewModel.ProbeName.Insert(4, sts.pobe_name5);
+            ViewModel.ProbeName.Insert(5, sts.pobe_name6);
+            ViewModel.ProbeName.Insert(6, sts.pobe_name7);
+            ViewModel.ProbeName.Insert(7, sts.pobe_name8);
+            ViewModel.ProbeName.Insert(8, sts.pobe_name9);
+            ViewModel.ProbeName.Insert(9, sts.pobe_name10);
+            ViewModel.ProbeName.Insert(10, sts.pobe_name11);
+            ViewModel.ProbeName.Insert(11, sts.pobe_name12);
+            ViewModel.ProbeName.Insert(12, sts.pobe_name13);
+            ViewModel.ProbeName.Insert(13, sts.pobe_name14);
+            ViewModel.ProbeName.Insert(14, sts.pobe_name15);
+            ViewModel.ProbeName.Insert(15, sts.pobe_name16);
+            ViewModel.ProbeName.Insert(16, sts.pobe_name17);
+            ViewModel.ProbeName.Insert(17, sts.pobe_name18);
+            ViewModel.ProbeName.Insert(18, sts.pobe_name19);
+            ViewModel.ProbeName.Insert(19, sts.pobe_name20);
+            ViewModel.ProbeNameIndex = sts.probe_id - 1; // スキャナを非表示にしたため、Index-1とする。(2025.12.2yori)
             if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
             {
                 ProbeName.IsEnabled = false; // V8の場合、ComboBoxを選択できないよう無効化する。
@@ -89,7 +89,8 @@ namespace VecApp
 
         private void Click_MultiGaugeBtn03(object sender, RoutedEventArgs e)
         {
-            Parent.CurrentPanel = Panel.ContactInspection; // 追加(2025.7.31yori)
+            CSH.Grp02.Cmd03(); // 変更(2025.12.4yori)
+            Parent.CurrentPanel = Panel.ScannerAlignment; // 変更(2025.12.3yori)
         }
 
         private void Click_BallBtn(object sender, RoutedEventArgs e)
@@ -125,6 +126,35 @@ namespace VecApp
         private void Click_CloseBtn(object sender, RoutedEventArgs e)
         {
             Parent.CurrentPanel = Panel.None; // 追加(2025.7.31yori)
+        }
+
+        // 追加(2025.12.2yori)
+        private void ProbeName_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.ViewModel.ProbeId = (this.ViewModel.ProbeNameIndex + 1).ToString(); // 名称変更と連動してIDも変更する。スキャナを非表示にしたため、Index+1とする。
+            // 名称変更と連動してプローブ画像も変更する。
+            Status01 sts = new Status01();
+            CSH.AppMain.UpDateData01(out sts);
+            switch (sts.pobe_type[this.ViewModel.ProbeNameIndex + 1])
+            {
+                case 0:
+                    this.ViewModel.ProbeImage = "Image/taperProbeV7.PNG";
+                    break;
+                case 1:
+                    this.ViewModel.ProbeImage = "Image/standardProbeV7.PNG";
+                    break;
+                case 2:
+                    this.ViewModel.ProbeImage = "Image/VPR81.PNG";
+                    break;
+                case 3:
+                    this.ViewModel.ProbeImage = "Image/VPR103.PNG";
+                    break;
+                case 4:
+                    this.ViewModel.ProbeImage = "Image/VPR105.PNG";
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -97,5 +97,9 @@ namespace VecApp
 
         public static int WM_MainWnd_OtherApp_Connected = WM_USER + 43; // 他アプリ(PolyWorks)から接続した場合(2025.11.19yori)
         public static int WM_MainWnd_OtherApp_Disconnected = WM_USER + 44; // 他アプリ(PolyWorks)から切断した場合(2025.11.19yori)
+
+        public const int WM_ScannerAlignmentPanel_MesCallBack = WM_USER + 45; // 追加(2025.12.2yori)
+        public const int WM_ScannerAlignmentPanel_Show = WM_USER + 46; // 追加(2025.12.5yori)
+        public const int WM_ScannerAlignmentPanel_Setup = WM_USER + 47; // 追加(2025.12.5yori)
     }
 }

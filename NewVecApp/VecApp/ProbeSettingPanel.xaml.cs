@@ -56,7 +56,7 @@ namespace VecApp
             this.ViewModel.Name.Insert(17, sts.pobe_name18); 
             this.ViewModel.Name.Insert(18, sts.pobe_name19);
             this.ViewModel.Name.Insert(19, sts.pobe_name20);
-            this.ViewModel.NameIndex = sts.probe_id -1; // スキャナを非表示にしたため、Index-1とする。(2025.10.31yori)
+            this.ViewModel.NameIndex = sts.probe_id - 1; // スキャナを非表示にしたため、Index-1とする。(2025.10.31yori)
             if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
             {
                 ProbeName.IsEnabled = false; // V8の場合、ComboBoxを選択できないよう無効化する。(2025.9.8yori)

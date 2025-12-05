@@ -278,6 +278,10 @@ namespace VecApp
             {
                 if (m_SubWnd01 != null) m_SubWnd01.Hide(); // 追加(2025.6.5yori)
             }
+            else if (msg == UsrMsg.WM_SubWnd02_Close)
+            {
+                if (m_SubWnd02 != null) m_SubWnd02.Hide(); // 追加(2025.12.2yori)
+            }
             else if (msg == UsrMsg.WM_SubWnd03_Close)
             {
                 if (m_SubWnd03 != null) // 追加(2025.11.11yori)
@@ -387,6 +391,18 @@ namespace VecApp
                     (Content as ContactInspectionPanel).ParaOutCallBack();
                 }
             }
+            else if (msg == UsrMsg.WM_ScannerAlignmentPanel_MesCallBack) // 追加(2025.12.3yori)
+            {
+                // 現在表示されているPanelクラスを取得
+                var Content = m_SubWnd02.MainContent.Content;
+
+                // パネルが表示されており(非null)、表示されているパネルが目的のパネル(Panel.Inspection)が表示されているか確認
+                if (Content != null && (Content as PanelBase).Type == Panel.ScannerAlignment)
+                {
+                    // ContentがScannerAlignmentPanelであればキャストしてアクセスする
+                    (Content as ScannerAlignmentPanel).MesCallBack();
+                }
+            }
             else if (msg == UsrMsg.WM_Init0Panel_Setup)
             {
                 Init0PanelSetup(); // 追加(2025.10.2yori)
@@ -414,6 +430,22 @@ namespace VecApp
                 MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
                 vm.IsBtnEnabled = true;
                 vm.BtnOpacity = 1.0;
+            }
+            else if (msg == UsrMsg.WM_ScannerAlignmentPanel_Show) // 追加(2025.12.5yori)
+            {
+                m_SubWnd02.CurrentPanel = Panel.ScannerAlignment; // スキャナアライメント画面表示
+            }
+            else if (msg == UsrMsg.WM_ScannerAlignmentPanel_Setup) // アライメント画面の初期設定(2025.12.5yori)
+            {
+                // 現在表示されているPanelクラスを取得
+                var Content = m_SubWnd02.MainContent.Content;
+
+                // パネルが表示されており(非null)、表示されているパネルが目的のパネル(Panel.Initialize)が表示されているか確認
+                if (Content != null && (Content as PanelBase).Type == Panel.ScannerAlignment)
+                {
+                    // ContentがScannerAlignmentPanelであればキャストしてアクセスする
+                    (Content as ScannerAlignmentPanel).ScannerAlignmentPanelSetup();
+                }
             }
 
             return IntPtr.Zero;

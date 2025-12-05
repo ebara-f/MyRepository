@@ -45,4 +45,8 @@ public:
     static int  SettingPanelInit(CALIB_MSEBOX* para); // 2025.9.25 add eba
     static int  SettingPanelOkBtn(CALIB_MSEBOX* para); // 2025.9.25 add eba
     static int  SettingPanelCancelBtn(CALIB_MSEBOX* para); // 2025.9.25 add eba
+
+    static int  ScannerAlignmentPanelMesCallBack(CALIB_SCANNER_MSEBOX* para); // 2025.12.3yori
+    static int  ScannerAlignmentPanelInit(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count); // 2025.12.4yori
+    static int  ScannerAlignmentPanelTerminate(); // 2025.12.4yori
 };
