@@ -1,4 +1,5 @@
-﻿using CSH;
+﻿// 追加(2025.12.3yori)
+using CSH;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,11 +12,11 @@ using System.Windows.Media;
 
 namespace VecApp
 {
-    public class ContactInspectionViewModel : INotifyPropertyChanged
+    public class ScannerAlignmentViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ContactInspectionViewModel()
+        public ScannerAlignmentViewModel()
         {
             ImageSource = "Image/1-1-1.png";
         }
@@ -866,21 +867,6 @@ namespace VecApp
             }
         }
 
-        // ゲージ長さ 2025.9.2 add eba
-        private string _gaugeLength;
-        public string GaugeLength
-        {
-            get => _gaugeLength;
-            set
-            {
-                if (_gaugeLength != value)
-                {
-                    _gaugeLength = value;
-                    OnPropertyChanged(nameof(GaugeLength));
-                }
-            }
-        }
-
         // 開始ボタンの有効無効を設定する。 2025.9.2 add eba
         private bool _isStartBtnEnabled = true; // 初期状態は有効
 
@@ -893,6 +879,21 @@ namespace VecApp
                 {
                     _isStartBtnEnabled = value;
                     OnPropertyChanged(nameof(IsStartBtnEnabled));
+                }
+            }
+        }
+
+        // 開始ボタンの名前を設定する。(2025.12.5yori)
+        private string _startButtonText = "";
+        public string StartButtonText
+        {
+            get => _startButtonText;
+            set
+            {
+                if (_startButtonText != value)
+                {
+                    _startButtonText = value;
+                    OnPropertyChanged(nameof(StartButtonText));
                 }
             }
         }
@@ -982,6 +983,6 @@ namespace VecApp
         // Viewと関連付かない変数 2025.8.26 add eba
         public int CalibStyleFg = 0;
 
-        public CalibMseBox CalibMseBox = new CalibMseBox(); // 2025.9.3 add eba
+        public CalibScannerMseBox CalibScannerMseBox = new CalibScannerMseBox(); // 2025.9.3 add eba
     }
 }

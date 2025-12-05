@@ -72,17 +72,12 @@ int Grp02::Cmd03()
 
     WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
 
-    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ALIGNMENT_REQ; // アライメント(2025.6.11)
+    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_REQ; // 非接触点検キャリブ座標系作成(2025.12.2)
+    HwCtrl::m_Type = int(CALIB_TYPE::SCANNER_MAKE_MATRIX);
 
     ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
 
     return (ret);
-
-    //if ( ErrMsg::CallBack != NULL ) {
-    //    ErrMsg::CallBack( ErrMsg::ERR_EVENING );
-    //}
-
-    //return( 0 );
 }
 
 
@@ -529,6 +524,7 @@ int Grp02::ContactInspectionPanelGetPath(TCHAR*& path, int count)
 }
 
 
+
 /***********************************************************************
 
     ContactInspectionPanelGetPath
@@ -544,6 +540,7 @@ int Grp02::ContactInspectionPanelGetMes(TCHAR*& mes, int count)
 
     return (ret);
 }
+
 
 
 /***********************************************************************
@@ -563,6 +560,7 @@ int Grp02::SettingPanelInit(CALIB_MSEBOX* para)
 }
 
 
+
 /***********************************************************************
 
     SettingPanelInit
@@ -580,6 +578,7 @@ int Grp02::SettingPanelOkBtn(CALIB_MSEBOX* para)
 }
 
 
+
 /***********************************************************************
 
     SettingPanelInit
@@ -592,6 +591,60 @@ int Grp02::SettingPanelCancelBtn(CALIB_MSEBOX* para)
     int ret = 0;
 
     CalibSetting::CancelBtn(para);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelMesCallBack
+    2025.12.3yori
+
+***********************************************************************/
+
+int Grp02::ScannerAlignmentPanelMesCallBack(CALIB_SCANNER_MSEBOX* para)
+{
+    int ret = 0;
+
+    CalibComm::ScanDataMesCallBack(para);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelInit
+    2025.12.3yori
+
+***********************************************************************/
+
+int Grp02::ScannerAlignmentPanelInit(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count)
+{
+    int ret = 0;
+
+    CalibComm::InitScanner(para, path, p_count, mes, m_count);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelTerminate
+    2025.12.4yori
+
+***********************************************************************/
+
+int Grp02::ScannerAlignmentPanelTerminate()
+{
+    int ret = 0;
+
+    CalibComm::CloseScanner();
 
     return (ret);
 }

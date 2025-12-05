@@ -18,7 +18,7 @@
         <TextBlock Grid.Column="0" Margin="210,65,50,0" Text="mm" VerticalAlignment="Top" Foreground="White" FontSize="12"/>
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="46,6,0,-24"/>
         <Button Width="100" Height="30" Margin="20,90,130,15" Content="{x:Static res:Resources.String57}"         Style="{StaticResource PanelDoneButtonStyle}" FontSize="12" Click="Button_Click_OK"/>
-        <Button Width="100" Height="30" Margin="130,90,20,15" Content="{x:Static res:Resources.String263}" Style="{StaticResource PanelCancelButtonStyle}" FontSize="12" Click="Button_Click_Cancel"/>
+        <Button Width="100" Height="30" Margin="130,90,20,15" Content="{x:Static res:Resources.String56}" Style="{StaticResource PanelCancelButtonStyle}" FontSize="12" Click="Button_Click_Cancel"/>
     </Grid>
 
 </Window>

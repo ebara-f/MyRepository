@@ -912,9 +912,6 @@
   <data name="String262" xml:space="preserve">
     <value>ボール間距離を入力・確認してください</value>
   </data>
-  <data name="String263" xml:space="preserve">
-    <value>キャンセル</value>
-  </data>
   <data name="String264" xml:space="preserve">
     <value>テーパ</value>
   </data>
@@ -941,5 +938,12 @@
   </data>
   <data name="String272" xml:space="preserve">
     <value>接続中</value>
+  </data>
+  <data name="String273" xml:space="preserve">
+    <value>フルキャリ
+開始</value>
+  </data>
+  <data name="String263" xml:space="preserve">
+    <value>中止</value>
   </data>
 </root>

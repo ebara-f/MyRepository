@@ -9,6 +9,8 @@
 #include	"CalibInspectMultiPlateStd.h"
 #include	"CalibProbeBallStd.h"
 #include	"CalibProbeBallExt.h"
+#include	"CalibScannerMakeMatrix.h" // 追加(2025.12.4yori)
+#include	"CalibScannerFull.h" // 追加(2025.12.5yori)
 
 CALIB_TYPE		CalibComm::m_CalibType;
 LANGUAGE		CalibComm::m_Language;
@@ -495,3 +497,95 @@ int CalibComm::ParaOutCallBack(CALIB_MSEBOX* para)
 }
 
 
+
+/***********************************************************************
+
+	非接触点検キャリブレーション画像のパスとメッセージ取得
+	2025.12.5yori
+
+***********************************************************************/
+void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
+{
+	wchar_t wc_path[256];
+	wchar_t wc_msg[512];
+	wchar_t wc_no[8];
+
+
+	CalibComm::m_CalibType = (CALIB_TYPE)para->CalibType;
+	switch (CalibComm::m_CalibType)
+	{
+		case CALIB_TYPE::SCANNER_MAKE_MATRIX:
+			swprintf(wc_no, 8, L"%d", HwCtrl::m_ShotNo + 1);
+			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_INI);
+			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[1点目]測定してください。"), wc_msg, 512, MACHINECHECK_INI);
+			break;
+
+		case CALIB_TYPE::SCANNER_FULL:
+			swprintf(wc_no, 8, L"%d", HwCtrl::m_ScanShotNo + 1);
+			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_INI);
+			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[基本姿勢]-[近]"), wc_msg, 512, MACHINECHECK_INI);
+			break;
+
+		default:
+			break;
+	}
+
+	swprintf(para->path, 256, CALIB_PATH);
+	swprintf(para->msg, 512, wc_msg);
+	wcsncat_s(para->path, wc_path, sizeof(para->path));
+}
+
+
+
+/***********************************************************************
+
+	ScannerAlignmentPanel初期化時に呼ぶ関数
+	2025.12.5yori
+
+***********************************************************************/
+
+void CalibComm::InitScanner(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count)
+{
+	int ret = 0;
+	int lang = 0;
+	int calmode = 0;
+
+	CalibComm::m_Language = (LANGUAGE)para->Language;
+
+	para->CalibType = HwCtrl::m_Type;
+	CalibComm::m_CalibType = (CALIB_TYPE)para->CalibType;
+	switch (CalibComm::m_CalibType)
+	{
+		case CALIB_TYPE::SCANNER_MAKE_MATRIX:
+			CalibScannerMakeMatrix::InitSub(para);
+			break;
+
+		case CALIB_TYPE::SCANNER_FULL:
+			CalibScannerFull::InitSub(para);
+			break;
+
+		default:
+			break;
+	}
+}
+
+
+
+/***********************************************************************
+
+	閉じるボタンがクリックされたときに呼ぶ関数
+
+***********************************************************************/
+int CalibComm::CloseScanner()
+{
+	int ret = 0;
+
+	// 有接触測定音OFFにして測定待機状態へ変更
+	if (HwCtrl::Func12() == 0) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
+	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
+	{
+		Sleep(100);
+	}
+
+	return (ret);
+}

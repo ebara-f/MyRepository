@@ -124,6 +124,8 @@
     <ClInclude Include="CalibInspectMultiPlateStd.h" />
     <ClInclude Include="CalibProbeBallExt.h" />
     <ClInclude Include="CalibProbeBallStd.h" />
+    <ClInclude Include="CalibScannerFull.h" />
+    <ClInclude Include="CalibScannerMakeMatrix.h" />
     <ClInclude Include="CalibSetting.h" />
     <ClInclude Include="CalibUserMulti.h" />
     <ClInclude Include="common.h" />
@@ -151,6 +153,8 @@
     <ClCompile Include="CalibInspectMultiPlateStd.cpp" />
     <ClCompile Include="CalibProbeBallExt.cpp" />
     <ClCompile Include="CalibProbeBallStd.cpp" />
+    <ClCompile Include="CalibScannerFull.cpp" />
+    <ClCompile Include="CalibScannerMakeMatrix.cpp" />
     <ClCompile Include="CalibSetting.cpp" />
     <ClCompile Include="CalibUserMulti.cpp" />
     <ClCompile Include="CPX_AppMain.cpp" />

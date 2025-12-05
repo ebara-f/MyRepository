@@ -1705,7 +1705,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   キャンセル に類似しているローカライズされた文字列を検索します。
+        ///   中止 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String263 {
             get {
@@ -1800,6 +1800,16 @@ namespace VecApp.Properties {
         public static string String272 {
             get {
                 return ResourceManager.GetString("String272", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   フルキャリ
+        ///開始 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String273 {
+            get {
+                return ResourceManager.GetString("String273", resourceCulture);
             }
         }
         

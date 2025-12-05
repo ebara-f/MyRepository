@@ -10,6 +10,8 @@
 #include	"Grp02.h"
 #include	"CalibDataBuff.h"
 
+#define CALIB_PATH L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles" // 追加(2025.12.4yori)
+#define MACHINECHECK_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\MachineCheck\\MachineCheck.txt" // 追加(2025.12.4yori)
 
 // 2025.8.27 add eba
 enum class CALIB_TYPE
@@ -26,6 +28,8 @@ enum class CALIB_TYPE
 	PROBEINSPECT_MULTI_GAUGE_NEST_STD,	// CALIB_MODE_PROBE_CHECK
 	PROBEINSPECT_MULTI_GAUGE_NEST_EXT,	// CALIB_MODE_PROBE_CHECK_EXT
 	// PROBEINSPECTのBALLはない 2025.10.31 memo eba
+	SCANNER_MAKE_MATRIX,				// 非接触点検キャリブレーションの座標系作成(2025.12.5yori)
+	SCANNER_FULL,						// 非接触フルキャリブレーション(2025.12.5yori)
 
 	END
 };
@@ -53,5 +57,8 @@ public:
 	static int ClickResoreBtn(CALIB_MSEBOX* para);
 	static int ParaOutCallBack(CALIB_MSEBOX* para);
 
-
+	// 非接触関連
+	static void InitScanner(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count); // 追加(2025.12.4yori)
+	static void ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.4yori)
+	static int CloseScanner(); // 追加(2025.12.4yori)
 };

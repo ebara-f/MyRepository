@@ -42,6 +42,7 @@ int             HwCtrl::m_LineNo = 0;
 int             HwCtrl::m_iSn = 0;
 int             HwCtrl::m_iSw = 0;
 int             HwCtrl::m_ScanShotNo = 0;
+int             HwCtrl::m_ScanShotOldNo = 0; // 追加(2025.12.6yori)
 bool            HwCtrl::m_bReadThreadStopFlag = true;
 bool            HwCtrl::EndFg = false;
 const double    HwCtrl::INVALID_CHECK = 999998.0;
@@ -53,6 +54,8 @@ bool	        HwCtrl::m_ScannerWarmUpMonitorCancelFlag = false; // 追加(2025.8.
 bool            HwCtrl::m_ScannerConnectBtnFg = false; // 追加(2025.9.2yori)
 bool            HwCtrl::m_MaintModeFlag = false; // 追加(2025.10.6yori)
 bool            HwCtrl::m_ScannerSettingCloseFlag = false; // 追加(2025.11.11yori)
+bool            HwCtrl::m_ScannerAlignmentFlag = false; // 追加(2025.12.5yori)
+int            HwCtrl::m_Type = 0; // 点検、キャリブレーションの種類(2025.12.5yori)
 int             HwCtrl::m_ProbeIdBeforeScanner = 2; // 追加(2025.11.20yori)
 unsigned short  HwCtrl::m_BrightSlice[5] = { 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0 }; // 輝度スライス(2025.8.25yori)
 unsigned short  HwCtrl::m_SensSlice[5] = { 0x0CCC, 0x04B0, 0x0CCC, 0x0CCC, 0x0CCC }; // 感度スライス(2025.8.25yori)
@@ -69,6 +72,8 @@ SelfChkSensResult* HwCtrl::m_ptSensResult = NULL; // モーターチェック(20
 bool            HwCtrl::m_PointerCheckFg = false; // ポインタ位置チェック(2025.7.3yori)
 double          HwCtrl::m_PointerCheckScanData = 0; // ポインタ位置チェック用データ(2025.7.4yori)
 int             HwCtrl::m_PointerCheckLineNo = 1; // ポインタ位置チェック用ライン数(2025.7.4yori)
+int             HwCtrl::m_ShotNo = 0; // 非接触点検、キャリブ用(2025.12.2yori)
+int             HwCtrl::m_ShotMax = 12; // 非接触点検、キャリブ用(2025.12.2yori)
 
 
 
@@ -83,7 +88,7 @@ int             HwCtrl::m_PointerCheckLineNo = 1; // ポインタ位置チェッ
 int HwCtrl::Func01()
 {
     int ret = 0;
-    timeBeginPeriod(1); // 2025.11.11 add eba // スキャンデータ取得遅延対応のため、コメントアウト解除(2025.11.18yori)
+    //timeBeginPeriod(1); // 2025.11.11 add eba // 追加無しでも遅延しないため、コメントアウト(2025.12.1yori)
     // VECTORONと接続開始
     ret = HwCtrl::m_hVecCnt.VecOpen(20000, NULL);
 
@@ -166,7 +171,7 @@ int HwCtrl::Func04()
 
     // アプリ単体でVECTORONと接続する場合もあるため、
     // PolyWorksへのコマンド送信はここでは行わない(2025.6.9yori)
-    timeEndPeriod(1); // 2025.11.11 add eba // スキャンデータ取得遅延対応のため、コメントアウト解除(2025.11.18yori)
+    //timeEndPeriod(1); // 2025.11.11 add eba  // 追加無しでも遅延しないため、コメントアウト(2025.12.1yori)
     return ret;
 }
 
@@ -2735,26 +2740,64 @@ void HwCtrl::SetTds1stPosition(const VecDtEx* pGetData)
 
 void HwCtrl::ConvertVecTranceData(const VecDtEx* pGetData, VecRet* pVecData)
 {
-
-    pVecData->no1 = (int)pGetData->no;			// 型式違う !< データ要求に対しての要求されたラインナンバー
-    pVecData->no2 = 0;							// 未使用 !< データ要求、ステータス要求に対しての最新のラインナンバー
-    pVecData->no3 = 0;							// 未使用 !< ステータス要求に対しての最古の利用可能なラインナンバー
+    pVecData->no1 = (int)pGetData->no;			    // 型式違う !< データ要求に対しての要求されたラインナンバー
+    pVecData->no2 = 0;							    // 未使用 !< データ要求、ステータス要求に対しての最新のラインナンバー
+    pVecData->no3 = 0;							    // 未使用 !< ステータス要求に対しての最古の利用可能なラインナンバー
     for (int i = 0; i < 3; ++i)
     {
-        pVecData->xyz[i] = pGetData->xyz[i];		// !< データ要求に対してのXYZ
-        pVecData->ijk[i] = pGetData->ijk[i];		// !< データ要求に対してのIJK
-        pVecData->ijk2[i] = pGetData->ijk2[i];		// !< データ要求に対してのI2J2K2
+        pVecData->xyz[i] = pGetData->xyz[i];	    // !< データ要求に対してのXYZ
+        pVecData->ijk[i] = pGetData->ijk[i];	    // !< データ要求に対してのIJK
+        pVecData->ijk2[i] = pGetData->ijk2[i];	    // !< データ要求に対してのI2J2K2
     }
 
-    pVecData->error = 0;							// 未使用 !< エラーコード サイズ違いでコピーできない
-    pVecData->button = 0;							// 未使用 !< 測定ボタンの状態 (ON:1 OFF:0)
-    pVecData->scan = 0;								// 未使用 !< 測定状態（アイドル中:0 スキャン中:1 その他:2）
+    pVecData->error = 0;						    // 未使用 !< エラーコード サイズ違いでコピーできない
+    pVecData->button = 0;						    // 未使用 !< 測定ボタンの状態 (ON:1 OFF:0)
+    pVecData->scan = 0;							    // 未使用 !< 測定状態（アイドル中:0 スキャン中:1 その他:2）
     for (int i = 0; i < 7; ++i)
     {
-        pVecData->angle[i] = pGetData->angle[i];	// 配列サイズが違うので注意 !< 各軸の角度([0]:7軸 [1]～[6]:1～6軸)
+        pVecData->angle[i] = pGetData->angle[i];    // 配列サイズが違うので注意 !< 各軸の角度([0]:7軸 [1]～[6]:1～6軸)
+    }
+}
+
+
+
+/***********************************************************************
+
+    べクロトン取得データをスキャナのベクトロン位置情報に変換
+    違いがあるので注意
+    べクロトン取得データ          VecDtEx* pGetData;
+    スキャナのベクトロン位置情報  VecCtEx* pVecData;
+    移植(2025.12.2yori)
+
+***********************************************************************/
+
+void HwCtrl::ConvertVecCtExTranceData(const VecDtEx* pGetData, VecCtEx* pVecData)
+{
+    pVecData->no = (int)pGetData->no;					//型式違う !< アームラインN
+
+    for (int i = 0; i < 3; ++i)
+    {
+        pVecData->xyz[i] = pGetData->xyz[i];			//!< XYZ座標(mm)
+        pVecData->ijk[i] = pGetData->ijk[i];			//!< アーム1軸情報IJK(単位ベクトル)
+        pVecData->ijk2[i] = pGetData->ijk2[i];			//!< アーム7軸情報I2J2K2(単位ベクトル)
+    }
+
+    pVecData->button = pGetData->button;				//!< 測定ボタンの状態 ON(=1)、OFF(=0)
+
+    for (int i = 0; i < 9; ++i)
+    {
+        pVecData->cnt[i] = 0;							//未使用 !< パラメータ
+        pVecData->er_code[i] = pGetData->er_code[i];    //!< エラーコード
+    }
+
+    for (int i = 0; i < 7; ++i)
+    {
+        pVecData->angle[i] = pGetData->angle[i];		//!< 各軸の角度([0]:7軸 [1]～[6]:1～6軸)
 
     }
 }
+
+
 
 /***********************************************************************
 

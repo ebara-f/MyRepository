@@ -12,7 +12,8 @@
     <Grid>
         <Border Background="#2C3E50" CornerRadius="10" Padding="20">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
-                <TextBlock Text="{x:Static res:Resources.String16}"
+                <!-- パネルの題名をバインディング(2025.12.2yori) -->
+                <TextBlock Text="{Binding Title}"
                     FontSize="20"
                     FontWeight="Bold"
                     Foreground="White"
@@ -34,7 +35,7 @@
                                     <TextBlock Text="{x:Static res:Resources.String11}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
                                     <!-- TextBox→ComboBox変更(2025.7.31yori) pを大文字Pへ変更(2025.8.1yori) -->
                                     <!-- x:Name="ProbeName"追加(2025.9.24yori) -->
-                                    <ComboBox x:Name="ProbeName" ItemsSource="{Binding ProbeName}" SelectedIndex="{Binding ProbeNameIndex}" Width="200" FontSize="20" Margin="10,0,0,0"/>
+                                    <ComboBox x:Name="ProbeName" ItemsSource="{Binding ProbeName}" SelectedIndex="{Binding ProbeNameIndex}" Width="200" FontSize="20" Margin="10,0,0,0" SelectionChanged="ProbeName_SelectionChanged"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
                                     <TextBlock Text="{x:Static res:Resources.String12}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
@@ -76,9 +77,10 @@
                                         IsEnabled="False"/>
                                     <TextBlock Text="mm" Foreground="White" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 </StackPanel>
+                                <!-- 作成中のため、無効化(2025.12.2yori) -->
                                 <Button Content="{x:Static res:Resources.String61}"
                                     Click="Click_MultiGaugeBtn01" Width="124" Height="46"
-                                    Margin="-300,10,0,0" FontSize="20"/>
+                                    Margin="-300,10,0,0" FontSize="20" IsEnabled="False" Opacity="0.25"/>
                             </StackPanel>
 
                             <!-- 仮の画像スペース -->
@@ -105,8 +107,9 @@
                                 <TextBlock Text="{x:Static res:Resources.String20}" Foreground="White" FontSize="20"/>
                             </Border>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,0">
+                                <!-- 作成中のため、無効化(2025.12.4yori) -->
                                 <Button Content="{x:Static res:Resources.String61}"
-                                    Click="Click_MultiGaugeBtn02" Width="124" Height="46" FontSize="20"/>
+                                    Click="Click_MultiGaugeBtn02" Width="124" Height="46" FontSize="20" IsEnabled="False" Opacity="0.25"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -122,9 +125,10 @@
                                     Click="Click_MultiGaugeBtn03"
                                     Width="124" Height="46"
                                     Margin="0,0,10,0" FontSize="20"/>
+                                <!-- 作成中のため、無効化(2025.12.2yori) -->
                                 <Button Content="{x:Static res:Resources.String62}"
                                     Click="Click_BallBtn"
-                                    Width="124" Height="46" FontSize="20"/>
+                                    Width="124" Height="46" FontSize="20" IsEnabled="False" Opacity="0.25"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -139,10 +143,11 @@
                         Click="Click_GaugeSettingBtn"
                         Width="124" Height="46"
                         Margin="0,0,10,0" FontSize="20"/>
+                    <!-- 作成中のため、無効化(2025.12.2yori) -->
                     <Button Content="{x:Static res:Resources.String63}"
                         Click="Click_HelpBtn"
                         Width="124" Height="46"
-                        Margin="0,0,10,0" FontSize="20"/>
+                        Margin="0,0,10,0" FontSize="20" IsEnabled="False" Opacity="0.25"/>
                     <Button Content="{x:Static res:Resources.String64}"
                         Click="Click_CloseBtn"
                         Width="124" Height="46"

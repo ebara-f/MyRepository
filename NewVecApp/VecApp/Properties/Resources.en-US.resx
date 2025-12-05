@@ -905,9 +905,6 @@ Meshing</value>
   <data name="String262" xml:space="preserve">
     <value>Check BarLen</value>
   </data>
-  <data name="String263" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
   <data name="String264" xml:space="preserve">
     <value>Taper</value>
   </data>
@@ -934,5 +931,12 @@ Meshing</value>
   </data>
   <data name="String272" xml:space="preserve">
     <value>Connecting</value>
+  </data>
+  <data name="String273" xml:space="preserve">
+    <value>Full Cal
+Start</value>
+  </data>
+  <data name="String263" xml:space="preserve">
+    <value>Stop</value>
   </data>
 </root>

@@ -107,6 +107,10 @@ enum class VEC_STEP_SEQ {	// 2025.5.23 作成 eba
 	ALIGNMENT_ING,	// 追加(2025.6.11yori) 2025.8.27 del eba
 	ALIGNMENT_ING2,	// 結果転送(アームへ)、結果表示(C#へ)シーケンス 2025.9.10 add eba
 	ALIGNMENT_CMP,	// 追加(2025.6.11yori) 2025.8.27 del eba
+	SCANNER_MAKE_MATRIX_REQ, // 追加(2025.12.5yori)
+	SCANNER_MAKE_MATRIX_ING, // 追加(2025.12.5yori)
+	SCANNER_ALIGNMENT_REQ, // 追加(2025.12.5yori)
+	SCANNER_ALIGNMENT_ING, // 追加(2025.12.5yori)
 	ARM_SELFCHECK_REQ,	// 追加(2025.6.11yori)
 	ARM_SELFCHECK_ING,	// 追加(2025.6.11yori)
 	ARM_SELFCHECK_ING2,	// メンテナンスモードでカウントチェック2を行う。(2025.10.6yori)

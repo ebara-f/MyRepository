@@ -70,9 +70,13 @@ public:
     const static int WM_ContactInspectionPanel_MesCallBack = WM_USER + 39;  // 2025.9.2 add eba
     const static int WM_ContactInspectionPanel_ParaOutCallBack = WM_USER + 40;  // 2025.9.2 add eba
 
-    const static int WM_Init0Panel_Setup = WM_USER + 41;   // 追加(2025.10.2yori)
-    const static int WM_ContactSelfJudgmentPanel_Update = WM_USER + 42;   // 追加(2025.10.3yori)
+    const static int WM_Init0Panel_Setup = WM_USER + 41; // 追加(2025.10.2yori)
+    const static int WM_ContactSelfJudgmentPanel_Update = WM_USER + 42; // 追加(2025.10.3yori)
 
     const static int WM_MainWnd_OtherApp_Connected = WM_USER + 43; // 他アプリ(PolyWorks)から接続した場合(2025.11.19yori)
     const static int WM_MainWnd_OtherApp_Disconnected = WM_USER + 44; // 他アプリ(PolyWorks)から切断した場合(2025.11.19yori)
+
+    const static int WM_ScannerAlignmentPanel_MesCallBack = WM_USER + 45; // 追加(2025.12.3yori)
+    const static int WM_ScannerAlignmentPanel_Show = WM_USER + 46; // 追加(2025.12.5yori)
+    const static int WM_ScannerAlignmentPanel_Setup = WM_USER + 47; // 追加(2025.12.5yori)
 };

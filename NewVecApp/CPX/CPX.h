@@ -244,6 +244,18 @@ typedef struct CalibSettingParamter
 } CALIB_MSEBOX;
 
 
+// 非接触点検キャリブレーション関連のデータ受け渡し用構造体(2025.12.5yori)
+typedef struct CalibScannerSettingParamter
+{
+    int Language;
+    int CalibType;
+    TCHAR path[256];
+    TCHAR msg[512];
+    int MesString;
+
+} CALIB_SCANNER_MSEBOX;
+
+
 CPX_DECLSPEC void WINAPI CPX_ErrMsg_SetCB( ER_CBFUNC );
 CPX_DECLSPEC int  WINAPI CPX_ErrMsg_GetMsg( int, TCHAR*&, int );
 
@@ -325,6 +337,9 @@ CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelInit(CALIB_MSEBOX* para);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelOkBtn(CALIB_MSEBOX* para);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelCancelBtn(CALIB_MSEBOX* para);
 
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelMesCallBack(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.3yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelInit(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count); // 追加(2025.12.4yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelTerminate(); // 追加(2025.12.4yori)
 
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd01(); // 追加(2025.6.24yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd02(); // 追加(2025.6.24yori)

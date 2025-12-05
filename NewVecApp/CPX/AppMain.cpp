@@ -870,7 +870,8 @@ void AppMain::ThreadProc()
     errno_t err; // 追加(2025.9.26yori)
     wchar_t armtype[16]; // 追加(2025.9.26yori)
     char model[16];// 追加(2025.9.26yori)
-    int     resultMsg = 0;
+    int resultMsg = 0;
+    VecCtEx VecData; // スキャナ側のベクトロンデータ(スキャナデータ変換用データ)(2025.12.2yori)
 
     while( 1 )
     {
@@ -1323,7 +1324,6 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::ALIGNMENT_REQ: // アライメント(2025.6.11yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ALIGNMENT_ING;
-            //UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Btn03); // SubWindow2へプローブ情報を送る。(2025.6.11yori)
             break;
 
         case VEC_STEP_SEQ::ALIGNMENT_ING: // データ取り込み、計算シーケンス中(2025.6.11yori)
@@ -1343,12 +1343,46 @@ void AppMain::ThreadProc()
                 }
             }
             break;
+
         case VEC_STEP_SEQ::ALIGNMENT_ING2: // データと転送、表示シーケンス中 2025.9.10 add eba
             UsrMsg::CallBack(UsrMsg::WM_ContactInspectionPanel_ParaOutCallBack);
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ALIGNMENT_ING;
             break;
+
         case VEC_STEP_SEQ::ALIGNMENT_CMP: // アライメント終了(2025.6.11yori)
             //HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
+            break;
+
+        case VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_REQ: // 非接触点検キャリブ座標系作成要求(2025.12.5yori)
+            UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show);
+            UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup);
+            HwCtrl::m_ScannerAlignmentFlag = true;
+            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_ING;
+            break;
+
+        case VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_ING: // 非接触点検キャリブ座標系作成(2025.12.4yori)
+            ret = HwCtrl::Func05(&PosiData);
+            if ((ret == 0) && (PosiData.button & 0x01) == 0x01 && (PosiData.no != -1) && (HwCtrl::m_hVecCnt.m_GetdataNo != 0)) // SW1(トリガボタンを押した場合)
+            {
+                HwCtrl::ConvertVecCtExTranceData(&PosiData, &VecData); // 構造体の内容が異なるため変換が必要
+                TdsVecSetMakeMatrixData(HwCtrl::m_ShotNo, &VecData);
+                HwCtrl::m_ShotNo++;
+                UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_MesCallBack);
+                if (HwCtrl::m_ShotNo == HwCtrl::m_ShotMax)
+                {
+                    UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close);
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_INIT_REQ;
+                    HwCtrl::m_ShotNo = 0;
+                }
+            }
+            break;
+
+        case VEC_STEP_SEQ::SCANNER_ALIGNMENT_REQ: // 非接触点検キャリブ要求(2025.12.5yori)
+            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_ALIGNMENT_ING;
+            break;
+
+        case VEC_STEP_SEQ::SCANNER_ALIGNMENT_ING: // 非接触点検キャリブ(2025.12.5yori)
+            Sleep(100);
             break;
 
         case VEC_STEP_SEQ::ARM_SELFCHECK_REQ: // 有接触自己診断(2025.6.11yori)
@@ -1521,11 +1555,20 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_INIT_CMP:
+            if (HwCtrl::m_ScannerAlignmentFlag) // 非接触点検キャリブレーションの場合(2025.12.5yori)
+            {
+                HwCtrl::m_Type = int(CALIB_TYPE::SCANNER_FULL);
+                UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn02);
+                UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show);
+                UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup);
+                HwCtrl::m_ScannerAlignmentFlag = false;
+            }
             Sleep(100);
             break;
 
         case VEC_STEP_SEQ::SCANNER_SCAN_START_REQ:
             HwCtrl::m_PointerCheckLineNo = 1; // 追加(2025.7.4yori)
+            HwCtrl::m_ScanShotOldNo = HwCtrl::m_ScanShotNo; // 追加(2025.12.6yori)
             HwCtrl::Func18(); // スキャン(Thread2)開始
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_START_CMP;
             break;
@@ -1541,6 +1584,14 @@ void AppMain::ThreadProc()
             {
                 UsrMsg::CallBack(UsrMsg::WM_SubWnd03_Close); // SubWindow3非表示(2025.11.11yori)
                 HwCtrl::m_ScannerSettingCloseFlag = false;
+            }
+            if (HwCtrl::m_ScannerAlignmentFlag) // 非接触点検キャリブレーションの場合(2025.12.5yori)
+            {
+                if (HwCtrl::m_ScanShotNo != HwCtrl::m_ScanShotOldNo)
+                {
+                    HwCtrl::m_ScanShotOldNo = HwCtrl::m_ScanShotNo;
+                    UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_MesCallBack);
+                }
             }
             Sleep(100);
             break;

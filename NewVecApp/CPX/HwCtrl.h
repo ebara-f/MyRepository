@@ -123,6 +123,8 @@ public:
     static bool m_ScannerConnectBtnFg; // スキャナ暖機完了ボタンフラグ(2025.9.2yori)
     static bool	m_MaintModeFlag; // メンテナンスモードフラグ(2025.10.6yori)
     static bool	m_ScannerSettingCloseFlag; // 非接触測定メニュー閉じるボタンフラグ(2025.11.11yori)
+    static bool	m_ScannerAlignmentFlag; // 非接触点検キャリブレーションフラグ(2025.12.5yori)
+    static int m_Type; // 点検、キャリブレーションの種類(2025.12.5yori)
 
     static int	m_ProbeIdBeforeScanner; // 非接触へ切り替える前のプローブID(2025.11.20yori)
 
@@ -154,6 +156,7 @@ public:
     static int m_iSn;                               // スキャナNo等 0でのみ使用
     static int m_iSw;
     static int m_ScanShotNo;                        // ショットNo
+    static int m_ScanShotOldNo;                     // ショットNoの変更があったことを知らせる一つ前のショットNo(2025.12.6yori)
     static bool m_bReadThreadStopFlag;		        // 読出しスレッド停止フラグ
     static bool EndFg;
     static const double INVALID_CHECK;              // 無効値判断値 (無効値は999999.0 floatデータのため
@@ -172,6 +175,8 @@ public:
     static bool m_PointerCheckFg;                   // ポインタ位置チェックフラグ(2025.7.3yori)
     static double m_PointerCheckScanData;           // ポインタ位置チェック用データ(2025.7.3yori)
     static int m_PointerCheckLineNo;                // ポインタ位置チェック用ライン数(2025.7.4yori)
+    static int m_ShotNo;                            // 非接触点検、キャリブ用(2025.12.2yori)
+    static int m_ShotMax;                           // 非接触点検、キャリブ用(2025.12.2yori)
 
     static int GetVecDataEx(VecDtEx* PosiData);
     static int GetMeasTopData();
@@ -180,6 +185,7 @@ public:
     //static bool GetandStoreScannerLineData(const VecRet* pVecData, bool tranceFg); // コメントアウト(2025.5.15yori)
     static bool GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg);
     static void ConvertVecTranceData(const VecDtEx* pGetData, VecRet* pVecData); // 構造体の内容がことなるため変換が必要
+    static void ConvertVecCtExTranceData(const VecDtEx* pGetData, VecCtEx* pVecData); // 構造体の内容がことなるため変換が必要(2025.12.2)
     static void SetTds1stPosition(const VecDtEx* pGetData);
     static int TriggerButtonAndMeasDataStatusTransfer(bool buttonfg, bool measdatafg);
     static void Memory_ResetCounter();

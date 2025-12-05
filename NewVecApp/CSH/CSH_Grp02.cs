@@ -133,7 +133,7 @@ namespace CSH
 
     }
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct CalibMseBox
     {
         public CalibGauge GaugePara;
@@ -179,6 +179,19 @@ namespace CSH
         // PROBEINSPECTのBALLはない 2025.10.31 memo eba
 
         END
+    }
+
+    // 非接触関連(2025.12.5yori)
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public struct CalibScannerMseBox
+    {
+        public int Language;
+        public int CalibType;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        public string path;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 512)]
+        public string msg;
+        public int MesString;
     }
 
 
@@ -266,6 +279,15 @@ namespace CSH
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_Grp02_SettingPanelCancelBtn(ref CalibMseBox para);  // 2025.9.25 add eba
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_ScannerAlignmentPanelMesCallBack(ref CalibScannerMseBox para); // 追加(2025.12.3yori)
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_ScannerAlignmentPanelInit(ref CalibScannerMseBox para, ref StringBuilder sb_p, int p_count, ref StringBuilder sb_m, int m_count); // 追加(2025.12.4yori)
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_ScannerAlignmentPanelTerminate(); // 追加(2025.12.4yori)
         #endregion
 
         /// <summary>
@@ -548,5 +570,65 @@ namespace CSH
             return CPX_Grp02_SettingPanelCancelBtn(ref para);
         }
 
+
+        /// <summary>
+        /// 追加(2025.12.3yori)
+        /// </summary>
+        static public int ScannerAlignmentPanelMesCallBack(ref CalibScannerMseBox para)
+        {
+            return CPX_Grp02_ScannerAlignmentPanelMesCallBack(ref para);
+        }
+
+
+        /// <summary>
+        /// 非接触点検キャリブレーション画面初期化処理(2025.12.4yori)
+        /// </summary>
+
+        static public int ScannerAlignmentPanelInit(ref CalibScannerMseBox para, out string path, int p_count, out string mes, int m_count)
+        {
+            int rc;
+            StringBuilder sb_p = null;
+            StringBuilder sb_m = null;
+
+            path = null;
+            mes = null;
+
+            // コマンドからの出力（文字列）を受け取るためのStringBuilderの生成
+            if (p_count > 0)
+            {
+                sb_p = new StringBuilder(p_count);
+            }
+            if (m_count > 0)
+            {
+                sb_m = new StringBuilder(m_count);
+            }
+
+            rc = CPX_Grp02_ScannerAlignmentPanelInit(ref para, ref sb_p, p_count, ref sb_m, m_count);
+
+            if (rc == 0)
+            {
+                // コマンドからの出力（文字列）の抽出
+                if (p_count > 0)
+                {
+                    path = sb_p.ToString();
+                }
+                if (m_count > 0)
+                {
+                    mes = sb_m.ToString();
+                }
+            }
+
+            return rc;
+        }
+
+
+        /// <summary>
+        /// ScannerAlignmentPanelTerminate(2025.12.4yori)
+        /// </summary>
+
+        static public int ScannerAlignmentPanelTerminate()
+        {
+            return CPX_Grp02_ScannerAlignmentPanelTerminate();
+        }
     }
 }
