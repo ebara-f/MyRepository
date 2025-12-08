@@ -34,4 +34,5 @@ public:
     static int  Cmd16(); // 追加(2025.8.27yori)
     static int  Cmd17(); // 追加(2025.8.27yori)
     static int  Cmd18(); // 追加(2025.11.11yori)
+    static int  ScannerAlignmentPanelFullCalStartBtn(); // フルキャリ開始(2025.12.8yori)
 };

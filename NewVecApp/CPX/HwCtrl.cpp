@@ -55,7 +55,7 @@ bool            HwCtrl::m_ScannerConnectBtnFg = false; // 追加(2025.9.2yori)
 bool            HwCtrl::m_MaintModeFlag = false; // 追加(2025.10.6yori)
 bool            HwCtrl::m_ScannerSettingCloseFlag = false; // 追加(2025.11.11yori)
 bool            HwCtrl::m_ScannerAlignmentFlag = false; // 追加(2025.12.5yori)
-int            HwCtrl::m_Type = 0; // 点検、キャリブレーションの種類(2025.12.5yori)
+int             HwCtrl::m_Type = 0; // 点検、キャリブレーションの種類(2025.12.5yori)
 int             HwCtrl::m_ProbeIdBeforeScanner = 2; // 追加(2025.11.20yori)
 unsigned short  HwCtrl::m_BrightSlice[5] = { 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0 }; // 輝度スライス(2025.8.25yori)
 unsigned short  HwCtrl::m_SensSlice[5] = { 0x0CCC, 0x04B0, 0x0CCC, 0x0CCC, 0x0CCC }; // 感度スライス(2025.8.25yori)
@@ -373,7 +373,11 @@ int HwCtrl::Func14()
 
     m_hVecCnt.VecCmd_ChangeProbe(0);
     m_hVecCnt.VecCmd_ChangeMode(VEC_MODE::VEC_MODE_LAZER_SCAN);
-    AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT);
+    // アプリから接続、非接触点検キャリブレーション場合は、PolyWorksへコマンドを送信しない。(2025.12.8yori)
+    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)
+    {
+        AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT);
+    }
 
     ErrorCode = (ERROR_CODE)Func15(); // スキャナ接続と初期化
 
@@ -385,7 +389,11 @@ int HwCtrl::Func14()
     {
         if (iScannerConnect == 1) // スキャナの電源がONの場合
         {
-            AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
+            // アプリから接続、非接触点検キャリブレーション場合は、PolyWorksへコマンドを送信しない。(2025.12.8yori)
+            if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)
+            {
+                AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
+            }
         }
         else if (iScannerConnect == 2) // スキャナの電源がOFFの場合
         {
@@ -400,7 +408,11 @@ int HwCtrl::Func14()
                 }
                 else
                 {
-                    AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
+                    // アプリから接続、非接触点検キャリブレーション場合は、PolyWorksへコマンドを送信しない。(2025.12.8yori)
+                    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)
+                    {
+                        AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
+                    }
                 }
             }
             else
@@ -445,9 +457,9 @@ int HwCtrl::Func15()
     d_address = (unsigned int)(atoi(address[0]) << 24) + (unsigned int)(atoi(address[1]) << 16) + (unsigned int)(atoi(address[2]) << 8) + (unsigned int)atoi(address[3]);
     TdsVecSetControllerAddress(d_address); //一時的にIPアドレスを「192.168.1.200(0xC0A801C8)」へ変更(2025.5.15yori) // iniファイルのIPアドレスを入力する。(2025.8.28yori)
 
-    if (m_b_Button_ConnectFlag)
+    if (m_b_Button_ConnectFlag || m_ScannerAlignmentFlag) // m_ScannerAlignmentFlag追加(2025.12.8yori)
     {
-        HwCtrl::Func60(); // スキャナ測定音ON(2025.8.12yori)
+        HwCtrl::ScannerBuzzerOn(); // スキャナ測定音ON(2025.8.12yori)
     }
     else
     {
@@ -1422,7 +1434,7 @@ void HwCtrl::Func47()
 
 ***********************************************************************/
 
-BOOL HwCtrl::Func48(int type)
+BOOL HwCtrl::ScannerSetMeasType(int type)
 {
     BOOL fg = FALSE;
 
@@ -1445,7 +1457,7 @@ BOOL HwCtrl::Func49()
 {
     BOOL fg = FALSE;
 
-    fg = Func48(TDS_MEASTYPE_SELF_CHECK_SENS);
+    fg = ScannerSetMeasType(TDS_MEASTYPE_SELF_CHECK_SENS);
     if (fg == TRUE)
     {
         fg = TdsVecStartSelfChkSens();
@@ -1772,13 +1784,13 @@ void HwCtrl::Func59(wchar_t mode[6][32])
 
 /***********************************************************************
 
-    コマンド60
+    ScannerBuzzerON
     スキャナ測定音ON
     移植(2025.8.12yori)
 
 ***********************************************************************/
 
-void HwCtrl::Func60()
+void HwCtrl::ScannerBuzzerOn()
 {
     WritePrivateProfileString(TEXT("Buzzer"), TEXT("0"), TEXT("1"), TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\TDSUser.ini"));
 }
@@ -1900,7 +1912,7 @@ BOOL HwCtrl::Func66()
     for (i = 0; i < 5; i++)
     {
         fg = TdsVecSetBrightSliceLevel(i, m_BrightSlice[i]);
-        fg |= TdsVecSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
+        fg |= ScannerSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
         if (fg == FALSE)
         {
             break;
@@ -1928,7 +1940,7 @@ BOOL HwCtrl::Func67()
     for (i = 0; i < 5; i++)
     {
         fg = TdsVecSetDataMinSliceLevel(i, m_SensSlice[i]);
-        fg |= TdsVecSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
+        fg |= ScannerSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
         if (fg == FALSE)
         {
             break;
@@ -1972,7 +1984,7 @@ BOOL HwCtrl::Func69(int twopeak)
     BOOL fg = FALSE;
 
     fg = TdsVecSet2PeakMask(twopeak);
-    fg |= TdsVecSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
+    fg |= ScannerSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
 
     return fg;
 }
@@ -1992,7 +2004,7 @@ BOOL HwCtrl::Func70()
     BOOL fg = FALSE;
 
     fg = TdsVecSetEdgeMask(m_Edge, 5); // エッジと判断する中空点数の初期値：5
-    fg |= TdsVecSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
+    fg |= ScannerSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
 
     return fg;
 }
@@ -2366,7 +2378,7 @@ void HwCtrl::GetScanDataThread_new()
             }
             else if (iMeasType != TDS_MEASTYPE_NORMAL)					// 測定タイプの通常計測モードでないとき再設定
             {
-                if (!TdsVecSetMeasType(TDS_MEASTYPE_NORMAL))
+                if (!ScannerSetMeasType(TDS_MEASTYPE_NORMAL))
                 {
                     // ログ出力 
                     // スレット終了へ
@@ -3225,30 +3237,26 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
         //{
         //    FileOutput();
         //}
-
-        ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
-        // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメントアウト追加2025.5.15yori)
-        // ダミースキャンは、奇数Noが有効な座標値、偶数Noが無効な座標値が取得される。(コメントアウト追加2025.5.15yori)
-        if (ptlinedata2025->iSendDataNo != 0) // 有効データ数を構造体へ追加(2021.12.1yori)
+        if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)  // アプリから接続した、非接触点検、キャリブレーション場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
         {
-            int isize = sizeof(OneLineData2);  // 転送データ数(バイト)：196216 // sizeofで確認(2025.5.15yori)
-
-            //iRecQue = LplSendMesBox2(NONCONTACT_DATA, isize, (char*)(ptlinedata2025));  // VECのijkを取得するため、OneLineData2を送信する(2021.5.27yori)
-            if (m_b_Button_ConnectFlag == false)  // アプリから接続した場合は、PolyWorksへデータを送信しない。(2025.7.3yori)
+            ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
+            // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメント追加2025.5.15yori)
+            // ダミースキャンは、奇数Noが有効な座標値、偶数Noが無効な座標値が取得される。(コメント追加2025.5.15yori)
+            if (ptlinedata2025->iSendDataNo != 0) // 有効データ数を構造体へ追加(2021.12.1yori)
             {
+                int isize = sizeof(OneLineData2);  // 転送データ数(バイト)：196216 // sizeofで確認(2025.5.15yori)
                 iRecQue = LplSendMesBox(NONCONTACT_DATA, isize, (char*)(ptlinedata2025));  // (2025.5.15yori)
+                // Queに積めたかどうか
+                if (iRecQue != 0)
+                {
+                    // 0以外の戻りはない
+                }
+                bCheckFg = true;
             }
-            // Queに積めたかどうか
-            if (iRecQue != 0)
+            else // すべて無効の場合はデータを積まないで戻る
             {
-                // 0以外の戻りはない
+                //bCheckFg = false; // コメントアウト(2025.5.15yori)
             }
-
-            bCheckFg = true;
-        }
-        else // すべて無効の場合はデータを積まないで戻る
-        {
-            //bCheckFg = false; // コメントアウト(2025.5.15yori)
         }
     //}
 

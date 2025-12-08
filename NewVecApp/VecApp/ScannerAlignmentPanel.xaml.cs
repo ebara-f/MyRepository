@@ -1,4 +1,4 @@
-﻿// 追加(2025.12.5yori)
+﻿// 追加(2025.12.7yori)
 using CSH;
 using Microsoft.VisualBasic;
 using System;
@@ -38,9 +38,6 @@ namespace VecApp
             this.ViewModel.IsStartBtnEnabled = true;
             this.ViewModel.IsBackBtnEnabled = false;
             this.ViewModel.IsReStartBtnEnabled = false;
-            this.ViewModel.IsSaveBtnEnabled = false;
-            this.ViewModel.IsSettingBtnEnabled = true;
-            this.ViewModel.SnapVisibility = Visibility.Hidden;
             this.ViewModel.IsTextBoxEnabled = true;
         }
 
@@ -58,6 +55,7 @@ namespace VecApp
             CSH.Grp02.ScannerAlignmentPanelInit(ref this.ViewModel.CalibScannerMseBox, out path, 512, out mes, 1024);
             this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
+            this.ViewModel.StartButtonText = VecApp.Properties.Resources.String273; // フルキャリ開始(2025.12.8yori)
         }
 
         public override void Terminate()
@@ -264,10 +262,10 @@ namespace VecApp
             //}
         }
 
-        // 開始ボタン
-        private void Click_StartBtn(object sender, RoutedEventArgs e)
+        // フルキャリ開始ボタン
+        private void Click_FullCalStartBtn(object sender, RoutedEventArgs e)
         {
-            CSH.Grp03.Cmd01(); // スキャンスタート(2025.12.5yori)
+            CSH.Grp03.ScannerAlignmentPanelFullCalStartBtn(); // スキャンスタート(2025.12.8yori)
         }
 
         private void Click_BackBtn(object sender, RoutedEventArgs e)
@@ -288,7 +286,6 @@ namespace VecApp
             this.ViewModel.IsTextBoxEnabled = true;
             this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
-            this.ViewModel.IsSettingBtnEnabled = true;
 
             //確認用(ResutTextのOK/NGの切り替え)　アスタワン様サンプル
             //this.ViewModel.ResultText = this.ViewModel.ToggleResultText();
@@ -331,43 +328,6 @@ namespace VecApp
             test = dlg.ShowDialog();
             
 
-        }
-
-
-        private void Click_SettingBtn(object sender, RoutedEventArgs e)
-        {
-            Parent.CurrentPanel = Panel.Setting;
-        }
-
-
-        private void Click_SaveBtn(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
-        private void Click_SnapBtn(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-
-        private void Click_HelpBtn(object sender, RoutedEventArgs e)
-        {
-            //switch((CalibType)this.ViewModel.CalibMseBox.CalibType)
-            //{
-            //    case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
-            //        this.ViewModel.ImageSource = "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\chkpos_V8_Multi.png";
-            //        break;
-
-            //    case CalibType.ALIGNMENT_MULTI_GAUGE:
-            //        this.ViewModel.ImageSource = "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\light_V8_Multi.png";
-            //        break;
-
-            //    default:
-            //        break;
-            //}
-                
         }
 
         private void Click_ProbeBtn(object sender, RoutedEventArgs e)

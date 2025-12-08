@@ -329,3 +329,21 @@ int WINAPI CPX_Grp03_Cmd18()
 
     return(rc);
 }
+
+
+
+/***********************************************************************
+
+    CPX_Grp03_ScannerAlignmentPanelFullCalStartBtn
+    2025.12.8yori
+
+***********************************************************************/
+
+int WINAPI CPX_Grp03_ScannerAlignmentPanelFullCalStartBtn()
+{
+    int     rc;
+
+    rc = Grp03::ScannerAlignmentPanelFullCalStartBtn();
+
+    return(rc);
+}

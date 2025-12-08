@@ -73,6 +73,9 @@ namespace CSH
         [DllImport("CPX.dll")]
         public extern static int CPX_Grp03_Cmd18(); // 追加(2025.11.11yori)
 
+        [DllImport("CPX.dll")]
+        public extern static int CPX_Grp03_ScannerAlignmentPanelFullCalStartBtn(); // 追加(2025.12.8yori)
+
         #endregion
 
         /// <summary>
@@ -240,6 +243,15 @@ namespace CSH
         static public int Cmd18()
         {
             return CPX_Grp03_Cmd18();
+        }
+
+        /// <summary>
+        /// ScannerAlignmentPanelFullCalStartBtn
+        /// 追加(2025.11.11yori)
+        /// </summary>
+        static public int ScannerAlignmentPanelFullCalStartBtn()
+        {
+            return CPX_Grp03_ScannerAlignmentPanelFullCalStartBtn();
         }
     }
 }

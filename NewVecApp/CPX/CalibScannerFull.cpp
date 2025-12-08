@@ -29,7 +29,4 @@ void CalibScannerFull::InitSub(CALIB_SCANNER_MSEBOX* para)
 		wcscpy_s(para->msg, 256, _T("Unexpected events."));
 		break;
 	}
-
-	// ”ñÚG‘ª’è‰¹ON
-	HwCtrl::Func60();
 }

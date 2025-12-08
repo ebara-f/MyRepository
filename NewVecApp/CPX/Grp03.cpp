@@ -351,3 +351,26 @@ int Grp03::Cmd18()
 
     return (ret);
 }
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelFullCalStartBtn
+    追加(2025.12.8yori)
+
+***********************************************************************/
+
+int Grp03::ScannerAlignmentPanelFullCalStartBtn()
+{
+    int ret = 0;
+
+    WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
+
+    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_START_REQ; // スキャンスタート
+    HwCtrl::ScannerSetMeasType(TDS_MEASTYPE_CALIB_FULL);
+
+    ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
+
+    return (ret);
+}

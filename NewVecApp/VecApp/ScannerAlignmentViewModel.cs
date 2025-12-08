@@ -18,7 +18,7 @@ namespace VecApp
 
         public ScannerAlignmentViewModel()
         {
-            ImageSource = "Image/1-1-1.png";
+            ImageSource = "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"; // 変更(2025.12.8yori)
         }
 
         private Visibility _imageVisibility = Visibility.Visible;
@@ -205,7 +205,7 @@ namespace VecApp
             }
         }
 
-        private string _subtitleText;
+        private string _subtitleText = "[面]-[1点目]測定してください。";
         public string SubtitleText
         {
             get => _subtitleText;
@@ -836,21 +836,6 @@ namespace VecApp
         }
         public Brush ResultBackground4 => ResultJudge4 ? Brushes.LightGreen : Brushes.LightPink;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // TextBoxの有効無効を設定する。 2025.9.2 add eba
         private bool _isTextBoxEnabled = false; // 初期状態は無効
 
@@ -926,53 +911,6 @@ namespace VecApp
                 {
                     _isReStartBtnEnabled = value;
                     OnPropertyChanged(nameof(IsReStartBtnEnabled));
-                }
-            }
-        }
-
-        // 結果保存ボタンの有効無効を設定する。 2025.9.2 add eba
-        private bool _isSaveBtnEnabled = true; // 初期状態は有効
-
-        public bool IsSaveBtnEnabled
-        {
-            get { return _isSaveBtnEnabled; }
-            set
-            {
-                if (_isSaveBtnEnabled != value)
-                {
-                    _isSaveBtnEnabled = value;
-                    OnPropertyChanged(nameof(IsSaveBtnEnabled));
-                }
-            }
-        }
-
-        // 設定ボタンの有効無効を設定する。 2025.9.2 add eba
-        private bool _isSettingBtnEnabled = true; // 初期状態は有効
-
-        public bool IsSettingBtnEnabled
-        {
-            get { return _isSettingBtnEnabled; }
-            set
-            {
-                if (_isSettingBtnEnabled != value)
-                {
-                    _isSettingBtnEnabled = value;
-                    OnPropertyChanged(nameof(IsSettingBtnEnabled));
-                }
-            }
-        }
-
-        // 2025.9.22 add eba
-        private Visibility _snapVisibility = Visibility.Hidden;
-        public Visibility SnapVisibility
-        {
-            get => _snapVisibility;
-            set
-            {
-                if (_snapVisibility != value)
-                {
-                    _snapVisibility = value;
-                    OnPropertyChanged(nameof(SnapVisibility));
                 }
             }
         }

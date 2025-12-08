@@ -1555,13 +1555,13 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_INIT_CMP:
-            if (HwCtrl::m_ScannerAlignmentFlag) // 非接触点検キャリブレーションの場合(2025.12.5yori)
+            if (HwCtrl::m_ScannerAlignmentFlag) // 非接触点検キャリブレーションの場合(2025.12.8yori)
             {
                 HwCtrl::m_Type = int(CALIB_TYPE::SCANNER_FULL);
                 UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn02);
                 UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show);
                 UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup);
-                HwCtrl::m_ScannerAlignmentFlag = false;
+                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL;
             }
             Sleep(100);
             break;
