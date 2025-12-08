@@ -12,6 +12,7 @@
 
 #define CALIB_PATH L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles" // ’Ç‰Á(2025.12.4yori)
 #define MACHINECHECK_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\MachineCheck\\MachineCheck.txt" // ’Ç‰Á(2025.12.4yori)
+#define CALSCN_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\calscn\\calscn.txt" // ’Ç‰Á(2025.12.8yori)
 
 // 2025.8.27 add eba
 enum class CALIB_TYPE

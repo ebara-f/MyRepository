@@ -522,8 +522,8 @@ void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
 
 		case CALIB_TYPE::SCANNER_FULL:
 			swprintf(wc_no, 8, L"%d", HwCtrl::m_ScanShotNo + 1);
-			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_INI);
-			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[ñ ]-[äÓñ{épê®]-[ãﬂ]"), wc_msg, 512, MACHINECHECK_INI);
+			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\calscn\\V7\\Shot1.png"), wc_path, 256, CALSCN_INI);
+			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[ñ ]-[äÓñ{épê®]-[ãﬂ]"), wc_msg, 512, CALSCN_INI);
 			break;
 
 		default:

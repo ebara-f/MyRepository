@@ -1360,7 +1360,7 @@ void AppMain::ThreadProc()
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_ING;
             break;
 
-        case VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_ING: // 非接触点検キャリブ座標系作成(2025.12.4yori)
+        case VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_ING: // 非接触点検キャリブ座標系作成(2025.12.8yori)
             ret = HwCtrl::Func05(&PosiData);
             if ((ret == 0) && (PosiData.button & 0x01) == 0x01 && (PosiData.no != -1) && (HwCtrl::m_hVecCnt.m_GetdataNo != 0)) // SW1(トリガボタンを押した場合)
             {
@@ -1370,6 +1370,10 @@ void AppMain::ThreadProc()
                 UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_MesCallBack);
                 if (HwCtrl::m_ShotNo == HwCtrl::m_ShotMax)
                 {
+                    MakeMtxResult Result;
+                    TdsVecExecMakeMatrix(HwCtrl::m_hVecCnt.VecSts_GetProbeDia(), &Result);	// 座標系作成を実行
+                    TdsVecSetMatrix(Result.dMatrix); // マトリクスを設定
+                    TdsVecSetSphCod(Result.dSphere); // 球座標を設定
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close);
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_INIT_REQ;
                     HwCtrl::m_ShotNo = 0;
@@ -1578,19 +1582,24 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL:
-        case VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP:
             // PolyWorksから接続かつ非接触設定メニューの閉じるボタンを押した場合(2025.11.11yori)
             if (HwCtrl::m_b_Button_ConnectFlag == false && HwCtrl::m_ScannerSettingCloseFlag == true)
             {
                 UsrMsg::CallBack(UsrMsg::WM_SubWnd03_Close); // SubWindow3非表示(2025.11.11yori)
                 HwCtrl::m_ScannerSettingCloseFlag = false;
             }
+
             if (HwCtrl::m_ScannerAlignmentFlag) // 非接触点検キャリブレーションの場合(2025.12.5yori)
             {
                 if (HwCtrl::m_ScanShotNo != HwCtrl::m_ScanShotOldNo)
                 {
                     HwCtrl::m_ScanShotOldNo = HwCtrl::m_ScanShotNo;
                     UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_MesCallBack);
+                }
+
+                if (HwCtrl::EndFg) // 全ての点検、キャリブデータを取得した場合(2025.12.8yori)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_STOP_REQ;
                 }
             }
             Sleep(100);
@@ -1599,6 +1608,10 @@ void AppMain::ThreadProc()
         case VEC_STEP_SEQ::SCANNER_SCAN_STOP_REQ:
             HwCtrl::Func20(); // スキャン停止
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP;
+            break;
+
+        case VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP: // SCANNER_SCAN_MEAS_IDELから移動(2025.12.8yori)
+            Sleep(100);
             break;
         
         case VEC_STEP_SEQ::OPEN_SCANNER_MEAS_DIALOG_REQ: // PolyWorksの設定ボタンが押され、非接触設定メニューを表示する。(2025.9.3yori)

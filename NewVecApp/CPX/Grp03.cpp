@@ -7,6 +7,7 @@
 
 #include "Grp03.h"
 #include "UsrMsg.h"
+#include "CalibComm.h" // 追加(2025.12.8yori)
 
 
 
