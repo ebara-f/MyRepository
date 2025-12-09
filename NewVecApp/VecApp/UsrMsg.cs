@@ -101,5 +101,6 @@ namespace VecApp
         public const int WM_ScannerAlignmentPanel_MesCallBack = WM_USER + 45; // 追加(2025.12.2yori)
         public const int WM_ScannerAlignmentPanel_Show = WM_USER + 46; // 追加(2025.12.5yori)
         public const int WM_ScannerAlignmentPanel_Setup = WM_USER + 47; // 追加(2025.12.5yori)
+        public const int WM_ScannerAlignmentPanel_ResultCallBack = WM_USER + 48; // 追加(2025.12.5yori)
     }
 }

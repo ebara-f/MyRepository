@@ -648,3 +648,21 @@ int Grp02::ScannerAlignmentPanelTerminate()
 
     return (ret);
 }
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelResultCallBack
+    2025.12.9yori
+
+***********************************************************************/
+
+int Grp02::ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para)
+{
+    int ret = 0;
+
+    CalibComm::ScannerAlignmentPanelResultCallBack(para);
+
+    return (ret);
+}

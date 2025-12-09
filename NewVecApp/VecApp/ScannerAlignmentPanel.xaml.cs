@@ -63,6 +63,7 @@ namespace VecApp
             CSH.Grp02.ScannerAlignmentPanelTerminate();           
         }
 
+        // 点検キャリブ画像切り替え(2025.12.5yori)
         public void MesCallBack()
         {
             CSH.Grp02.ScannerAlignmentPanelMesCallBack(ref this.ViewModel.CalibScannerMseBox);
@@ -73,193 +74,37 @@ namespace VecApp
             //this.ViewModel.CalibMseBox.MesString = 0;
         }
 
-        public void ParaOutCallBack()
+        // 結果表示(2025.12.9yori)
+        public void ResultCallBack()
         {
-            //CSH.Grp02.ScannerAlignmentPanelParaOutCallBack(ref this.ViewModel.CalibMseBox);
+            CSH.Grp02.ScannerAlignmentPanelResultCallBack(ref this.ViewModel.CalibScannerMseBox);
             this.ViewModel.SubtitleText = VecApp.Properties.Resources.String265;
 
-            //switch ((CalibType)this.ViewModel.CalibMseBox.CalibType)
-            //{
-            //    case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
-            //        this.ViewModel.ImageVisibility = Visibility.Hidden;
-            //        this.ViewModel.GridVisibility = Visibility.Visible;
+            switch ((CalibType)this.ViewModel.CalibScannerMseBox.CalibType)
+            {
+                case CalibType.SCANNER_FULL:
+                    this.ViewModel.ImageVisibility = Visibility.Hidden;
+                    this.ViewModel.GridVisibility2 = Visibility.Visible;
 
-            //        this.ViewModel.XMaxMinValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.pp[0].ToString("F3");
-            //        this.ViewModel.YMaxMinValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.pp[1].ToString("F3");
-            //        this.ViewModel.ZMaxMinValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.pp[2].ToString("F3");
+                    // OK・NG表示
+                    if (this.ViewModel.CalibScannerMseBox.CalibResultJudge == 0)
+                    {
+                        this.ViewModel.ResultText2 = "OK";
+                        this.ViewModel.ResultJudge2 = true;  // 背景色緑
+                    }
+                    else
+                    {
+                        this.ViewModel.ResultText2 = "NG";
+                        this.ViewModel.ResultJudge2 = false; // 背景色赤
+                    }
 
-            //        this.ViewModel.XTwoSigmaValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.sigma2[0].ToString("F3");
-            //        this.ViewModel.YTwoSigmaValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.sigma2[1].ToString("F3");
-            //        this.ViewModel.ZTwoSigmaValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.sigma2[2].ToString("F3");
-            //        this.ViewModel.DistanceTwoSigmaValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.sigma2[3].ToString("F3");
+                    //SetHistoryText(this.ViewModel.CalibMseBox.CalibResultVal.ToString("F0"));
 
-            //        this.ViewModel.FaceDistanceValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.plate.ToString("F3");
-            //        this.ViewModel.MeasurementErrorValue = this.ViewModel.CalibMseBox.PlateErrVal.ToString("F3");
+                    break;
 
-            //        // OK・NG表示
-            //        if (this.ViewModel.CalibMseBox.CalibInspectJudge == 0)
-            //        {
-            //            this.ViewModel.ResultText = this.ViewModel.ToggleResultText();  // OK
-            //            this.ViewModel.ResultJudge = true;  // 背景色緑
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.ResultJudge = false; // 背景色赤
-            //        }
-
-            //        // 各結果の背景色変更
-            //        if (this.ViewModel.CalibMseBox.InspectionResultFg.pp[0] == 0)
-            //        {
-            //            this.ViewModel.XMaxMinJudge = true;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.XMaxMinJudge = false;
-            //        }
-
-            //        if (this.ViewModel.CalibMseBox.InspectionResultFg.pp[1] == 0)
-            //        {
-            //            this.ViewModel.YMaxMinJudge = true;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.YMaxMinJudge = false;
-            //        }
-
-            //        if (this.ViewModel.CalibMseBox.InspectionResultFg.pp[2] == 0)
-            //        {
-            //            this.ViewModel.ZMaxMinJudge = true;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.ZMaxMinJudge = false;
-            //        }
-
-            //        if (this.ViewModel.CalibMseBox.InspectionResultFg.sigma2[0] == 0)
-            //        {
-            //            this.ViewModel.XTwoSigmaJudge = true;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.XTwoSigmaJudge = false;
-            //        }
-
-            //        if (this.ViewModel.CalibMseBox.InspectionResultFg.sigma2[1] == 0)
-            //        {
-            //            this.ViewModel.YTwoSigmaJudge = true;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.YTwoSigmaJudge = false;
-            //        }
-
-            //        if (this.ViewModel.CalibMseBox.InspectionResultFg.sigma2[2] == 0)
-            //        {
-            //            this.ViewModel.ZTwoSigmaJudge = true;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.ZTwoSigmaJudge = false;
-            //        }
-
-            //        if (this.ViewModel.CalibMseBox.InspectionResultFg.sigma2[3] == 0)
-            //        {
-            //            this.ViewModel.DistanceTwoSigmaJudge = true;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.DistanceTwoSigmaJudge = false;
-            //        }
-
-            //        if (this.ViewModel.CalibMseBox.InspectionResultFg.plate == 0)
-            //        {
-            //            this.ViewModel.MeasurementErrorJudge = true;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.MeasurementErrorJudge = false;
-            //        }
-
-
-
-            //        // しきい値表示
-            //        this.ViewModel.ThresholdText =
-            //                "最大最小しきい値 : " +
-            //                this.ViewModel.CalibMseBox.InspectionThreshold.pp.ToString("F2") +
-            //                "\n" +
-            //                "2σしきい値 : " +
-            //                this.ViewModel.CalibMseBox.InspectionThreshold.sigma2.ToString("F2") +
-            //                "\n" +
-            //                "面間誤差しきい値 : " +
-            //                this.ViewModel.CalibMseBox.InspectionThreshold.plate.ToString("F2");
-
-            //        break;
-
-            //    case CalibType.ALIGNMENT_MULTI_GAUGE:
-            //        this.ViewModel.ImageVisibility = Visibility.Hidden;
-            //        this.ViewModel.GridVisibility2 = Visibility.Visible;
-
-            //        // OK・NG表示
-            //        if (this.ViewModel.CalibMseBox.CalibResultJudge == 0)
-            //        {
-            //            this.ViewModel.ResultText2 = "OK";
-            //            this.ViewModel.ResultJudge2 = true;  // 背景色緑
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.ResultText2 = "NG";
-            //            this.ViewModel.ResultJudge2 = false; // 背景色赤
-            //        }
-
-            //        //SetHistoryText(this.ViewModel.CalibMseBox.CalibResultVal.ToString("F0"));
-
-            //        break;
-
-            //    case CalibType.ALIGNMENT_BALL_GAUGE_STD:
-            //        this.ViewModel.ImageVisibility = Visibility.Hidden;
-            //        this.ViewModel.GridVisibility3 = Visibility.Visible;
-
-            //        this.ViewModel.CenterBefValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.ri.ToString("F3");
-            //        this.ViewModel.DiaBefValue = this.ViewModel.CalibMseBox.InspAndProbCkResult.Ps.ToString("F3");
-            //        this.ViewModel.CenterAftValue = this.ViewModel.CalibMseBox.InspAndProbCkResult2.ri.ToString("F3");
-            //        this.ViewModel.DiaAftValue = this.ViewModel.CalibMseBox.InspAndProbCkResult2.Ps.ToString("F3");
-
-            //        // しきい値表示
-            //        this.ViewModel.ThresholdText3 =
-            //                "最大最小しきい値 : " +
-            //                this.ViewModel.CalibMseBox.InspectionThreshold.pp.ToString("F2") +
-            //                "\n" +
-            //                "2σしきい値 : " +
-            //                this.ViewModel.CalibMseBox.InspectionThreshold.sigma2.ToString("F2") +
-            //                "\n" +
-            //                "面間誤差しきい値 : " +
-            //                this.ViewModel.CalibMseBox.InspectionThreshold.plate.ToString("F2");
-
-            //        // 収束したかどうか
-            //        if (this.ViewModel.CalibMseBox.CalibResultJudge == 0)
-            //        {  
-            //            this.ViewModel.ResultText3 = VecApp.Properties.Resources.String266;
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.ResultText3 = VecApp.Properties.Resources.String267;
-            //        }
-
-            //        // 精度が改善したかどうか
-            //        if (this.ViewModel.CalibMseBox.CalibInspectJudge == 0)
-            //        {
-            //            this.ViewModel.ResultJudge3 = true;  // 背景色緑
-            //        }
-            //        else
-            //        {
-            //            this.ViewModel.ResultJudge3 = false; // 背景色黄色
-            //        }
-
-            //        break;
-
-            //    default:
-            //        break;
-            //}
+                default:
+                    break;
+            }
         }
 
         // フルキャリ開始ボタン

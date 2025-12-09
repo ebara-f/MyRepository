@@ -40,6 +40,18 @@
                            Height="470" Margin="5,-10,150,10"
                            Visibility="{Binding ImageVisibility}" Grid.ColumnSpan="2"/>
 
+                        <!-- キャリブOK/NG表示(2025.12.9yori) -->
+                        <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,245,10"
+                           Visibility="{Binding GridVisibility2}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ResultText2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,15,0,0" VerticalAlignment="Center" Height="230" FontSize="65" TextAlignment="Center" Background="{Binding ResultBackground2}"/>
+                        </Grid>
+
                         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Orientation="Vertical" Margin="10,0,0,0" VerticalAlignment="Top">
                             <!-- スタートボタン名バインディング(2025.12.5yori) -->
                             <Button Content="{Binding StartButtonText}" Margin="0,0,0,5" Click="Click_FullCalStartBtn" IsEnabled="{Binding IsStartBtnEnabled}" Style="{StaticResource PanelStartButton2Style}" FontSize="20"/>

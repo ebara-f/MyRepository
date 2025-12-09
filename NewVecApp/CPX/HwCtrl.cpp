@@ -74,6 +74,7 @@ double          HwCtrl::m_PointerCheckScanData = 0; // ポインタ位置チェ�
 int             HwCtrl::m_PointerCheckLineNo = 1; // ポインタ位置チェック用ライン数(2025.7.4yori)
 int             HwCtrl::m_ShotNo = 0; // 非接触点検、キャリブ用(2025.12.2yori)
 int             HwCtrl::m_ShotMax = 12; // 非接触点検、キャリブ用(2025.12.2yori)
+int             HwCtrl::m_ScannerCalibResultJudge = 0; // 非接触キャリブ結果判定 OK:0 NG:1 (2025.12.9yori)
 
 
 
@@ -3330,9 +3331,11 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                     ttb[2] = ttb_old[2] + ptCalibResult->tArmParam.dArmAddTilt[2];
                     m_hVecCnt.VecSetScannerPara(ofb[0], ofb[1], ofb[2], ttb[0], ttb[1], ttb[2]);
                     m_ScanShotNo = 0;
+                    m_ScannerCalibResultJudge = 0; // 追加(2025.12.9yori)
                 }
                 else
                 {
+                    m_ScannerCalibResultJudge = 1; // 追加(2025.12.9yori)
                     ErrorCode = TdsVecErrorCode();
                     char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
                     // エラーメッセージは後でコーディング(2025.5.15yori)

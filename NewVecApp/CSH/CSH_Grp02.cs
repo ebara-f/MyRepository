@@ -177,14 +177,70 @@ namespace CSH
         PROBEINSPECT_MULTI_GAUGE_NEST_STD,  // CALIB_MODE_PROBE_CHECK
         PROBEINSPECT_MULTI_GAUGE_NEST_EXT,  // CALIB_MODE_PROBE_CHECK_EXT
         // PROBEINSPECTのBALLはない 2025.10.31 memo eba
+        SCANNER_MAKE_MATRIX,				// 非接触点検キャリブレーションの座標系作成(2025.12.9yori)
+	    SCANNER_FULL,						// 非接触フルキャリブレーション(2025.12.9yori)
 
         END
     }
 
     // 非接触関連(2025.12.5yori)
+    //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    //public struct SensorParam               //! センサパラメータを格納する構造体
+    //{
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    //    double [] dSensorOffset;            //!< センサオフセット値X,Y,Z (mm)
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    //    double [] dSensorTilt;              //!< センサチルト値X,Y,Z (度)
+    //}
+
+    //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    //public struct ArmParam                  //! アームパラメータを格納する構造体
+    //{
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    //    double [] dArmAddOffset;            //!< アームオフセット加算値X,Y,Z (mm)
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    //    double [] dArmAddTilt;              //!< アームチルト加算値X,Y,Z (度)
+    //}
+
+    //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    //public struct CalibResult2              //! キャリブレーション算出結果を格納する構造体
+    //{
+    //    SensorParam tSensorParam;           //!< センサパラメータ
+    //    ArmParam tArmParam;                 //!< アームパラメータ
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4 * 3)]
+    //    public double [] dResult;           //!< 4球中心座標結果(面確認計測の場合は面法線ベクトル)
+    //}
+
+    //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    //public struct ChkScnResult              //! 始業前点検の結果を格納するための構造体
+    //{
+    //    public short sResult;               //!< OK(=1)、NG(=0)
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4 * 4)]
+    //    public double [] dSph;              //!< 4ショットそれぞれの球重心と球半径(mm)
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3 * 3)]
+    //    public double [] dSphMaxMin;        //!< 球重心4ショット中のXYZの最大値と最小値(mm)
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+    //    public double [] dPlnHeight;        //!< 4ショットそれぞれの面高さ(mm)
+    //    public double dPlnLength;           //!< 面間距離基準値(mm)
+    //    public double dPlnLenDifference;    //!< 面間距離誤差値(mm)
+    //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+    //    public int [] iAverageR;            //!< 4ショットそれぞれの平均輝度
+    //    public int iCheckBright;            //!< 輝度チェック結果 OK(=1)、NG(=0)
+    //}
+
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct CalibScannerMseBox
     {
+        //public CalibResult2 CalibResult;    // 有接触と型が重複するため、CalibResult→CalibResult2へ変更
+        //public ChkScnResult ChkResult;
+
+        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        //public double [] maxmin;            // 球中心座標値のmaxmin[0]:x, maxmin[1]:y, maxmin[2]:z
+        //public double maxh;                 // 最大面高さ
+        //public double minh;                 // 最小面高さ
+
+        public int CalibResultJudge;          // 収束したか否か
+
         public int Language;
         public int CalibType;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
@@ -288,6 +344,10 @@ namespace CSH
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_Grp02_ScannerAlignmentPanelTerminate(); // 追加(2025.12.4yori)
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_ScannerAlignmentPanelResultCallBack(ref CalibScannerMseBox para); // 追加(2025.12.9yori)
+        
         #endregion
 
         /// <summary>
@@ -629,6 +689,15 @@ namespace CSH
         static public int ScannerAlignmentPanelTerminate()
         {
             return CPX_Grp02_ScannerAlignmentPanelTerminate();
+        }
+
+
+        /// <summary>
+        /// 追加(2025.12.9yori)
+        /// </summary>
+        static public int ScannerAlignmentPanelResultCallBack(ref CalibScannerMseBox para)
+        {
+            return CPX_Grp02_ScannerAlignmentPanelResultCallBack(ref para);
         }
     }
 }

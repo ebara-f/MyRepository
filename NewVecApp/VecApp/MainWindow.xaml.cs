@@ -396,11 +396,23 @@ namespace VecApp
                 // 現在表示されているPanelクラスを取得
                 var Content = m_SubWnd02.MainContent.Content;
 
-                // パネルが表示されており(非null)、表示されているパネルが目的のパネル(Panel.Inspection)が表示されているか確認
+                // パネルが表示されており(非null)、表示されているパネルが目的のパネル(Panel.ScannerAlignment)が表示されているか確認
                 if (Content != null && (Content as PanelBase).Type == Panel.ScannerAlignment)
                 {
                     // ContentがScannerAlignmentPanelであればキャストしてアクセスする
                     (Content as ScannerAlignmentPanel).MesCallBack();
+                }
+            }
+            else if (msg == UsrMsg.WM_ScannerAlignmentPanel_ResultCallBack) // 追加(2025.12.9yori)
+            {
+                // 現在表示されているPanelクラスを取得
+                var Content = m_SubWnd02.MainContent.Content;
+
+                // パネルが表示されており(非null)、表示されているパネルが目的のパネル(Panel.ScannerAlignment)が表示されているか確認
+                if (Content != null && (Content as PanelBase).Type == Panel.ScannerAlignment)
+                {
+                    // ContentがScannerAlignmentPanelであればキャストしてアクセスする
+                    (Content as ScannerAlignmentPanel).ResultCallBack();
                 }
             }
             else if (msg == UsrMsg.WM_Init0Panel_Setup)

@@ -827,7 +827,6 @@ int AppMain::UpDateData05_Default(GAUGE* ga)
     return(0);
 }
 
-
 /***********************************************************************
 
     2025.9.2 eba
@@ -841,7 +840,6 @@ int AppMain::ContactInspectionPanelMesCallBack()
 
     return(0);
 }
-
 
 /***********************************************************************
 
@@ -1600,6 +1598,7 @@ void AppMain::ThreadProc()
                 if (HwCtrl::EndFg) // 全ての点検、キャリブデータを取得した場合(2025.12.8yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_STOP_REQ;
+                    UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_ReultCallBack);
                 }
             }
             Sleep(100);

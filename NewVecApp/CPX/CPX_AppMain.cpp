@@ -44,6 +44,7 @@ int WINAPI CPX_AppMain_Term()
 }
 
 
+
 int WINAPI CPX_AppMain_SubWnd01()
 {
     int     rc;
@@ -52,6 +53,7 @@ int WINAPI CPX_AppMain_SubWnd01()
 
     return(rc);
 }
+
 
 
 int WINAPI CPX_AppMain_SubWnd02()
@@ -64,6 +66,7 @@ int WINAPI CPX_AppMain_SubWnd02()
 }
 
 
+
 int WINAPI CPX_AppMain_SubWnd03()
 {
     int     rc;
@@ -74,6 +77,7 @@ int WINAPI CPX_AppMain_SubWnd03()
 }
 
 
+
 int WINAPI CPX_AppMain_UpDateData01(STATUS01* sts)
 {
     int     rc;
@@ -82,6 +86,7 @@ int WINAPI CPX_AppMain_UpDateData01(STATUS01* sts)
 
     return(rc);
 }
+
 
 
 // 追加(2025.6.19yori)
@@ -95,6 +100,7 @@ int WINAPI CPX_AppMain_UpDateData02(STATUS02* sts)
 }
 
 
+
 // 追加(2025.6.24yori)
 int WINAPI CPX_AppMain_UpDateData03(STATUS03* sts)
 {
@@ -104,6 +110,7 @@ int WINAPI CPX_AppMain_UpDateData03(STATUS03* sts)
 
     return(rc);
 }
+
 
 
 // 追加(2025.7.31yori)
@@ -118,6 +125,7 @@ int WINAPI CPX_AppMain_UpDateData04(THRESHOLD* th, int id)
 }
 
 
+
 // 追加(2025.8.7yori)
 int WINAPI CPX_AppMain_UpDateData05(GAUGE* ga)
 {
@@ -127,6 +135,7 @@ int WINAPI CPX_AppMain_UpDateData05(GAUGE* ga)
 
     return(rc);
 }
+
 
 
 // 追加(2025.10.3yori)
@@ -140,6 +149,7 @@ int WINAPI CPX_AppMain_UpDateData06(STATUS04* sts)
 }
 
 
+
 // 追加(2025.10.6yori)
 int WINAPI CPX_AppMain_CountCheck(STATUS04* sts)
 {
@@ -149,6 +159,7 @@ int WINAPI CPX_AppMain_CountCheck(STATUS04* sts)
 
     return(rc);
 }
+
 
 
 // 追加(2025.7.18yori)
@@ -162,6 +173,7 @@ int WINAPI CPX_AppMain_UpDateData01_Write(STATUS01* sts)
 }
 
 
+
 // 追加(2025.8.25yori)
 int WINAPI CPX_AppMain_UpDateData02_Write(STATUS02* sts)
 {
@@ -171,6 +183,7 @@ int WINAPI CPX_AppMain_UpDateData02_Write(STATUS02* sts)
 
     return(rc);
 }
+
 
 
 // 追加(2025.8.1yori)
@@ -185,6 +198,7 @@ int WINAPI CPX_AppMain_UpDateData04_Write(THRESHOLD* th, int id)
 }
 
 
+
 // 追加(2025.8.9yori)
 int WINAPI CPX_AppMain_UpDateData05_Write(GAUGE* ga)
 {
@@ -194,6 +208,7 @@ int WINAPI CPX_AppMain_UpDateData05_Write(GAUGE* ga)
 
     return(rc);
 }
+
 
 
 // 追加(2025.8.1yori)
@@ -208,6 +223,7 @@ int WINAPI CPX_AppMain_UpDateData04_Default(THRESHOLD* th, int id)
 }
 
 
+
 // 追加(2025.8.9yori)
 int WINAPI CPX_AppMain_UpDateData05_Default(GAUGE* ga)
 {
@@ -217,6 +233,7 @@ int WINAPI CPX_AppMain_UpDateData05_Default(GAUGE* ga)
 
     return(rc);
 }
+
 
 
 // 追加(2025.8.9yori)

@@ -177,6 +177,7 @@ public:
     static int m_PointerCheckLineNo;                // ポインタ位置チェック用ライン数(2025.7.4yori)
     static int m_ShotNo;                            // 非接触点検、キャリブ用(2025.12.2yori)
     static int m_ShotMax;                           // 非接触点検、キャリブ用(2025.12.2yori)
+    static int m_ScannerCalibResultJudge;           // 非接触キャリブ結果判定 OK:0 NG:1 (2025.12.9yori)
 
     static int GetVecDataEx(VecDtEx* PosiData);
     static int GetMeasTopData();

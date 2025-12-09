@@ -501,7 +501,7 @@ int CalibComm::ParaOutCallBack(CALIB_MSEBOX* para)
 /***********************************************************************
 
 	非接触点検キャリブレーション画像のパスとメッセージ取得
-	2025.12.5yori
+	2025.12.9yori
 
 ***********************************************************************/
 void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
@@ -516,14 +516,14 @@ void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
 	{
 		case CALIB_TYPE::SCANNER_MAKE_MATRIX:
 			swprintf(wc_no, 8, L"%d", HwCtrl::m_ShotNo + 1);
-			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_INI);
-			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[1点目]測定してください。"), wc_msg, 512, MACHINECHECK_INI);
+			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_TXT);
+			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[1点目]測定してください。"), wc_msg, 512, MACHINECHECK_TXT);
 			break;
 
 		case CALIB_TYPE::SCANNER_FULL:
 			swprintf(wc_no, 8, L"%d", HwCtrl::m_ScanShotNo + 1);
-			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\calscn\\V7\\Shot1.png"), wc_path, 256, CALSCN_INI);
-			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[基本姿勢]-[近]"), wc_msg, 512, CALSCN_INI);
+			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\calscn\\V7\\Shot1.png"), wc_path, 256, CALSCN_TXT);
+			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[基本姿勢]-[近]"), wc_msg, 512, CALSCN_TXT);
 			break;
 
 		default:
@@ -574,6 +574,7 @@ void CalibComm::InitScanner(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_coun
 /***********************************************************************
 
 	閉じるボタンがクリックされたときに呼ぶ関数
+	2025.12.5yori
 
 ***********************************************************************/
 int CalibComm::CloseScanner()
@@ -588,4 +589,17 @@ int CalibComm::CloseScanner()
 	}
 
 	return (ret);
+}
+
+
+
+/***********************************************************************
+
+	非接触点検キャリブ結果コールバック関数
+	2025.12.9yori
+
+***********************************************************************/
+void CalibComm::ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para)
+{
+	para->CalibResultJudge = HwCtrl::m_ScannerCalibResultJudge;
 }

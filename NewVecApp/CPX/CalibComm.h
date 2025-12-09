@@ -11,8 +11,8 @@
 #include	"CalibDataBuff.h"
 
 #define CALIB_PATH L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles" // ’Ç‰Á(2025.12.4yori)
-#define MACHINECHECK_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\MachineCheck\\MachineCheck.txt" // ’Ç‰Á(2025.12.4yori)
-#define CALSCN_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\calscn\\calscn.txt" // ’Ç‰Á(2025.12.8yori)
+#define MACHINECHECK_TXT L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\MachineCheck\\MachineCheck.txt" // ’Ç‰Á(2025.12.9yori)
+#define CALSCN_TXT L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\calib\\calscn\\calscn.txt" // ’Ç‰Á(2025.12.9yori)
 
 // 2025.8.27 add eba
 enum class CALIB_TYPE
@@ -62,4 +62,5 @@ public:
 	static void InitScanner(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count); // ’Ç‰Á(2025.12.4yori)
 	static void ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para); // ’Ç‰Á(2025.12.4yori)
 	static int CloseScanner(); // ’Ç‰Á(2025.12.4yori)
+	static void ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para); // ’Ç‰Á(2025.12.9yori)
 };
