@@ -15,8 +15,8 @@
         Title="BeakMater Plug-in SoftWare(beta)" Height="240" Width="486" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
     <Grid Margin="5,5,5,5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <Grid.ColumnDefinitions>
-            <!-- *→1.5*へ変更(2025.11.3yori) -->
-            <ColumnDefinition Width="1.5*"/>
+            <!-- *→2*へ変更(2025.12.14yori) -->
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <!-- Btn01、Btn02、Btn03バインディング追加(2025.11.19yori) -->

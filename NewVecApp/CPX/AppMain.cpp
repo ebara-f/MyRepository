@@ -1379,14 +1379,6 @@ void AppMain::ThreadProc()
             }
             break;
 
-        case VEC_STEP_SEQ::SCANNER_ALIGNMENT_REQ: // 非接触点検キャリブ要求(2025.12.5yori)
-            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_ALIGNMENT_ING;
-            break;
-
-        case VEC_STEP_SEQ::SCANNER_ALIGNMENT_ING: // 非接触点検キャリブ(2025.12.5yori)
-            Sleep(100);
-            break;
-
         case VEC_STEP_SEQ::ARM_SELFCHECK_REQ: // 有接触自己診断(2025.6.11yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SELFCHECK_ING;
             break;
@@ -1595,6 +1587,8 @@ void AppMain::ThreadProc()
                     UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_MesCallBack);
                 }
 
+                if (HwCtrl::CalcFg) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_ALIGNMENT_REQ; // 計算中(2025.12.10yori)
+
                 if (HwCtrl::EndFg) // 全ての点検、キャリブデータを取得した場合(2025.12.8yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_STOP_REQ;
@@ -1626,6 +1620,20 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_DISCONNECT_CMP: // スキャナ切断処理完了(2025.9.3yori)
+            Sleep(100);
+            break;
+
+        case VEC_STEP_SEQ::SCANNER_ALIGNMENT_REQ: // 非接触点検キャリブ要求(2025.12.5yori)
+            //ProgBar::CallBackShow(2); // 計算中のプログレスバー表示(2025.12.10yori)
+            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_ALIGNMENT_ING;
+            break;
+
+        case VEC_STEP_SEQ::SCANNER_ALIGNMENT_ING: // 非接触点検キャリブ(2025.12.5yori)
+            if (!HwCtrl::CalcFg) // 計算が終了した場合(2025.12.10yori)
+            {
+                //ProgBar::CallBackHide();
+                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL;
+            }
             Sleep(100);
             break;
 

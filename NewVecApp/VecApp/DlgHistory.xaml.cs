@@ -41,10 +41,10 @@ namespace VecApp
 			var hwnd = new WindowInteropHelper((Window)sender).Handle;
 			SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
 
-			this.ViewModel.TextHistory = "AAAAAAAAAA";
-		}
+            //this.ViewModel.TextHistory = "AAAAAAAAAA"; // SetHistoryTextで入力したテキストが上書きされるため、コメントアウト(2025.12.10yori)
+        }
 
-		#endregion
+        #endregion
 
         /// <summary>
         /// メンバー変数

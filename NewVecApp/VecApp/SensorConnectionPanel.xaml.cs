@@ -50,12 +50,12 @@ namespace VecApp
         {
             if (SlideSwitch.Value == 1)
             {
-                SlideStatusText.Text = "オン";
+                SlideStatusText.Text = VecApp.Properties.Resources.String144; // 変更(2025.12.14yori)
                 CSH.Grp01.Cmd12();  // 暖機監視オン(2025.7.30yori)
             }
             else
             {
-                SlideStatusText.Text = "オフ";
+                SlideStatusText.Text = VecApp.Properties.Resources.String143; // 変更(2025.12.14yori)
                 CSH.Grp01.Cmd13();  // 暖機監視オフ(2025.7.30yori)
             }
         }

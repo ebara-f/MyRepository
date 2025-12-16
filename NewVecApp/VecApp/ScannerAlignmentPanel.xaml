@@ -40,8 +40,8 @@
                            Height="470" Margin="5,-10,150,10"
                            Visibility="{Binding ImageVisibility}" Grid.ColumnSpan="2"/>
 
-                        <!-- キャリブOK/NG表示(2025.12.9yori) -->
-                        <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,245,10"
+                        <!-- キャリブOK/NG表示(2025.12.10yori) -->
+                        <Grid Grid.Row="0" Grid.Column="0" Margin="5,-10,0,10"
                            Visibility="{Binding GridVisibility2}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -49,26 +49,29 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ResultText2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,15,0,0" VerticalAlignment="Center" Height="230" FontSize="65" TextAlignment="Center" Background="{Binding ResultBackground2}"/>
+                            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding ResultText2, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Margin="0,15,0,0" Height="470" FontSize="150" TextAlignment="Center" Background="{Binding ResultBackground2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                         </Grid>
 
                         <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Orientation="Vertical" Margin="10,0,0,0" VerticalAlignment="Top">
-                            <!-- スタートボタン名バインディング(2025.12.5yori) -->
-                            <Button Content="{Binding StartButtonText}" Margin="0,0,0,5" Click="Click_FullCalStartBtn" IsEnabled="{Binding IsStartBtnEnabled}" Style="{StaticResource PanelStartButton2Style}" FontSize="20"/>
-                            <Button Content="{x:Static res:Resources.String83}" Margin="0,0,0,5" Click="Click_BackBtn" IsEnabled="{Binding IsBackBtnEnabled}" Style="{StaticResource PanelBackButtonStyle}" FontSize="20"/>
-                            <Button Content="{x:Static res:Resources.String84}" Click="Click_FirstBackBtn" IsEnabled="{Binding IsReStartBtnEnabled}" Style="{StaticResource PanelFirstBackButtonStyle}" FontSize="20"/>
-                            <Button Content="{x:Static res:Resources.String85}" Click="Click_ProbeBtn" Margin="0,20,0,0" Visibility="{Binding GridVisibility}" Style="{StaticResource PanelButton2Style}" Height="40" FontSize="20"/>
-                            <!-- 中止ボタン(2025.12.5yori) -->
-                            <Button Content="{x:Static res:Resources.String263}" Click="Click_CancelBtn" Margin="0,20,0,0" Style="{StaticResource PanelButton2Style}" Height="40" FontSize="20"/>
+                            <!-- ユーザーキャリ開始ボタン、未作成のため無効化(2025.12.16yori) -->
+                            <Button Content="{x:Static res:Resources.String188}" Click="Click_UserCalStartBtn" Margin="0,0,0,5" Style="{StaticResource PanelStartButton2Style}" FontSize="20" IsEnabled="False" Opacity="0.25"/>
+                            <!-- フルキャリ開始ボタン(2025.12.16yori) -->
+                            <Button Content="{x:Static res:Resources.String273}" Margin="0,0,0,5" Click="Click_FullCalStartBtn" IsEnabled="{Binding IsFullCalStartBtnEnabled}" Style="{StaticResource PanelStartButton2Style}" FontSize="20" Opacity="{Binding FullCalStartButtonOpacity}"/>
+                            <!-- 戻るボタン -->
+                            <Button Content="{x:Static res:Resources.String83}" Margin="0,0,0,5" Click="Click_BackBtn" IsEnabled="{Binding IsBackBtnEnabled}" Style="{StaticResource PanelBackButtonStyle}" FontSize="20" Opacity="{Binding BackButtonOpacity}"/>
+                            <!-- 中止ボタン(2025.12.16yori) -->
+                            <Button Content="{x:Static res:Resources.String263}" Click="Click_StopBtn" IsEnabled="{Binding IsStopBtnEnabled}" Style="{StaticResource PanelButton2Style}" Height="40" FontSize="20" Opacity="{Binding StopButtonOpacity}"/>
+                            <!-- 閉じる(2025.12.5yori) -->
                             <Button Content="{x:Static res:Resources.String64}" Click="Click_CloseBtn" Width="80" Height="40" Margin="0,20,0,0" Style="{StaticResource PanelButton2Style}" FontSize="20"/>
                         </StackPanel>
 
+                        <!-- Margin変更(2025.12.16yori) -->
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,0,10,0" VerticalAlignment="Top">
                             <!-- FontSize="16"→"20"へ変更(2025.12.5yori) -->
                             <TextBox Width="573"
                                      Height="50"
                                      FontSize="20"
-                                     Margin="20,0,0,0"
+                                     Margin="0,0,0,0"
                                      VerticalContentAlignment="Center"
                                      Background="#2A2A2A"
                                      Foreground="White"

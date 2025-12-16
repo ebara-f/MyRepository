@@ -97,16 +97,18 @@
                                     ValueChanged="SlideSwitch_ValueChanged"
                                     Value="{Binding _SlideSwitch}" VerticalAlignment="Center"
                                     IsEnabled="False"
-                                    Opacity="0.25"/>
+                                    Opacity="0.25" Margin="5,5,0,0"/>
                                 
                                 <!-- 未作成のため、半透明化(2025.11.11yori) -->
+                                <!-- Text=修正(2025.12.14)-->
                                 <TextBlock
-                                    Text="{Binding _SlideText}"
+                                    x:Name="SlideStatusText"
+                                    Text="{x:Static res:Resources.String143}"
                                     Foreground="White"
                                     FontWeight="Bold"
                                     VerticalAlignment="Center"
                                     Margin="5,0,0,0"
-                                    Opacity="0.25"/>
+                                    Opacity="0.25" FontSize="20"/>
                             </StackPanel>
 
                             <Button Content="{x:Static res:Resources.String56}" Margin="600,0,7,0" Width="130" Height="50"

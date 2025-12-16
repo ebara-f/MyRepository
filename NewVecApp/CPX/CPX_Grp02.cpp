@@ -513,22 +513,6 @@ int WINAPI CPX_Grp02_SettingPanelCancelBtn(CALIB_MSEBOX* para)
 }
 
 
-/***********************************************************************
-
-    CPX_Grp02_ScannerAlignmentPanelMesCallBack
-    2025.12.2yori
-
-***********************************************************************/
-
-int WINAPI CPX_Grp02_ScannerAlignmentPanelMesCallBack(CALIB_SCANNER_MSEBOX* para)
-{
-    int     rc;
-
-    rc = Grp02::ScannerAlignmentPanelMesCallBack(para);
-
-    return(rc);
-}
-
 
 /***********************************************************************
 
@@ -547,6 +531,79 @@ int WINAPI CPX_Grp02_ScannerAlignmentPanelInit(CALIB_SCANNER_MSEBOX* para, TCHAR
 }
 
 
+
+/***********************************************************************
+
+    CPX_Grp02_ScannerAlignmentPanelMesCallBack
+    2025.12.2yori
+
+***********************************************************************/
+
+int WINAPI CPX_Grp02_ScannerAlignmentPanelMesCallBack(CALIB_SCANNER_MSEBOX* para)
+{
+    int     rc;
+
+    rc = Grp02::ScannerAlignmentPanelMesCallBack(para);
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelClickBack
+    2025.12.12yori
+
+***********************************************************************/
+
+int WINAPI CPX_Grp02_ScannerAlignmentPanelClickBack(CALIB_SCANNER_MSEBOX* para)
+{
+    int     rc;
+
+    rc = Grp02::ScannerAlignmentPanelClickBack(para);
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelClickReStart
+    2025.12.12yori
+
+***********************************************************************/
+
+int WINAPI CPX_Grp02_ScannerAlignmentPanelClickReStart(CALIB_SCANNER_MSEBOX* para)
+{
+    int     rc;
+
+    rc = Grp02::ScannerAlignmentPanelClickReStart(para);
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelResultCallBack
+    2025.12.16yori
+
+***********************************************************************/
+
+int WINAPI CPX_Grp02_ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para)
+{
+    int     rc;
+
+    rc = Grp02::ScannerAlignmentPanelResultCallBack(para);
+
+    return (rc);
+}
+
+
+
 /***********************************************************************
 
     CPX_Grp02_ScannerAlignmentPanelTerminate
@@ -559,22 +616,6 @@ int WINAPI CPX_Grp02_ScannerAlignmentPanelTerminate()
     int     rc;
 
     rc = Grp02::ScannerAlignmentPanelTerminate();
-
-    return(rc);
-}
-
-/***********************************************************************
-    
-    CPX_Grp02_ScannerAlignmentPanelTerminate
-    2025.12.4yori
-
-***********************************************************************/
-
-int WINAPI CPX_Grp02_ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* mes)
-{
-    int     rc;
-
-    rc = Grp02::ScannerAlignmentPanelResultCallBack(mes);
 
     return(rc);
 }

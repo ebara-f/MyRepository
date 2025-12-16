@@ -49,22 +49,6 @@ namespace VecApp
             }
         }
 
-
-        private Visibility _gridVisibility = Visibility.Hidden;
-        public Visibility GridVisibility
-        {
-            get => _gridVisibility;
-            set
-            {
-                if (_gridVisibility != value)
-                {
-                    _gridVisibility = value;
-                    OnPropertyChanged(nameof(GridVisibility));
-                }
-            }
-        }
-
-
         private string _xMaxMinValue;
         public string XMaxMinValue
         {
@@ -205,7 +189,7 @@ namespace VecApp
             }
         }
 
-        private string _subtitleText = "[面]-[1点目]測定してください。";
+        private string _subtitleText = "[Plane]-[First]Please measure."; // 変更(20925.12.14yori)
         public string SubtitleText
         {
             get => _subtitleText;
@@ -836,49 +820,18 @@ namespace VecApp
         }
         public Brush ResultBackground4 => ResultJudge4 ? Brushes.LightGreen : Brushes.LightPink;
 
-        // TextBoxの有効無効を設定する。 2025.9.2 add eba
-        private bool _isTextBoxEnabled = false; // 初期状態は無効
+        // フルキャリ開始ボタンの有効無効を設定する。(2025.12.16yori)
+        private bool _isFullCalStartBtnEnabled = true; // 初期状態は有効
 
-        public bool IsTextBoxEnabled
+        public bool IsFullCalStartBtnEnabled
         {
-            get { return _isTextBoxEnabled; }
+            get { return _isFullCalStartBtnEnabled; }
             set
             {
-                if (_isTextBoxEnabled != value)
+                if (_isFullCalStartBtnEnabled != value)
                 {
-                    _isTextBoxEnabled = value;
-                    OnPropertyChanged(nameof(IsTextBoxEnabled));
-                }
-            }
-        }
-
-        // 開始ボタンの有効無効を設定する。 2025.9.2 add eba
-        private bool _isStartBtnEnabled = true; // 初期状態は有効
-
-        public bool IsStartBtnEnabled
-        {
-            get { return _isStartBtnEnabled; }
-            set
-            {
-                if (_isStartBtnEnabled != value)
-                {
-                    _isStartBtnEnabled = value;
-                    OnPropertyChanged(nameof(IsStartBtnEnabled));
-                }
-            }
-        }
-
-        // 開始ボタンの名前を設定する。(2025.12.5yori)
-        private string _startButtonText = "";
-        public string StartButtonText
-        {
-            get => _startButtonText;
-            set
-            {
-                if (_startButtonText != value)
-                {
-                    _startButtonText = value;
-                    OnPropertyChanged(nameof(StartButtonText));
+                    _isFullCalStartBtnEnabled = value;
+                    OnPropertyChanged(nameof(IsFullCalStartBtnEnabled));
                 }
             }
         }
@@ -899,18 +852,63 @@ namespace VecApp
             }
         }
 
-        // 初めに戻るボタンの有効無効を設定する。 2025.9.2 add eba
-        private bool _isReStartBtnEnabled = true; // 初期状態は有効
+        // 中止ボタンの有効無効を設定する。(2025.12.16yori)
+        private bool _isStopBtnEnabled = true; // 初期状態は有効
 
-        public bool IsReStartBtnEnabled
+        public bool IsStopBtnEnabled
         {
-            get { return _isReStartBtnEnabled; }
+            get { return _isStopBtnEnabled; }
             set
             {
-                if (_isReStartBtnEnabled != value)
+                if (_isStopBtnEnabled != value)
                 {
-                    _isReStartBtnEnabled = value;
-                    OnPropertyChanged(nameof(IsReStartBtnEnabled));
+                    _isStopBtnEnabled = value;
+                    OnPropertyChanged(nameof(IsStopBtnEnabled));
+                }
+            }
+        }
+
+        // フルキャリボタンの不透明度を設定する。(2025.12.16yori)
+        private double _fullCalStartButtonOpacity = 0.25; // デフォルトは不透明度：0.25
+        public double FullCalStartButtonOpacity
+        {
+            get { return _fullCalStartButtonOpacity; }
+            set
+            {
+                if (_fullCalStartButtonOpacity != value)
+                {
+                    _fullCalStartButtonOpacity = value;
+                    OnPropertyChanged(nameof(FullCalStartButtonOpacity));
+                }
+            }
+        }
+
+        // 戻るボタンの不透明度を設定する。(2025.12.16yori)
+        private double _backButtonOpacity = 0.25; // デフォルトは不透明度：0.25
+        public double BackButtonOpacity
+        {
+            get { return _backButtonOpacity; }
+            set
+            {
+                if (_backButtonOpacity != value)
+                {
+                    _backButtonOpacity = value;
+                    OnPropertyChanged(nameof(BackButtonOpacity));
+                }
+            }
+        }
+
+        // 中止ボタンの不透明度を設定する。(2025.12.16yori)
+        private double _stopButtonOpacity = 0.25; // デフォルトは不透明度：0.25
+        public double StopButtonOpacity
+        {
+            get { return _stopButtonOpacity; }
+            set
+            {
+                if (_stopButtonOpacity != value)
+                {
+                    _stopButtonOpacity = value;
+                    OnPropertyChanged(nameof(StopButtonOpacity));
                 }
             }
         }

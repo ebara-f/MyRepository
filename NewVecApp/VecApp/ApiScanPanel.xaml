@@ -731,7 +731,8 @@
                 <!-- x:Name="SartStopButton"追加(2025.8.12yori) -->
                 <!-- IsEnabled="{Binding IsButtonEnabled}"追加(2025.9.3yori) -->
                 <!-- Opacity="{Binding ButtonOpacity}"追加(2025.11.20yori) -->
-                <Button x:Name="SartStopButton" Content="{x:Static res:Resources.String188}" Margin="5,0,0,0" Click="Click_StartBtn" 
+                <!-- Button修正(2025.12.12yori) -->
+                <Button x:Name="SartStopButton" Content="{x:Static res:Resources.String114}" Margin="5,0,0,0" Click="Click_StartBtn" 
                         Style="{StaticResource PanelStartButton3Style}" Width="120" Height="60" IsEnabled="{Binding IsButtonEnabled}" Opacity="{Binding ButtonOpacity}" FontSize="20"/>
                 <Button Content="{x:Static res:Resources.String189}" Margin="30,0,0,0" Click="Click_ResetBtn"
                         Style="{StaticResource PanelInitialValueButton2Style}" Width="120" Height="60" IsEnabled="{Binding IsButtonEnabled}" Opacity="{Binding ButtonOpacity}" FontSize="20"/>
@@ -745,7 +746,8 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
                 <!-- 保存機能調査中のため、ボタンを無効にする。(2025.11.6yori) -->
-                <Button Content="{x:Static res:Resources.String192}" Margin="5,0,0,0" Click="Click_SaveBtn"
+                <!-- Button修正(2025.12.12yori) -->
+                <Button Content="{x:Static res:Resources.String118}" Margin="5,0,0,0" Click="Click_SaveBtn"
                         Style="{StaticResource PanelButton2Style}" Width="120" Height="60" IsEnabled="False" Opacity="0.25" FontSize="20"/>
                 <!-- パラメータ初期化調査中のため、ボタンを無効にする。(2025.11.6yori) -->
                 <Button Content="{x:Static res:Resources.String193}" Margin="30,0,0,0" Click="Click_ParameterInitializationBtn"

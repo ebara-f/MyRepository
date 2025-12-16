@@ -946,7 +946,8 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   スタート に類似しているローカライズされた文字列を検索します。
+        ///   ユーザーキャリ
+        ///開始 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String188 {
             get {
@@ -992,7 +993,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   保存 に類似しているローカライズされた文字列を検索します。
+        ///   暖機監視 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String192 {
             get {
@@ -1038,7 +1039,8 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   感度 に類似しているローカライズされた文字列を検索します。
+        ///   暖機中です。
+        ///お待ちください。 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String197 {
             get {
@@ -1106,15 +1108,6 @@ namespace VecApp.Properties {
         public static string String202 {
             get {
                 return ResourceManager.GetString("String202", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   履歴 に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string String203 {
-            get {
-                return ResourceManager.GetString("String203", resourceCulture);
             }
         }
         
@@ -1810,6 +1803,42 @@ namespace VecApp.Properties {
         public static string String273 {
             get {
                 return ResourceManager.GetString("String273", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   計算中 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String274 {
+            get {
+                return ResourceManager.GetString("String274", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   プローブ登録 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String275 {
+            get {
+                return ResourceManager.GetString("String275", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   初期値 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String276 {
+            get {
+                return ResourceManager.GetString("String276", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   パスワード に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String277 {
+            get {
+                return ResourceManager.GetString("String277", resourceCulture);
             }
         }
         

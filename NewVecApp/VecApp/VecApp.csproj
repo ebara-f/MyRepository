@@ -193,7 +193,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /D /Y /I $(OutDir)$(TargetName).dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)$(TargetName).exe ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)$(TargetName).runtimeconfig.json ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.Wpf.dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.Wpf.Shared.dll ..\_exec\$(Configuration)\&#xD;&#xA;" />
+    <Exec Command="xcopy /D /Y /I $(OutDir)$(TargetName).dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)$(TargetName).exe ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)$(TargetName).runtimeconfig.json ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.Wpf.dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)OxyPlot.Wpf.Shared.dll ..\_exec\$(Configuration)\&#xD;&#xA;xcopy /D /Y /I $(OutDir)en-US\$(TargetName).resources.dll ..\_exec\$(Configuration)\en-US\&#xD;&#xA;xcopy /D /Y /I $(OutDir)zh-CN\$(TargetName).resources.dll ..\_exec\$(Configuration)\zh-CN\" />
   </Target>
 
 </Project>

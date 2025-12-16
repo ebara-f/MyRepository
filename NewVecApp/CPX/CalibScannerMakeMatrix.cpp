@@ -48,4 +48,7 @@ void CalibScannerMakeMatrix::InitSub(CALIB_SCANNER_MSEBOX* para)
 	MakeMtxInfo ptinfo;
 	TdsVecGetMakeMatrixInfo(&ptinfo);
 	HwCtrl::m_ShotMax = ptinfo.iShotMax;
+
+	//  座標系作成のショット数初期化(2025.12.11yori)
+	HwCtrl::m_ShotNo = 0;
 }

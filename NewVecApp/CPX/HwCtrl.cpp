@@ -44,7 +44,8 @@ int             HwCtrl::m_iSw = 0;
 int             HwCtrl::m_ScanShotNo = 0;
 int             HwCtrl::m_ScanShotOldNo = 0; // 追加(2025.12.6yori)
 bool            HwCtrl::m_bReadThreadStopFlag = true;
-bool            HwCtrl::EndFg = false;
+bool            HwCtrl::EndFg = false; // 非接触点検キャリブ終了フラグ
+bool            HwCtrl::CalcFg = false; // 非接触点検キャリブ計算中フラグ(2025.12.10yori)
 const double    HwCtrl::INVALID_CHECK = 999998.0;
 VEC_STEP_SEQ    HwCtrl::m_VecStepSeq;
 bool            HwCtrl::m_b_Button_ConnectFlag = false; // 追加(2025.6.10yori)
@@ -75,6 +76,8 @@ int             HwCtrl::m_PointerCheckLineNo = 1; // ポインタ位置チェッ
 int             HwCtrl::m_ShotNo = 0; // 非接触点検、キャリブ用(2025.12.2yori)
 int             HwCtrl::m_ShotMax = 12; // 非接触点検、キャリブ用(2025.12.2yori)
 int             HwCtrl::m_ScannerCalibResultJudge = 0; // 非接触キャリブ結果判定 OK:0 NG:1 (2025.12.9yori)
+CalibResult*    HwCtrl::m_ptCalibResult = NULL; // 非接触キャリブ結果(2025.12.10yori)
+double          HwCtrl::m_MaxMin[3] = { 0, 0, 0 }; // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
 
 
 
@@ -3238,7 +3241,7 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
         //{
         //    FileOutput();
         //}
-        if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)  // アプリから接続した、非接触点検、キャリブレーション場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
+        if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
         {
             ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
             // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメント追加2025.5.15yori)
@@ -3287,6 +3290,7 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
     double ttb[3] = { 0 };
     int iMeasType = 0;
     double maxx = 0, maxy = 0, maxz = 0, minx = 0, miny = 0, minz = 0, maxh = 0, minh = 0;
+    m_ptCalibResult = new CalibResult;  // 追加(2025.12.10yori)
 
     TdsVecGetMeasType(&iMeasType);
 
@@ -3296,6 +3300,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
         {
             if (m_ScanShotNo == 14)
             {
+                CalcFg = true; // 追加(2025.12.10yori)
+
                 if (TdsVecExecCalibCalcu(ptCalibResult)) // デバッグ版では、「Debug Assertion Failed!」のメッセージが2回表示されるが、「無視」して問題ない。(2021.9.3yori)
                 {
                     m_ScanShotNo++;
@@ -3306,6 +3312,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                     char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
                     // エラーメッセージは後でコーディング(2025.5.15yori)
                 }
+
+                CalcFg = false; // 追加(2025.12.10yori)
             }
             else if (m_ScanShotNo == 16)
             {
@@ -3331,6 +3339,10 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                     ttb[2] = ttb_old[2] + ptCalibResult->tArmParam.dArmAddTilt[2];
                     m_hVecCnt.VecSetScannerPara(ofb[0], ofb[1], ofb[2], ttb[0], ttb[1], ttb[2]);
                     m_ScanShotNo = 0;
+                    *m_ptCalibResult = *ptCalibResult; // 追加(2025.12.10yori)
+                    m_MaxMin[0] = maxx - minx; // 追加(2025.12.10yori)
+                    m_MaxMin[1] = maxy - miny; // 追加(2025.12.10yori)
+                    m_MaxMin[2] = maxz - minz; // 追加(2025.12.10yori)
                     m_ScannerCalibResultJudge = 0; // 追加(2025.12.9yori)
                 }
                 else
@@ -3362,6 +3374,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
         {
             if (m_ScanShotNo == 12)
             {
+                CalcFg = true; // 追加(2025.12.10yori)
+
                 if (TdsVecExecCalibCalcu(ptCalibResult))
                 {
                     // 球中心座標値の最大値、最小値計算(2021.9.8.yori)
@@ -3393,6 +3407,7 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
 
                 m_ScanDataStepCounter = NCON_MEAS_SEQ::BREAK;			// 中断
                 EndFg = true;
+                CalcFg = false; // 追加(2025.12.10yori)
             }
             else
             {

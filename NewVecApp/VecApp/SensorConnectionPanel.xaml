@@ -56,36 +56,42 @@
                                FontSize="20"
                                Margin="415,10,0,0"/>
 
+                        <!-- Width変更(2025.12.14yori) -->
                         <Button Content="{x:Static res:Resources.String58}"
                             HorizontalAlignment="Left"
                             Padding="16,8"
                             Margin="0,-160,0,0"
-                            Click="Click_ConnectDoneBtn" Width="150" Style="{StaticResource PanelDoneButtonStyle}" Height="46" FontSize="20"/>
+                            Click="Click_ConnectDoneBtn" Width="160" Style="{StaticResource PanelDoneButtonStyle}" Height="46" FontSize="20"/>
 
                         <!-- キャンセルボタン追加(2025.7.30yori) -->
+                        <!-- Width変更(2025.12.14yori) -->
                         <Button Content="{x:Static res:Resources.String56}"
                             HorizontalAlignment="Left"
                             Padding="16,8"
                             Margin="170,-160,0,0"
-                            Click="Click_ConnectCancelBtn" Width="150" Style="{StaticResource PanelCancelButtonStyle}" Height="46" FontSize="20"/>
+                            Click="Click_ConnectCancelBtn" Width="160" Style="{StaticResource PanelCancelButtonStyle}" Height="46" FontSize="20" HorizontalContentAlignment="Center"/>
 
-                        <StackPanel Orientation="Horizontal" Grid.Column="0">
-                            <TextBlock Text="{x:Static res:Resources.String2}" FontSize="20" Margin="480,20,10,0" Foreground="White"/>
+                        <!-- HorizontalAlignment="Right"追加(2025.12.14yori) -->
+                        <!-- 未作成のため、半透明化(2025.12.14yori) -->
+                        <StackPanel Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Right">
+                            <TextBlock Text="{x:Static res:Resources.String2}" FontSize="20" Margin="480,20,10,0" Foreground="White" Opacity="0.25"/>
 
                             <!-- スライドバー -->
+                            <!-- 未作成のため、無効化、半透明化(2025.12.14yori) -->
                             <Slider x:Name="SlideSwitch"
                                 Width="80"
                                 Minimum="0" Maximum="1"
                                 TickFrequency="1"
                                 IsSnapToTickEnabled="True"
                                 ValueChanged="SlideSwitch_ValueChanged"
-                                Margin="5,20,0,0"/>
-
+                                Margin="5,27,0,0" IsEnabled="False" Opacity="0.25"/>
+                            <!-- Text="オフ"変更(2025.12.14yori) -->
+                            <!-- 未作成のため、半透明化(2025.12.14yori) -->
                             <TextBlock x:Name="SlideStatusText"
-                                   Text="オフ"
+                                   Text="{x:Static res:Resources.String144}"
                                    Foreground="White"
                                    FontWeight="Bold"
-                                   Margin="5,20,0,0" FontSize="20"/>
+                                   Margin="5,20,0,0" FontSize="20" Opacity="0.25"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

@@ -599,6 +599,24 @@ int Grp02::SettingPanelCancelBtn(CALIB_MSEBOX* para)
 
 /***********************************************************************
 
+    ScannerAlignmentPanelInit
+    2025.12.3yori
+
+***********************************************************************/
+
+int Grp02::ScannerAlignmentPanelInit(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count)
+{
+    int ret = 0;
+
+    CalibComm::InitScanner(para, path, p_count, mes, m_count);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
     ScannerAlignmentPanelMesCallBack
     2025.12.3yori
 
@@ -617,16 +635,34 @@ int Grp02::ScannerAlignmentPanelMesCallBack(CALIB_SCANNER_MSEBOX* para)
 
 /***********************************************************************
 
-    ScannerAlignmentPanelInit
-    2025.12.3yori
+    ScannerAlignmentPanelClickBack
+    2025.12.12yori
 
 ***********************************************************************/
 
-int Grp02::ScannerAlignmentPanelInit(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count)
+int Grp02::ScannerAlignmentPanelClickBack(CALIB_SCANNER_MSEBOX* para)
 {
     int ret = 0;
 
-    CalibComm::InitScanner(para, path, p_count, mes, m_count);
+    CalibComm::BackScanner(para);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    ScannerAlignmentPanelClickBack
+    2025.12.12yori
+
+***********************************************************************/
+
+int Grp02::ScannerAlignmentPanelClickReStart(CALIB_SCANNER_MSEBOX* para)
+{
+    int ret = 0;
+
+    CalibComm::ReStartScanner(para);
 
     return (ret);
 }

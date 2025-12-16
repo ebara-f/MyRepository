@@ -500,45 +500,6 @@ int CalibComm::ParaOutCallBack(CALIB_MSEBOX* para)
 
 /***********************************************************************
 
-	非接触点検キャリブレーション画像のパスとメッセージ取得
-	2025.12.9yori
-
-***********************************************************************/
-void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
-{
-	wchar_t wc_path[256];
-	wchar_t wc_msg[512];
-	wchar_t wc_no[8];
-
-
-	CalibComm::m_CalibType = (CALIB_TYPE)para->CalibType;
-	switch (CalibComm::m_CalibType)
-	{
-		case CALIB_TYPE::SCANNER_MAKE_MATRIX:
-			swprintf(wc_no, 8, L"%d", HwCtrl::m_ShotNo + 1);
-			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_TXT);
-			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[1点目]測定してください。"), wc_msg, 512, MACHINECHECK_TXT);
-			break;
-
-		case CALIB_TYPE::SCANNER_FULL:
-			swprintf(wc_no, 8, L"%d", HwCtrl::m_ScanShotNo + 1);
-			GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\calscn\\V7\\Shot1.png"), wc_path, 256, CALSCN_TXT);
-			GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[基本姿勢]-[近]"), wc_msg, 512, CALSCN_TXT);
-			break;
-
-		default:
-			break;
-	}
-
-	swprintf(para->path, 256, CALIB_PATH);
-	swprintf(para->msg, 512, wc_msg);
-	wcsncat_s(para->path, wc_path, sizeof(para->path));
-}
-
-
-
-/***********************************************************************
-
 	ScannerAlignmentPanel初期化時に呼ぶ関数
 	2025.12.5yori
 
@@ -573,13 +534,135 @@ void CalibComm::InitScanner(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_coun
 
 /***********************************************************************
 
-	閉じるボタンがクリックされたときに呼ぶ関数
-	2025.12.5yori
+	ScannerAlignmentPanelの戻るボタンがクリックされたときに呼ぶ関数
+	2025.12.11yori
+
+***********************************************************************/
+void CalibComm::BackScanner(CALIB_SCANNER_MSEBOX* para)
+{
+	wchar_t wc_path[256];
+	wchar_t wc_msg[512];
+	wchar_t wc_no[8];
+
+	CalibComm::m_CalibType = (CALIB_TYPE)para->CalibType;
+	switch (CalibComm::m_CalibType)
+	{
+	case CALIB_TYPE::SCANNER_MAKE_MATRIX:
+		HwCtrl::m_ShotNo--;
+		para->ShotNo = HwCtrl::m_ShotNo; // 追加(2025.16yori)
+		swprintf(wc_no, 8, L"%d", HwCtrl::m_ShotNo + 1);
+		GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_TXT);
+		if (CalibComm::m_Language == LANGUAGE::JAPANESE) GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[1点目]測定してください。"), wc_msg, 512, MACHINECHECK_TXT); // 日本語の場合(2025.12.14)
+		if (CalibComm::m_Language == LANGUAGE::ENBLISH) GetPrivateProfileString(TEXT("MESSAGE_ENG"), wc_no, TEXT("[Plane]-[First]Please measure."), wc_msg, 512, MACHINECHECK_TXT); // 英語の場合(2025.12.14)
+		break;
+
+	case CALIB_TYPE::SCANNER_FULL:
+		HwCtrl::m_ScanShotNo--;
+		para->ScanShotNo = HwCtrl::m_ScanShotNo; // 追加(2025.16yori)
+		swprintf(wc_no, 8, L"%d", HwCtrl::m_ScanShotNo + 1);
+		GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\calscn\\V7\\Shot1.png"), wc_path, 256, CALSCN_TXT);
+		if (CalibComm::m_Language == LANGUAGE::JAPANESE) GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[基本姿勢]-[近]"), wc_msg, 512, CALSCN_TXT); // 日本語の場合(2025.12.14)
+		if (CalibComm::m_Language == LANGUAGE::ENBLISH) GetPrivateProfileString(TEXT("MESSAGE_ENG"), wc_no, TEXT("[Plane]-[Normal]-[Near]"), wc_msg, 512, CALSCN_TXT); // 英語の場合(2025.12.14)
+		break;
+
+	default:
+		break;
+	}
+
+	swprintf(para->path, 256, CALIB_PATH);
+	swprintf(para->msg, 512, wc_msg);
+	wcsncat_s(para->path, wc_path, sizeof(para->path));
+}
+
+
+
+/***********************************************************************
+
+	ScannerAlignmentPanelの中止ボタンがクリックされたときに呼ぶ関数
+	2025.12.11yori
+
+***********************************************************************/
+void CalibComm::ReStartScanner(CALIB_SCANNER_MSEBOX* para)
+{
+	CalibComm::m_CalibType = (CALIB_TYPE)para->CalibType;
+	switch (CalibComm::m_CalibType)
+	{
+	case CALIB_TYPE::SCANNER_MAKE_MATRIX:
+		CalibScannerMakeMatrix::InitSub(para);
+		break;
+
+	case CALIB_TYPE::SCANNER_FULL:
+		CalibScannerFull::InitSub(para);
+		break;
+
+	default:
+		break;
+	}
+}
+
+
+
+/***********************************************************************
+
+	非接触点検キャリブレーション画像のパスとメッセージ取得
+	2025.12.9yori
+
+***********************************************************************/
+void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
+{
+	wchar_t wc_path[256];
+	wchar_t wc_msg[512];
+	wchar_t wc_no[8];
+
+	CalibComm::m_CalibType = (CALIB_TYPE)para->CalibType;
+	switch (CalibComm::m_CalibType)
+	{
+	case CALIB_TYPE::SCANNER_MAKE_MATRIX:
+		para->ShotNo = HwCtrl::m_ShotNo; // 追加(2025.16yori)
+		swprintf(wc_no, 8, L"%d", HwCtrl::m_ShotNo + 1);
+		GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_TXT);
+		if (CalibComm::m_Language == LANGUAGE::JAPANESE) GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[1点目]測定してください。"), wc_msg, 512, MACHINECHECK_TXT); // 日本語の場合(2025.12.14)
+		if (CalibComm::m_Language == LANGUAGE::ENBLISH) GetPrivateProfileString(TEXT("MESSAGE_ENG"), wc_no, TEXT("[Plane]-[First]Please measure."), wc_msg, 512, MACHINECHECK_TXT); // 英語の場合(2025.12.14)
+		break;
+
+	case CALIB_TYPE::SCANNER_FULL:
+		para->ScanShotNo = HwCtrl::m_ScanShotNo; // 追加(2025.16yori)
+		swprintf(wc_no, 8, L"%d", HwCtrl::m_ScanShotNo + 1);
+		GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\calscn\\V7\\Shot1.png"), wc_path, 256, CALSCN_TXT);
+		if (CalibComm::m_Language == LANGUAGE::JAPANESE) GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[基本姿勢]-[近]"), wc_msg, 512, CALSCN_TXT); // 日本語の場合(2025.12.14)
+		if (CalibComm::m_Language == LANGUAGE::ENBLISH) GetPrivateProfileString(TEXT("MESSAGE_ENG"), wc_no, TEXT("[Plane]-[Normal]-[Near]"), wc_msg, 512, CALSCN_TXT); // 英語の場合(2025.12.14)
+		break;
+
+	default:
+		break;
+	}
+
+	swprintf(para->path, 256, CALIB_PATH);
+	swprintf(para->msg, 512, wc_msg);
+	wcsncat_s(para->path, wc_path, sizeof(para->path));
+}
+
+
+
+/***********************************************************************
+
+	ScannerAlignmentPanelの閉じるボタンがクリックされたときに呼ぶ関数
+	2025.12.11yori
 
 ***********************************************************************/
 int CalibComm::CloseScanner()
 {
 	int ret = 0;
+
+	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ; // スキャナ切断処理
+	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ) // スキャナ切断処理状態になるまで待機
+	{
+		Sleep(100);
+	}
+	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::SCANNER_DISCONNECT_CMP) // スキャナ切断処理完了状態になるまで待機
+	{
+		Sleep(100);
+	}
 
 	// 有接触測定音OFFにして測定待機状態へ変更
 	if (HwCtrl::Func12() == 0) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
@@ -596,10 +679,27 @@ int CalibComm::CloseScanner()
 /***********************************************************************
 
 	非接触点検キャリブ結果コールバック関数
-	2025.12.9yori
+	2025.12.10yori
 
 ***********************************************************************/
 void CalibComm::ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para)
 {
+	para->dResult[0][0] = HwCtrl::m_ptCalibResult->dResult[0][0];
+	para->dResult[0][1] = HwCtrl::m_ptCalibResult->dResult[0][1];
+	para->dResult[0][2] = HwCtrl::m_ptCalibResult->dResult[0][2];
+	para->dResult[1][0] = HwCtrl::m_ptCalibResult->dResult[1][0];
+	para->dResult[1][1] = HwCtrl::m_ptCalibResult->dResult[1][1];
+	para->dResult[1][2] = HwCtrl::m_ptCalibResult->dResult[1][2];
+	para->dResult[2][0] = HwCtrl::m_ptCalibResult->dResult[2][0];
+	para->dResult[2][1] = HwCtrl::m_ptCalibResult->dResult[2][1];
+	para->dResult[2][2] = HwCtrl::m_ptCalibResult->dResult[2][2];
+	para->dResult[3][0] = HwCtrl::m_ptCalibResult->dResult[3][0];
+	para->dResult[3][1] = HwCtrl::m_ptCalibResult->dResult[3][1];
+	para->dResult[3][2] = HwCtrl::m_ptCalibResult->dResult[3][2];
+	para->maxmin[0] = HwCtrl::m_MaxMin[0];
+	para->maxmin[1] = HwCtrl::m_MaxMin[1];
+	para->maxmin[2] = HwCtrl::m_MaxMin[2];
 	para->CalibResultJudge = HwCtrl::m_ScannerCalibResultJudge;
+
+	delete HwCtrl::m_ptCalibResult;
 }

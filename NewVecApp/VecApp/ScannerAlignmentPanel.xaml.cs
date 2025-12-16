@@ -32,13 +32,14 @@ namespace VecApp
 
             // 初期化処理
             this.ViewModel.ImageVisibility = Visibility.Visible;
-            this.ViewModel.GridVisibility = Visibility.Hidden;
             this.ViewModel.GridVisibility2 = Visibility.Hidden;
             this.ViewModel.GridVisibility3 = Visibility.Hidden;
-            this.ViewModel.IsStartBtnEnabled = true;
-            this.ViewModel.IsBackBtnEnabled = false;
-            this.ViewModel.IsReStartBtnEnabled = false;
-            this.ViewModel.IsTextBoxEnabled = true;
+            this.ViewModel.IsFullCalStartBtnEnabled = false; // 変更(2025.12.16yori)
+            this.ViewModel.FullCalStartButtonOpacity = 0.25; // 追加(2025.12.16yori)
+            this.ViewModel.IsBackBtnEnabled = false; // 変更(2025.12.16yori)
+            this.ViewModel.BackButtonOpacity = 0.25; // 追加(2025.12.16yori)
+            this.ViewModel.IsStopBtnEnabled = false; // 変更(2025.12.16yori)
+            this.ViewModel.StopButtonOpacity = 0.25; // 追加(2025.12.16yori)
         }
 
         private ScannerAlignmentViewModel ViewModel
@@ -49,13 +50,29 @@ namespace VecApp
         // 画面の初期設定
         public void ScannerAlignmentPanelSetup()
         {
-            this.ViewModel.CalibScannerMseBox.Language = 1; // 日本語
+            this.ViewModel.CalibScannerMseBox.Language = 2; // 英語(2025.12.14yori)
             string path;
             string mes;
             CSH.Grp02.ScannerAlignmentPanelInit(ref this.ViewModel.CalibScannerMseBox, out path, 512, out mes, 1024);
             this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
-            this.ViewModel.StartButtonText = VecApp.Properties.Resources.String273; // フルキャリ開始(2025.12.8yori)
+            switch ((CalibType)this.ViewModel.CalibScannerMseBox.CalibType) // 追加(2025.12.16yori)
+            {
+                case CalibType.SCANNER_MAKE_MATRIX:
+                    this.ViewModel.IsFullCalStartBtnEnabled = false;
+                    this.ViewModel.FullCalStartButtonOpacity = 0.25;
+                    break;
+                case CalibType.SCANNER_FULL:
+                    this.ViewModel.IsFullCalStartBtnEnabled = true;
+                    this.ViewModel.FullCalStartButtonOpacity = 1.0;
+                    break;
+                default:
+                    break;
+            }
+            this.ViewModel.IsBackBtnEnabled = false;
+            this.ViewModel.BackButtonOpacity = 0.25;
+            this.ViewModel.IsStopBtnEnabled = false;
+            this.ViewModel.StopButtonOpacity = 0.25;
         }
 
         public override void Terminate()
@@ -69,7 +86,13 @@ namespace VecApp
             CSH.Grp02.ScannerAlignmentPanelMesCallBack(ref this.ViewModel.CalibScannerMseBox);
             this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
-
+            if (this.ViewModel.CalibScannerMseBox.ShotNo != 0 || this.ViewModel.CalibScannerMseBox.ScanShotNo != 0)// 追加(2025.12.16yori)
+            {
+                this.ViewModel.IsBackBtnEnabled = true;
+                this.ViewModel.BackButtonOpacity = 1.0;
+                this.ViewModel.IsStopBtnEnabled = true;
+                this.ViewModel.StopButtonOpacity = 1.0;
+            }
             //UsrMessageBox.Show(this.ViewModel.CalibMseBox.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             //this.ViewModel.CalibMseBox.MesString = 0;
         }
@@ -98,48 +121,62 @@ namespace VecApp
                         this.ViewModel.ResultJudge2 = false; // 背景色赤
                     }
 
-                    //SetHistoryText(this.ViewModel.CalibMseBox.CalibResultVal.ToString("F0"));
-
                     break;
 
                 default:
                     break;
             }
+            // ボタンの状態変更(2025.12.16yori)
+            this.ViewModel.IsFullCalStartBtnEnabled = true;
+            this.ViewModel.FullCalStartButtonOpacity = 1.0;
+            this.ViewModel.IsBackBtnEnabled = false;
+            this.ViewModel.BackButtonOpacity = 0.25;
+            this.ViewModel.IsStopBtnEnabled = false;
+            this.ViewModel.StopButtonOpacity = 0.25;
         }
 
         // フルキャリ開始ボタン
         private void Click_FullCalStartBtn(object sender, RoutedEventArgs e)
         {
             CSH.Grp03.ScannerAlignmentPanelFullCalStartBtn(); // スキャンスタート(2025.12.8yori)
+            this.ViewModel.IsFullCalStartBtnEnabled = false; // 追加(2025.12.16yori)
+            this.ViewModel.FullCalStartButtonOpacity = 0.25; // 追加(2025.12.16yori)
         }
 
+        // 戻るボタン
         private void Click_BackBtn(object sender, RoutedEventArgs e)
         {
-            //CSH.Grp02.ScannerAlignmentPanelClickBack(ref this.ViewModel.CalibMseBox);
+            CSH.Grp02.ScannerAlignmentPanelClickBack(ref this.ViewModel.CalibScannerMseBox); // 追加(2025.12.12yori)
             this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
-
+            if (this.ViewModel.CalibScannerMseBox.ShotNo == 0 && this.ViewModel.CalibScannerMseBox.ScanShotNo == 0)// 追加(2025.12.16yori)
+            {
+                this.ViewModel.IsBackBtnEnabled = false;
+                this.ViewModel.BackButtonOpacity = 0.25;
+                this.ViewModel.IsStopBtnEnabled = false;
+                this.ViewModel.StopButtonOpacity = 0.25;
+            }
         }
 
-
-        private void Click_FirstBackBtn(object sender, RoutedEventArgs e)
+        // 中止ボタン(2025.12.16yori)
+        private void Click_StopBtn(object sender, RoutedEventArgs e)
         {
-            //CSH.Grp02.ScannerAlignmentPanelClickReStart(ref this.ViewModel.CalibMseBox);
-            this.ViewModel.IsStartBtnEnabled = true;
+            CSH.Grp02.ScannerAlignmentPanelClickReStart(ref this.ViewModel.CalibScannerMseBox);
+            this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
+            this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
+            switch ((CalibType)this.ViewModel.CalibScannerMseBox.CalibType)
+            {
+                case CalibType.SCANNER_FULL:
+                    CSH.Grp03.Cmd02(); // スキャンストップ
+                    break;
+
+                default:
+                    break;
+            }
             this.ViewModel.IsBackBtnEnabled = false;
-            this.ViewModel.IsReStartBtnEnabled = false;
-            this.ViewModel.IsTextBoxEnabled = true;
-            this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
-            this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
-
-            //確認用(ResutTextのOK/NGの切り替え)　アスタワン様サンプル
-            //this.ViewModel.ResultText = this.ViewModel.ToggleResultText();
-        }
-
-        // 中止ボタン
-        private void Click_CancelBtn(object sender, RoutedEventArgs e)
-        {
-            CSH.Grp03.Cmd02(); // スキャンストップ(2025.12.5yori)
+            this.ViewModel.BackButtonOpacity = 0.25;
+            this.ViewModel.IsStopBtnEnabled = false;
+            this.ViewModel.StopButtonOpacity = 0.25;
         }
 
         private void Click_CloseBtn(object sender, RoutedEventArgs e)
@@ -154,28 +191,41 @@ namespace VecApp
             DlgHistory dlg = new DlgHistory();
             bool? test = false;
 
-            //switch ((CalibType)this.ViewModel.CalibMseBox.CalibType)
-            //{
-            //    case CalibType.INSPECT_MULTI_GAUGE_NEST_STD:
+            switch ((CalibType)this.ViewModel.CalibScannerMseBox.CalibType)
+            {
+                case CalibType.SCANNER_FULL:
+                    dlg.SetHistoryText("[" + VecApp.Properties.Resources.String62 + "1] = " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[0].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[1].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[2].ToString("F3") + "\n" +
+                                       "[" + VecApp.Properties.Resources.String62 + "2] = " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[3].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[4].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[5].ToString("F3") + "\n" +
+                                       "[" + VecApp.Properties.Resources.String62 + "3] = " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[6].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[7].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[8].ToString("F3") + "\n" +
+                                       "[" + VecApp.Properties.Resources.String62 + "4] = " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[9].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[10].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.dResult[11].ToString("F3") + "\n" +
+                                       "[" + VecApp.Properties.Resources.String78 + "] = " +
+                                       this.ViewModel.CalibScannerMseBox.maxmin[0].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.maxmin[1].ToString("F3") + " " +
+                                       this.ViewModel.CalibScannerMseBox.maxmin[2].ToString("F3") + "\n");
+                    break;
 
-            //        break;
-
-            //    case CalibType.ALIGNMENT_MULTI_GAUGE:
-            //    case CalibType.ALIGNMENT_BALL_GAUGE_STD:
-            //        dlg.SetHistoryText(this.ViewModel.CalibMseBox.CalibResultVal.ToString("F0"));
-
-            //        break;
-
-            //    default:
-            //        break;
-            //}
+                default:
+                    break;
+            }
 
             test = dlg.ShowDialog();
-            
-
         }
 
-        private void Click_ProbeBtn(object sender, RoutedEventArgs e)
+
+        // ユーザーキャリ開始ボタン
+        private void Click_UserCalStartBtn(object sender, RoutedEventArgs e)
         {
 
         }

@@ -157,12 +157,14 @@ namespace VecApp
         {
             if (this.ViewModel.SlideSwitch)
             {
+                SlideStatusText.Text = VecApp.Properties.Resources.String144; // 追加(2025.12.14yori)
                 this.ViewModel.SlideSwitch = true;
                 CSH.Grp01.Cmd09();  // 暖機監視オン(2025.7.16yori)
             }
             else
             {
                 this.ViewModel.SlideSwitch = false;
+                SlideStatusText.Text = VecApp.Properties.Resources.String143; // 追加(2025.12.14yori)
                 CSH.Grp01.Cmd10();  // 暖機監視オフ(2025.7.16yori)
             }
         }

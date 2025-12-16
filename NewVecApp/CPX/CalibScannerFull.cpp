@@ -29,4 +29,7 @@ void CalibScannerFull::InitSub(CALIB_SCANNER_MSEBOX* para)
 		wcscpy_s(para->msg, 256, _T("Unexpected events."));
 		break;
 	}
+
+	//  非接触点検キャリブショット数初期化(2025.12.11yori)
+	HwCtrl::m_ScanShotNo = 0;
 }

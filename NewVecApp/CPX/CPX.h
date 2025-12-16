@@ -244,16 +244,18 @@ typedef struct CalibSettingParamter
 } CALIB_MSEBOX;
 
 
-// 非接触点検キャリブレーション関連のデータ受け渡し用構造体(2025.12.9yori)
+// 非接触点検キャリブレーション関連のデータ受け渡し用構造体(2025.12.10yori)
 typedef struct CalibScannerSettingParamter
 {
-    //CalibResult CalibResult;
+    int ShotNo; // 座標系作成用点数(2025.12.16yori)
+    int ScanShotNo; // 非接触点検キャリブ用ショット数(2025.12.16yori)
+
     //ChkScnResult ChkResult;
 
-    //double maxmin[3]; // 球中心座標値のmaxmin[0]:x, maxmin[1]:y, maxmin[2]:z
     //double maxh; // 最大面高さ
     //double minh; // 最小面高さ
-
+    double dResult[4][3]; // 4球中心座標結果
+    double maxmin[3]; // 球中心座標値のmaxmin[0]:x, maxmin[1]:y, maxmin[2]:z
     int CalibResultJudge; // 収束したか否か
 
     int Language;
@@ -346,10 +348,12 @@ CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelInit(CALIB_MSEBOX* para);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelOkBtn(CALIB_MSEBOX* para);
 CPX_DECLSPEC int  WINAPI CPX_Grp02_SettingPanelCancelBtn(CALIB_MSEBOX* para);
 
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelMesCallBack(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.3yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelInit(CALIB_SCANNER_MSEBOX* para, TCHAR*& path, int p_count, TCHAR*& mes, int m_count); // 追加(2025.12.4yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelMesCallBack(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.12yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelClickBack(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.12yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelClickReStart(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.12yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.16yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelTerminate(); // 追加(2025.12.4yori)
-CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* mes); // 追加(2025.12.9yori)
 
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd01(); // 追加(2025.6.24yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd02(); // 追加(2025.6.24yori)

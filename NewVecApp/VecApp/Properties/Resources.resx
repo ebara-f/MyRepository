@@ -682,9 +682,6 @@
   <data name="String187" xml:space="preserve">
     <value>Default1</value>
   </data>
-  <data name="String188" xml:space="preserve">
-    <value>スタート</value>
-  </data>
   <data name="String189" xml:space="preserve">
     <value>リセット</value>
   </data>
@@ -694,9 +691,6 @@
   <data name="String191" xml:space="preserve">
     <value>オート
 メッシング</value>
-  </data>
-  <data name="String192" xml:space="preserve">
-    <value>保存</value>
   </data>
   <data name="String193" xml:space="preserve">
     <value>パラメータ
@@ -710,9 +704,6 @@
   </data>
   <data name="String196" xml:space="preserve">
     <value>非接触始業前点検</value>
-  </data>
-  <data name="String197" xml:space="preserve">
-    <value>感度</value>
   </data>
   <data name="String198" xml:space="preserve">
     <value>スキャナSW</value>
@@ -728,9 +719,6 @@
   </data>
   <data name="String202" xml:space="preserve">
     <value>LED</value>
-  </data>
-  <data name="String203" xml:space="preserve">
-    <value>履歴</value>
   </data>
   <data name="String204" xml:space="preserve">
     <value>全点灯</value>
@@ -945,5 +933,28 @@
   </data>
   <data name="String263" xml:space="preserve">
     <value>中止</value>
+  </data>
+  <data name="String274" xml:space="preserve">
+    <value>計算中</value>
+  </data>
+  <data name="String275" xml:space="preserve">
+    <value>プローブ登録</value>
+  </data>
+  <data name="String276" xml:space="preserve">
+    <value>初期値</value>
+  </data>
+  <data name="String277" xml:space="preserve">
+    <value>パスワード</value>
+  </data>
+  <data name="String188" xml:space="preserve">
+    <value>ユーザーキャリ
+開始</value>
+  </data>
+  <data name="String192" xml:space="preserve">
+    <value>暖機監視</value>
+  </data>
+  <data name="String197" xml:space="preserve">
+    <value>暖機中です。
+お待ちください。</value>
   </data>
 </root>

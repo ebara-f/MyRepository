@@ -17,7 +17,7 @@ namespace VecApp
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            VecApp.Properties.Settings.Default.UICulture = "jp-JP"; //
+            VecApp.Properties.Settings.Default.UICulture = "jp-JP";
             //VecApp.Properties.Settings.Default.Save();
 
             string cultureName = VecApp.Properties.Settings.Default.UICulture;
@@ -29,7 +29,7 @@ namespace VecApp
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(cultureName);
 
 
-            //Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //英語に変更
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); // 英語に変更(2025.12.14yori)
             base.OnStartup(e);
         }
     }

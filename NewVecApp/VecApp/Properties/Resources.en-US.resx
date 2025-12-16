@@ -166,7 +166,7 @@
     <value>Scanner Parameter Details</value>
   </data>
   <data name="String114" xml:space="preserve">
-    <value>start</value>
+    <value>Start</value>
   </data>
   <data name="String115" xml:space="preserve">
     <value>Reset</value>
@@ -179,7 +179,7 @@
 Meshing</value>
   </data>
   <data name="String118" xml:space="preserve">
-    <value>keep</value>
+    <value>Save</value>
   </data>
   <data name="String119" xml:space="preserve">
     <value>Parameter initialization</value>
@@ -191,7 +191,7 @@ Meshing</value>
     <value>display</value>
   </data>
   <data name="String121" xml:space="preserve">
-    <value>sensitivity</value>
+    <value>Sensitivity</value>
   </data>
   <data name="String122" xml:space="preserve">
     <value>Luminosity Mask</value>
@@ -248,7 +248,7 @@ Meshing</value>
     <value>Max-Min</value>
   </data>
   <data name="String22" xml:space="preserve">
-    <value>Threshold Setting</value>
+    <value>Threshold settings</value>
   </data>
   <data name="String23" xml:space="preserve">
     <value>Probe inspection</value>
@@ -293,7 +293,7 @@ Meshing</value>
     <value>Calibration error tolerance:</value>
   </data>
   <data name="String36" xml:space="preserve">
-    <value>Gauge Settings</value>
+    <value>Gauge settings</value>
   </data>
   <data name="String37" xml:space="preserve">
     <value>Gauge Type</value>
@@ -326,7 +326,7 @@ Meshing</value>
     <value>Number of balls extracted:</value>
   </data>
   <data name="String46" xml:space="preserve">
-    <value>limit</value>
+    <value>Limit</value>
   </data>
   <data name="String47" xml:space="preserve">
     <value>Tolerance</value>
@@ -365,7 +365,7 @@ Meshing</value>
     <value>OK</value>
   </data>
   <data name="String58" xml:space="preserve">
-    <value>Connection complete</value>
+    <value>Connected</value>
   </data>
   <data name="String59" xml:space="preserve">
     <value>Start calibration</value>
@@ -407,13 +407,13 @@ Meshing</value>
     <value>3. Click the [Connected] button</value>
   </data>
   <data name="String70" xml:space="preserve">
-    <value>Probe Registration</value>
+    <value>Probe registration</value>
   </data>
   <data name="String71" xml:space="preserve">
     <value>With contact</value>
   </data>
   <data name="String72" xml:space="preserve">
-    <value>self-judgment</value>
+    <value>Self-judgment</value>
   </data>
   <data name="String73" xml:space="preserve">
     <value>Contacted Property</value>
@@ -434,7 +434,8 @@ Meshing</value>
     <value>distance</value>
   </data>
   <data name="String8" xml:space="preserve">
-    <value>⚠️Be careful when installing the scanner
+    <value>⚠️Be careful
+　when installing the scanner
 　unit so that it does not fall.</value>
   </data>
   <data name="String80" xml:space="preserve">
@@ -444,10 +445,10 @@ Meshing</value>
     <value>measurement error</value>
   </data>
   <data name="String82" xml:space="preserve">
-    <value>start</value>
+    <value>Start</value>
   </data>
   <data name="String83" xml:space="preserve">
-    <value>return</value>
+    <value>Return</value>
   </data>
   <data name="String84" xml:space="preserve">
     <value>Back to top</value>
@@ -459,7 +460,7 @@ Meshing</value>
     <value>Undo</value>
   </data>
   <data name="String87" xml:space="preserve">
-    <value>history</value>
+    <value>History</value>
   </data>
   <data name="String88" xml:space="preserve">
     <value>Setting</value>
@@ -546,10 +547,10 @@ Meshing</value>
     <value>Note</value>
   </data>
   <data name="String143" xml:space="preserve">
-    <value>off</value>
+    <value>Off</value>
   </data>
   <data name="String144" xml:space="preserve">
-    <value>on</value>
+    <value>On</value>
   </data>
   <data name="String145" xml:space="preserve">
     <value>Normal</value>
@@ -680,9 +681,6 @@ Meshing</value>
   <data name="String187" xml:space="preserve">
     <value>Default1</value>
   </data>
-  <data name="String188" xml:space="preserve">
-    <value>start</value>
-  </data>
   <data name="String189" xml:space="preserve">
     <value>Reset</value>
   </data>
@@ -691,9 +689,6 @@ Meshing</value>
   </data>
   <data name="String191" xml:space="preserve">
     <value>Auto Meshing</value>
-  </data>
-  <data name="String192" xml:space="preserve">
-    <value>keep</value>
   </data>
   <data name="String193" xml:space="preserve">
     <value>Parameter initialization</value>
@@ -706,9 +701,6 @@ Meshing</value>
   </data>
   <data name="String196" xml:space="preserve">
     <value>Non-contact pre-work inspection</value>
-  </data>
-  <data name="String197" xml:space="preserve">
-    <value>sensitivity</value>
   </data>
   <data name="String198" xml:space="preserve">
     <value>Scanner SW</value>
@@ -724,9 +716,6 @@ Meshing</value>
   </data>
   <data name="String202" xml:space="preserve">
     <value>LED</value>
-  </data>
-  <data name="String203" xml:space="preserve">
-    <value>history</value>
   </data>
   <data name="String204" xml:space="preserve">
     <value>All lights on</value>
@@ -753,22 +742,22 @@ Meshing</value>
     <value>Default Gateway:</value>
   </data>
   <data name="String212" xml:space="preserve">
-    <value>none</value>
+    <value>Without</value>
   </data>
   <data name="String213" xml:space="preserve">
-    <value>can be</value>
+    <value>With</value>
   </data>
   <data name="String214" xml:space="preserve">
     <value>Standard</value>
   </data>
   <data name="String215" xml:space="preserve">
-    <value>extension</value>
+    <value>Extension</value>
   </data>
   <data name="String216" xml:space="preserve">
-    <value>straight</value>
+    <value>Straight</value>
   </data>
   <data name="String217" xml:space="preserve">
-    <value>touch</value>
+    <value>Touch</value>
   </data>
   <data name="String218" xml:space="preserve">
     <value>Gauge Length:</value>
@@ -795,7 +784,7 @@ Meshing</value>
     <value>Alignment</value>
   </data>
   <data name="String226" xml:space="preserve">
-    <value>Non-contact Setting Menu</value>
+    <value>Scanner Setting Menu</value>
   </data>
   <data name="String227" xml:space="preserve">
     <value>Measurement Mode</value>
@@ -938,5 +927,29 @@ Start</value>
   </data>
   <data name="String263" xml:space="preserve">
     <value>Stop</value>
+  </data>
+  <data name="String274" xml:space="preserve">
+    <value>Calculating</value>
+  </data>
+  <data name="String275" xml:space="preserve">
+    <value>Probe
+registration</value>
+  </data>
+  <data name="String276" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="String277" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="String188" xml:space="preserve">
+    <value>User Cal
+Start</value>
+  </data>
+  <data name="String192" xml:space="preserve">
+    <value>Warm-up monitoring</value>
+  </data>
+  <data name="String197" xml:space="preserve">
+    <value>Warming up.
+Please wait.</value>
   </data>
 </root>

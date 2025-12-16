@@ -158,7 +158,8 @@ public:
     static int m_ScanShotNo;                        // ショットNo
     static int m_ScanShotOldNo;                     // ショットNoの変更があったことを知らせる一つ前のショットNo(2025.12.6yori)
     static bool m_bReadThreadStopFlag;		        // 読出しスレッド停止フラグ
-    static bool EndFg;
+    static bool EndFg;                              // 非接触点検キャリブ終了フラグ
+    static bool CalcFg;                             // 非接触点検キャリブ計算中フラグ(2025.12.10yori)
     static const double INVALID_CHECK;              // 無効値判断値 (無効値は999999.0 floatデータのため
     static unsigned short m_BrightSlice[5];         // 輝度スライス(2025.8.25yori)
     static unsigned short m_SensSlice[5];           // 感度スライス(2025.8.25yori)
@@ -178,6 +179,8 @@ public:
     static int m_ShotNo;                            // 非接触点検、キャリブ用(2025.12.2yori)
     static int m_ShotMax;                           // 非接触点検、キャリブ用(2025.12.2yori)
     static int m_ScannerCalibResultJudge;           // 非接触キャリブ結果判定 OK:0 NG:1 (2025.12.9yori)
+    static CalibResult* m_ptCalibResult;            // 非接触キャリブ結果(2025.12.10yori)
+    static double m_MaxMin[3];                      // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
 
     static int GetVecDataEx(VecDtEx* PosiData);
     static int GetMeasTopData();

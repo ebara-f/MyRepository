@@ -183,7 +183,7 @@ namespace CSH
         END
     }
 
-    // 非接触関連(2025.12.5yori)
+    // 非接触関連(2025.12.10yori)
     //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     //public struct SensorParam               //! センサパラメータを格納する構造体
     //{
@@ -231,14 +231,19 @@ namespace CSH
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct CalibScannerMseBox
     {
-        //public CalibResult2 CalibResult;    // 有接触と型が重複するため、CalibResult→CalibResult2へ変更
+        public int ShotNo; // 座標系作成用点数(2025.12.16yori)
+        public int ScanShotNo; // 非接触点検キャリブ用ショット数(2025.12.16yori)
+
         //public ChkScnResult ChkResult;
 
         //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         //public double [] maxmin;            // 球中心座標値のmaxmin[0]:x, maxmin[1]:y, maxmin[2]:z
         //public double maxh;                 // 最大面高さ
         //public double minh;                 // 最小面高さ
-
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4 * 3)]
+        public double [] dResult; // 4球中心座標結果
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        public double [] maxmin; // 球中心座標値のmaxmin[0]:x, maxmin[1]:y, maxmin[2]:z
         public int CalibResultJudge;          // 収束したか否か
 
         public int Language;
@@ -337,17 +342,23 @@ namespace CSH
         public extern static int CPX_Grp02_SettingPanelCancelBtn(ref CalibMseBox para);  // 2025.9.25 add eba
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_ScannerAlignmentPanelInit(ref CalibScannerMseBox para, ref StringBuilder sb_p, int p_count, ref StringBuilder sb_m, int m_count); // 追加(2025.12.4yori)
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_Grp02_ScannerAlignmentPanelMesCallBack(ref CalibScannerMseBox para); // 追加(2025.12.3yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
-        public extern static int CPX_Grp02_ScannerAlignmentPanelInit(ref CalibScannerMseBox para, ref StringBuilder sb_p, int p_count, ref StringBuilder sb_m, int m_count); // 追加(2025.12.4yori)
+        public extern static int CPX_Grp02_ScannerAlignmentPanelClickBack(ref CalibScannerMseBox para); // 追加(2025.12.12yori)
+
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_Grp02_ScannerAlignmentPanelClickReStart(ref CalibScannerMseBox para); // 追加(2025.12.12yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_Grp02_ScannerAlignmentPanelTerminate(); // 追加(2025.12.4yori)
 
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_Grp02_ScannerAlignmentPanelResultCallBack(ref CalibScannerMseBox para); // 追加(2025.12.9yori)
-        
+
         #endregion
 
         /// <summary>
@@ -632,15 +643,6 @@ namespace CSH
 
 
         /// <summary>
-        /// 追加(2025.12.3yori)
-        /// </summary>
-        static public int ScannerAlignmentPanelMesCallBack(ref CalibScannerMseBox para)
-        {
-            return CPX_Grp02_ScannerAlignmentPanelMesCallBack(ref para);
-        }
-
-
-        /// <summary>
         /// 非接触点検キャリブレーション画面初期化処理(2025.12.4yori)
         /// </summary>
 
@@ -679,6 +681,33 @@ namespace CSH
             }
 
             return rc;
+        }
+
+
+        /// <summary>
+        /// 追加(2025.12.3yori)
+        /// </summary>
+        static public int ScannerAlignmentPanelMesCallBack(ref CalibScannerMseBox para)
+        {
+            return CPX_Grp02_ScannerAlignmentPanelMesCallBack(ref para);
+        }
+
+
+        /// <summary>
+        /// 追加(2025.12.12yori)
+        /// </summary>
+        static public int ScannerAlignmentPanelClickBack(ref CalibScannerMseBox para)
+        {
+            return CPX_Grp02_ScannerAlignmentPanelClickBack(ref para);
+        }
+
+
+        /// <summary>
+        /// 追加(2025.12.12yori)
+        /// </summary>
+        static public int ScannerAlignmentPanelClickReStart(ref CalibScannerMseBox para)
+        {
+            return CPX_Grp02_ScannerAlignmentPanelClickReStart(ref para);
         }
 
 

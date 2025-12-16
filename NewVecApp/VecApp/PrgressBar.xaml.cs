@@ -192,17 +192,21 @@ namespace VecApp
 
         // 
         public const int PGB_ID1 = 1;
+        public const int PGB_ID2 = 2; // 追加(2025.12.10yori)
 
 
         public void SetId(int id)
         {
             switch (id)
             {
-
-
                 case PGB_ID1:
                     ViewModel.Text1 = VecApp.Properties.Resources.String272;
                     ViewModel.TitleText = VecApp.Properties.Resources.String272;
+                    break;
+
+                case PGB_ID2: // 追加(2025.12.10yori)
+                    ViewModel.Text1 = VecApp.Properties.Resources.String274;
+                    ViewModel.TitleText = VecApp.Properties.Resources.String274;
                     break;
 
                 default:

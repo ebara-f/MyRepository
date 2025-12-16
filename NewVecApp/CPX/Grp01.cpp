@@ -419,11 +419,13 @@ int Grp01::SensorConnectionPanelCancelButton()
 {
     int ret = 0;
 
-    // PolyWorksから接続した場合、スキャナ接続手順のキャンセルボタンが押されたことをPolyWorks側に知らせる。
     if (HwCtrl::m_b_Button_ConnectFlag == false)
     {
         UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1を閉じる。
-        HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);
+        if (HwCtrl::m_ScannerAlignmentFlag == false) // 通常測定の場合は、PolyWorks側に知らせる。(2025.12.16yori)
+        {
+            HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);
+        }
     }
 
     return (ret);

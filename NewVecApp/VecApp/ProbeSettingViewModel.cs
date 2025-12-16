@@ -33,7 +33,7 @@ namespace VecApp
 
         public ProbeSettingViewModel()
         {
-            BallItems = new ObservableCollection<string> { Resources.String212, Resources.String213 };
+            BallItems = new ObservableCollection<string> { Resources.String212, Resources.String213 }; // 修正(2025.12.14)
             Name = new ObservableCollection<string> { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" }; // 追加(2025.7.24yori)
             NameIndex = 2;  // 追加(2025.7.22yori)
             //Name = "標準プローブ"; // 削除予定(2025.7.22yori)
