@@ -63,6 +63,6 @@ public:
 	static void BackScanner(CALIB_SCANNER_MSEBOX* para); // ’Ç‰Á(2025.12.11yori)
 	static void ReStartScanner(CALIB_SCANNER_MSEBOX* para); // ’Ç‰Á(2025.12.11yori)
 	static void ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para); // ’Ç‰Á(2025.12.4yori)
-	static int CloseScanner(); // ’Ç‰Á(2025.12.4yori)
+	static void CloseScanner(); // •ÏX(2025.12.17yori)
 	static void ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para); // ’Ç‰Á(2025.12.9yori)
 };

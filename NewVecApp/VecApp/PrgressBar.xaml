@@ -1,4 +1,6 @@
-﻿<Window x:Class="VecApp.PrgressBar"
+﻿<!--画面中央に表示追加(2025.12.17yori)-->
+<!--FontSize="20"へ変更(2025.12.17yori)-->
+<Window x:Class="VecApp.PrgressBar"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +10,7 @@
         Loaded="Window_Loaded"
         BorderThickness="1" BorderBrush="LightGray"
         Title="{Binding TitleText, UpdateSourceTrigger=PropertyChanged}" Height="160" Width="400"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen" FontSize="20">
 
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>

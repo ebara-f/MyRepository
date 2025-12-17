@@ -205,8 +205,8 @@ namespace VecApp
                     break;
 
                 case PGB_ID2: // 追加(2025.12.10yori)
-                    ViewModel.Text1 = VecApp.Properties.Resources.String274;
-                    ViewModel.TitleText = VecApp.Properties.Resources.String274;
+                    ViewModel.Text1 = VecApp.Properties.Resources.String203; // 変更(2025.12.17yori)
+                    ViewModel.TitleText = VecApp.Properties.Resources.String274; // 変更(2025.12.17yori)
                     break;
 
                 default:

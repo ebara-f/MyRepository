@@ -55,7 +55,8 @@ bool	        HwCtrl::m_ScannerWarmUpMonitorCancelFlag = false; // 追加(2025.8.
 bool            HwCtrl::m_ScannerConnectBtnFg = false; // 追加(2025.9.2yori)
 bool            HwCtrl::m_MaintModeFlag = false; // 追加(2025.10.6yori)
 bool            HwCtrl::m_ScannerSettingCloseFlag = false; // 追加(2025.11.11yori)
-bool            HwCtrl::m_ScannerAlignmentFlag = false; // 追加(2025.12.5yori)
+bool            HwCtrl::m_ScannerAlignmentScannerFlag = false; // 追加(2025.12.5yori)
+bool            HwCtrl::m_ScannerAlignmentProbeFlag = false; // 追加(2025.12.17yori)
 int             HwCtrl::m_Type = 0; // 点検、キャリブレーションの種類(2025.12.5yori)
 int             HwCtrl::m_ProbeIdBeforeScanner = 2; // 追加(2025.11.20yori)
 unsigned short  HwCtrl::m_BrightSlice[5] = { 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0 }; // 輝度スライス(2025.8.25yori)
@@ -378,7 +379,7 @@ int HwCtrl::Func14()
     m_hVecCnt.VecCmd_ChangeProbe(0);
     m_hVecCnt.VecCmd_ChangeMode(VEC_MODE::VEC_MODE_LAZER_SCAN);
     // アプリから接続、非接触点検キャリブレーション場合は、PolyWorksへコマンドを送信しない。(2025.12.8yori)
-    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)
+    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)
     {
         AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT);
     }
@@ -394,7 +395,7 @@ int HwCtrl::Func14()
         if (iScannerConnect == 1) // スキャナの電源がONの場合
         {
             // アプリから接続、非接触点検キャリブレーション場合は、PolyWorksへコマンドを送信しない。(2025.12.8yori)
-            if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)
+            if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)
             {
                 AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
             }
@@ -413,7 +414,7 @@ int HwCtrl::Func14()
                 else
                 {
                     // アプリから接続、非接触点検キャリブレーション場合は、PolyWorksへコマンドを送信しない。(2025.12.8yori)
-                    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)
+                    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)
                     {
                         AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
                     }
@@ -461,7 +462,7 @@ int HwCtrl::Func15()
     d_address = (unsigned int)(atoi(address[0]) << 24) + (unsigned int)(atoi(address[1]) << 16) + (unsigned int)(atoi(address[2]) << 8) + (unsigned int)atoi(address[3]);
     TdsVecSetControllerAddress(d_address); //一時的にIPアドレスを「192.168.1.200(0xC0A801C8)」へ変更(2025.5.15yori) // iniファイルのIPアドレスを入力する。(2025.8.28yori)
 
-    if (m_b_Button_ConnectFlag || m_ScannerAlignmentFlag) // m_ScannerAlignmentFlag追加(2025.12.8yori)
+    if (m_b_Button_ConnectFlag || m_ScannerAlignmentScannerFlag) // m_ScannerAlignmentScannerFlag追加(2025.12.8yori)
     {
         HwCtrl::ScannerBuzzerOn(); // スキャナ測定音ON(2025.8.12yori)
     }
@@ -3241,7 +3242,7 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
         //{
         //    FileOutput();
         //}
-        if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
+        if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
         {
             ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
             // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメント追加2025.5.15yori)
@@ -3302,7 +3303,9 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
             {
                 CalcFg = true; // 追加(2025.12.10yori)
 
-                if (TdsVecExecCalibCalcu(ptCalibResult)) // デバッグ版では、「Debug Assertion Failed!」のメッセージが2回表示されるが、「無視」して問題ない。(2021.9.3yori)
+                // デバッグ版DLLでは、「Debug Assertion Failed!」のメッセージが2回表示されるが、「無視」して問題ない。(2021.9.3yori)
+                // デバッグ版では、TdsVecExecCalibCalcuを実行すると、プロセスが終了しないため、プロセスの終了確認はリリース版で行う。(2025.12.17yori)
+                if (TdsVecExecCalibCalcu(ptCalibResult))
                 {
                     m_ScanShotNo++;
                 }

@@ -93,8 +93,6 @@ namespace VecApp
                 this.ViewModel.IsStopBtnEnabled = true;
                 this.ViewModel.StopButtonOpacity = 1.0;
             }
-            //UsrMessageBox.Show(this.ViewModel.CalibMseBox.MesString, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            //this.ViewModel.CalibMseBox.MesString = 0;
         }
 
         // 結果表示(2025.12.9yori)
@@ -138,9 +136,20 @@ namespace VecApp
         // フルキャリ開始ボタン
         private void Click_FullCalStartBtn(object sender, RoutedEventArgs e)
         {
+            if (this.ViewModel.SubtitleText == VecApp.Properties.Resources.String265) // 点検キャリブが終了していた場合(2025.12.17yori)
+            {
+                this.ViewModel.ImageVisibility = Visibility.Visible;
+                this.ViewModel.GridVisibility2 = Visibility.Hidden;
+                CSH.Grp02.ScannerAlignmentPanelClickReStart(ref this.ViewModel.CalibScannerMseBox);
+                this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
+                this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
+            }
+
             CSH.Grp03.ScannerAlignmentPanelFullCalStartBtn(); // スキャンスタート(2025.12.8yori)
             this.ViewModel.IsFullCalStartBtnEnabled = false; // 追加(2025.12.16yori)
             this.ViewModel.FullCalStartButtonOpacity = 0.25; // 追加(2025.12.16yori)
+            this.ViewModel.IsStopBtnEnabled = true; // 追加(2025.12.17yori)
+            this.ViewModel.StopButtonOpacity = 1.0; // 追加(2025.12.17yori)
         }
 
         // 戻るボタン
@@ -179,12 +188,13 @@ namespace VecApp
             this.ViewModel.StopButtonOpacity = 0.25;
         }
 
+        // 閉じるボタン
         private void Click_CloseBtn(object sender, RoutedEventArgs e)
         {
             Parent.CurrentPanel = Panel.Inspection;
         }
 
-
+        // 履歴ボタン
         private void Click_HistoryBtn(object sender, RoutedEventArgs e)
         {
 
@@ -222,7 +232,6 @@ namespace VecApp
 
             test = dlg.ShowDialog();
         }
-
 
         // ユーザーキャリ開始ボタン
         private void Click_UserCalStartBtn(object sender, RoutedEventArgs e)

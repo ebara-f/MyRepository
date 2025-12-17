@@ -1112,6 +1112,15 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   お待ちください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String203 {
+            get {
+                return ResourceManager.GetString("String203", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   全点灯 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String204 {

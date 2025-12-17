@@ -957,4 +957,7 @@
     <value>暖機中です。
 お待ちください。</value>
   </data>
+  <data name="String203" xml:space="preserve">
+    <value>お待ちください。</value>
+  </data>
 </root>

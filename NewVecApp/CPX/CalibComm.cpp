@@ -648,30 +648,46 @@ void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
 
 	ScannerAlignmentPanelの閉じるボタンがクリックされたときに呼ぶ関数
 	2025.12.11yori
+	戻り値なしの関数へ変更(2025.12.17yori)
 
 ***********************************************************************/
-int CalibComm::CloseScanner()
+void CalibComm::CloseScanner()
 {
 	int ret = 0;
 
-	HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ; // スキャナ切断処理
-	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ) // スキャナ切断処理状態になるまで待機
+	if (HwCtrl::m_ScannerAlignmentProbeFlag == true) // 有接触の場合(2025.12.17yori)
 	{
-		Sleep(100);
-	}
-	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::SCANNER_DISCONNECT_CMP) // スキャナ切断処理完了状態になるまで待機
-	{
-		Sleep(100);
+		HwCtrl::m_ScannerAlignmentProbeFlag = false;
+
+		// 有接触測定音OFFにして測定待機状態へ変更
+		if (HwCtrl::Func12() == 0) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
+		while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
+		{
+			Sleep(100);
+		}
 	}
 
-	// 有接触測定音OFFにして測定待機状態へ変更
-	if (HwCtrl::Func12() == 0) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
-	while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
+	if (HwCtrl::m_ScannerAlignmentScannerFlag == true) // 非接触の場合(2025.12.17yori)
 	{
-		Sleep(100);
-	}
+		HwCtrl::m_ScannerAlignmentScannerFlag = false;
+		HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ; // スキャナ切断処理
+		while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ) // スキャナ切断処理状態になるまで待機
+		{
+			Sleep(100);
+		}
+		while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::SCANNER_DISCONNECT_CMP) // スキャナ切断処理完了状態になるまで待機
+		{
+			Sleep(100);
+		}
+		delete HwCtrl::m_ptCalibResult;
 
-	return (ret);
+		// 有接触測定音OFFにして測定待機状態へ変更
+		if (HwCtrl::Func12() == 0) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
+		while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::MEAS_IDLE)
+		{
+			Sleep(100);
+		}
+	}
 }
 
 
@@ -700,6 +716,4 @@ void CalibComm::ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para)
 	para->maxmin[1] = HwCtrl::m_MaxMin[1];
 	para->maxmin[2] = HwCtrl::m_MaxMin[2];
 	para->CalibResultJudge = HwCtrl::m_ScannerCalibResultJudge;
-
-	delete HwCtrl::m_ptCalibResult;
 }

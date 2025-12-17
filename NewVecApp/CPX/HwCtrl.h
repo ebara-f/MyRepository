@@ -123,7 +123,8 @@ public:
     static bool m_ScannerConnectBtnFg; // スキャナ暖機完了ボタンフラグ(2025.9.2yori)
     static bool	m_MaintModeFlag; // メンテナンスモードフラグ(2025.10.6yori)
     static bool	m_ScannerSettingCloseFlag; // 非接触測定メニュー閉じるボタンフラグ(2025.11.11yori)
-    static bool	m_ScannerAlignmentFlag; // 非接触点検キャリブレーションフラグ(2025.12.5yori)
+    static bool	m_ScannerAlignmentScannerFlag; // 非接触点検キャリブレーション非接触フラグ(2025.12.17yori)
+    static bool	m_ScannerAlignmentProbeFlag; // 非接触点検キャリブレーション有接触フラグ(2025.12.17yori)
     static int m_Type; // 点検、キャリブレーションの種類(2025.12.5yori)
 
     static int	m_ProbeIdBeforeScanner; // 非接触へ切り替える前のプローブID(2025.11.20yori)

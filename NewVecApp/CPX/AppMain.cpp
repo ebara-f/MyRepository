@@ -1354,7 +1354,6 @@ void AppMain::ThreadProc()
         case VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_REQ: // 非接触点検キャリブ座標系作成要求(2025.12.5yori)
             UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show);
             UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup);
-            HwCtrl::m_ScannerAlignmentFlag = true;
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_ING;
             break;
 
@@ -1375,6 +1374,8 @@ void AppMain::ThreadProc()
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close);
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_INIT_REQ;
                     HwCtrl::m_ShotNo = 0;
+                    HwCtrl::m_ScannerAlignmentProbeFlag = false; // 追加(2025.12.17yori)
+                    HwCtrl::m_ScannerAlignmentScannerFlag = true; // 追加(2025.12.17yori)
                 }
             }
             break;
@@ -1549,7 +1550,7 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_INIT_CMP:
-            if (HwCtrl::m_ScannerAlignmentFlag) // 非接触点検キャリブレーションの場合(2025.12.8yori)
+            if (HwCtrl::m_ScannerAlignmentScannerFlag) // 非接触点検キャリブレーションの場合(2025.12.8yori)
             {
                 HwCtrl::m_Type = int(CALIB_TYPE::SCANNER_FULL);
                 UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn02);
@@ -1579,7 +1580,7 @@ void AppMain::ThreadProc()
                 HwCtrl::m_ScannerSettingCloseFlag = false;
             }
 
-            if (HwCtrl::m_ScannerAlignmentFlag) // 非接触点検キャリブレーションの場合(2025.12.5yori)
+            if (HwCtrl::m_ScannerAlignmentScannerFlag) // 非接触点検キャリブレーションの場合(2025.12.5yori)
             {
                 if (HwCtrl::m_ScanShotNo != HwCtrl::m_ScanShotOldNo)
                 {
@@ -1593,6 +1594,7 @@ void AppMain::ThreadProc()
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_STOP_REQ;
                     UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_ReultCallBack);
+                    HwCtrl::EndFg = false; // 追加(2025.12.17yori)
                 }
             }
             Sleep(100);
@@ -1624,14 +1626,14 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_ALIGNMENT_REQ: // 非接触点検キャリブ要求(2025.12.5yori)
-            //ProgBar::CallBackShow(2); // 計算中のプログレスバー表示(2025.12.10yori)
+            ProgBar::CallBackShow(2); // 計算中のプログレスバー表示(2025.12.10yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_ALIGNMENT_ING;
             break;
 
         case VEC_STEP_SEQ::SCANNER_ALIGNMENT_ING: // 非接触点検キャリブ(2025.12.5yori)
             if (!HwCtrl::CalcFg) // 計算が終了した場合(2025.12.10yori)
             {
-                //ProgBar::CallBackHide();
+                ProgBar::CallBackHide();
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL;
             }
             Sleep(100);

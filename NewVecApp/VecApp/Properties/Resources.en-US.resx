@@ -952,4 +952,7 @@ Start</value>
     <value>Warming up.
 Please wait.</value>
   </data>
+  <data name="String203" xml:space="preserve">
+    <value>Please wait.</value>
+  </data>
 </root>

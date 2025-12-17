@@ -74,6 +74,7 @@ int Grp02::Cmd03()
 
     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_REQ; // 非接触点検キャリブ座標系作成(2025.12.2)
     HwCtrl::m_Type = int(CALIB_TYPE::SCANNER_MAKE_MATRIX);
+    HwCtrl::m_ScannerAlignmentProbeFlag = true; // 追加(2025.12.17yori)
 
     ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
 

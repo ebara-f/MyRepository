@@ -422,9 +422,17 @@ int Grp01::SensorConnectionPanelCancelButton()
     if (HwCtrl::m_b_Button_ConnectFlag == false)
     {
         UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1を閉じる。
-        if (HwCtrl::m_ScannerAlignmentFlag == false) // 通常測定の場合は、PolyWorks側に知らせる。(2025.12.16yori)
+
+        if (HwCtrl::m_ScannerAlignmentProbeFlag == false)  // PolyWorksから接続し、通常測定の場合(2025.12.17yori)
         {
-            HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);
+            HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);// PolyWorks側にスキャナ接続キャンセルを知らせる。
+        }
+        else // PolyWorksから接続し、非接触点検キャリブの場合(2025.12.17yori)
+        {
+            UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn02); // 有接触設定メニュー表示
+            UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show); // アライメント画面表示
+            UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup); // アライメント画面の初期設定
+            HwCtrl::m_ScannerAlignmentProbeFlag = false;
         }
     }
 
