@@ -13,8 +13,8 @@
     <Grid>
         <Border Background="#2C3E50" CornerRadius="10" Padding="20">
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
-                <!-- String77→String225へ変更(2025.1.5yori) -->
-                <TextBlock Text="{x:Static res:Resources.String225}"
+                <!-- 用語をアライメントからキャリブレーションへ変更(2025.12.18yori) -->
+                <TextBlock Text="{x:Static res:Resources.String30}"
                        FontSize="20"
                        FontWeight="Bold"
                        Foreground="White"

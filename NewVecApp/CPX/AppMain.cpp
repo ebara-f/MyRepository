@@ -1374,8 +1374,7 @@ void AppMain::ThreadProc()
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close);
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_INIT_REQ;
                     HwCtrl::m_ShotNo = 0;
-                    HwCtrl::m_ScannerAlignmentProbeFlag = false; // 追加(2025.12.17yori)
-                    HwCtrl::m_ScannerAlignmentScannerFlag = true; // 追加(2025.12.17yori)
+                    HwCtrl::m_ScannerAlignmentScannerFlag = true; // 追加(2025.12.18yori)
                 }
             }
             break;
@@ -1545,13 +1544,18 @@ void AppMain::ThreadProc()
         case VEC_STEP_SEQ::SCANNER_WARMUP_CMP: // 暖機監視終了(2025.8.22yori)
             UsrMsg::CallBack(UsrMsg::WM_DlgPrgBar3_Close); // 暖機監視プログレスバー非表示(2025.7.29yori) // VEC_STEP_SEQ::SCANNER_WARMUP_INGから移動(2025.8.22yori)
             //UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1非表示(2025.6.10yori) // VEC_STEP_SEQ::SCANNER_INIT_CMPから移動し、修正(2025.8.21yori) // コメントアウト(2025.11.25yori)
-            if (HwCtrl::m_b_Button_ConnectFlag) UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn03); // アプリから接続した場合は、SubWindow3を表示する。(2025.6.10yori) // VEC_STEP_SEQ::SCANNER_INIT_CMPから移動し、修正(2025.8.21yori)
+            if (HwCtrl::m_b_Button_ConnectFlag &&                   // アプリから接続した場合は、SubWindow3を表示する。(2025.6.10yori) // VEC_STEP_SEQ::SCANNER_INIT_CMPから移動し、修正(2025.8.21yori)
+                HwCtrl::m_ScannerAlignmentScannerFlag == false)     // 点検キャリブレーションではない場合(2025.12.18yori)
+            {
+                UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn03); // 非接触設定メニュー表示
+            }
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_INIT_CMP;
             break;
 
         case VEC_STEP_SEQ::SCANNER_INIT_CMP:
             if (HwCtrl::m_ScannerAlignmentScannerFlag) // 非接触点検キャリブレーションの場合(2025.12.8yori)
             {
+                HwCtrl::m_ScannerAlignmentProbeFlag = false; // 追加(2025.12.18yori)
                 HwCtrl::m_Type = int(CALIB_TYPE::SCANNER_FULL);
                 UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn02);
                 UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show);

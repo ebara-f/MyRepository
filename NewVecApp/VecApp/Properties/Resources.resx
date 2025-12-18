@@ -401,9 +401,6 @@
   <data name="String68" xml:space="preserve">
     <value>点検</value>
   </data>
-  <data name="String69" xml:space="preserve">
-    <value>キャリブレーション</value>
-  </data>
   <data name="String7" xml:space="preserve">
     <value>3. [接続完了]ボタンをクリック</value>
   </data>
@@ -698,9 +695,6 @@
   </data>
   <data name="String194" xml:space="preserve">
     <value>表示</value>
-  </data>
-  <data name="String195" xml:space="preserve">
-    <value>閉じる</value>
   </data>
   <data name="String196" xml:space="preserve">
     <value>非接触始業前点検</value>

@@ -41,9 +41,11 @@ namespace VecApp
             get => this.DataContext as SensorConnectionViewModel;
         }
 
+        // 接続完了ボタン
         private void Click_ConnectDoneBtn(object sender, RoutedEventArgs e)
         {
             CSH.Grp01.Cmd07();  // 有接触から非接触へ切り替える(2025.7.29yori)
+            Parent.CurrentPanel = Panel.None; // パネル非表示(2025.12.18yori)
         }
 
         private void SlideSwitch_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

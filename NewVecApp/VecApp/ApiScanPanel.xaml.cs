@@ -200,9 +200,9 @@ namespace VecApp
             if (Item7?.Options3 != null)
             {
                 Item7.Options3.Clear();
-                Item7.Options3.Insert(0, "低");
-                Item7.Options3.Insert(1, "中");
-                Item7.Options3.Insert(2, "高");
+                Item7.Options3.Insert(0, VecApp.Properties.Resources.String132); // 変更(2025.12.18yori)
+                Item7.Options3.Insert(1, VecApp.Properties.Resources.String133); // 変更(2025.12.18yori)
+                Item7.Options3.Insert(2, VecApp.Properties.Resources.String134); // 変更(2025.12.18yori)
                 Item7.OptionIndex3 = sts.power;
             }
 

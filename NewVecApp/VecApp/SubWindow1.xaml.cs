@@ -45,6 +45,11 @@ namespace VecApp
 
             // ウィンドウズハンドルの取得
             //m_hWnd = new WindowInteropHelper(this).EnsureHandle(); // 削除予定(2025.7.28yori)
+
+            // Beak Masterで0軸イニシャライズは不要なため、無効化(2025.12.18yori)
+            SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
+            vm.IsBtn04Enabled = false;
+            vm.Btn04Opacity = 0.25;
         }
 
         /// <summary>
@@ -70,19 +75,20 @@ namespace VecApp
             // this.CurrentPanel = Panel.Initialize; // ここではイニシャライズを実施しない。(2025.7.30yori)
 
             // 0軸イニシャライズボタン有効無効の機種場合分け追加(2025.11.19yori)
-            Status01 sts = new Status01();
-            CSH.AppMain.UpDateData01(out sts);
-            SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
-            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
-            {
-                vm.IsBtn04Enabled = true;
-                vm.Btn04Opacity = 1.0;
-            }
-            else
-            {
-                vm.IsBtn04Enabled = false;
-                vm.Btn04Opacity = 0.25;
-            }
+            // V8対応のときに追加する。(2025.12.18yoriyori)
+            //Status01 sts = new Status01();
+            //CSH.AppMain.UpDateData01(out sts);
+            //SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
+            //if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
+            //{
+            //    vm.IsBtn04Enabled = true;
+            //    vm.Btn04Opacity = 1.0;
+            //}
+            //else
+            //{
+            //    vm.IsBtn04Enabled = false;
+            //    vm.Btn04Opacity = 0.25;
+            //}
         }
 
         // 切断
@@ -91,9 +97,10 @@ namespace VecApp
             // C++で実装した処理を実行
             CSH.Grp01.Cmd04();  // 追加(2025.4.28yori)
             // 0軸イニシャライズボタンの状態をでデフォルトに戻す。(2025.11.19yori)
-            SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
-            vm.IsBtn04Enabled = true;
-            vm.Btn04Opacity = 1.0;
+            // V8対応のときに追加する。(2025.12.18yoriyori)
+            //SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
+            //vm.IsBtn04Enabled = true;
+            //vm.Btn04Opacity = 1.0;
         }
 
         // イニシャライズ

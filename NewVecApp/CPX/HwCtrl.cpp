@@ -487,6 +487,13 @@ int HwCtrl::Func15()
             //int     iXSize = 0; // 不要？削除予定(2025.11.25yori)
             //double	dXPitch = 0.0; // 不要？削除予定(2025.11.25yori)
             //int		iMeasMode = Func34(); // 変更(2025.8.12yori) // 不要？削除予定(2025.11.25yori)
+
+            if (m_ScannerAlignmentScannerFlag == true) // 点検キャリブレーションの場合(2025.12.18yori)
+            {
+                Func61(TDS_MEASMODE_E); // 計測モード：Eモード
+                Func62(TDS_SIMPLESENS_0); // 感度：Normal
+                Func64(TDS_INTERPOLATIONX_NONE); // 補間：なし
+            }
         }
         else
         {
@@ -2161,7 +2168,7 @@ BOOL HwCtrl::Func76()
     Func39(&power); // ガイドレーザーのパワーを取得(2025.11.25yori)
     Func40(&interp); // X点間補間の設定を取得(2025.11.25yori)
     WriteIniScanPara(Func34(), power, interp); // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
-    WriteIniScanSens(sens); // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
+
     fg = TdsVecScannerPowerOff();
     TdsVecMeasExit();
     fg |= WritePrivateProfileString(TEXT("Buzzer"), TEXT("0"), TEXT("1"), TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\TDSUser.ini"));

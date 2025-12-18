@@ -276,7 +276,7 @@
     <value>スキャナ接続手順</value>
   </data>
   <data name="String30" xml:space="preserve">
-    <value>キャリブレーション</value>
+    <value>Calibration</value>
   </data>
   <data name="String31" xml:space="preserve">
     <value>ゲージ配置距離：</value>
@@ -387,7 +387,7 @@
     <value>ヘルプ</value>
   </data>
   <data name="String64" xml:space="preserve">
-    <value>閉じる</value>
+    <value>Close</value>
   </data>
   <data name="String65" xml:space="preserve">
     <value>ネットワーク</value>
@@ -400,9 +400,6 @@
   </data>
   <data name="String68" xml:space="preserve">
     <value>点検</value>
-  </data>
-  <data name="String69" xml:space="preserve">
-    <value>キャリブレーション</value>
   </data>
   <data name="String7" xml:space="preserve">
     <value>3. [接続完了]ボタンをクリック</value>
@@ -515,13 +512,13 @@
     <value>感度スライス</value>
   </data>
   <data name="String132" xml:space="preserve">
-    <value>低</value>
+    <value>Low</value>
   </data>
   <data name="String133" xml:space="preserve">
-    <value>中</value>
+    <value>Middle</value>
   </data>
   <data name="String134" xml:space="preserve">
-    <value>高</value>
+    <value>High</value>
   </data>
   <data name="String135" xml:space="preserve">
     <value>補間(Xピッチ)</value>
@@ -700,9 +697,6 @@
   <data name="String194" xml:space="preserve">
     <value>表示</value>
   </data>
-  <data name="String195" xml:space="preserve">
-    <value>閉じる</value>
-  </data>
   <data name="String196" xml:space="preserve">
     <value>非接触始業前点検</value>
   </data>
@@ -785,7 +779,7 @@
     <value>有接触設定メニュー</value>
   </data>
   <data name="String225" xml:space="preserve">
-    <value>アライメント</value>
+    <value>Alignment</value>
   </data>
   <data name="String226" xml:space="preserve">
     <value>Scanner Setting Menu</value>
@@ -903,7 +897,7 @@
     <value>Taper</value>
   </data>
   <data name="String265" xml:space="preserve">
-    <value>Check the results and click the Close button.</value>
+    <value>Check the results and click the close button.</value>
   </data>
   <data name="String266" xml:space="preserve">
     <value>補正値作成成功</value>

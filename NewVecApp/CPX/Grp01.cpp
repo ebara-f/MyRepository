@@ -119,8 +119,10 @@ int Grp01::Cmd04()
 
     // 2025.7.2 eba chg
     //WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE); // コールバック関数UsrMsg::CallBackが戻ってこないため、一時的にコメントアウト、後で調査(2025.8.21yori)
-    if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::CONNECT_CMP || HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::MEAS_IDLE ||
-        HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::INITIALIZE_CMP)   // 2025.9.30 add eba
+    if (HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::CONNECT_CMP ||
+        HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::MEAS_IDLE ||
+        HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::INITIALIZE_CMP || // 2025.9.30 add eba
+        HwCtrl::m_VecStepSeq == VEC_STEP_SEQ::SCANNER_DISCONNECT_CMP) // 追加(2025.12.18yori)
     {
         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_REQ;
     }
@@ -433,6 +435,18 @@ int Grp01::SensorConnectionPanelCancelButton()
             UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show); // アライメント画面表示
             UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup); // アライメント画面の初期設定
             HwCtrl::m_ScannerAlignmentProbeFlag = false;
+        }
+    }
+    else // アプリから接続した場合、キャンセルボタンでスキャナ切断処理を行う。(2025.12.18yori)
+    {
+        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ; // スキャナ切断処理
+        while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::SCANNER_DISCONNECT_REQ) // スキャナ切断処理状態になるまで待機
+        {
+            Sleep(100);
+        }
+        while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::SCANNER_DISCONNECT_CMP) // スキャナ切断処理完了状態になるまで待機
+        {
+            Sleep(100);
         }
     }
 

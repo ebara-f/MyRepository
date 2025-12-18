@@ -108,7 +108,7 @@ namespace VecApp
             //this.CurrentPanel = Panel.ContactProperty;
             //this.CurrentPanel = Panel.ContactInspection; // 上記から変更(2025.11.14yori)
             this.CurrentPanel = Panel.Inspection; // 上記から変更(2025.12.2yori)
-            this.InspectionValue.Title = VecApp.Properties.Resources.String225; // 追加(2025.12.2yori)
+            this.InspectionValue.Title = VecApp.Properties.Resources.String30; // 変更(2025.12.18yori)
         }
 
         private void Click_Btn04(object sender, RoutedEventArgs e)

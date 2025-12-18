@@ -27,7 +27,8 @@
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String70}" Click="Click_Btn07" FontSize="20"/>
             <!-- 始業前点検作成中のため、無効(2025.12.2yori) -->
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String16}" Click="Click_Btn02" FontSize="20" IsEnabled="False" Opacity="0.25"/>
-            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String225}" Click="Click_Btn03" FontSize="20"/>
+            <!-- 用語をアライメントからキャリブレーションへ変更(2025.12.18yori) -->
+            <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String30}" Click="Click_Btn03" FontSize="20"/>
             <!-- 自己診断作成中のため、無効(2025.12.2yori) -->
             <Button Style="{StaticResource MenuButtonStyle}" Content="{x:Static res:Resources.String72}" Click="Click_Btn04" FontSize="20" IsEnabled="False" Opacity="0.25"/>
             <!-- アーム型式作成中のため、無効(2025.12.2yori) -->

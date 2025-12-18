@@ -94,7 +94,7 @@
                             <Button Content="{x:Static res:Resources.String201}" Margin="0,0,0,10" Click="Click_MotorBtn" Style="{StaticResource PanelButton2Style}" Height="40"/>
                             <Button Content="{x:Static res:Resources.String202}" Margin="0,0,0,10" Click="Click_LEDBtn" Style="{StaticResource PanelButton2Style}" Height="40"/>
 
-                            <Button Content="{x:Static res:Resources.String195}" Click="Click_CloseBtn" Width="60" Height="40" Margin="0,30,0,0" Style="{StaticResource PanelButton2Style}"/>
+                            <Button Content="{x:Static res:Resources.String64}" Click="Click_CloseBtn" Width="60" Height="40" Margin="0,30,0,0" Style="{StaticResource PanelButton2Style}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,0,10,0" VerticalAlignment="Top">

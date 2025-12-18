@@ -474,7 +474,21 @@ namespace VecApp
             m_SubWnd03.ApiScanValue.IsButtonEnabled = true; // アプリ側から接続した場合にスキャナのスタートとリセットボタンを押せるようにする。(2025.9.3yori)
             m_SubWnd03.ApiScanValue.ButtonOpacity = 1.0; // 追加(2025.11.20yori)
 
-            //UpdateData1();	// 2025.5.22 test ebs
+            //UpdateData1();	// 2025.5.22 test eba
+
+            // SubWindow1のボタン有効化(2025.12.18yori)
+            SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
+            m_SubWnd01.DataContext = SubWnd01ViewModel;
+            SubWnd01ViewModel.IsBtn01Enabled = true;
+            SubWnd01ViewModel.IsBtn02Enabled = true;
+            SubWnd01ViewModel.IsBtn03Enabled = true;
+            SubWnd01ViewModel.IsBtn04Enabled = false; // Beak Masterで0軸イニシャライズは不要なため、無効化
+            SubWnd01ViewModel.IsBtn05Enabled = true;
+            SubWnd01ViewModel.Btn01Opacity = 1.0;
+            SubWnd01ViewModel.Btn02Opacity = 1.0;
+            SubWnd01ViewModel.Btn03Opacity = 1.0;
+            SubWnd01ViewModel.Btn04Opacity = 0.25; // Beak Masterで0軸イニシャライズは不要なため、半透明化
+            SubWnd01ViewModel.Btn05Opacity = 1.0;
         }
 
 		/// <summary>

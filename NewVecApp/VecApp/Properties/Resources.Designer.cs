@@ -1021,15 +1021,6 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   閉じる に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string String195 {
-            get {
-                return ResourceManager.GetString("String195", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   非接触始業前点検 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String196 {
@@ -2253,15 +2244,6 @@ namespace VecApp.Properties {
         public static string String68 {
             get {
                 return ResourceManager.GetString("String68", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   キャリブレーション に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        public static string String69 {
-            get {
-                return ResourceManager.GetString("String69", resourceCulture);
             }
         }
         
