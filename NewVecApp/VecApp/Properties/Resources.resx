@@ -954,4 +954,17 @@
   <data name="String203" xml:space="preserve">
     <value>お待ちください。</value>
   </data>
+  <data name="String69" xml:space="preserve">
+    <value>設定を変更した場合は下記の手順を実施してください。
+1. 測定機を切断
+2. 測定機の電源OFF
+3. 測定機の電源ON
+4. 測定を再度接続</value>
+  </data>
+  <data name="String195" xml:space="preserve">
+    <value>パラメータを初期化しますか？</value>
+  </data>
+  <data name="String278" xml:space="preserve">
+    <value>ストップ</value>
+  </data>
 </root>

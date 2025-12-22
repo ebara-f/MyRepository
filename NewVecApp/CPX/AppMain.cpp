@@ -999,10 +999,13 @@ void AppMain::ThreadProc()
                 else strcpy_s(model, 16, HwCtrl::m_hVecCnt.m_Sts.m_Model.c_str());
                 err = mbstowcs_s(&converted, armtype, 16, model, _TRUNCATE);
                 ret = HwCtrl::Func74(armtype);
-
                 ret = HwCtrl::Func08(); // 有接触モードへ変更
                 ret = HwCtrl::Func75(); // 関節リミットビープ音のON(2025.9.1yori)
                 ret = HwCtrl::Func05(&PosiData); // 接続時にプローブID変更フラグ初期値取得のため、追加(2025.10.2)
+                if (HwCtrl::Func09() == 0 && HwCtrl::m_hVecCnt.m_Sts.m_iProbeId == 0) // 有接触モードでID=0(非接触)の場合、非接触モードへ切り替える前のプローブIDへ戻す。(2025.12.20yori)
+                {
+                    HwCtrl::Func50(HwCtrl::m_ProbeIdBeforeScanner, HwCtrl::m_hVecCnt.m_Sts.m_dia);
+                }
 
                 if (HwCtrl::m_hVecCnt.m_Sts.m_Warm != 0) // 温度が正常ではない場合(2025.11.11yori)
                 {
@@ -1460,7 +1463,8 @@ void AppMain::ThreadProc()
             // 測定中に異常があった場合のエラー処理をちゃんとすること 2025.5.27 memo eba
             if (ret == 0)
             {
-                if (HwCtrl::m_b_Button_ConnectFlag == false) // アプリから接続した場合は、PolyWorksへデータ送信しない。(2025.6.10yori)
+                // アプリから接続した場合は、PolyWorksへデータ送信しない。(2025.6.10yori)
+                if (HwCtrl::m_b_Button_ConnectFlag == false) // FullMoonのテスト環境の場合はif文をコメントアウトする。(2025.12.22yori)
                 {
                     // PolyWorksへデータ送信
                     if (HwCtrl::m_hVecCnt.m_Sts.m_enMode == VEC_MODE_PROBE && HwCtrl::m_hVecCnt.m_VecInitflag == true)

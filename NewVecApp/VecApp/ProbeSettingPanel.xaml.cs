@@ -55,7 +55,7 @@ namespace VecApp
             this.ViewModel.Name.Insert(16, sts.pobe_name17);
             this.ViewModel.Name.Insert(17, sts.pobe_name18); 
             this.ViewModel.Name.Insert(18, sts.pobe_name19);
-            this.ViewModel.Name.Insert(19, sts.pobe_name20);
+            if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") this.ViewModel.Name.Insert(19, sts.pobe_name20); // V8の場合はプローブなし(None probe)を表示する。(2025.12..21yori)
             this.ViewModel.NameIndex = sts.probe_id - 1; // スキャナを非表示にしたため、Index-1とする。(2025.10.31yori)
             if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L")
             {

@@ -895,65 +895,159 @@ int HwCtrl::Func30()
 
 ***********************************************************************/
 
-int HwCtrl::Func31(char address[4][8], char subnet[4][8], char port[4]) // 2025.9.30 この関数バグあり、メモリ壊しています！！！！ memo eba
+int HwCtrl::Func31(char address[4][8], char subnet[4][8], char port[4]) // ChatGPTによる修正、動作確認中(2025.12.21yori)
 {
     int ret = 0;
-    int i = 0;
-    int j = 0;
-    int k = 0; // 追加(2025.8.20yori)
 
-    // 初期化(2025.8.20yori)
+    // ------------------------
+    // 初期化（\0 で確実に）
+    // ------------------------
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            address[i][j] = NULL;
-            subnet[i][j] = NULL;
+            address[i][j] = '\0';
+            subnet[i][j] = '\0';
         }
-        port[i] = NULL;
+        port[i] = '\0';
     }
 
+    // ネットワーク情報取得
     m_hVecCnt.VecCmd_GetNetwork();
 
-    // IPアドレス、サブネットマスクを分割(2025.8.15yori)
-    // IPアドレス
-    for (i = 0; i < 4; i++)
+    // ------------------------
+    // IPアドレス分割
+    // ------------------------
     {
-        while(m_hVecCnt.m_Sts.m_Address[k] != ' ')
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        while (m_hVecCnt.m_Sts.m_Address[k] != '\0' && i < 4)
         {
-            if (m_hVecCnt.m_Sts.m_Address[k] == '\0') break;
-            address[i][j] = m_hVecCnt.m_Sts.m_Address[k];
-            j++;
-            k++; // 追加(2025.8.20yori)
+            if (m_hVecCnt.m_Sts.m_Address[k] == ' ')
+            {
+                address[i][j] = '\0';
+                i++;
+                j = 0;
+            }
+            else if (j < 7)  // バッファ保護
+            {
+                address[i][j++] = m_hVecCnt.m_Sts.m_Address[k];
+            }
+            k++;
         }
-        j = 0; // 追加(2025.8.20yori)
-        k++; // 追加(2025.8.20yori)
+
+        // 最後の要素を終端
+        if (i < 4)
+        {
+            address[i][j] = '\0';
+        }
     }
 
-    // サブネットマスク
-    j = 0;
-    k = 0;
-    for (i = 0; i < 4; i++)
+    // ------------------------
+    // サブネットマスク分割
+    // ------------------------
     {
-        while (m_hVecCnt.m_Sts.m_Subnet[k] != ' ')
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        while (m_hVecCnt.m_Sts.m_Subnet[k] != '\0' && i < 4)
         {
-            if (m_hVecCnt.m_Sts.m_Subnet[k] == '\0') break;
-            subnet[i][j] = m_hVecCnt.m_Sts.m_Subnet[k];
-            j++;
-            k++; // 追加(2025.8.20yori)
+            if (m_hVecCnt.m_Sts.m_Subnet[k] == ' ')
+            {
+                subnet[i][j] = '\0';
+                i++;
+                j = 0;
+            }
+            else if (j < 7)  // バッファ保護
+            {
+                subnet[i][j++] = m_hVecCnt.m_Sts.m_Subnet[k];
+            }
+            k++;
         }
-        j = 0; // 追加(2025.8.20yori)
-        k++; // 追加(2025.8.20yori)
+
+        // 最後の要素を終端
+        if (i < 4)
+        {
+            subnet[i][j] = '\0';
+        }
     }
 
+    // ------------------------
     // ポート
-    for (i = 0; i < 4; i++)
+    // ------------------------
+    for (int i = 0; i < 4; i++)
     {
         port[i] = m_hVecCnt.m_Sts.m_Port[i];
     }
 
     return ret;
 }
+
+
+
+//int HwCtrl::Func31(char address[4][8], char subnet[4][8], char port[4]) // 2025.9.30 この関数バグあり、メモリ壊しています！！！！ memo eba
+//{
+//    int ret = 0;
+//    int i = 0;
+//    int j = 0;
+//    int k = 0; // 追加(2025.8.20yori)
+//
+//    // 初期化(2025.8.20yori)
+//    for (int i = 0; i < 4; i++)
+//    {
+//        for (int j = 0; j < 8; j++)
+//        {
+//            address[i][j] = NULL;
+//            subnet[i][j] = NULL;
+//        }
+//        port[i] = NULL;
+//    }
+//
+//    m_hVecCnt.VecCmd_GetNetwork();
+//
+//    // IPアドレス、サブネットマスクを分割(2025.8.15yori)
+//    // IPアドレス
+//    for (i = 0; i < 4; i++)
+//    {
+//        while(m_hVecCnt.m_Sts.m_Address[k] != ' ')
+//        {
+//            if (m_hVecCnt.m_Sts.m_Address[k] == '\0') break;
+//            address[i][j] = m_hVecCnt.m_Sts.m_Address[k];
+//            j++;
+//            k++; // 追加(2025.8.20yori)
+//        }
+//        j = 0; // 追加(2025.8.20yori)
+//        k++; // 追加(2025.8.20yori)
+//    }
+//
+//    // サブネットマスク
+//    j = 0;
+//    k = 0;
+//    for (i = 0; i < 4; i++)
+//    {
+//        while (m_hVecCnt.m_Sts.m_Subnet[k] != ' ')
+//        {
+//            if (m_hVecCnt.m_Sts.m_Subnet[k] == '\0') break;
+//            subnet[i][j] = m_hVecCnt.m_Sts.m_Subnet[k];
+//            j++;
+//            k++; // 追加(2025.8.20yori)
+//        }
+//        j = 0; // 追加(2025.8.20yori)
+//        k++; // 追加(2025.8.20yori)
+//    }
+//
+//    // ポート
+//    for (i = 0; i < 4; i++)
+//    {
+//        port[i] = m_hVecCnt.m_Sts.m_Port[i];
+//    }
+//
+//    return ret;
+//}
+
 
 
 

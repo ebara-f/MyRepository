@@ -1021,6 +1021,15 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   パラメータを初期化しますか？ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String195 {
+            get {
+                return ResourceManager.GetString("String195", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   非接触始業前点検 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String196 {
@@ -1843,6 +1852,15 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   ストップ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String278 {
+            get {
+                return ResourceManager.GetString("String278", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   球直径(球ゲージ)： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String28 {
@@ -2244,6 +2262,19 @@ namespace VecApp.Properties {
         public static string String68 {
             get {
                 return ResourceManager.GetString("String68", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   設定を変更した場合は下記の手順を実施してください。
+        ///1. 測定機を切断
+        ///2. 測定機の電源OFF
+        ///3. 測定機の電源ON
+        ///4. 測定を再度接続 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String69 {
+            get {
+                return ResourceManager.GetString("String69", resourceCulture);
             }
         }
         

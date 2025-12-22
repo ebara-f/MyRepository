@@ -258,7 +258,8 @@ namespace VecApp
         private void Click_StartBtn(object sender, RoutedEventArgs e)
         {
             // ボタンの名前を切り替えと、スキャンとストップを行う。(2025.8.12yori)
-            if (SartStopButton.Content.ToString() == "スタート")
+            // 多言語対応による変更(2025.12.22yori)
+            if (SartStopButton.Content.ToString() == VecApp.Properties.Resources.String114)
             {
                 Status02 sts = new Status02();
                 CSH.AppMain.UpDateData02(out sts); // 追加(2025.8.25yori)
@@ -414,14 +415,14 @@ namespace VecApp
                 }
                 
                 CSH.Grp03.Cmd01(); // スキャンスタート
-                SartStopButton.Content = "ストップ";
+                SartStopButton.Content = VecApp.Properties.Resources.String278; // 多言語対応による変更(2025.12.22yori)
                 ScanMode.IsEnabled = false; // 計測モードComboBox無効
                 Pitch.IsEnabled = false; // 点間ピッチComboBox無効
             }
             else
             {
                 CSH.Grp03.Cmd02(); // スキャンストップ
-                SartStopButton.Content = "スタート";
+                SartStopButton.Content = VecApp.Properties.Resources.String114; // 多言語対応による変更(2025.12.22yori)
                 ScanMode.IsEnabled = true; // ComboBox有効
                 Pitch.IsEnabled = true; // 点間ピッチComboBox有効
             }
@@ -445,8 +446,9 @@ namespace VecApp
         private void Click_ParameterInitializationBtn(object sender, RoutedEventArgs e)
         {
             // メッセージボックスを表示する。(2025.8.26yori)
+            // 多言語対応による変更(2025.12.22yori)
             MessageBoxResult result;
-            result = MessageBox.Show("パラメータを初期化しますか？", "BeakMater Plug-in SoftWare(beta)", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            result = MessageBox.Show(VecApp.Properties.Resources.String195, "Beak Master Plug-in SoftWare(beta)", MessageBoxButton.YesNo, MessageBoxImage.Information);
             switch (result)
             {
                 case MessageBoxResult.Yes:

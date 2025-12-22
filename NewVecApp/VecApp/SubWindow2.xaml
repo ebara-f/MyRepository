@@ -9,7 +9,7 @@
         xmlns:local="clr-namespace:VecApp"
         xmlns:res="clr-namespace:VecApp.Properties"
         mc:Ignorable="d"
-        Title="BeakMater Plug-in SoftWare(beta)" Height="770" Width="1100" Closing="Terminate" ResizeMode="NoResize">
+        Title="Beak Master Plug-in SoftWare(beta)" Height="770" Width="1100" Closing="Terminate" ResizeMode="NoResize">
     <!-- Loaded="Window_Loaded"削除(2025.10.1yori) -->
     <!-- Height="550"→Height=770"へ変更(2025.9.27yori) -->
     <Grid Background="#2C3E50">

@@ -758,7 +758,10 @@ namespace VecApp
 
                 // Window のアクティブ化
                 //UIPlus.ForceActive(m_DlgPrgBar2.m_hWnd);
-                UIPlus.ForceActive(m_DlgPrgBar3.m_hWnd);    // 2025.09.04 修正 by GeomLab
+                //UIPlus.ForceActive(m_DlgPrgBar3.m_hWnd);    // 2025.09.04 修正 by GeomLab
+                // SetForegroundWindowの代わりにTopmostを使用する。(2025.12.20yori)
+                m_DlgPrgBar3.Topmost = true;  // 一時的に最前面にする。
+                m_DlgPrgBar3.Activate();      // ウィンドウをアクティブ化
             }
         }
 

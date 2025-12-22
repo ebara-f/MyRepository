@@ -166,7 +166,7 @@
     <value>スキャナパラメータ詳細</value>
   </data>
   <data name="String114" xml:space="preserve">
-    <value>スタート</value>
+    <value>Start</value>
   </data>
   <data name="String115" xml:space="preserve">
     <value>リセット</value>
@@ -953,5 +953,18 @@ Please wait.</value>
   </data>
   <data name="String203" xml:space="preserve">
     <value>Please wait.</value>
+  </data>
+  <data name="String69" xml:space="preserve">
+    <value>After changing the setting, perform the following procedure.
+1. Disconnect the measuring machine
+2. Power off the measuring machine
+3. Power on the measuring machine
+4. Reconnect on the measuring machine</value>
+  </data>
+  <data name="String195" xml:space="preserve">
+    <value>Do you want to initialize the parameters?</value>
+  </data>
+  <data name="String278" xml:space="preserve">
+    <value>Stop</value>
   </data>
 </root>

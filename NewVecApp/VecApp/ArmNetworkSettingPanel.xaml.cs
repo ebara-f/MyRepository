@@ -78,7 +78,8 @@ namespace VecApp
             CSH.AppMain.UpDateData01_Write(in sts);
             CSH.Grp02.Cmd09();
             // メッセージボックスを表示する。(2025.8.28yori)
-            MessageBox.Show("設定を変更した場合は下記の手順を実施してください。\n1.測定機を切断\n2.測定機の電源OFF\n3.測定機の電源ON\n4.測定を再度接続", "BeakMater Plug-in SoftWare(beta)", MessageBoxButton.OK, MessageBoxImage.Information);
+            // 多言語対応による変更(2025.12.22yori)
+            MessageBox.Show(VecApp.Properties.Resources.String69, "Beak Master Plug-in SoftWare(beta)", MessageBoxButton.OK, MessageBoxImage.Information);
             Parent.CurrentPanel = Panel.None;
         }
 
