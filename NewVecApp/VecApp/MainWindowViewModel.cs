@@ -201,7 +201,7 @@ namespace VecApp
         }
 
         // ボタン1、2、3の有効無効を設定する。(2025.11.19yori)
-        private bool _isBtnEnabled = true; // 初期状態は有効
+        private bool _isBtnEnabled = false; // アプリ単体動作は作成中のため、初期状態は無効(2025.12.26)
         public bool IsBtnEnabled
         {
             get { return _isBtnEnabled; }
@@ -216,7 +216,7 @@ namespace VecApp
         }
 
         // ボタン1、2、3の不透明度を設定する。(2025.11.19yori)
-        private double _btnOpacity = 1.0; // デフォルトは不透明
+        private double _btnOpacity = 0.25; // アプリ単体動作は作成中のため、初期値は半透明(2025.12.26)
         public double BtnOpacity
         {
             get => _btnOpacity;

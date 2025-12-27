@@ -77,6 +77,8 @@ bool      AppMain::m_ThreadBreak  = false;
 
 int AppMain::Init()
 {
+    DisablePowerThrottlingIgnoreTimerResolution(); // 電力スロットリングを無効化(タイマー精度)(2025.12.26yori)
+    //DisableAllPowerThrottling(); // 電力スロットリングを無効化(CPU処理速度、タイマー精度)→上記をコメントアウトしてこれを実行してもEhモードは遅延する。(2025.12.27yori)
     //int     frc,yes_existF; // 現行のLplQueを使用するため、コメントアウト(2025.5.15yori)
 
     m_ThreadBreak = false;
@@ -843,6 +845,102 @@ int AppMain::ContactInspectionPanelMesCallBack()
 
 /***********************************************************************
 
+    電力スロットリングを無効化(CPU処理速度)
+    2025.12.26yori)
+
+***********************************************************************/
+void AppMain::DisablePowerThrottling()
+{
+    PROCESS_POWER_THROTTLING_STATE state = {};
+    state.Version = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
+
+    // 電力スロットリングを無効化
+    state.ControlMask = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
+    state.StateMask = 0; // ← 無効化
+
+    BOOL result = SetProcessInformation(
+        GetCurrentProcess(),
+        ProcessPowerThrottling,
+        &state,
+        sizeof(state)
+    );
+
+    if (!result)
+    {
+        DWORD err = GetLastError();
+        // エラーハンドリング（必要なら）
+    }
+}
+
+
+/***********************************************************************
+
+    電力スロットリングを無効化(タイマー精度)
+    2025.12.26yori)
+
+***********************************************************************/
+void AppMain::DisablePowerThrottlingIgnoreTimerResolution()
+{
+    PROCESS_POWER_THROTTLING_STATE state = {};
+    state.Version = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
+
+    // 対象を指定（IGNORE_TIMER_RESOLUTION を管理対象にする）
+    state.ControlMask = PROCESS_POWER_THROTTLING_IGNORE_TIMER_RESOLUTION;
+
+    // StateMask を 0 にする → フラグを無効化（OFFにする）
+    state.StateMask = 0;
+
+    BOOL result = SetProcessInformation(
+        GetCurrentProcess(),
+        ProcessPowerThrottling,
+        &state,
+        sizeof(state)
+    );
+
+    if (!result)
+    {
+        DWORD err = GetLastError();
+        // エラーハンドリング（必要なら）
+    }
+}
+
+
+
+/***********************************************************************
+
+    全電力スロットリングも含めて完全に無効化(CPU処理速度、タイマー精度)
+    2025.12.26yori)
+
+***********************************************************************/
+void AppMain::DisableAllPowerThrottling()
+{
+    PROCESS_POWER_THROTTLING_STATE state = {};
+    state.Version = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
+
+    // 全フラグを管理対象に設定
+    state.ControlMask =
+        PROCESS_POWER_THROTTLING_EXECUTION_SPEED |
+        PROCESS_POWER_THROTTLING_IGNORE_TIMER_RESOLUTION;
+
+    // すべてOFFにする
+    state.StateMask = 0;
+
+    BOOL result = SetProcessInformation(
+        GetCurrentProcess(),
+        ProcessPowerThrottling,
+        &state,
+        sizeof(state)
+    );
+
+    if (!result)
+    {
+        DWORD err = GetLastError();
+        // エラーハンドリング（必要なら）
+    }
+}
+
+/***********************************************************************
+
     スレッド処理
     PolyWorksからのメッセージ受信
     PolyWorksへ有接触データ送信
@@ -1016,7 +1114,7 @@ void AppMain::ThreadProc()
                 if (!HwCtrl::m_b_Button_ConnectFlag)
                 {
                     HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_SUCCESS); // 接続に成功したことをPolyWorks側に知らせる(2025.6.9yori)
-                    UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Connected); // C#側にPolyWorks側から接続したことを知らせる。(2025.11.19yori)
+                    //UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Connected); // C#側にPolyWorks側から接続したことを知らせる。(2025.11.19yori) // アプリ単体動作は作成中のため、最初から接続、設定ボタンを押せないようにする。(2025.12.26yori)
                 }
             }
             else
@@ -1682,7 +1780,7 @@ void AppMain::ThreadProc()
                 if (!HwCtrl::m_b_Button_ConnectFlag)
                 {
                     HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_SUCCESS); // 切断に成功したことをPolyWorks側に知らせる(2025.6.9yori)
-                    UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Disconnected); // C#側にPolyWorks側から切断したことを知らせる。(2025.11.19yori)
+                    //UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Disconnected); // C#側にPolyWorks側から切断したことを知らせる。(2025.11.19yori) // アプリ単体動作は作成中のため、最初から接続、設定ボタンを押せないようにする。(2025.12.26yori)
                 }
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_CMP;
             }
