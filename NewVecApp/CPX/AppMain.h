@@ -38,6 +38,11 @@ public:
     static int  ContactInspectionPanelMesCallBack(); // 2025.9.2 add eba
 
     static void ThreadProc();
+
+    // 電力スロットリング設定関数(2025.12.26yori)
+    static void DisablePowerThrottling();
+    static void DisablePowerThrottlingIgnoreTimerResolution();
+    static void DisableAllPowerThrottling();
 };
 
 
