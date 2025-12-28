@@ -27,6 +27,7 @@
 #include "UsrMsgBox.h"  // 2025.11.12 add eba
 #include "ProgBar.h"  // 2025.11.18 add eba
 #include "CalibComm.h"
+#include "PowerPlanRAII.h" // 追加(2025.12..27yori)
 
 //// 追加(2025.5.15yori)
 //------------------------------
@@ -58,6 +59,7 @@ enum APP_CMD {
 ////
 
 
+
 /***********************************************************************
 
     スタティック変数
@@ -79,6 +81,8 @@ int AppMain::Init()
 {
     DisablePowerThrottlingIgnoreTimerResolution(); // 電力スロットリングを無効化(タイマー精度)(2025.12.26yori)
     //DisableAllPowerThrottling(); // 電力スロットリングを無効化(CPU処理速度、タイマー精度)→上記をコメントアウトしてこれを実行してもEhモードは遅延する。(2025.12.27yori)
+    timeBeginPeriod(1); // 追加(2025.12.27yori)
+    //SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS); // 優先度：高(2025.12.27yori)
     //int     frc,yes_existF; // 現行のLplQueを使用するため、コメントアウト(2025.5.15yori)
 
     m_ThreadBreak = false;
@@ -131,6 +135,7 @@ int AppMain::Term()
     LplTerminateALL(); // 追加(2025.5.15yori)
     // 現行のLplQueを使用するため、コメントアウト(2025.5.15yori)
     //LplQue_Delete();
+    timeEndPeriod(1); // 追加(2025.12.27yori)
 
     return( 0 );
 }
@@ -846,7 +851,7 @@ int AppMain::ContactInspectionPanelMesCallBack()
 /***********************************************************************
 
     電力スロットリングを無効化(CPU処理速度)
-    2025.12.26yori)
+    2025.12.26yori
 
 ***********************************************************************/
 void AppMain::DisablePowerThrottling()
@@ -876,7 +881,7 @@ void AppMain::DisablePowerThrottling()
 /***********************************************************************
 
     電力スロットリングを無効化(タイマー精度)
-    2025.12.26yori)
+    2025.12.26yori
 
 ***********************************************************************/
 void AppMain::DisablePowerThrottlingIgnoreTimerResolution()
@@ -904,12 +909,10 @@ void AppMain::DisablePowerThrottlingIgnoreTimerResolution()
     }
 }
 
-
-
 /***********************************************************************
 
     全電力スロットリングも含めて完全に無効化(CPU処理速度、タイマー精度)
-    2025.12.26yori)
+    2025.12.26yori
 
 ***********************************************************************/
 void AppMain::DisableAllPowerThrottling()
@@ -938,6 +941,26 @@ void AppMain::DisableAllPowerThrottling()
         // エラーハンドリング（必要なら）
     }
 }
+
+
+
+/***********************************************************************
+    
+    共有メモリ受信テスト関数
+    2025.12.28yori
+
+***********************************************************************/
+
+int AppMain::TestLplRecvMesBox()
+{
+    int		iRec = 0;
+    char	buff[1024] = { 0 };
+    iRec = HwCtrl::AppCommandRecv(buff);
+
+    return(0);
+}
+
+
 
 /***********************************************************************
 
@@ -968,9 +991,16 @@ void AppMain::ThreadProc()
     char model[16];// 追加(2025.9.26yori)
     int resultMsg = 0;
     VecCtEx VecData; // スキャナ側のベクトロンデータ(スキャナデータ変換用データ)(2025.12.2yori)
+    //int w_cnt = 0; // デバッグ(2025.12.28yori)
+    //int r_cnt = 0; // デバッグ2025.12.28yori)
+    //char text[256]; // デバッグ(2025.12.28yori) 
 
     while( 1 )
     {
+        //LplGetQueCount(NONCONTACT_DATA, &w_cnt, &r_cnt); // デバッグ(2025.12.28yori)
+        //sprintf_s(text, 256, "LplGetQueCount:w_cnt %d r_cnt %d\n", w_cnt, r_cnt); // デバッグ(2025.12.28yori)
+        //OutputDebugStringA(text); // デバッグ(2025.12.27yori)
+
         if ( m_ThreadBreak == true ) {
             m_ThreadBreak = false;
             break;

@@ -43,6 +43,8 @@ public:
     static void DisablePowerThrottling();
     static void DisablePowerThrottlingIgnoreTimerResolution();
     static void DisableAllPowerThrottling();
+
+    static int TestLplRecvMesBox(); // 共有メモリ受信テスト関数(2025.12.28yori)
 };
 
 

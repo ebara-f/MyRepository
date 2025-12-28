@@ -12,3 +12,4 @@ EXPORTS
 	LplSendMesBox2			@19
 	LplSendMesBoxBuffferEmpty @20
 	LplTerminateALL			@21
+	LplGetQueCount			@22

@@ -27,6 +27,7 @@ typedef	struct t_QueForm	STR_QUE;
 
 HANDLE		hQUETASK;
 HANDLE		hProcSEMA[QueEntry];
+HANDLE		hProc; // 追加(2025.12.27yori)
 STR_QUE*	m_Que;
 
 //----------------------------------------------
@@ -161,6 +162,19 @@ void DeleteQue(void)
 
 }
 
+// 追加(2025.12.28yori)
+void GetQueCount(int QID, int* pWCnt, int* pRCnt)
+{
+	//WaitForSingleObject(hProcSEMA[QID - 1], INFINITE);
+	WaitForSingleObject(hProc, INFINITE);
+
+	*pWCnt = m_Que[QID - 1].WriteIx;
+	*pRCnt = m_Que[QID - 1].ReadIx;
+
+	//ReleaseSemaphore(hProcSEMA[QID - 1], 1, NULL);
+	ReleaseSemaphore(hProc, 1, NULL);
+}
+
 // キューにデータ(ポインター引き渡し char* (t_MessForm))を入れる
 // 2021.3.15 戻り値 1の時のバグ修正
 //   return を書き換える 
@@ -172,7 +186,8 @@ int PutQue(int QID, char* QAddr)
 	int iSts = 0;														// 戻り値 (成功)
 
 	if ((QID >= 1) && (QID <= QueEntry)) {
-		WaitForSingleObject(hProcSEMA[QID-1], INFINITE);
+		//WaitForSingleObject(hProcSEMA[QID-1], INFINITE);
+		WaitForSingleObject(hProc, INFINITE); // 追加(2025.12.27yori)
 		if (m_Que[QID-1].WriteIx == QueMax-1) {							// Bufferの最後まで到達
 			if (m_Que[QID-1].ReadIx != 0) {								// いっぱいの判断　++WriteIxが読み出しに追いつく
 				m_Que[QID-1].QueAddr[QueMax-1] = QAddr;
@@ -193,7 +208,8 @@ int PutQue(int QID, char* QAddr)
 				iSts = 2;												// 致命的エラー
 			}
 		}
-		ReleaseSemaphore(hProcSEMA[QID - 1], 1, NULL);
+		//ReleaseSemaphore(hProcSEMA[QID - 1], 1, NULL);
+		ReleaseSemaphore(hProc, 1, NULL); // 追加(2025.12.27yori)
 		return iSts;
 	}
 	else {
@@ -209,7 +225,8 @@ void* GetQue(int QID)
 	void* ptRes = NULL;
 
 	if ((QID >= 1) && (QID <= QueEntry)) {
-		WaitForSingleObject(hProcSEMA[QID-1], INFINITE);
+		//WaitForSingleObject(hProcSEMA[QID-1], INFINITE);
+		WaitForSingleObject(hProc, INFINITE); // 追加(2025.12.27yori)
 		if (m_Que[QID-1].WriteIx != m_Que[QID-1].ReadIx) {				// ReasdとWriteが同じ番号はデータなし状態
 			if (m_Que[QID-1].ReadIx == QueMax-1) {						// バッファー折り返し
 				m_Que[QID-1].ReadIx = 0;
@@ -223,7 +240,8 @@ void* GetQue(int QID)
 		else {
 			/* do nothing */
 		}
-		ReleaseSemaphore(hProcSEMA[QID - 1], 1, NULL);
+		//ReleaseSemaphore(hProcSEMA[QID - 1], 1, NULL);
+		ReleaseSemaphore(hProc, 1, NULL); // 追加(2025.12.27yori)
 		return ptRes;
 	}
 	else {

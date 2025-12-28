@@ -245,3 +245,15 @@ int WINAPI CPX_AppMain_MesCallBack()
 
     return(rc);
 }
+
+
+
+// 追加(2025.12.28yori)
+int  WINAPI CPX_AppMain_TestLplRecvMesBox()
+{
+    int     rc;
+
+    rc = AppMain::TestLplRecvMesBox();
+
+    return(rc);
+}

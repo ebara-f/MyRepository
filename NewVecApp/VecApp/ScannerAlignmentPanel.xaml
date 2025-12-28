@@ -24,9 +24,9 @@
                 <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Height="615">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="485" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="6*" />
@@ -68,11 +68,11 @@
                         <!-- Margin変更(2025.12.16yori) -->
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,0,10,0" VerticalAlignment="Top">
                             <!-- FontSize="16"→"20"へ変更(2025.12.5yori) -->
-                            <TextBox Width="573"
+                            <!-- TextBoxからTextBlockへ変更編(2025.12.28yori) -->
+                            <TextBlock Width="573"
                                      Height="50"
                                      FontSize="20"
-                                     Margin="0,0,0,0"
-                                     VerticalContentAlignment="Center"
+                                     VerticalAlignment="Center"
                                      Background="#2A2A2A"
                                      Foreground="White"
                                      Text="{Binding SubtitleText, UpdateSourceTrigger=PropertyChanged}"/>

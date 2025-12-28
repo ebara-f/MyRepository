@@ -167,9 +167,13 @@ int __stdcall LplSendMesBox(int TId, int Leng, char SBuf[])
 {
 	struct t_MessForm *MemAddr;
 
+	WaitForSingleObject(hSEMAQUE, INFINITE); //追加(2025.12.27yori)
 
 	if ((TId < 1) || (TId > 32))
+	{
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 		return 1;
+	}
 
 	MemAddr = (struct t_MessForm *)malloc(Leng+16);
 	if (MemAddr != NULL) {
@@ -178,11 +182,14 @@ int __stdcall LplSendMesBox(int TId, int Leng, char SBuf[])
 		MemAddr->Leng = Leng;
 		memcpy_s(MemAddr->Text, MES_SIZE_CHECK, SBuf, Leng);		// 2021.4.14
 		PutQue(TId, (char *)&MemAddr->TId);
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 		return 0;
 	}
 	else
+	{
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 		return 1;
-
+	}
 }
 //---------------------------------------------------
 int MesBoxBusyCheck(int TId)
@@ -226,13 +233,19 @@ int SendMesBox(int TId, int Leng, char SBuf[])
 // ************************************************* コメントを付ける 2021.4.2
 int	__stdcall LplRecvMesBox(int TId, char RBuf[])
 {
-char	*MesBox;
-int		Len;
+	char	*MesBox;
+	int		Len;
 
-if ((TId < 1) || (TId > 32))
-	return -1;
-	if (hQueTbl == NULL)
+	WaitForSingleObject(hSEMAQUE, INFINITE); //追加(2025.12.27yori)
+
+	if ((TId < 1) || (TId > 32)) {
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 		return -1;
+	}
+	if (hQueTbl == NULL) {
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
+		return -1;
+	}
 
 	MesBox = _IFCom + MES_TOP + (TId-1)*MES_SIZE;
 	if (MesBox[0] == 1) {
@@ -245,10 +258,10 @@ if ((TId < 1) || (TId > 32))
 		MesBox[0] = 0;
 
 		QueLogWrite(TId, 1, Len, RBuf);
-
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 		return Len;
 	}
-
+	ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 	return -3;
 }
 
@@ -256,8 +269,12 @@ void 	PutFreeBlock(int QId, char Buf[])//キューへフリーブロックを送る
 {
 	char	*MesBox;
 
-	if ((QId < 1) || (QId > 32))
+	WaitForSingleObject(hSEMAQUE, INFINITE); //追加(2025.12.27yori)
+
+	if ((QId < 1) || (QId > 32)) {
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 		return;
+	}
 	MesBox = _IFCom + FBK_TOP + (QId-1)*FBK_SIZE;
 	QueBusy();
 	if (MesBox[0] == 0) {
@@ -269,6 +286,7 @@ void 	PutFreeBlock(int QId, char Buf[])//キューへフリーブロックを送る
 		QueReady();
 	}
 	QueReady();
+	ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 }
 void QueBusy(void)
 {
@@ -419,14 +437,21 @@ int __stdcall LplSendMesBoxBuffferEmpty(int TId)
 {
 	char	*MesBox;
 
-	if ((TId < 1) || (TId > 32))	return 1;	// 基本的にこのエラーは帰らない
+	WaitForSingleObject(hSEMAQUE, INFINITE); //追加(2025.12.27yori)
+
+	if ((TId < 1) || (TId > 32)) {
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
+		return 1;	// 基本的にこのエラーは帰らない
+	}
 
 	MesBox = _IFCom + MES_TOP + (TId-1)*MES_SIZE;
 	if (MesBox[0] == 0)
 	{
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 		return 0;		// 書き込み可能
 	}
 	else {
+		ReleaseSemaphore(hSEMAQUE, 1, NULL); //追加(2025.12.27yori)
 		return 1;		// MesBox[0]が1なので書き込めない
 	}
 }
@@ -454,5 +479,11 @@ void __stdcall LplTerminateALL()
 	}
 
 	return;
+}
+
+// 追加(2025.12.28yori)
+void __stdcall LplGetQueCount(int TId, int* pWCnt, int* pRCnt)
+{
+	GetQueCount(TId, &*pWCnt, &*pRCnt);
 }
 

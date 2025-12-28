@@ -63,8 +63,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,0,0,1
- PRODUCTVERSION 2,0,0,1
+ FILEVERSION 2,0,0,2
+ PRODUCTVERSION 2,0,0,2
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -81,12 +81,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Kosaka Laboratory Ltd."
             VALUE "FileDescription", "LplQue"
-            VALUE "FileVersion", "2.0.0.1"
+            VALUE "FileVersion", "2.0.0.2"
             VALUE "InternalName", "LplQue"
             VALUE "LegalCopyright", "Copyright (C) 2006-2025 Kosaka Laboratory Ltd."
             VALUE "OriginalFilename", "LplQue.dll"
             VALUE "ProductName", "LplQue"
-            VALUE "ProductVersion", "2.0.0.1"
+            VALUE "ProductVersion", "2.0.0.2"
         END
     END
     BLOCK "VarFileInfo"

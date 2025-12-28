@@ -296,6 +296,7 @@ CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData05_Write(GAUGE*); // 2025.8.9 yor
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData04_Default(THRESHOLD*, int); // 2025.8.1 yori // int追加(2025.9.22yori)
 CPX_DECLSPEC int  WINAPI CPX_AppMain_UpDateData05_Default(GAUGE*); // 2025.8.1 yori
 CPX_DECLSPEC int  WINAPI CPX_AppMain_MesCallBack(); // 2025.9.2 add eba
+CPX_DECLSPEC int  WINAPI CPX_AppMain_TestLplRecvMesBox(); // 追加(2025.12.28yori)
 
 CPX_DECLSPEC int  WINAPI CPX_Grp01_Cmd01();
 CPX_DECLSPEC int  WINAPI CPX_Grp01_Cmd02( int, double, const TCHAR* );

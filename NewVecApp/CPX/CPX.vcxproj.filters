@@ -98,6 +98,9 @@
     <ClInclude Include="CalibScannerFull.h">
       <Filter>ヘッダー ファイル\Calib</Filter>
     </ClInclude>
+    <ClInclude Include="PowerPlanRAII.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -195,6 +198,9 @@
     </ClCompile>
     <ClCompile Include="CalibScannerFull.cpp">
       <Filter>ソース ファイル\Calib</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerPlanRAII.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

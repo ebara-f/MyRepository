@@ -516,7 +516,8 @@ namespace VecApp
 		/// </summary>
 		private void Click_Close(object sender, RoutedEventArgs e)
 		{
-			Close();
+            //CSH.AppMain.TestLplRecvMesBox(); // テストのため、後で削除予定(2025.12.28yori)
+            Close();
 		}
 
         /// <summary>

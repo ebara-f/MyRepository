@@ -345,6 +345,9 @@ namespace CSH
         [DllImport("CPX.dll")]
         public extern static int CPX_AppMain_MesCallBack(); // 2025.9.2 add eba
 
+        [DllImport("CPX.dll")]
+        public extern static int CPX_AppMain_TestLplRecvMesBox(); // 追加(2025.12.28yori)
+
         #endregion
 
         /// <summary>
@@ -480,6 +483,12 @@ namespace CSH
         static public int MesCallBack()
         {
             return CPX_AppMain_MesCallBack();
+        }
+
+        // 追加(2025.12.28yori)
+        static public int TestLplRecvMesBox()
+        {
+            return CPX_AppMain_TestLplRecvMesBox();
         }
     }
 }

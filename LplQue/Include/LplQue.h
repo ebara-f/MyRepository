@@ -32,3 +32,4 @@ extern int 		__stdcall LplSendMesBox2(int TId, int Leng, char SBuf[]);	// 2021.4
 extern int 		__stdcall LplSendMesBoxBuffferEmpty(int TId);				// 2021.4.15
 
 extern void	    __stdcall LplTerminateALL();                                // 2025.4.11
+extern void	    __stdcall LplGetQueCount(int TId, int* pWCnt, int* pRCnt);	// ’Ç‰Á(2025.12.28yori)

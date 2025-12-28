@@ -2972,8 +2972,16 @@ int HwCtrl::DataSamplingandTransfer(bool transFg, int* pErrorCode)
     bool bSwFg = false;
     int iSts = 0;
     bool bLoop = true;
+    //int w_cnt = 0; // デバッグ(2025.12.28yori)
+    //int r_cnt = 0; // デバッグ(2025.12.28yori)
+    //char text[256]; // デバッグ(2025.12.28yori)
+
     while (bLoop)											// スキャンループ
     {
+        //LplGetQueCount(NONCONTACT_DATA, &w_cnt, &r_cnt); // デバッグ(2025.12.28yori)
+        //sprintf_s(text, 256, "LplGetQueCount:w_cnt %d r_cnt %d\n", w_cnt, r_cnt); // デバッグ(2025.12.28yori)
+        //OutputDebugStringA(text); // デバッグ(2025.12.28yori)
+
         int res = OneDataSamplingandTransfer(transFg, pErrorCode);
 
         switch (res) {
@@ -3194,7 +3202,7 @@ job_exit:
             }
             else {
                 *pErrorCode = iVecSts;	// 2021.3.6現在エラーをすべて解析できない
-                iSts = 4;				// エラー状態
+                        iSts = 4;				// エラー状態
             }
         }
     }
