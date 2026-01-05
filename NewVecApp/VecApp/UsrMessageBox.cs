@@ -63,6 +63,9 @@ namespace VecApp
                 case 270:
                     text = VecApp.Properties.Resources.String270;
                     break;
+                case 271: // スキャナ接続エラー追加(2026.1.3yori)
+                    text = VecApp.Properties.Resources.String271;
+                    break;
 
                 default:
                     text = "NO Message";

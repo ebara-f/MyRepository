@@ -35,7 +35,8 @@
                                     <TextBlock Text="{x:Static res:Resources.String11}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
                                     <!-- TextBox→ComboBox変更(2025.7.31yori) pを大文字Pへ変更(2025.8.1yori) -->
                                     <!-- x:Name="ProbeName"追加(2025.9.24yori) -->
-                                    <ComboBox x:Name="ProbeName" ItemsSource="{Binding ProbeName}" SelectedIndex="{Binding ProbeNameIndex}" Width="200" FontSize="20" Margin="10,0,0,0" SelectionChanged="ProbeName_SelectionChanged"/>
+                                    <!-- 未作成のため、ComboBox無効化(2026.1.1yori) -->
+                                    <ComboBox x:Name="ProbeName" ItemsSource="{Binding ProbeName}" SelectedIndex="{Binding ProbeNameIndex}" Width="200" FontSize="20" Margin="10,0,0,0" SelectionChanged="ProbeName_SelectionChanged" IsEnabled="False"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,5">
                                     <TextBlock Text="{x:Static res:Resources.String12}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>

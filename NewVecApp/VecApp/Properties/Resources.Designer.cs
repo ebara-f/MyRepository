@@ -1788,7 +1788,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   スキャナ説即エラー に類似しているローカライズされた文字列を検索します。
+        ///   スキャナ接続エラー に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String271 {
             get {

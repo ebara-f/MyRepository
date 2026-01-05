@@ -910,7 +910,7 @@ meshing</value>
     <value>Communication error</value>
   </data>
   <data name="String271" xml:space="preserve">
-    <value>Scanner error</value>
+    <value>Scanner communication error</value>
   </data>
   <data name="String272" xml:space="preserve">
     <value>Connecting</value>

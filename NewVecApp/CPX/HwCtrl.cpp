@@ -2459,7 +2459,7 @@ void HwCtrl::GetScanDataThread_new()
     DWORD endTimedt = 0;
 
     double		dXPitch = 0.0;
-    int			iMeasMode = Func34(); // 変更(20258.12yori)
+    int			iMeasMode = Func34(); // 変更(2025.8.12yori)
 
     int res = 0;
     int ErrorCode = 0;

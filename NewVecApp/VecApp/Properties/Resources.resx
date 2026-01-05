@@ -916,7 +916,7 @@
     <value>通信エラー発生</value>
   </data>
   <data name="String271" xml:space="preserve">
-    <value>スキャナ説即エラー</value>
+    <value>スキャナ接続エラー</value>
   </data>
   <data name="String272" xml:space="preserve">
     <value>接続中</value>

@@ -201,7 +201,7 @@ int Grp01::Cmd07()
         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE0_REQ; // 有接触から非接触へ切り替える // SCANNER_INIT_REQ→INITIALIZE0_REQへ変更(2025.9.2yori)
         HwCtrl::m_ScannerConnectBtnFg = true; // 接続完了ボタンが押された。(2025.9.2yori)
     }
-    if(HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR700M" || HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR700L")
+    if(HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR700M" || HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR700L" || HwCtrl::m_hVecCnt.m_Sts.m_Model == "VAR600M") // VAR600M追加(2026.1.3yori)
     {
         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_INIT_ING;
     }
@@ -428,6 +428,7 @@ int Grp01::SensorConnectionPanelCancelButton()
         if (HwCtrl::m_ScannerAlignmentProbeFlag == false)  // PolyWorksから接続し、通常測定の場合(2025.12.17yori)
         {
             HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);// PolyWorks側にスキャナ接続キャンセルを知らせる。
+                                                                         // →PolyWorks側からスキャナとアームの切断が通知される。
         }
         else // PolyWorksから接続し、非接触点検キャリブの場合(2025.12.17yori)
         {

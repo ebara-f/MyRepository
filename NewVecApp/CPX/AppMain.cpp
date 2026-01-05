@@ -1662,6 +1662,7 @@ void AppMain::ThreadProc()
             {
                 UsrMsgBox::CallBack(271, 268, 0, 16);
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);// PolyWorks側にスキャナ接続キャンセルを知らせる。→PolyWorks側からスキャナとアームの切断が通知される。(2026.1.3yori)
             }
             break;
 
@@ -1802,21 +1803,28 @@ void AppMain::ThreadProc()
         //    break;
 
         case VEC_STEP_SEQ::DISCONNECT_REQ:
-            ret = HwCtrl::Func08();   // 有接触モードへ変更
-            ret |= HwCtrl::Func13(); // 有接触測定音ON
-            ret |= HwCtrl::Func04(); // 有接触切断
-            if (ret == 0)
+            if (HwCtrl::m_hVecCnt.m_connectflag == true) // 接続している場合を追加、PolyWorksを再起動したときに再接続できるようにする。(2025.12.31yori)
             {
-                if (!HwCtrl::m_b_Button_ConnectFlag)
+                ret = HwCtrl::Func08();   // 有接触モードへ変更
+                ret |= HwCtrl::Func13(); // 有接触測定音ON
+                ret |= HwCtrl::Func04(); // 有接触切断
+                if (ret == 0)
                 {
-                    HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_SUCCESS); // 切断に成功したことをPolyWorks側に知らせる(2025.6.9yori)
-                    //UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Disconnected); // C#側にPolyWorks側から切断したことを知らせる。(2025.11.19yori) // アプリ単体動作は作成中のため、最初から接続、設定ボタンを押せないようにする。(2025.12.26yori)
+                    if (!HwCtrl::m_b_Button_ConnectFlag)
+                    {
+                        HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_SUCCESS); // 切断に成功したことをPolyWorks側に知らせる(2025.6.9yori)
+                        //UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Disconnected); // C#側にPolyWorks側から切断したことを知らせる。(2025.11.19yori) // アプリ単体動作は作成中のため、最初から接続、設定ボタンを押せないようにする。(2025.12.26yori)
+                    }
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_CMP;
                 }
-                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_CMP;
+                else
+                {
+                    if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_FAILURE); // 切断に失敗したことをPolyWorks側に知らせる(2025.6.9yori)
+                }
             }
             else
             {
-                if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_FAILURE); // 切断に失敗したことをPolyWorks側に知らせる(2025.6.9yori)
+                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
             }
             break;
 

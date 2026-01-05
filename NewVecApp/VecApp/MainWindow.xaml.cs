@@ -251,6 +251,19 @@ namespace VecApp
             }
             else if (msg == UsrMsg.WM_SubWnd01_Btn03)
             {
+                // SubWindow1のボタン無効化(2026.1.2yori)
+                SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
+                m_SubWnd01.DataContext = SubWnd01ViewModel;
+                SubWnd01ViewModel.IsBtn01Enabled = false; // 接続
+                SubWnd01ViewModel.IsBtn02Enabled = false; // 切断
+                SubWnd01ViewModel.IsBtn03Enabled = false; // イニシャライズ
+                SubWnd01ViewModel.IsBtn04Enabled = false; // 0軸イニシャライズ
+                SubWnd01ViewModel.IsBtn05Enabled = false; // モード切替
+                SubWnd01ViewModel.Btn01Opacity = 0.25; // 接続
+                SubWnd01ViewModel.Btn02Opacity = 0.25; // 切断
+                SubWnd01ViewModel.Btn03Opacity = 0.25; // イニシャライズ
+                SubWnd01ViewModel.Btn04Opacity = 0.25; // 0軸イニシャライズ
+                SubWnd01ViewModel.Btn05Opacity = 0.25; // モード切替
                 m_SubWnd01.CurrentPanel = Panel.Initialize; // イニシャライズ画面表示(2025.7.18yori) // 変更(2025.7.28yori)
             }
             else if (msg == UsrMsg.WM_SubWnd01_Btn04)
