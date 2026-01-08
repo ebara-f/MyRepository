@@ -94,7 +94,7 @@ int HwCtrl::Func01()
 {
     int ret = 0;
 
-    //timeBeginPeriod(1); // 2025.11.11 add eba // アプリ側では実行しない。PolyWorks側で実行する。(2025.12.26yori)
+    //timeBeginPeriod(1); // 2025.11.11 add eba // アプリ側では実行しない。PolyWorks側で実行する。(2025.12.26yori) // AppMain::Init()で実行(2025.12.27yori)
     // VECTORONと接続開始
     ret = HwCtrl::m_hVecCnt.VecOpen(20000, NULL);
 
@@ -177,7 +177,7 @@ int HwCtrl::Func04()
 
     // アプリ単体でVECTORONと接続する場合もあるため、
     // PolyWorksへのコマンド送信はここでは行わない(2025.6.9yori)
-    //timeEndPeriod(1); // 2025.11.11 add eba  // アプリ側では実行しない。PolyWorks側で実行する。(2025.12.26yori)
+    //timeEndPeriod(1); // 2025.11.11 add eba  // アプリ側では実行しない。PolyWorks側で実行する。(2025.12.26yori) // AppMain::Term()で実行(2025.12.27yori)
     return ret;
 }
 
@@ -3340,40 +3340,44 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
     //}
     //else
     //{
-        iRec = TdsVecAndMeas(&(ptlinedata2025->tVecData), (ptlinedata2025->tPulsData), m_iXSize, &iDataNum); // ベクトロンとスキャンデータ合成
-        ptlinedata2025->lineNo = (int)pVecData->no1;
-        ptlinedata2025->iDataNum_Rec = iRec;
-        ptlinedata2025->iDataNum = iDataNum;
-        ptlinedata2025->bMeasDataFg = m_bmeasfg;
-        ptlinedata2025->bButtonFg = m_bbuttonfg; // 追加(2025.11.5yori)
+    
+    iRec = TdsVecAndMeas(&(ptlinedata2025->tVecData), (ptlinedata2025->tPulsData), m_iXSize, &iDataNum); // ベクトロンとスキャンデータ合成
+    ptlinedata2025->lineNo = (int)pVecData->no1;
+    ptlinedata2025->iDataNum_Rec = iRec;
+    ptlinedata2025->iDataNum = iDataNum;
+    ptlinedata2025->bMeasDataFg = m_bmeasfg;
+    ptlinedata2025->bButtonFg = m_bbuttonfg; // 追加(2025.11.5yori)
 
-        // デバッグ用(2025.8.5yori)
-        //if (ptlinedata2025[index].bMeasDataFg == true) // 測定データのみ出力
-        //{
-        //    FileOutput();
-        //}
-        if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
+    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
+    {
+        ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
+        if (m_bmeasfg == true && ptlinedata2025->iSendDataNo != 0)
         {
-            ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
-            // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメント追加2025.5.15yori)
-            // ダミースキャンは、奇数Noが有効な座標値、偶数Noが無効な座標値が取得される。(コメント追加2025.5.15yori)
-            if (ptlinedata2025->iSendDataNo != 0) // 有効データ数を構造体へ追加(2021.12.1yori)
+            // データ飛びチェック(2026.1.8yori)
+            // データ飛びのあるラインはPolyWorksへ送信しない。
+            if (SendLineDataCheck3(index))
             {
-                int isize = sizeof(OneLineData2);  // 転送データ数(バイト)：196216 // sizeofで確認(2025.5.15yori)
-                iRecQue = LplSendMesBox(NONCONTACT_DATA, isize, (char*)(ptlinedata2025));  // (2025.5.15yori)
-                // Queに積めたかどうか
-                if (iRecQue != 0)
-                {
-                    // 0以外の戻りはない
-                }
-                bCheckFg = true;
-            }
-            else // すべて無効の場合はデータを積まないで戻る
-            {
-                //bCheckFg = false; // コメントアウト(2025.5.15yori)
+                ptlinedata2025->iSendDataNo = 0;
             }
         }
-    //}
+        // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメント追加2025.5.15yori)
+        // ダミースキャンは、奇数Noが有効な座標値、偶数Noが無効な座標値が取得される。(コメント追加2025.5.15yori)
+        if (ptlinedata2025->iSendDataNo != 0) // 有効データ数を構造体へ追加(2021.12.1yori)
+        {
+            int isize = sizeof(OneLineData2);  // 転送データ数(バイト)：196216 // sizeofで確認(2025.5.15yori)
+            iRecQue = LplSendMesBox(NONCONTACT_DATA, isize, (char*)(ptlinedata2025));  // (2025.5.15yori)
+            // Queに積めたかどうか
+            if (iRecQue != 0)
+            {
+                // 0以外の戻りはない
+            }
+            bCheckFg = true;
+        }
+        else // すべて無効の場合はデータを積まないで戻る
+        {
+            //bCheckFg = false; // コメントアウト(2025.5.15yori)
+        }
+    }
 
     ReleaseSemaphore(hSEMA, 1, NULL);
 
@@ -3768,6 +3772,7 @@ void HwCtrl::Memory_ResetCounter()
     999999.0が無効値 floatデータのため 999998.0(INVALID_CHECK)より大きい値を無効値とする
     戻り値 0：転送データなし その他：転送データ数
     移植(2025.5.15yori)
+    不定値、-nan(ind)、inf追加(2026.1.8yori)
 
 ***********************************************************************/
 
@@ -3779,12 +3784,25 @@ int HwCtrl::SendLineDataCheck2(int index)
 
     for (int i = 0; i < iXSize; ++i)
     {
+
+        // 999999.0 の時、無効データとして取得しない。
         if (ptlinedata2025[index].tPulsData[i].dataX < INVALID_CHECK &&
             ptlinedata2025[index].tPulsData[i].dataY < INVALID_CHECK &&
             ptlinedata2025[index].tPulsData[i].dataZ < INVALID_CHECK)
         {
             //有効データ
             ptlinedata2025[index].tPulsData[transferCnt++] = ptlinedata2025[index].tPulsData[i]; //先頭詰めにする
+        }
+
+        // -nan(ind)の時、無効データとして取得しない。データ飛びによるノイズデータ対策(2026.1.8yori)
+        if (isnan(ptlinedata2025[index].tPulsData[i].dataX) == true ||
+            isnan(ptlinedata2025[index].tPulsData[i].dataY) == true ||
+            isnan(ptlinedata2025[index].tPulsData[i].dataZ) == true ||
+            isinf(ptlinedata2025[index].tPulsData[i].dataX) == true ||
+            isinf(ptlinedata2025[index].tPulsData[i].dataY) == true ||
+            isinf(ptlinedata2025[index].tPulsData[i].dataZ) == true)
+        {
+            return transferCnt = 0;
         }
     }
 
@@ -3795,11 +3813,51 @@ int HwCtrl::SendLineDataCheck2(int index)
 
 /***********************************************************************
 
-    スキャンデータのファイル出力
-    移植(2025.8.5yori)
+    データ飛びチェック
+    2026.1.8yori
 
 ***********************************************************************/
-void HwCtrl::FileOutput()
+
+bool HwCtrl::SendLineDataCheck3(int index)
+{
+    double diff_x, diff_y, diff_z;
+    bool isFirst = true;
+    double threshold = 100.0;
+
+    int iXSize = ptlinedata2025[index].iSendDataNo; // 有効データ数
+
+    for (int i = 0; i < iXSize; ++i)
+    {
+        if (!isFirst)
+        {
+            diff_x = abs(ptlinedata2025[index].tPulsData[i].dataX - ptlinedata2025[index].tPulsData[i - 1].dataX);
+            diff_y = abs(ptlinedata2025[index].tPulsData[i].dataY - ptlinedata2025[index].tPulsData[i - 1].dataY);
+            diff_z = abs(ptlinedata2025[index].tPulsData[i].dataZ - ptlinedata2025[index].tPulsData[i - 1].dataZ);
+
+            if (diff_x > threshold || diff_y > threshold || diff_z > threshold)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            isFirst = false;  // 最初の1回だけスキップ
+        }
+    }
+
+    return false;
+}
+
+
+
+/***********************************************************************
+
+    スキャンデータのファイル出力
+    移植(2025.8.5yori)
+    引数追加(2026.1.7yori)
+
+***********************************************************************/
+void HwCtrl::FileOutput(int iScanDataNo)
 {
     FILE* pf;
     char cPath[256] = { 0 }; // ファイルのパス
@@ -3811,12 +3869,51 @@ void HwCtrl::FileOutput()
 
     if ((fopen_s(&pf, cPath, "a")) == 0)
     {
-        sprintf_s(cData1, "LineNo%d,%f,%f,%f\n", m_LineNo, ptlinedata2025[index].tVecData.ijk[0], ptlinedata2025[index].tVecData.ijk[1], ptlinedata2025[index].tVecData.ijk[2]);
+        sprintf_s(cData1, "ArmLineNo%d,ScannerLineNo%d,%f,%f,%f\n", ptlinedata2025->tVecData.no1, ptlinedata2025->tPulsData->lineNo, ptlinedata2025[index].tVecData.ijk[0], ptlinedata2025[index].tVecData.ijk[1], ptlinedata2025[index].tVecData.ijk[2]); // m_LineNoからアームとスキャナのラインNoへ変更(2026.1.7yori)
         fseek(pf, 0, SEEK_SET); // file先頭へ移動
         fputs((char*)&(cData1), pf); // fileへ書き込み
         memset(cData1, 0, sizeof(cData1)); // 配列をクリア
 
-        int iScanDataNo = SendLineDataCheck2(index); // 無効データ処理を行う
+        for (i = 0; i < iScanDataNo; i++)
+        {
+            sprintf_s(cData2, "%f,%f,%f\n", ptlinedata2025[index].tPulsData[i].dataX, ptlinedata2025[index].tPulsData[i].dataY, ptlinedata2025[index].tPulsData[i].dataZ);
+            fputs((char*)&(cData2), pf); // fileへ書き込み
+            memset(cData2, 0, sizeof(cData2)); //配列をクリア
+        }
+
+        fclose(pf); //ファイルを閉じる
+    }
+    else
+    {
+        // ファイルを開くことができなかった
+    }
+}
+
+
+
+/***********************************************************************
+
+    アームデータスキャンデータのファイル出力
+    2026.1.8yori
+
+***********************************************************************/
+void HwCtrl::FileOutput2(int iScanDataNo, const VecRet* pVecData)
+{
+    FILE* pf;
+    char cPath[256] = { 0 }; // ファイルのパス
+    char cData1[256] = { 0 }; // ラインNo, IJK
+    char cData2[256] = { 0 }; // XYZ
+
+    sprintf_s(cPath, "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Log\\ArmAndScanLineData.txt"); // 書込むファイルのパス
+    int index = 0, i = 0;
+
+    if ((fopen_s(&pf, cPath, "a")) == 0)
+    {
+        sprintf_s(cData1, "ArmLineNo%d,ScannerLineNo%d,%f,%f,%f\n%f,%f,%f\n%f,%f,%f\n", ptlinedata2025->tVecData.no1, ptlinedata2025->tPulsData->lineNo, ptlinedata2025[index].tVecData.ijk[0], ptlinedata2025[index].tVecData.ijk[1], ptlinedata2025[index].tVecData.ijk[2],
+            pVecData->xyz[0], pVecData->xyz[1], pVecData->xyz[2], ptlinedata2025[index].tVecData.xyz[0], ptlinedata2025[index].tVecData.xyz[1], ptlinedata2025[index].tVecData.xyz[2]);
+        fseek(pf, 0, SEEK_SET); // file先頭へ移動
+        fputs((char*)&(cData1), pf); // fileへ書き込み
+        memset(cData1, 0, sizeof(cData1)); // 配列をクリア
 
         for (i = 0; i < iScanDataNo; i++)
         {

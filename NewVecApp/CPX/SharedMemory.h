@@ -89,7 +89,6 @@ X測定ピッチ（補間有り）	(mm)			0.063	0.063	0.031	0.016	0.016
 		PulsData tPulsData[MAX_ONELINEDATA];	//1ラインのデータ
 	}OneLineData2;
 
-
 	//コメントアウト(2021.9.10yori)
 	/*
 	public ref class SharedMemory
