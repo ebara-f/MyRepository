@@ -182,6 +182,8 @@ public:
     static int m_ScannerCalibResultJudge;           // 非接触キャリブ結果判定 OK:0 NG:1 (2025.12.9yori)
     static CalibResult* m_ptCalibResult;            // 非接触キャリブ結果(2025.12.10yori)
     static double m_MaxMin[3];                      // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
+    static double m_BeforeXYZ[3];                   // スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
+    static bool m_isFirst;                          // 追加(2026.1.10yori)
 
     static int GetVecDataEx(VecDtEx* PosiData);
     static int GetMeasTopData();
@@ -196,7 +198,8 @@ public:
     static void Memory_ResetCounter();
     //static bool SendOneLineData(); // コメントアウト(2025.5.15yori)
     static int SendLineDataCheck2(int index);
-    static bool SendLineDataCheck3(int index); // データ飛びチェック(2026.1.8yori)
+    static bool SendLineDataCheckDiffPoint(int index); // データ飛びチェック(2026.1.8yori)
+    static bool SendLineDataCheckSameLine(int index); // 前後ラインが近い距離にある重複ラインチェック(2026.1.10yori)
     static void FileOutput(int iScanDataNo); // Debug用、スキャンデータファイル出力(2025.8.5yori) // 引数追加(2026.1.7yori)
     static void FileOutput2(int iScanDataNo, const VecRet* pVecData); // Debug用、アームとスキャンデータファイル出力(2026.1.8yori)
     // プローブ登録(2025.10.31yori)

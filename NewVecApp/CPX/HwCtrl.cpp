@@ -79,6 +79,8 @@ int             HwCtrl::m_ShotMax = 12; // 非接触点検、キャリブ用(202
 int             HwCtrl::m_ScannerCalibResultJudge = 0; // 非接触キャリブ結果判定 OK:0 NG:1 (2025.12.9yori)
 CalibResult*    HwCtrl::m_ptCalibResult = NULL; // 非接触キャリブ結果(2025.12.10yori)
 double          HwCtrl::m_MaxMin[3] = { 0, 0, 0 }; // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
+double          HwCtrl::m_BeforeXYZ[3] = { 0, 0, 0 };// スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
+bool            HwCtrl::m_isFirst = true; // 追加(2026.1.10yori)
 
 
 
@@ -396,10 +398,11 @@ int HwCtrl::Func14()
         if (iScannerConnect == 1) // スキャナの電源がONの場合
         {
             // アプリから接続、非接触点検キャリブレーション場合は、PolyWorksへコマンドを送信しない。(2025.12.8yori)
-            if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)
-            {
-                AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
-            }
+            // 暖機完了あるいは暖機をキャンセルした場合にSCANNER_INITIALIZE_SUCCESSコマンド送信するため、コメントアウト(2026.1.9yori)
+            //if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)
+            //{
+            //    AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
+            //}
         }
         else if (iScannerConnect == 2) // スキャナの電源がOFFの場合
         {
@@ -415,10 +418,11 @@ int HwCtrl::Func14()
                 else
                 {
                     // アプリから接続、非接触点検キャリブレーション場合は、PolyWorksへコマンドを送信しない。(2025.12.8yori)
-                    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)
-                    {
-                        AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
-                    }
+                    // 暖機完了あるいは暖機をキャンセルした場合にSCANNER_INITIALIZE_SUCCESSコマンド送信するため、コメント(2026.1.9yori)
+                    //if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)
+                    //{
+                    //    AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS);
+                    //}
                 }
             }
             else
@@ -3314,6 +3318,7 @@ job_exit:
 bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
 {
     bool bCheckFg = true;
+    bool bCheckSameLineFg = true;
     int	iDataNum = 0;
     int iRec = 0;
     int index = 0;
@@ -3325,6 +3330,13 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
 
     ptlinedata2025->tVecData = *pVecData; // ベクトロンデータのセット
 
+    if (m_bmeasfg == false) {
+        bCheckSameLineFg = false;
+    }
+    else {
+        bCheckSameLineFg = SendLineDataCheckSameLine(index); // 前後ラインが近い距離にある重複ラインチェック(2026.1.10yori)
+    }
+    
     memset(ptlinedata2025->tPulsData, 0, sizeof(PulsData) * 3500); // ゼロクリア追加(2021.11.15yori)
 
     // ポインタ位置チェック作成中のため、コメントアウト(2025.9.3yori)
@@ -3340,7 +3352,7 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
     //}
     //else
     //{
-    
+
     iRec = TdsVecAndMeas(&(ptlinedata2025->tVecData), (ptlinedata2025->tPulsData), m_iXSize, &iDataNum); // ベクトロンとスキャンデータ合成
     ptlinedata2025->lineNo = (int)pVecData->no1;
     ptlinedata2025->iDataNum_Rec = iRec;
@@ -3348,18 +3360,28 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
     ptlinedata2025->bMeasDataFg = m_bmeasfg;
     ptlinedata2025->bButtonFg = m_bbuttonfg; // 追加(2025.11.5yori)
 
+
     if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
     {
-        ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
+        if (bCheckSameLineFg)
+        {
+            ptlinedata2025->iSendDataNo = 0;
+        }
+        else
+        {
+            ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
+        }
+
         if (m_bmeasfg == true && ptlinedata2025->iSendDataNo != 0)
         {
             // データ飛びチェック(2026.1.8yori)
             // データ飛びのあるラインはPolyWorksへ送信しない。
-            if (SendLineDataCheck3(index))
+            if (SendLineDataCheckDiffPoint(index))
             {
                 ptlinedata2025->iSendDataNo = 0;
             }
         }
+
         // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメント追加2025.5.15yori)
         // ダミースキャンは、奇数Noが有効な座標値、偶数Noが無効な座標値が取得される。(コメント追加2025.5.15yori)
         if (ptlinedata2025->iSendDataNo != 0) // 有効データ数を構造体へ追加(2021.12.1yori)
@@ -3794,7 +3816,7 @@ int HwCtrl::SendLineDataCheck2(int index)
             ptlinedata2025[index].tPulsData[transferCnt++] = ptlinedata2025[index].tPulsData[i]; //先頭詰めにする
         }
 
-        // -nan(ind)の時、無効データとして取得しない。データ飛びによるノイズデータ対策(2026.1.8yori)
+        // -nan(ind)、infの場合、無効データとして取得しない。データ飛びによるノイズデータ対策(2026.1.8yori)
         if (isnan(ptlinedata2025[index].tPulsData[i].dataX) == true ||
             isnan(ptlinedata2025[index].tPulsData[i].dataY) == true ||
             isnan(ptlinedata2025[index].tPulsData[i].dataZ) == true ||
@@ -3818,7 +3840,7 @@ int HwCtrl::SendLineDataCheck2(int index)
 
 ***********************************************************************/
 
-bool HwCtrl::SendLineDataCheck3(int index)
+bool HwCtrl::SendLineDataCheckDiffPoint(int index)
 {
     double diff_x, diff_y, diff_z;
     bool isFirst = true;
@@ -3844,6 +3866,45 @@ bool HwCtrl::SendLineDataCheck3(int index)
             isFirst = false;  // 最初の1回だけスキップ
         }
     }
+
+    return false;
+}
+
+
+
+/***********************************************************************
+
+    前後ラインが近い距離にある重複ラインチェック
+    2026.1.10yori
+
+***********************************************************************/
+
+bool HwCtrl::SendLineDataCheckSameLine(int index)
+{
+    double threshold2 = 0.7 * 0.7;
+    double dxyz[3], dist2;
+
+    if (!m_isFirst)
+    {
+        dxyz[0] = ptlinedata2025[index].tVecData.xyz[0] - m_BeforeXYZ[0];
+        dxyz[1] = ptlinedata2025[index].tVecData.xyz[1] - m_BeforeXYZ[1];
+        dxyz[2] = ptlinedata2025[index].tVecData.xyz[2] - m_BeforeXYZ[2];
+
+        dist2 = dxyz[0] * dxyz[0] + dxyz[1] * dxyz[1] + dxyz[2] * dxyz[2];
+
+        if (dist2 < threshold2)
+        {
+            return true;
+        }
+    }
+    else
+    {
+        m_isFirst = false;  // 最初の1回だけスキップ
+    }
+
+    m_BeforeXYZ[0] = ptlinedata2025[index].tVecData.xyz[0];
+    m_BeforeXYZ[1] = ptlinedata2025[index].tVecData.xyz[1];
+    m_BeforeXYZ[2] = ptlinedata2025[index].tVecData.xyz[2];
 
     return false;
 }
@@ -3893,7 +3954,7 @@ void HwCtrl::FileOutput(int iScanDataNo)
 
 /***********************************************************************
 
-    アームデータスキャンデータのファイル出力
+    アームとスキャンデータのファイル出力
     2026.1.8yori
 
 ***********************************************************************/

@@ -1693,8 +1693,9 @@ void AppMain::ThreadProc()
                 UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn02);
                 UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show);
                 UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup);
-                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL;
             }
+            if (HwCtrl::m_b_Button_ConnectFlag == false) HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS); // 追加(2026.1.9yori)
+            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL;
             Sleep(100);
             break;
 
