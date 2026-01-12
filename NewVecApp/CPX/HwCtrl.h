@@ -184,6 +184,11 @@ public:
     static double m_MaxMin[3];                      // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
     static double m_BeforeXYZ[3];                   // スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
     static bool m_isFirst;                          // 追加(2026.1.10yori)
+    //static double m_Beforedist2;                    // デバッグ(2026.1.12yori)
+    //static double m_Afterdist2;                     // デバッグ(2026.1.12yori)
+    //static unsigned int gDistHist[11];//2026.01.12 t.kanamura
+    static int dist_count; // 追加(2026.1.12yori)
+    static int m_JudgeCount;
 
     static int GetVecDataEx(VecDtEx* PosiData);
     static int GetMeasTopData();

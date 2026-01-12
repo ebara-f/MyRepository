@@ -993,7 +993,7 @@ void AppMain::ThreadProc()
     VecCtEx VecData; // スキャナ側のベクトロンデータ(スキャナデータ変換用データ)(2025.12.2yori)
     //int w_cnt = 0; // デバッグ(2025.12.28yori)
     //int r_cnt = 0; // デバッグ2025.12.28yori)
-    //char text[256]; // デバッグ(2025.12.28yori) 
+    //char text[256]; // デバッグ(2026.1.12yori) 
 
     while( 1 )
     {
@@ -1700,6 +1700,12 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_SCAN_START_REQ:
+
+            //// test only 2026.01.12 t.kanamura
+            //for (int i = 0; i < 11; i++) {
+            //    HwCtrl::gDistHist[i] = 0;
+            //}
+
             HwCtrl::m_PointerCheckLineNo = 1; // 追加(2025.7.4yori)
             HwCtrl::m_ScanShotOldNo = HwCtrl::m_ScanShotNo; // 追加(2025.12.6yori)
             HwCtrl::Func18(); // スキャン(Thread2)開始
@@ -1741,8 +1747,10 @@ void AppMain::ThreadProc()
         case VEC_STEP_SEQ::SCANNER_SCAN_STOP_REQ:
             HwCtrl::Func20(); // スキャン停止
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP;
+            //sprintf_s(text, 256, "m_Afterdist2:%.9f\n", HwCtrl::m_Afterdist2); // デバッグ(2026.1.12yori)
+            //OutputDebugStringA(text); // デバッグ(2026.1.12yori)
+            //HwCtrl::m_Afterdist2 = 0.0; // デバッグ(2026.1.12yori)
             break;
-
         case VEC_STEP_SEQ::SCANNER_SCAN_STOP_CMP: // SCANNER_SCAN_MEAS_IDELから移動(2025.12.8yori)
             Sleep(100);
             break;

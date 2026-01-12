@@ -72,17 +72,20 @@ SelfChkLatchResult* HwCtrl::m_ptLatchResult = NULL; // ラッチ通信チェッ�
 SelfChkMotorResult* HwCtrl::m_ptMotorResult = NULL; // モーターチェック(2025.6.24yori)
 SelfChkSensResult* HwCtrl::m_ptSensResult = NULL; // モーターチェック(2025.6.24yori)
 bool            HwCtrl::m_PointerCheckFg = false; // ポインタ位置チェック(2025.7.3yori)
-double          HwCtrl::m_PointerCheckScanData = 0; // ポインタ位置チェック用データ(2025.7.4yori)
+double          HwCtrl::m_PointerCheckScanData = 0.0; // ポインタ位置チェック用データ(2025.7.4yori)
 int             HwCtrl::m_PointerCheckLineNo = 1; // ポインタ位置チェック用ライン数(2025.7.4yori)
 int             HwCtrl::m_ShotNo = 0; // 非接触点検、キャリブ用(2025.12.2yori)
 int             HwCtrl::m_ShotMax = 12; // 非接触点検、キャリブ用(2025.12.2yori)
 int             HwCtrl::m_ScannerCalibResultJudge = 0; // 非接触キャリブ結果判定 OK:0 NG:1 (2025.12.9yori)
 CalibResult*    HwCtrl::m_ptCalibResult = NULL; // 非接触キャリブ結果(2025.12.10yori)
-double          HwCtrl::m_MaxMin[3] = { 0, 0, 0 }; // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
-double          HwCtrl::m_BeforeXYZ[3] = { 0, 0, 0 };// スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
+double          HwCtrl::m_MaxMin[3] = { 0.0, 0.0, 0.0 }; // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
+double          HwCtrl::m_BeforeXYZ[3] = { 0.0, 0.0, 0.0 };// スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
 bool            HwCtrl::m_isFirst = true; // 追加(2026.1.10yori)
-
-
+//double          HwCtrl::m_Beforedist2 = 0.0; // デバッグ(2026.1.12yori)
+//double          HwCtrl::m_Afterdist2 = 0.0;  // デバッグ(2026.1.12yori)
+//unsigned int    HwCtrl::gDistHist[11] = { 0 };//test 2026.01.12 t.kanamura
+int             HwCtrl::dist_count = 0; // 追加(2026.1.12yori)
+int             HwCtrl::m_JudgeCount = 0;
 
 /***********************************************************************
 
@@ -3360,7 +3363,6 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
     ptlinedata2025->bMeasDataFg = m_bmeasfg;
     ptlinedata2025->bButtonFg = m_bbuttonfg; // 追加(2025.11.5yori)
 
-
     if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
     {
         if (bCheckSameLineFg)
@@ -3881,8 +3883,10 @@ bool HwCtrl::SendLineDataCheckDiffPoint(int index)
 
 bool HwCtrl::SendLineDataCheckSameLine(int index)
 {
-    double threshold2 = 0.7 * 0.7;
-    double dxyz[3], dist2;
+    double threshold2 = 0.015 * 0.015;
+    double dxyz[3], dist2 = 0.0;
+    //char text[256]; // デバッグ(2026.1.12yori) 
+    bool test = false; // デバッグ(2026.1.12yori) 
 
     if (!m_isFirst)
     {
@@ -3892,9 +3896,57 @@ bool HwCtrl::SendLineDataCheckSameLine(int index)
 
         dist2 = dxyz[0] * dxyz[0] + dxyz[1] * dxyz[1] + dxyz[2] * dxyz[2];
 
+        ////<- test only 2026.01.12 t.kanamura
+        //double  value = dist2 * 10000;
+        //int     idx   = sqrt(value);
+
+        //if (idx >= 10) {
+        //    idx = 10;
+        //}
+        //else if (idx <= 0) {
+        //    idx = 0;
+        //}
+        //gDistHist[idx]++;
+        ////->
+
+        //if (dist2 > m_Afterdist2 && ptlinedata2025[index].tVecData.no1 > 18000) // デバッグ(2026.1.13yori)
+        //{
+        //    m_Afterdist2 = dist2;
+        //    sprintf_s(text, 256, "m_Afterdist2:%.9f\n", HwCtrl::m_Afterdist2); // デバッグ(2026.1.12yori)
+        //    OutputDebugStringA(text); // デバッグ(2026.1.12yori)
+        //}
+
         if (dist2 < threshold2)
         {
-            return true;
+            dist_count++; // 追加(2026.1.12yori)
+            //return true;  // コメントアウト(2026.1.12yori)
+            test = false;
+        }
+        else
+        {
+            dist_count   = 0; // 追加(2026.1.12yori)
+            m_JudgeCount = 0;
+        }
+        if (dist_count > 151) // 追加(2026.1.12yori)
+        {
+            m_JudgeCount++;
+
+            if (m_JudgeCount > 3) {
+                m_JudgeCount = 0;
+                test = false;
+            }
+            else {
+                test = true;
+            }
+            /*
+            if ((dist_count & 1) == 1) {
+                //return true;
+                test = true;
+            }
+            else {
+                test = false;
+            }*/
+
         }
     }
     else
@@ -3905,8 +3957,9 @@ bool HwCtrl::SendLineDataCheckSameLine(int index)
     m_BeforeXYZ[0] = ptlinedata2025[index].tVecData.xyz[0];
     m_BeforeXYZ[1] = ptlinedata2025[index].tVecData.xyz[1];
     m_BeforeXYZ[2] = ptlinedata2025[index].tVecData.xyz[2];
-
-    return false;
+  
+    //return false;
+    return test;
 }
 
 
