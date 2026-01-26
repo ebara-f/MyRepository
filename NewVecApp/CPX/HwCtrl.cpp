@@ -81,7 +81,6 @@ CalibResult*    HwCtrl::m_ptCalibResult = NULL; // 非接触キャリブ結果(2
 double          HwCtrl::m_MaxMin[3] = { 0.0, 0.0, 0.0 }; // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
 double          HwCtrl::m_BeforeXYZ[3] = { 0.0, 0.0, 0.0 };// スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
 bool            HwCtrl::m_isFirst = true; // 追加(2026.1.10yori)
-//double          HwCtrl::m_Beforedist2 = 0.0; // デバッグ(2026.1.12yori)
 //double          HwCtrl::m_Afterdist2 = 0.0;  // デバッグ(2026.1.12yori)
 //unsigned int    HwCtrl::gDistHist[11] = { 0 };//test 2026.01.12 t.kanamura
 int             HwCtrl::dist_count = 0; // 追加(2026.1.12yori)
@@ -416,7 +415,7 @@ int HwCtrl::Func14()
             {
                 if (iScannerConnect == 2) // スキャナの電源がOFFの場合
                 {
-                    // エラー処理は後でコーディング(2025.5.15yori)
+                    ErrorCode = ERROR_CODE::ERROR_CODE_SCANNER_INIT2; // 追加(2026.1.22yori)
                 }
                 else
                 {
@@ -2266,14 +2265,16 @@ BOOL HwCtrl::Func76()
     int power; // 追加(2025.11.25yori)
     int interp; // 追加(2025.11.25yori)
 
-    GetIniScanSens(&sens); // 感度取得(2025.11.25yori)
-    Func39(&power); // ガイドレーザーのパワーを取得(2025.11.25yori)
-    Func40(&interp); // X点間補間の設定を取得(2025.11.25yori)
-    WriteIniScanPara(Func34(), power, interp); // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
-
-    fg = TdsVecScannerPowerOff();
-    TdsVecMeasExit();
-    fg |= WritePrivateProfileString(TEXT("Buzzer"), TEXT("0"), TEXT("1"), TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\TDSUser.ini"));
+    if (iScannerConnect == 1) // スキャナが接続されている場合(2026.1.23yori)
+    {
+        GetIniScanSens(&sens); // 感度取得(2025.11.25yori)
+        Func39(&power); // ガイドレーザーのパワーを取得(2025.11.25yori)
+        Func40(&interp); // X点間補間の設定を取得(2025.11.25yori)
+        WriteIniScanPara(Func34(), power, interp); // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
+        fg = TdsVecScannerPowerOff();
+        TdsVecMeasExit();
+        fg |= WritePrivateProfileString(TEXT("Buzzer"), TEXT("0"), TEXT("1"), TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\TDSUser.ini"));
+    }
 
     return fg;
 }
@@ -3321,7 +3322,7 @@ job_exit:
 bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
 {
     bool bCheckFg = true;
-    bool bCheckSameLineFg = true;
+    //bool bCheckSameLineFg = true; // 実装検討中のため、重複ラインチェックフラグコメントアウト(2026.1.13yori)
     int	iDataNum = 0;
     int iRec = 0;
     int index = 0;
@@ -3333,12 +3334,13 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
 
     ptlinedata2025->tVecData = *pVecData; // ベクトロンデータのセット
 
-    if (m_bmeasfg == false) {
-        bCheckSameLineFg = false;
-    }
-    else {
-        bCheckSameLineFg = SendLineDataCheckSameLine(index); // 前後ラインが近い距離にある重複ラインチェック(2026.1.10yori)
-    }
+    // 実装検討中のため、重複ラインチェックは行わない。(2026.1.13yori)
+    //if (m_bmeasfg == false) {
+    //    bCheckSameLineFg = false;
+    //}
+    //else {
+    //    bCheckSameLineFg = SendLineDataCheckSameLine(index); // 前後ラインが近い距離にある重複ラインチェック(2026.1.10yori)
+    //}
     
     memset(ptlinedata2025->tPulsData, 0, sizeof(PulsData) * 3500); // ゼロクリア追加(2021.11.15yori)
 
@@ -3365,14 +3367,15 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
 
     if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
     {
-        if (bCheckSameLineFg)
-        {
-            ptlinedata2025->iSendDataNo = 0;
-        }
-        else
-        {
+        // 実装検討中のため、重複ラインチェックは行わない。(2026.1.13yori)
+        //if (bCheckSameLineFg)
+        //{
+        //    ptlinedata2025->iSendDataNo = 0;
+        //}
+        //else
+        //{
             ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
-        }
+        //}
 
         if (m_bmeasfg == true && ptlinedata2025->iSendDataNo != 0)
         {
@@ -3886,7 +3889,7 @@ bool HwCtrl::SendLineDataCheckSameLine(int index)
     double threshold2 = 0.015 * 0.015;
     double dxyz[3], dist2 = 0.0;
     //char text[256]; // デバッグ(2026.1.12yori) 
-    bool test = false; // デバッグ(2026.1.12yori) 
+    bool test = false; // 追加(2026.1.12yori) 
 
     if (!m_isFirst)
     {
@@ -3910,6 +3913,7 @@ bool HwCtrl::SendLineDataCheckSameLine(int index)
         ////->
 
         //if (dist2 > m_Afterdist2 && ptlinedata2025[index].tVecData.no1 > 18000) // デバッグ(2026.1.13yori)
+        //if (dist2 > m_Afterdist2) // デバッグ(2026.1.14yori)
         //{
         //    m_Afterdist2 = dist2;
         //    sprintf_s(text, 256, "m_Afterdist2:%.9f\n", HwCtrl::m_Afterdist2); // デバッグ(2026.1.12yori)
@@ -3931,6 +3935,7 @@ bool HwCtrl::SendLineDataCheckSameLine(int index)
         {
             m_JudgeCount++;
 
+            // m_JudgeCount > 3の場合、重複ラインを4回に1回PolyWorksへ送る。(2025.1.13yori)
             if (m_JudgeCount > 3) {
                 m_JudgeCount = 0;
                 test = false;
@@ -3969,30 +3974,26 @@ bool HwCtrl::SendLineDataCheckSameLine(int index)
     スキャンデータのファイル出力
     移植(2025.8.5yori)
     引数追加(2026.1.7yori)
+    X,Y,Z,I,J,Kのみ出力変更(2026.1.22yori)
 
 ***********************************************************************/
 void HwCtrl::FileOutput(int iScanDataNo)
 {
     FILE* pf;
     char cPath[256] = { 0 }; // ファイルのパス
-    char cData1[256] = { 0 }; // ラインNo, IJK
-    char cData2[256] = { 0 }; // XYZ
+    char cData1[256] = { 0 }; // X,Y,Z,I,J,K
 
     sprintf_s(cPath, "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Log\\ScanLineData.txt"); // 書込むファイルのパス
     int index = 0, i = 0;
 
     if ((fopen_s(&pf, cPath, "a")) == 0)
     {
-        sprintf_s(cData1, "ArmLineNo%d,ScannerLineNo%d,%f,%f,%f\n", ptlinedata2025->tVecData.no1, ptlinedata2025->tPulsData->lineNo, ptlinedata2025[index].tVecData.ijk[0], ptlinedata2025[index].tVecData.ijk[1], ptlinedata2025[index].tVecData.ijk[2]); // m_LineNoからアームとスキャナのラインNoへ変更(2026.1.7yori)
-        fseek(pf, 0, SEEK_SET); // file先頭へ移動
-        fputs((char*)&(cData1), pf); // fileへ書き込み
-        memset(cData1, 0, sizeof(cData1)); // 配列をクリア
-
         for (i = 0; i < iScanDataNo; i++)
         {
-            sprintf_s(cData2, "%f,%f,%f\n", ptlinedata2025[index].tPulsData[i].dataX, ptlinedata2025[index].tPulsData[i].dataY, ptlinedata2025[index].tPulsData[i].dataZ);
-            fputs((char*)&(cData2), pf); // fileへ書き込み
-            memset(cData2, 0, sizeof(cData2)); //配列をクリア
+            sprintf_s(cData1, "%f,%f,%f,%f,%f,%f\n", ptlinedata2025[index].tPulsData[i].dataX, ptlinedata2025[index].tPulsData[i].dataY, ptlinedata2025[index].tPulsData[i].dataZ,
+                                                     ptlinedata2025[index].tVecData.ijk[0], ptlinedata2025[index].tVecData.ijk[1], ptlinedata2025[index].tVecData.ijk[2]);
+            fputs((char*)&(cData1), pf); // fileへ書き込み
+            memset(cData1, 0, sizeof(cData1)); //配列をクリア
         }
 
         fclose(pf); //ファイルを閉じる

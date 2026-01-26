@@ -981,7 +981,7 @@ void AppMain::ThreadProc()
     char	buff[1024] = { 0 };
     int     ret = 0;
     int     slp_tm = 100;   // 2025.7.4 eba add default100ms
-    BOOL    fg = FALSE; // 追加(2025.7.29yori)
+    BOOL    warmup_fg = FALSE; // 追加(2025.7.29yori)
     ////
     VecDtEx PosiData; // 下記から移動(2025.9.8yori)
     PosiData.pbid_chg_fg = 0;  // 追加(2025.9.8yori)
@@ -1660,15 +1660,28 @@ void AppMain::ThreadProc()
             }
             else
             {
-                UsrMsgBox::CallBack(271, 268, 0, 16);
-                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
-                if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);// PolyWorks側にスキャナ接続キャンセルを知らせる。→PolyWorks側からスキャナとアームの切断が通知される。(2026.1.3yori)
+                UsrMsgBox::CallBack(271, 268, 0, 16); // エラーメッセージ表示
+                if (HwCtrl::m_ScannerAlignmentScannerFlag) // 非接触点検キャリブレーションの場合(2026.1.23yori)
+                {
+                    HwCtrl::Func08(); // 有接触モードへ変更
+                    HwCtrl::Func12(); // 有接触測定音OFF
+                    UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn02); // 有接触設定メニュー表示
+                    UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show); // アライメント画面表示
+                    UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup); // アライメント画面の初期設定
+                    HwCtrl::m_ScannerAlignmentScannerFlag = false;
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_ING;
+                }
+                else if (HwCtrl::m_b_Button_ConnectFlag == false) // 非接触点検キャリブレーションではない場合(2026.1.23yori)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                    HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_CONNECT_CANCEL);// PolyWorks側にスキャナ接続キャンセルを知らせる。→PolyWorks側からスキャナとアームの切断が通知される。(2026.1.3yori)
+                }
             }
             break;
 
         case VEC_STEP_SEQ::SCANNER_WARMUP_ING:
-            HwCtrl::Func53(&fg);
-            if (fg == TRUE)
+            HwCtrl::Func53(&warmup_fg);
+            if (warmup_fg == TRUE)
             {
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_WARMUP_CMP;
             }
@@ -1694,14 +1707,17 @@ void AppMain::ThreadProc()
                 UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show);
                 UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup);
             }
-            if (HwCtrl::m_b_Button_ConnectFlag == false) HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS); // 追加(2026.1.9yori)
+            else if (HwCtrl::m_b_Button_ConnectFlag == false) // 非接触点検キャリブレーションではない場合(2026.1.20yori)
+            {
+                HwCtrl::AppCommandSend(APP_SEND_CMD::SCANNER_INITIALIZE_SUCCESS); // 追加(2026.1.9yori)
+            }
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_SCAN_MEAS_IDEL;
             Sleep(100);
             break;
 
         case VEC_STEP_SEQ::SCANNER_SCAN_START_REQ:
 
-            //// test only 2026.01.12 t.kanamura
+            ////// test only 2026.01.12 t.kanamura
             //for (int i = 0; i < 11; i++) {
             //    HwCtrl::gDistHist[i] = 0;
             //}

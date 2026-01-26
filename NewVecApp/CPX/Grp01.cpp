@@ -436,6 +436,7 @@ int Grp01::SensorConnectionPanelCancelButton()
             UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Show); // アライメント画面表示
             UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_Setup); // アライメント画面の初期設定
             HwCtrl::m_ScannerAlignmentProbeFlag = false;
+            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::SCANNER_MAKE_MATRIX_ING; // 追加忘れ(2026.1.23yori)
         }
     }
     else // アプリから接続した場合、キャンセルボタンでスキャナ切断処理を行う。(2025.12.18yori)

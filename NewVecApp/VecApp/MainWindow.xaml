@@ -1,5 +1,6 @@
 ﻿<!-- 全体のFontSize="20"へ変更(2025.9.29yori) -->
 <!-- ResizeMode="NoResize"→"CanResize"へ変更(2025.11.19yori) -->
+<!-- Titleの(beta)削除(2026.1.13yori) -->
 <Window x:Class="VecApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -12,7 +13,7 @@
         Loaded="Window_Loaded"
         BorderThickness="1" BorderBrush="LightGray"
         ResizeMode="CanMinimize"
-        Title="Beak Master Plug-in SoftWare(beta)" Height="240" Width="486" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
+        Title="Beak Master Plug-in SoftWare" Height="240" Width="486" Background="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
     <Grid Margin="5,5,5,5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <Grid.ColumnDefinitions>
             <!-- *→2*へ変更(2025.12.14yori) -->

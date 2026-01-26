@@ -88,7 +88,8 @@ namespace VecApp
             CSH.Grp03.Cmd17(); // 追加(2025.8.27yori)
             // メッセージボックスを表示する。(2025.8.28yori)
             // 多言語対応による変更(2025.12.22yori)
-            MessageBox.Show(VecApp.Properties.Resources.String69, "Beak Master Plug-in SoftWare(beta)", MessageBoxButton.OK, MessageBoxImage.Information);
+            // タイトルバーの(beta)削除(2026.1.13yori)
+            MessageBox.Show(VecApp.Properties.Resources.String69, "Beak Master Plug-in SoftWare", MessageBoxButton.OK, MessageBoxImage.Information);
             Parent.CurrentPanel = Panel.None;
         }
 

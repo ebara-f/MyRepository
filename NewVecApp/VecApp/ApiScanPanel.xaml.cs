@@ -447,8 +447,9 @@ namespace VecApp
         {
             // メッセージボックスを表示する。(2025.8.26yori)
             // 多言語対応による変更(2025.12.22yori)
+            // タイトルバーの(beta)削除(2026.1.13yori)
             MessageBoxResult result;
-            result = MessageBox.Show(VecApp.Properties.Resources.String195, "Beak Master Plug-in SoftWare(beta)", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            result = MessageBox.Show(VecApp.Properties.Resources.String195, "Beak Master Plug-in SoftWare", MessageBoxButton.YesNo, MessageBoxImage.Information);
             switch (result)
             {
                 case MessageBoxResult.Yes:

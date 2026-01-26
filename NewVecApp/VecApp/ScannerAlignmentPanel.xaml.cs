@@ -182,6 +182,8 @@ namespace VecApp
                 default:
                     break;
             }
+            this.ViewModel.IsFullCalStartBtnEnabled = true; // 中止後、再開できるようにする。(2026.1.20yori)
+            this.ViewModel.FullCalStartButtonOpacity = 1.0; // 中止後、再開できるようにする。(2026.1.20yori)
             this.ViewModel.IsBackBtnEnabled = false;
             this.ViewModel.BackButtonOpacity = 0.25;
             this.ViewModel.IsStopBtnEnabled = false;

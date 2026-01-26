@@ -84,7 +84,7 @@ public:
     static int  Func50(int id, double dia); // 追加(2025.7.18yori) // 引数追加(2025.9.8yori)
     static int  Func51(); // 追加(2025.7.18yori)
     static void Func52(wchar_t probe_name[21][32], wchar_t stylus_angle[21][32], wchar_t probe_type[21][32]); // 追加(2025.7.22yori) // 引数追加(2025.8.28yori) // プローブ種類追加(2025.10.31yori)
-    static BOOL Func53(BOOL*); // 追加(2025.7.29yori)
+    static BOOL Func53(BOOL* warmup); // 追加(2025.7.29yori)
     static int  Func54(CALIB_JUDGE_CK* th, CALIB_JUDGE th2[20], CALIB_GAUGE* gauge, int id); // 追加(2025.8.1yori)  // 引数追加(2025.9.22yori)
     static int  Func55(CALIB_JUDGE_CK* th, CALIB_JUDGE th2[20], int id); // 追加(2025.8.1yori) // 引数追加(2025.9.22yori)
     static BOOL  Func56(VecGaugeIni* ga1, SensorSettingIni* ga2, double* scanchkball); // 追加(2025.8.7yori) // 非接触球のみの点検しきい値追加(2025.8.10yori)
@@ -184,9 +184,8 @@ public:
     static double m_MaxMin[3];                      // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
     static double m_BeforeXYZ[3];                   // スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
     static bool m_isFirst;                          // 追加(2026.1.10yori)
-    //static double m_Beforedist2;                    // デバッグ(2026.1.12yori)
-    //static double m_Afterdist2;                     // デバッグ(2026.1.12yori)
-    //static unsigned int gDistHist[11];//2026.01.12 t.kanamura
+    //static double m_Afterdist2;                   // デバッグ(2026.1.12yori)
+    //static unsigned int gDistHist[11];// test 2026.01.12 t.kanamura
     static int dist_count; // 追加(2026.1.12yori)
     static int m_JudgeCount;
 

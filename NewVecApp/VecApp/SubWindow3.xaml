@@ -1,5 +1,6 @@
 ﻿<!-- 全体のFontSize="20"へ変更(2025.9.28yori) -->
 <!-- ウィンドウサイズ変更固定(2025.11.4yori) -->
+<!-- Titleの(beta)削除(2026.1.13yori) -->
 <local:SubWindowBase
         x:Class="VecApp.SubWindow3"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,7 +10,7 @@
         xmlns:local="clr-namespace:VecApp"
         xmlns:res="clr-namespace:VecApp.Properties"
         mc:Ignorable="d"
-        Title="Beak Master Plug-in SoftWare(beta)" Height="770" Width="1200" Closing="Terminate" ResizeMode="NoResize">
+        Title="Beak Master Plug-in SoftWare" Height="770" Width="1200" Closing="Terminate" ResizeMode="NoResize">
     <!-- Height="550"→Height=770" Width="1100"→Width="1200"へ変更(2025.11.24yori) -->
     <Grid Background="#2C3E50">
         <Grid.ColumnDefinitions>
