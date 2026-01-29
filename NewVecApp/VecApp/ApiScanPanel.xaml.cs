@@ -49,7 +49,7 @@ namespace VecApp
             this.ViewModel.ApiScanIndex1 = sts.mode;
 
             // 点間ピッチ(2025.11.6yori)
-            this.ViewModel.ApiScanText = sts.pitch[0].ToString("F3"); // 1/1
+            this.ViewModel.ApiScanText = Math.Round(sts.pitch[0], 3, MidpointRounding.AwayFromZero).ToString("F3"); // 1/1 // 四捨五入されるようsts.pitch[0].ToString("F3")から修正(2026.1.28yori)
 
             // 感度(2025.8.18yori)
             var Item1 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "Sensitivity");
@@ -643,7 +643,7 @@ namespace VecApp
                     // 点間ピッチを画面表示する。(2025.11.6yori)
                     Status02 sts = new Status02();
                     CSH.AppMain.UpDateData02(out sts);
-                    this.ViewModel.ApiScanText = sts.pitch[0].ToString("F3");
+                    this.ViewModel.ApiScanText = Math.Round(sts.pitch[0], 3, MidpointRounding.AwayFromZero).ToString("F3"); // 四捨五入されるようsts.pitch[0].ToString("F3")から修正(2026.1.28yori)
                 }
                 else
                 {
@@ -652,7 +652,7 @@ namespace VecApp
                     // 点間ピッチを画面表示する。(2025.11.6yori)
                     Status02 sts = new Status02();
                     CSH.AppMain.UpDateData02(out sts);
-                    this.ViewModel.ApiScanText = sts.pitch[0].ToString("F3");
+                    this.ViewModel.ApiScanText = Math.Round(sts.pitch[0], 3, MidpointRounding.AwayFromZero).ToString("F3"); // 四捨五入されるようsts.pitch[0].ToString("F3")から修正(2026.1.28yori)
                 }
 
                 if (treeItem.SlideSwitch8)
@@ -682,7 +682,7 @@ namespace VecApp
             Status02 sts = new Status02();
             CSH.AppMain.UpDateData02(out sts);
             // 点間ピッチは計測モードによって異なるため、画面表示を変更する。(2025.11.6yori)
-            this.ViewModel.ApiScanText = sts.pitch[0].ToString("F3");
+            this.ViewModel.ApiScanText = Math.Round(sts.pitch[0], 3, MidpointRounding.AwayFromZero).ToString("F3"); // 四捨五入されるようsts.pitch[0].ToString("F3")から修正(2026.1.28yori)
             // エッジマスク点数は計測モードによって異なるため、画面表示を変更する。(2025.8.27yori)
             var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
             if (Item11?.InputText26 != null)

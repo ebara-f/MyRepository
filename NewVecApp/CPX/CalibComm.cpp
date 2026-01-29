@@ -558,6 +558,7 @@ void CalibComm::BackScanner(CALIB_SCANNER_MSEBOX* para)
 
 	case CALIB_TYPE::SCANNER_FULL:
 		HwCtrl::m_ScanShotNo--;
+		TdsVecSetShotNum(HwCtrl::m_ScanShotNo); // ショットNoを設定漏れのため、追加(2026.1.27yori)
 		para->ScanShotNo = HwCtrl::m_ScanShotNo; // 追加(2025.16yori)
 		swprintf(wc_no, 8, L"%d", HwCtrl::m_ScanShotNo + 1);
 		GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\calscn\\V7\\Shot1.png"), wc_path, 256, CALSCN_TXT);
@@ -618,7 +619,8 @@ void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
 	switch (CalibComm::m_CalibType)
 	{
 	case CALIB_TYPE::SCANNER_MAKE_MATRIX:
-		para->ShotNo = HwCtrl::m_ShotNo; // 追加(2025.16yori)
+		para->ShotNo = HwCtrl::m_ShotNo; // 追加(2025.12.16yori)
+		if (HwCtrl::m_ShotNo == HwCtrl::m_ShotMax) para->ShotNo = 0; // 追加(2026.1.27yori)
 		swprintf(wc_no, 8, L"%d", HwCtrl::m_ShotNo + 1);
 		GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\MachineCheck\\V7\\Matrix_Plane_No1.png"), wc_path, 256, MACHINECHECK_TXT);
 		if (CalibComm::m_Language == LANGUAGE::JAPANESE) GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[1点目]測定してください。"), wc_msg, 512, MACHINECHECK_TXT); // 日本語の場合(2025.12.14)
@@ -626,7 +628,7 @@ void CalibComm::ScanDataMesCallBack(CALIB_SCANNER_MSEBOX* para)
 		break;
 
 	case CALIB_TYPE::SCANNER_FULL:
-		para->ScanShotNo = HwCtrl::m_ScanShotNo; // 追加(2025.16yori)
+		para->ScanShotNo = HwCtrl::m_ScanShotNo; // 追加(2025.12.16yori)
 		swprintf(wc_no, 8, L"%d", HwCtrl::m_ScanShotNo + 1);
 		GetPrivateProfileString(TEXT("IMAGE_V7"), wc_no, TEXT("\\calib\\calscn\\V7\\Shot1.png"), wc_path, 256, CALSCN_TXT);
 		if (CalibComm::m_Language == LANGUAGE::JAPANESE) GetPrivateProfileString(TEXT("MESSAGE_JPN"), wc_no, TEXT("[面]-[基本姿勢]-[近]"), wc_msg, 512, CALSCN_TXT); // 日本語の場合(2025.12.14)

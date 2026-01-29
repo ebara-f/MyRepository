@@ -85,6 +85,7 @@ bool            HwCtrl::m_isFirst = true; // 追加(2026.1.10yori)
 //unsigned int    HwCtrl::gDistHist[11] = { 0 };//test 2026.01.12 t.kanamura
 int             HwCtrl::dist_count = 0; // 追加(2026.1.12yori)
 int             HwCtrl::m_JudgeCount = 0;
+int             HwCtrl::m_ArmLineNo = 0; // スキャナの座標値と合成するアームラインNo(デバッグ用)(2026.1.26yori)
 
 /***********************************************************************
 
@@ -3101,6 +3102,7 @@ int HwCtrl::OneDataSamplingandTransfer(bool transFg, int* pErrorCode)
             break;                                                              // データなし　状態監視ループ
         case 1:                                                                 // データ取得			
             line_no = (int)PosiData.no;
+            //m_ArmLineNo = (int)PosiData.no;                                     // デバッグ(2026.1.26yori)
             iVecSts = 0;
             VecGetLoopFg = false;
             break;
@@ -3876,6 +3878,31 @@ bool HwCtrl::SendLineDataCheckDiffPoint(int index)
 }
 
 
+/***********************************************************************
+
+    デバッグ用データ飛びチェック
+    2026.1.26yori
+
+***********************************************************************/
+
+bool HwCtrl::SendLineDataCheckDiffPoint2(int index)
+{
+    double diff_z;
+    double threshold = 5.0;
+
+    int iXSize = ptlinedata2025[index].iSendDataNo; // 有効データ数
+
+    diff_z = abs(ptlinedata2025[index].tPulsData[0].dataZ - ptlinedata2025[index].tPulsData[iXSize - 1].dataZ);
+
+    if (diff_z > threshold)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
 
 /***********************************************************************
 
@@ -4010,9 +4037,10 @@ void HwCtrl::FileOutput(int iScanDataNo)
 
     アームとスキャンデータのファイル出力
     2026.1.8yori
+    引数変更、直接アームの座標値とijk取得(2026.1.26yori)
 
 ***********************************************************************/
-void HwCtrl::FileOutput2(int iScanDataNo, const VecRet* pVecData)
+void HwCtrl::FileOutput2(int iScanDataNo, VecDtEx PosiData)
 {
     FILE* pf;
     char cPath[256] = { 0 }; // ファイルのパス
@@ -4024,8 +4052,12 @@ void HwCtrl::FileOutput2(int iScanDataNo, const VecRet* pVecData)
 
     if ((fopen_s(&pf, cPath, "a")) == 0)
     {
-        sprintf_s(cData1, "ArmLineNo%d,ScannerLineNo%d,%f,%f,%f\n%f,%f,%f\n%f,%f,%f\n", ptlinedata2025->tVecData.no1, ptlinedata2025->tPulsData->lineNo, ptlinedata2025[index].tVecData.ijk[0], ptlinedata2025[index].tVecData.ijk[1], ptlinedata2025[index].tVecData.ijk[2],
-            pVecData->xyz[0], pVecData->xyz[1], pVecData->xyz[2], ptlinedata2025[index].tVecData.xyz[0], ptlinedata2025[index].tVecData.xyz[1], ptlinedata2025[index].tVecData.xyz[2]);
+        sprintf_s(cData1, "ArmLineNo%d,ScannerLineNo%d\n%f,%f,%f\n%f,%f,%f\n%f,%f,%f\n%f,%f,%f\n",
+            m_ArmLineNo, ptlinedata2025->tPulsData->lineNo,
+            PosiData.ijk[0], PosiData.ijk[1], PosiData.ijk[2],
+            ptlinedata2025[index].tVecData.ijk[0], ptlinedata2025[index].tVecData.ijk[1], ptlinedata2025[index].tVecData.ijk[2],
+            PosiData.xyz[0], PosiData.xyz[1], PosiData.xyz[2],
+            ptlinedata2025[index].tVecData.xyz[0], ptlinedata2025[index].tVecData.xyz[1], ptlinedata2025[index].tVecData.xyz[2]);
         fseek(pf, 0, SEEK_SET); // file先頭へ移動
         fputs((char*)&(cData1), pf); // fileへ書き込み
         memset(cData1, 0, sizeof(cData1)); // 配列をクリア

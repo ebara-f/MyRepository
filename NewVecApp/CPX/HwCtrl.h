@@ -188,6 +188,7 @@ public:
     //static unsigned int gDistHist[11];// test 2026.01.12 t.kanamura
     static int dist_count; // 追加(2026.1.12yori)
     static int m_JudgeCount;
+    static int m_ArmLineNo; // スキャナの座標値と合成するアームラインNo(デバッグ用)(2026.1.26yori)
 
     static int GetVecDataEx(VecDtEx* PosiData);
     static int GetMeasTopData();
@@ -203,9 +204,10 @@ public:
     //static bool SendOneLineData(); // コメントアウト(2025.5.15yori)
     static int SendLineDataCheck2(int index);
     static bool SendLineDataCheckDiffPoint(int index); // データ飛びチェック(2026.1.8yori)
+    static bool SendLineDataCheckDiffPoint2(int index); // デバッグ用のデータ飛びチェック(2026.1.26yori)
     static bool SendLineDataCheckSameLine(int index); // 前後ラインが近い距離にある重複ラインチェック(2026.1.10yori)
     static void FileOutput(int iScanDataNo); // Debug用、スキャンデータファイル出力(2025.8.5yori) // 引数追加(2026.1.7yori)
-    static void FileOutput2(int iScanDataNo, const VecRet* pVecData); // Debug用、アームとスキャンデータファイル出力(2026.1.8yori)
+    static void FileOutput2(int iScanDataNo, VecDtEx PosiData); // Debug用、アームとスキャンデータファイル出力(2026.1.8yori) // 引数変更、直接アームの座標値とijk取得(2026.1.26yori)
     // プローブ登録(2025.10.31yori)
     static void ProbeResit(int psid, const TCHAR* probename, int probetype);
 

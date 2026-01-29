@@ -158,12 +158,28 @@ namespace VecApp
             CSH.Grp02.ScannerAlignmentPanelClickBack(ref this.ViewModel.CalibScannerMseBox); // 追加(2025.12.12yori)
             this.ViewModel.ImageSource = this.ViewModel.CalibScannerMseBox.path;
             this.ViewModel.SubtitleText = this.ViewModel.CalibScannerMseBox.msg;
-            if (this.ViewModel.CalibScannerMseBox.ShotNo == 0 && this.ViewModel.CalibScannerMseBox.ScanShotNo == 0)// 追加(2025.12.16yori)
+            switch ((CalibType)this.ViewModel.CalibScannerMseBox.CalibType) // キャリブの種類をswitch文で分ける。(2026.1.27yori)
             {
-                this.ViewModel.IsBackBtnEnabled = false;
-                this.ViewModel.BackButtonOpacity = 0.25;
-                this.ViewModel.IsStopBtnEnabled = false;
-                this.ViewModel.StopButtonOpacity = 0.25;
+                case CalibType.SCANNER_MAKE_MATRIX:
+                    if (this.ViewModel.CalibScannerMseBox.ShotNo == 0)
+                    {
+                        this.ViewModel.IsBackBtnEnabled = false;
+                        this.ViewModel.BackButtonOpacity = 0.25;
+                        this.ViewModel.IsStopBtnEnabled = false;
+                        this.ViewModel.StopButtonOpacity = 0.25;
+                    }
+                    break;
+                case CalibType.SCANNER_FULL:
+                    if(this.ViewModel.CalibScannerMseBox.ScanShotNo == 0)
+                    {
+                        this.ViewModel.IsBackBtnEnabled = false;
+                        this.ViewModel.BackButtonOpacity = 0.25;
+                        this.ViewModel.IsStopBtnEnabled = true;
+                        this.ViewModel.StopButtonOpacity = 1.0;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -177,13 +193,15 @@ namespace VecApp
             {
                 case CalibType.SCANNER_FULL:
                     CSH.Grp03.Cmd02(); // スキャンストップ
+                    // 中止後、再開できるようにする。(2026.1.20yori)
+                    // 座標系作成時にボタンを押せないようcase文内に移動(2026.1.27yori)
+                    this.ViewModel.IsFullCalStartBtnEnabled = true;
+                    this.ViewModel.FullCalStartButtonOpacity = 1.0;
                     break;
 
                 default:
                     break;
             }
-            this.ViewModel.IsFullCalStartBtnEnabled = true; // 中止後、再開できるようにする。(2026.1.20yori)
-            this.ViewModel.FullCalStartButtonOpacity = 1.0; // 中止後、再開できるようにする。(2026.1.20yori)
             this.ViewModel.IsBackBtnEnabled = false;
             this.ViewModel.BackButtonOpacity = 0.25;
             this.ViewModel.IsStopBtnEnabled = false;
@@ -199,7 +217,6 @@ namespace VecApp
         // 履歴ボタン
         private void Click_HistoryBtn(object sender, RoutedEventArgs e)
         {
-
             DlgHistory dlg = new DlgHistory();
             bool? test = false;
 

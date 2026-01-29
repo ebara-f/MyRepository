@@ -57,11 +57,12 @@
                                Margin="415,10,0,0"/>
 
                         <!-- Width変更(2025.12.14yori) -->
+                        <!-- 多言語対応でButtonの文字がはみ出さないようWidth→MinWidthへ変更(2026.1.29yori) -->
                         <Button Content="{x:Static res:Resources.String58}"
                             HorizontalAlignment="Left"
                             Padding="16,8"
                             Margin="0,-160,0,0"
-                            Click="Click_ConnectDoneBtn" Width="160" Style="{StaticResource PanelDoneButtonStyle}" Height="46" FontSize="20"/>
+                            Click="Click_ConnectDoneBtn" MinWidth="160" Style="{StaticResource PanelDoneButtonStyle}" Height="46" FontSize="20"/>
 
                         <!-- キャンセルボタン追加(2025.7.30yori) -->
                         <!-- Width変更(2025.12.14yori) -->

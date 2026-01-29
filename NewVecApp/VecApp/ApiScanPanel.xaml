@@ -713,7 +713,19 @@
                     Foreground="White"
                     Margin="0,0,0,5"/>
             <!-- x:Name="ScanMode"追加(2025.8.12yori) -->
-            <ComboBox x:Name="ScanMode" Margin="10" ItemsSource="{Binding ApiScanItems1}" SelectedIndex="{Binding ApiScanIndex1}" SelectionChanged="ComboBox_SelectionChanged_Mode" FontSize="20" />
+            <!-- 多言語対応でComboBoxの文字がはみ出さないよう修正(2026.1.29yori) -->
+            <ComboBox x:Name="ScanMode" Margin="10" ItemsSource="{Binding ApiScanItems1}" SelectedIndex="{Binding ApiScanIndex1}" SelectionChanged="ComboBox_SelectionChanged_Mode" Height="30">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                            <TextBlock Text="{Binding}"
+                                       FontSize="20"
+                                       TextWrapping="NoWrap"/>
+                        </Viewbox>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+
+            </ComboBox>
             <Border Background="Gray" Padding="2"  Margin="0,0,0,5">
                 <TextBlock Text="{x:Static res:Resources.String185}" Foreground="White" FontSize="20" TextAlignment="Center"/>
             </Border>
@@ -724,7 +736,16 @@
                 <!-- TextBox→TextBlockへ、編集不可へ変更(2025.8.12yori) -->
                 <TextBlock Text="{Binding ApiScanText}" Foreground="White"  Width="93" Height="35" TextAlignment="Center" HorizontalAlignment="Center" Background="#3A3A3A" FontSize="20" Margin="30,0,0,0"/>
             </StackPanel>
-            <Button Content="{x:Static res:Resources.String186}" Margin="10" Click="Click_SensorParameterBtn" Style="{StaticResource PanelButton2Style}" FontSize="20" Height="40" VerticalContentAlignment="Center"/>
+            <!-- 多言語対応でButton文字がはみ出さないよう修正(2026.1.29yori) -->
+            <Button Margin="10" Click="Click_SensorParameterBtn" Style="{StaticResource PanelButton2Style}" Height="40" VerticalContentAlignment="Center">
+                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                    <TextBlock Text="{x:Static res:Resources.String186}"
+                               FontSize="20"
+                               TextWrapping="NoWrap"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"/>
+                </Viewbox>
+            </Button>
             <!-- カラーマップ名称(Default1)を非表示(2025.8.10yori) -->
             <TextBlock Text="{x:Static res:Resources.String187}" Foreground="White" FontSize="10" TextAlignment="Center" Visibility="Hidden"/>
             <StackPanel Margin="0,40,0,0" Orientation="Horizontal" HorizontalAlignment="Center">

@@ -375,11 +375,15 @@ int AppMain::UpDateData02(STATUS02* sts)
     // 計測モード取得
     sts->mode = HwCtrl::Func34();
 
-    // 点間ピッチ間引き(2025.8.11yori)
-    for (i = 0; i < 10; i++)
-    {
-        sts->pitch[i] = HwCtrl::m_dXPitch * ( i + 1 );
-    }
+    // 点間ピッチはTDSLibarary.iniから取得する。(DhとEhがDLLから取得した値と異なるため)(2026.1.28yori)
+    string s(sts->mode_info[sts->mode]);
+    size_t start = s.find("mm-"); // "mm-" の後から始める。
+    if (start == string::npos) return -1; // "mm-"が見つからなかった場合
+    start += 3; // "mm-" の長さ
+    size_t end = s.find("mm", start); // 次の "mm" まで
+    if (end == string::npos) return -1; // "mm"が見つからなかった場合
+    string s_pitch = s.substr(start, end - start);
+    double d_pitch = stod(s_pitch);
 
     // 感度取得
     HwCtrl::Func35(sts->sens_use, sts->sens_name);
@@ -414,6 +418,13 @@ int AppMain::UpDateData02(STATUS02* sts)
 
     // 補間設定取得(2025.6.23yori)
     HwCtrl::Func40(&sts->xpitch_onoff);
+
+    // 点間ピッチ間引き(2025.8.11yori) // 点間ピッチの値は、補間設定取得後にsts->pitchへ代入する。(2026.1.28yori)
+    if(sts->xpitch_onoff == TDS_INTERPOLATIONX_NINE) d_pitch = d_pitch / 2; // X点間補間ありの場合(2026.1.28yori)
+    for (i = 0; i < 10; i++)
+    {
+        sts->pitch[i] = d_pitch * (i + 1); // HwCtrl::m_dXPitch→d_pitchへ変更(2026.1.28yori)
+    }
 
     // 角度マスク設定値取得(2025.6.23yori)
     HwCtrl::Func41(&sts->angle);
