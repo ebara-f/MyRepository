@@ -161,11 +161,12 @@ int Grp02::Cmd07(int id, double dia)
 
     ret = HwCtrl::Func50(id, dia); // プローブ設定画面から取得したプローブ情報をアームへ送る。(2025.9.1yori)
 
-    WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
-
-    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE; // PROBE_SET_CMP→MEAS_IDLEへ変更(2025.9.1yori)
-
-    ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
+    // HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLEから下記へ変更(2026.2.6yori)
+    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_CMP; // アーム設定完了
+    while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::ARM_SET_CMP) // アーム設定完了状態になるまで待機
+    {
+        Sleep(100);
+    }
 
     return (ret);
 }
@@ -356,11 +357,12 @@ int Grp02::ProbeInputPanelProbeResist(int id, const TCHAR* probename, int probet
 
     HwCtrl::ProbeResit(id, probename, probetype);
 
-    WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
-
-    if (ret == 0) HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE; // 有接触測定待ち
-
-    ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
+    // HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLEから下記へ変更(2026.2.6yori)
+    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_CMP; // アーム設定完了
+    while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::ARM_SET_CMP) // アーム設定完了状態になるまで待機
+    {
+        Sleep(100);
+    }
 
     return (ret);
 }
@@ -701,6 +703,28 @@ int Grp02::ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para)
     int ret = 0;
 
     CalibComm::ScannerAlignmentPanelResultCallBack(para);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    ArmSetCancel
+    追加(2026.2.6yori)
+
+***********************************************************************/
+
+int Grp02::ArmSetCancel()
+{
+    int ret = 0;
+
+    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_CMP; // アーム設定完了
+    while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::ARM_SET_CMP) // アーム設定完了状態になるまで待機
+    {
+        Sleep(100);
+    }
 
     return (ret);
 }

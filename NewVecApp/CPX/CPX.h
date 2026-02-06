@@ -356,6 +356,8 @@ CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelClickReStart(CALIB_SCANN
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.16yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp02_ScannerAlignmentPanelTerminate(); // 追加(2025.12.4yori)
 
+CPX_DECLSPEC int  WINAPI CPX_Grp02_ArmSetCancel(); // 追加(2026.2.6yori)
+
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd01(); // 追加(2025.6.24yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd02(); // 追加(2025.6.24yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd03(); // 追加(2025.6.24yori)

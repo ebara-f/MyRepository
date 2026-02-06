@@ -84,6 +84,9 @@ namespace VecApp
             // メインウィンドウ起動時に最小化する。(2025.11.19yori)
             this.WindowState = System.Windows.WindowState.Minimized;
 
+            // メインウィンドウの状態変更を監視(2026.2.5yori)
+            this.StateChanged += MainWindow_StateChanged;
+
             this.DataContext = new MainWindowViewModel();
 
 			// ウィンドウズハンドルの取得
@@ -125,6 +128,15 @@ namespace VecApp
             CSH.UsrMsgBox.SetCB(UsrMessageBox.ShowCallBack);  // エラーダイアログ表示
             CSH.ProgBar.SetCB1(PrgressBarShiwTopMost);  // プログレスバーShow
             CSH.ProgBar.SetCB2(PrgressBarHide);  // プログレスバーHide
+        }
+
+        // メインウィンドウの状態変更を監視(2026.2.5yori)
+        private void MainWindow_StateChanged(object? sender, EventArgs e)
+        {
+            if (this.WindowState != WindowState.Minimized)
+            {
+                this.WindowState = WindowState.Minimized;
+            }
         }
 
         private void MainWindow_SourceInitialized(object sender, EventArgs e)
@@ -610,26 +622,32 @@ namespace VecApp
             if ( m_SubWnd01 == null ) return;
 
 			// C++側の処理
-			CSH.AppMain.SubWnd01();
+			//CSH.AppMain.SubWnd01(); // 未処理のため、コメントアウト(2026.2.3yori)
 
 			// C#側の処理
             if (m_SubWnd01.IsVisible == false)
             {
-                m_SubWnd01.Owner = Application.Current.MainWindow;
-                m_SubWnd01.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                Application.Current.Dispatcher.BeginInvoke( // 例外(0x8001010D)修正(2026.2.3yori)
+                    new Action(() =>
+                    {
+                        m_SubWnd01.Owner = Application.Current.MainWindow;
+                        m_SubWnd01.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-                // モーダレスダイアログとして表示
-                m_SubWnd01.Show();
+                        // モーダレスダイアログとして表示
+                        m_SubWnd01.Show();
 
-                // モーダルダイアログとして表示
-                //m_SubWnd01.ShowDialog();
+                        // モーダルダイアログとして表示
+                        //m_SubWnd01.ShowDialog();
 
-                // Window のアクティブ化
-                //UIPlus.ForceActive(m_SubWnd01.hWnd); // m_hWnd→hWnd(2025.7.29yori)
-                // SetForegroundWindowの代わりにTopmostを使用する。(2025.11.7yori)
-                m_SubWnd01.Topmost = true;  // 一時的に最前面にする。
-                m_SubWnd01.Activate();      // ウィンドウをアクティブ化
-                m_SubWnd01.Topmost = false; // 元に戻す。
+                        // Window のアクティブ化
+                        //UIPlus.ForceActive(m_SubWnd01.hWnd); // m_hWnd→hWnd(2025.7.29yori)
+                        // SetForegroundWindowの代わりにTopmostを使用する。(2025.11.7yori)
+                        m_SubWnd01.Topmost = true;  // 一時的に最前面にする。
+                        m_SubWnd01.Activate();      // ウィンドウをアクティブ化
+                        m_SubWnd01.Topmost = false; // 元に戻す。
+                    }),
+                    System.Windows.Threading.DispatcherPriority.Background
+                );
             }
         }
 
@@ -642,27 +660,33 @@ namespace VecApp
             if ( m_SubWnd02 == null ) return;
 
             // C++側の処理
-            CSH.AppMain.SubWnd02();
+            //CSH.AppMain.SubWnd02(); // 未処理のため、コメントアウト(2026.2.3yori)
 
             // C#側の処理
             if (m_SubWnd02.IsVisible == false)
             {
-                m_SubWnd02.Owner = Application.Current.MainWindow;
-                m_SubWnd02.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                Application.Current.Dispatcher.BeginInvoke( // 例外(0x8001010D)修正(2026.2.3yori)
+                    new Action(() =>
+                    {
+                        m_SubWnd02.Owner = Application.Current.MainWindow;
+                        m_SubWnd02.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-                // モーダレスダイアログとして表示
-                m_SubWnd02.Show();
+                        // モーダレスダイアログとして表示
+                        m_SubWnd02.Show();
 
-                // モーダルダイアログとして表示
-                //m_SubWnd02.ShowDialog();
+                        // モーダルダイアログとして表示
+                        //m_SubWnd02.ShowDialog();
 
-                // Window のアクティブ化
-                //UIPlus.ForceActive(m_SubWnd02.hWnd); // m_hWnd→hWnd(2025.7.29yori)
-                // 1.アプリ起動→2.PolyWorks起動→3.接続→4.SubWindowを起動すると、フリーズ状態(SetForegroundWindow関数が戻らない)となるため、
-                // SetForegroundWindowの代わりにTopmostを使用する。(2025.11.7yori)
-                m_SubWnd02.Topmost = true;  // 一時的に最前面にする。
-                m_SubWnd02.Activate();      // ウィンドウをアクティブ化
-                m_SubWnd02.Topmost = false; // 元に戻す。
+                        // Window のアクティブ化
+                        //UIPlus.ForceActive(m_SubWnd02.hWnd); // m_hWnd→hWnd(2025.7.29yori)
+                        // 1.アプリ起動→2.PolyWorks起動→3.接続→4.SubWindowを起動すると、フリーズ状態(SetForegroundWindow関数が戻らない)となるため、
+                        // SetForegroundWindowの代わりにTopmostを使用する。(2025.11.7yori)
+                        m_SubWnd02.Topmost = true;  // 一時的に最前面にする。
+                        m_SubWnd02.Activate();      // ウィンドウをアクティブ化
+                        m_SubWnd02.Topmost = false; // 元に戻す。
+                    }),
+                    System.Windows.Threading.DispatcherPriority.Background
+                );
             }
         }
 
@@ -679,7 +703,7 @@ namespace VecApp
             if ( m_SubWnd03 == null ) return;
 
             // C++側の処理
-            CSH.AppMain.SubWnd03();
+            //CSH.AppMain.SubWnd03(); // 未処理のため、コメントアウト(2026.2.3yori)
 
             // C#側の処理
             if (m_SubWnd03.IsVisible == false)

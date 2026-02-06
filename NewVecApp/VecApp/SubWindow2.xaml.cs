@@ -23,26 +23,6 @@ namespace VecApp
     /// </summary>
     public partial class SubWindow2 : SubWindowBase
     {
-        #region 最大化・最小化・閉じるボタンの非表示設定
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            const int GWL_STYLE = -16;
-            const int WS_SYSMENU = 0x80000;
-
-            // SYSMENUを非表示にする
-            var hwnd = new WindowInteropHelper((Window)sender).Handle;
-            //SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);   // 2025.4.22 eba del
-        }
-
-        #endregion
-
         // 2025.09.04  Modify by GeomLab
         // MainWindow から終了させるときだけ true にする
         public bool m_AllowClose { get; set; } = false;
@@ -76,9 +56,23 @@ namespace VecApp
 
         public ScannerAlignmentViewModel ScannerAlignmentValue = new ScannerAlignmentViewModel();
 
+        //// ×ボタンを非表示にするたの追加コード(2026.2.6yori)
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
+        ////
+
         public SubWindow2()
         {
             InitializeComponent();
+
+            // ×ボタンを非表示にする。(2026.2.6yori)
+            HideCloseButton();
         }
 
         public void Cmd01() // 追加(2025.6.11yori)
@@ -207,6 +201,16 @@ namespace VecApp
                 this.CurrentPanel = Panel.None;
                 this.Hide();
             }
+        }
+
+        // ×ボタンを消す処理を追加(2026.2.6yori)
+        private void HideCloseButton()
+        {
+            IntPtr hWnd = new WindowInteropHelper(this).EnsureHandle();
+
+            int style = GetWindowLong(hWnd, GWL_STYLE);
+            style &= ~WS_SYSMENU; // システムメニューを外す
+            SetWindowLong(hWnd, GWL_STYLE, style);
         }
     }
 }

@@ -359,6 +359,9 @@ namespace CSH
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_Grp02_ScannerAlignmentPanelResultCallBack(ref CalibScannerMseBox para); // 追加(2025.12.9yori)
 
+        [DllImport("CPX.dll")]
+        public extern static int CPX_Grp02_ArmSetCancel(); // 追加(2026.2.6yori)
+
         #endregion
 
         /// <summary>
@@ -714,7 +717,6 @@ namespace CSH
         /// <summary>
         /// ScannerAlignmentPanelTerminate(2025.12.4yori)
         /// </summary>
-
         static public int ScannerAlignmentPanelTerminate()
         {
             return CPX_Grp02_ScannerAlignmentPanelTerminate();
@@ -727,6 +729,15 @@ namespace CSH
         static public int ScannerAlignmentPanelResultCallBack(ref CalibScannerMseBox para)
         {
             return CPX_Grp02_ScannerAlignmentPanelResultCallBack(ref para);
+        }
+
+        /// <summary>
+        /// ArmSetCancel(2026.2.6yori)
+        /// </summary>
+
+        static public int ArmSetCancel()
+        {
+            return CPX_Grp02_ArmSetCancel();
         }
     }
 }

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using System.ComponentModel;
 using CSH;
+using System.Runtime.InteropServices; // 追加(2026.2.6yori)
 
 namespace VecApp
 {
@@ -38,6 +39,17 @@ namespace VecApp
 
         public _0AxisInitializeViewModel _0AxisInitializeValue = new _0AxisInitializeViewModel(); // 変更(2025.10.2yori)
 
+        //// ×ボタンを非表示にするたの追加コード(2026.2.6yori)
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
+        ////
+
         public SubWindow1()
         {
             InitializeComponent();
@@ -45,6 +57,9 @@ namespace VecApp
 
             // ウィンドウズハンドルの取得
             //m_hWnd = new WindowInteropHelper(this).EnsureHandle(); // 削除予定(2025.7.28yori)
+
+            // ×ボタンを非表示にする。(2026.2.6yori)
+            HideCloseButton();
 
             // Beak Masterで0軸イニシャライズは不要なため、無効化(2025.12.18yori)
             SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
@@ -97,7 +112,7 @@ namespace VecApp
             // C++で実装した処理を実行
             CSH.Grp01.Cmd04();  // 追加(2025.4.28yori)
             // 0軸イニシャライズボタンの状態をでデフォルトに戻す。(2025.11.19yori)
-            // V8対応のときに追加する。(2025.12.18yoriyori)
+            // V8対応のときに追加する。(2025.12.18yori)
             //SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
             //vm.IsBtn04Enabled = true;
             //vm.Btn04Opacity = 1.0;
@@ -181,6 +196,16 @@ namespace VecApp
                     }
                 }
             }
+        }
+
+        // ×ボタンを消す処理を追加(2026.2.6yori)
+        private void HideCloseButton()
+        {
+            IntPtr hWnd = new WindowInteropHelper(this).EnsureHandle();
+
+            int style = GetWindowLong(hWnd, GWL_STYLE);
+            style &= ~WS_SYSMENU; // システムメニューを外す
+            SetWindowLong(hWnd, GWL_STYLE, style);
         }
     }
 }

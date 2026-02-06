@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,7 +14,6 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Diagnostics;
 using CSH;
 
 namespace VecApp
@@ -37,9 +38,23 @@ namespace VecApp
 
         public SensorNetworkSettingViewModel SensorNetworkSettingValue = new SensorNetworkSettingViewModel();
 
+        //// ×ボタンを非表示にするたの追加コード(2026.2.6yori)
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
+        ////
+
         public SubWindow3()
         {
             InitializeComponent();
+
+            // ×ボタンを非表示にする。(2026.2.6yori)
+            HideCloseButton();
 
             // ウィンドウズハンドルの取得
             //m_hWnd = new WindowInteropHelper(this).EnsureHandle(); // 削除予定(2025.7.28yori)
@@ -107,6 +122,16 @@ namespace VecApp
                 this.CurrentPanel = Panel.None;
                 this.Hide();
             }
+        }
+
+        // ×ボタンを消す処理を追加(2026.2.6yori)
+        private void HideCloseButton()
+        {
+            IntPtr hWnd = new WindowInteropHelper(this).EnsureHandle();
+
+            int style = GetWindowLong(hWnd, GWL_STYLE);
+            style &= ~WS_SYSMENU; // システムメニューを外す
+            SetWindowLong(hWnd, GWL_STYLE, style);
         }
     }
 }

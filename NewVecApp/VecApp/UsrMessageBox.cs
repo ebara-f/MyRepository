@@ -49,7 +49,7 @@ namespace VecApp
         {
             string text = "";
             string caption = "";
-            int result;
+            int result = 0; // = 0追加(2026.2.5yori)
 
             switch (msgID)
             {
@@ -66,12 +66,43 @@ namespace VecApp
                 case 271: // スキャナ接続エラー追加(2026.1.3yori)
                     text = VecApp.Properties.Resources.String271;
                     break;
+                case 279: // アーム通信エラー追加(2026.2.3yori)
+                    text = VecApp.Properties.Resources.String279;
+                    break;
+                case 280: // 点群数エラー(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String280;
+                    break;
+                case 281: // 座標系エラー(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String281;
+                    break;
+                case 282: // 距離が近すぎます。(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String282;
+                    break;
+                case 283: // 距離が遠すぎます。(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String283;
+                    break;
+                case 284: // 点群取得失敗(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String284;
+                    break;
+                case 285: // No.1関節角度エラー(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String285;
+                    break;
+                case 286: // No.0関節角度エラー(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String286;
+                    break;
+                case 287: // 点群欠損エラー(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String287;
+                    break;
+                case 288: // 球作成失敗(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String288;
+                    break;
+                case 289: // No.2関節角度エラー(2026.2.4yori)
+                    text = VecApp.Properties.Resources.String289;
+                    break;
 
                 default:
                     text = "NO Message";
                     break;
-
-
             }
 
 
@@ -99,10 +130,17 @@ namespace VecApp
                     ShowCallBack(msgID, capID, button, icon));
             }
 
+            // 今アクティブなWindowを親にして他のWindowを操作不可(2026.2.5yori)
+            Window owner = Application.Current.Windows
+                .OfType<Window>()
+                .FirstOrDefault(w => w.IsActive)
+                ?? Application.Current.MainWindow;
+
             // 最前面に表示するために
             // 一時的な透明ウィンドウを作成
             var topmostWindow = new Window
             {
+                Owner = owner, // 追加(2026.2.5yori)
                 Topmost = true,
                 ShowInTaskbar = false,
                 WindowStyle = WindowStyle.None,
@@ -113,18 +151,21 @@ namespace VecApp
                 Left = SystemParameters.WorkArea.Width / 2,
                 Top = SystemParameters.WorkArea.Height / 2
             };
-            topmostWindow.Show();
-            
-            result = (int)MessageBox.Show(topmostWindow, text, caption, (MessageBoxButton)button, (MessageBoxImage)icon);
+            //topmostWindow.Show(); // コメントアウト(2026.2.5yori)
 
-            topmostWindow.Close();
-            
-            return (result);
-            
-            
-            
+            // Windowが表示されたタイミングで MessageBoxを出す。(2026.2.5yori)
+            topmostWindow.Loaded += (_, __) =>
+            {
+                result = (int)MessageBox.Show(topmostWindow, text, caption, (MessageBoxButton)button, (MessageBoxImage)icon);
+
+                topmostWindow.Close(); // MessageBox終了後に閉じる。(2026.2.5yori)
+            };
+
+            topmostWindow.ShowDialog(); // モーダル表示(2026.2.5yori)
+
+            return (result);        
+           
             //return (int)MessageBox.Show(text, caption, (MessageBoxButton)button, (MessageBoxImage)icon);
-
         }
 
 

@@ -1779,7 +1779,7 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
-        ///   通信エラー発生 に類似しているローカライズされた文字列を検索します。
+        ///   通信エラー に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String270 {
             get {
@@ -1861,11 +1861,112 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   アーム側で通信エラーが発生しました。
+        ///アームから音が鳴るのを確認してから
+        ///「OK」ボタンを押してください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String279 {
+            get {
+                return ResourceManager.GetString("String279", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   球直径(球ゲージ)： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String28 {
             get {
                 return ResourceManager.GetString("String28", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   点群数エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String280 {
+            get {
+                return ResourceManager.GetString("String280", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   座標系エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String281 {
+            get {
+                return ResourceManager.GetString("String281", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   距離が近すぎます。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String282 {
+            get {
+                return ResourceManager.GetString("String282", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   距離が遠すぎます。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String283 {
+            get {
+                return ResourceManager.GetString("String283", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   点群取得失敗 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String284 {
+            get {
+                return ResourceManager.GetString("String284", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   No.1関節角度エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String285 {
+            get {
+                return ResourceManager.GetString("String285", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   No.0関節角度エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String286 {
+            get {
+                return ResourceManager.GetString("String286", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   点群欠損エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String287 {
+            get {
+                return ResourceManager.GetString("String287", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   球作成失敗 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String288 {
+            get {
+                return ResourceManager.GetString("String288", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   No.2関節角度エラー に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String289 {
+            get {
+                return ResourceManager.GetString("String289", resourceCulture);
             }
         }
         

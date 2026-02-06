@@ -619,3 +619,21 @@ int WINAPI CPX_Grp02_ScannerAlignmentPanelTerminate()
 
     return(rc);
 }
+
+
+
+/***********************************************************************
+
+    CPX_Grp02_ArmSetCancel
+    2026.2.6yori
+
+***********************************************************************/
+
+int WINAPI CPX_Grp02_ArmSetCancel()
+{
+    int     rc;
+
+    rc = Grp02::ArmSetCancel();
+
+    return(rc);
+}

@@ -913,7 +913,7 @@
     <value>接続できません</value>
   </data>
   <data name="String270" xml:space="preserve">
-    <value>通信エラー発生</value>
+    <value>通信エラー</value>
   </data>
   <data name="String271" xml:space="preserve">
     <value>スキャナ接続エラー</value>
@@ -966,5 +966,40 @@
   </data>
   <data name="String278" xml:space="preserve">
     <value>ストップ</value>
+  </data>
+  <data name="String279" xml:space="preserve">
+    <value>アーム側で通信エラーが発生しました。
+アームから音が鳴るのを確認してから
+「OK」ボタンを押してください。</value>
+  </data>
+  <data name="String280" xml:space="preserve">
+    <value>点群数エラー</value>
+  </data>
+  <data name="String281" xml:space="preserve">
+    <value>座標系エラー</value>
+  </data>
+  <data name="String282" xml:space="preserve">
+    <value>距離が近すぎます。</value>
+  </data>
+  <data name="String283" xml:space="preserve">
+    <value>距離が遠すぎます。</value>
+  </data>
+  <data name="String284" xml:space="preserve">
+    <value>点群取得失敗</value>
+  </data>
+  <data name="String285" xml:space="preserve">
+    <value>No.1関節角度エラー</value>
+  </data>
+  <data name="String286" xml:space="preserve">
+    <value>No.0関節角度エラー</value>
+  </data>
+  <data name="String287" xml:space="preserve">
+    <value>点群欠損エラー</value>
+  </data>
+  <data name="String288" xml:space="preserve">
+    <value>球作成失敗</value>
+  </data>
+  <data name="String289" xml:space="preserve">
+    <value>No.2関節角度エラー</value>
   </data>
 </root>

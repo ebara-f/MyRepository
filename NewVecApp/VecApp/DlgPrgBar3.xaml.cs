@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using System.Runtime.InteropServices; // 追加(2026.2.6yori)
 
 namespace VecApp
 {
@@ -30,6 +31,17 @@ namespace VecApp
         /// </summary>
         private bool m_IsRunning;
 
+        //// ×ボタンを非表示にするたの追加コード(2026.2.6yori)
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
+        ////
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -39,6 +51,9 @@ namespace VecApp
 
 			// ウィンドウズハンドルの取得
 			m_hWnd = new WindowInteropHelper(this).EnsureHandle();
+
+            // ×ボタンを非表示にする。(2026.2.6yori)
+            HideCloseButton();
         }
 
         /// <summary>
@@ -192,6 +207,14 @@ namespace VecApp
                 m_CTS.Dispose();
                 m_CTS = null;
             }
+        }
+
+        // ×ボタンを消す処理を追加(2026.2.6yori)
+        private void HideCloseButton()
+        {
+            int style = GetWindowLong(m_hWnd, GWL_STYLE);
+            style &= ~WS_SYSMENU; // システムメニューを外す
+            SetWindowLong(m_hWnd, GWL_STYLE, style);
         }
     }
 }

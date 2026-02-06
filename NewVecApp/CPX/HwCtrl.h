@@ -161,6 +161,8 @@ public:
     static bool m_bReadThreadStopFlag;		        // 読出しスレッド停止フラグ
     static bool EndFg;                              // 非接触点検キャリブ終了フラグ
     static bool CalcFg;                             // 非接触点検キャリブ計算中フラグ(2025.12.10yori)
+    static bool PostureCheckFg;                     // 非接触点検キャリブ中姿勢チェックフラグ(2026.2.4yori)
+    static int ScannerErrorCode;                    // スキャナエラーコード(2026.2.4yori)
     static const double INVALID_CHECK;              // 無効値判断値 (無効値は999999.0 floatデータのため
     static unsigned short m_BrightSlice[5];         // 輝度スライス(2025.8.25yori)
     static unsigned short m_SensSlice[5];           // 感度スライス(2025.8.25yori)
@@ -184,6 +186,7 @@ public:
     static double m_MaxMin[3];                      // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
     static double m_BeforeXYZ[3];                   // スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
     static bool m_isFirst;                          // 追加(2026.1.10yori)
+    static int m_BeforeLineNo;                      // 追加(2026.2.2yori)
     //static double m_Afterdist2;                   // デバッグ(2026.1.12yori)
     //static unsigned int gDistHist[11];// test 2026.01.12 t.kanamura
     static int dist_count; // 追加(2026.1.12yori)
@@ -206,6 +209,7 @@ public:
     static bool SendLineDataCheckDiffPoint(int index); // データ飛びチェック(2026.1.8yori)
     static bool SendLineDataCheckDiffPoint2(int index); // デバッグ用のデータ飛びチェック(2026.1.26yori)
     static bool SendLineDataCheckSameLine(int index); // 前後ラインが近い距離にある重複ラインチェック(2026.1.10yori)
+    static bool SendLineDataCheckDiffLine(int index); // ライン飛びチェック(2026.2.2yori)
     static void FileOutput(int iScanDataNo); // Debug用、スキャンデータファイル出力(2025.8.5yori) // 引数追加(2026.1.7yori)
     static void FileOutput2(int iScanDataNo, VecDtEx PosiData); // Debug用、アームとスキャンデータファイル出力(2026.1.8yori) // 引数変更、直接アームの座標値とijk取得(2026.1.26yori)
     // プローブ登録(2025.10.31yori)

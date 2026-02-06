@@ -29,6 +29,13 @@
 #include "CalibComm.h"
 #include "PowerPlanRAII.h" // 追加(2025.12..27yori)
 
+//// メモリーリーク特定(2026.2.6yori)
+#ifdef _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#endif
+////
+
 //// 追加(2025.5.15yori)
 //------------------------------
 // APP間コマンド（Plugin側のソースコード内のAPP_CMDと一致させること）
@@ -110,6 +117,11 @@ int AppMain::Init()
         }
     }
     */
+
+    // メモリーリーク検出(2026.2.6yori)
+    #ifdef _DEBUG
+        //_CrtSetBreakAlloc(123); // デバッグ出力ウィンドウに表示されたDetected memory leaks!の{   }の番号を入力
+    #endif
 
     // スレッド開始
     std::thread  Thread( &AppMain::ThreadProc );
@@ -1596,6 +1608,12 @@ void AppMain::ThreadProc()
             ////
             break;
 
+        case VEC_STEP_SEQ::ARM_SET_CMP: // アーム設定完了(2026.2.6yori)
+            UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close); // SubWindow2を閉じる。(2026.2.6yori)
+            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
+            HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。
+            break;
+
         case VEC_STEP_SEQ::MEAS_IDLE:
             HwCtrl::pbid_chg_old_fg = PosiData.pbid_chg_fg; // 追加(2025.10.2yori)
             ret = HwCtrl::Func05(&PosiData);
@@ -1626,9 +1644,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                resultMsg = UsrMsgBox::CallBack(279, 268, 4, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.5yori)
                 HwCtrl::Func04(); // 有接触切断
-                if (resultMsg == 6)
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.5yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1646,7 +1664,22 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::SCANNER_CONNECT_BTN_ONOFF: // スキャナ接続完了ボタン待ち(2025.9.2yori)
-            Sleep(100);
+            // エラー処理追加(2026.2.4yori)
+            ret = HwCtrl::Func09();
+            if(ret != 0)
+            {
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.5yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.5yori)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
+            }
             break;
 
         case VEC_STEP_SEQ::SCANNER_INIT_ING:
@@ -1753,7 +1786,14 @@ void AppMain::ThreadProc()
 
             if (HwCtrl::m_ScannerAlignmentScannerFlag) // 非接触点検キャリブレーションの場合(2025.12.5yori)
             {
-                if (HwCtrl::m_ScanShotNo != HwCtrl::m_ScanShotOldNo)
+                // 姿勢チェック、エラーメッセージ表示(2026.2.5yori)
+                if (HwCtrl::PostureCheckFg)
+                {
+                    resultMsg = UsrMsgBox::CallBack(HwCtrl::ScannerErrorCode + 270, 268, 0, 16);
+                    HwCtrl::PostureCheckFg = false;
+                }
+
+                if (HwCtrl::m_ScanShotNo != HwCtrl::m_ScanShotOldNo) // 画面切替
                 {
                     HwCtrl::m_ScanShotOldNo = HwCtrl::m_ScanShotNo;
                     UsrMsg::CallBack(UsrMsg::WM_ScannerAlignmentPanel_MesCallBack);

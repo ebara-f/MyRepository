@@ -962,4 +962,39 @@ Please wait.</value>
   <data name="String278" xml:space="preserve">
     <value>Stop</value>
   </data>
+  <data name="String279" xml:space="preserve">
+    <value>A communication error occurred on the arm side.
+Please wait until the arm makes a sound,
+then press the “OK” button.</value>
+  </data>
+  <data name="String280" xml:space="preserve">
+    <value>Point cloud count error</value>
+  </data>
+  <data name="String281" xml:space="preserve">
+    <value>Coordinate system error</value>
+  </data>
+  <data name="String282" xml:space="preserve">
+    <value>The distance is too near.</value>
+  </data>
+  <data name="String283" xml:space="preserve">
+    <value>The distance is too far.</value>
+  </data>
+  <data name="String284" xml:space="preserve">
+    <value>Point cloud acquisition failure</value>
+  </data>
+  <data name="String285" xml:space="preserve">
+    <value>No.1 joint angle error</value>
+  </data>
+  <data name="String286" xml:space="preserve">
+    <value>No.0 joint angle error</value>
+  </data>
+  <data name="String287" xml:space="preserve">
+    <value>Point cloud missing error</value>
+  </data>
+  <data name="String288" xml:space="preserve">
+    <value>Sphere creation failed</value>
+  </data>
+  <data name="String289" xml:space="preserve">
+    <value>No.2 joint angle error</value>
+  </data>
 </root>

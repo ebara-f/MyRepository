@@ -52,4 +52,6 @@ public:
     static int  ScannerAlignmentPanelClickReStart(CALIB_SCANNER_MSEBOX* para); // 追加(2025.12.12yori)
     static int  ScannerAlignmentPanelTerminate(); // 追加(2025.12.4yori)
     static int  ScannerAlignmentPanelResultCallBack(CALIB_SCANNER_MSEBOX* mes); // 追加(2025.12.9yori)
+
+    static int  ArmSetCancel(); // 追加(2026.2.6yori)
 };

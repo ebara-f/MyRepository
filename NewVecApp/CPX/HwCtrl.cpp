@@ -46,6 +46,8 @@ int             HwCtrl::m_ScanShotOldNo = 0; // 追加(2025.12.6yori)
 bool            HwCtrl::m_bReadThreadStopFlag = true;
 bool            HwCtrl::EndFg = false; // 非接触点検キャリブ終了フラグ
 bool            HwCtrl::CalcFg = false; // 非接触点検キャリブ計算中フラグ(2025.12.10yori)
+bool            HwCtrl::PostureCheckFg = false;// 非接触点検キャリブ中姿勢チェックフラグ(2026.2.4yori)
+int             HwCtrl::ScannerErrorCode = 0; // スキャナエラーコード(2026.2.4yori)
 const double    HwCtrl::INVALID_CHECK = 999998.0;
 VEC_STEP_SEQ    HwCtrl::m_VecStepSeq;
 bool            HwCtrl::m_b_Button_ConnectFlag = false; // 追加(2025.6.10yori)
@@ -81,6 +83,7 @@ CalibResult*    HwCtrl::m_ptCalibResult = NULL; // 非接触キャリブ結果(2
 double          HwCtrl::m_MaxMin[3] = { 0.0, 0.0, 0.0 }; // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
 double          HwCtrl::m_BeforeXYZ[3] = { 0.0, 0.0, 0.0 };// スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
 bool            HwCtrl::m_isFirst = true; // 追加(2026.1.10yori)
+int             HwCtrl::m_BeforeLineNo = 0; // 追加(2026.2.2yori)
 //double          HwCtrl::m_Afterdist2 = 0.0;  // デバッグ(2026.1.12yori)
 //unsigned int    HwCtrl::gDistHist[11] = { 0 };//test 2026.01.12 t.kanamura
 int             HwCtrl::dist_count = 0; // 追加(2026.1.12yori)
@@ -3379,15 +3382,14 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
             ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
         //}
 
-        if (m_bmeasfg == true && ptlinedata2025->iSendDataNo != 0)
-        {
-            // データ飛びチェック(2026.1.8yori)
-            // データ飛びのあるラインはPolyWorksへ送信しない。
-            if (SendLineDataCheckDiffPoint(index))
+            if (m_bmeasfg == true && ptlinedata2025->iSendDataNo != 0)
             {
-                ptlinedata2025->iSendDataNo = 0;
+                // データ飛びチェック(2026.1.8yori)
+                if (SendLineDataCheckDiffPoint(index)) // データ飛び(スキャナ側)のラインはPolyWorksへ送信しない。(2026.1.8yori)
+                {
+                    ptlinedata2025->iSendDataNo = 0;
+                }
             }
-        }
 
         // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメント追加2025.5.15yori)
         // ダミースキャンは、奇数Noが有効な座標値、偶数Noが無効な座標値が取得される。(コメント追加2025.5.15yori)
@@ -3427,7 +3429,7 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
 
 void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkResult)
 {
-    int ErrorCode = 0;
+    //int ErrorCode = 0; // グローバル変数へ変更(2026.2.4yori)
     double ofb_old[3] = { 0 }; //追加(2021.12.20yori)
     double ttb_old[3] = { 0 }; //追加(2021.12.20yori)
     double ofb[3] = { 0 };
@@ -3454,8 +3456,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                 }
                 else
                 {
-                    ErrorCode = TdsVecErrorCode();
-                    char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
+                    ScannerErrorCode = TdsVecErrorCode();
+                    char* cs = Error_Defin::GetErrorString((ERROR_CODE)ScannerErrorCode);
                     // エラーメッセージは後でコーディング(2025.5.15yori)
                 }
 
@@ -3494,8 +3496,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                 else
                 {
                     m_ScannerCalibResultJudge = 1; // 追加(2025.12.9yori)
-                    ErrorCode = TdsVecErrorCode();
-                    char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
+                    ScannerErrorCode = TdsVecErrorCode();
+                    char* cs = Error_Defin::GetErrorString((ERROR_CODE)ScannerErrorCode);
                     // エラーメッセージは後でコーディング(2025.5.15yori)
                 }
 
@@ -3509,9 +3511,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
         }
         else
         {
-            ErrorCode = TdsVecErrorCode();
-            char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
-            // エラーメッセージは後でコーディング(2025.5.15yori)
+            ScannerErrorCode = TdsVecErrorCode();
+            PostureCheckFg = true; // 追加(2026.2.4yori)
         }
     }
     else if (iMeasType == TDS_MEASTYPE_CALIB_USER) // ユーザーキャリブレーションの場合(2021.8.20yori)
@@ -3546,8 +3547,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                 }
                 else
                 {
-                    ErrorCode = TdsVecErrorCode();
-                    char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
+                    ScannerErrorCode = TdsVecErrorCode();
+                    char* cs = Error_Defin::GetErrorString((ERROR_CODE)ScannerErrorCode);
                     // エラーメッセージは後でコーディング(2025.5.15yori)
                 }
 
@@ -3562,8 +3563,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
         }
         else
         {
-            ErrorCode = TdsVecErrorCode();
-            char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
+            ScannerErrorCode = TdsVecErrorCode();
+            char* cs = Error_Defin::GetErrorString((ERROR_CODE)ScannerErrorCode);
             // エラーメッセージは後でコーディング(2025.5.15yori)
         }
     }
@@ -3583,8 +3584,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                 }
                 else
                 {
-                    ErrorCode = TdsVecErrorCode();
-                    char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
+                    ScannerErrorCode = TdsVecErrorCode();
+                    char* cs = Error_Defin::GetErrorString((ERROR_CODE)ScannerErrorCode);
                     // エラーメッセージは後でコーディング(2025.5.15yori)
                 }
 
@@ -3598,8 +3599,8 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
         }
         else
         {
-            ErrorCode = TdsVecErrorCode();
-            char* cs = Error_Defin::GetErrorString((ERROR_CODE)ErrorCode);
+            ScannerErrorCode = TdsVecErrorCode();
+            char* cs = Error_Defin::GetErrorString((ERROR_CODE)ScannerErrorCode);
             // エラーメッセージは後でコーディング(2025.5.15yori)
         }
     }
@@ -3992,6 +3993,49 @@ bool HwCtrl::SendLineDataCheckSameLine(int index)
   
     //return false;
     return test;
+}
+
+
+
+/***********************************************************************
+
+    ライン飛びチェック
+    2026.2.2yori
+
+***********************************************************************/
+
+bool HwCtrl::SendLineDataCheckDiffLine(int index)
+{
+    double threshold2 = 2.3 * 2.3;
+    double dxyz[3], dist2 = 0.0;
+    bool fg = false;
+
+    if (!m_isFirst)
+    {
+        if ((ptlinedata2025[index].lineNo - m_BeforeLineNo) == 1) // ラインNoの差が1の場合のみチェックする。
+        {
+            dxyz[0] = ptlinedata2025[index].tVecData.xyz[0] - m_BeforeXYZ[0];
+            dxyz[1] = ptlinedata2025[index].tVecData.xyz[1] - m_BeforeXYZ[1];
+            dxyz[2] = ptlinedata2025[index].tVecData.xyz[2] - m_BeforeXYZ[2];
+
+            dist2 = dxyz[0] * dxyz[0] + dxyz[1] * dxyz[1] + dxyz[2] * dxyz[2];
+            if (dist2 > threshold2)
+            {
+                fg = true;
+            }
+        }
+    }
+    else
+    {
+        m_isFirst = false;  // 最初の1回だけスキップ
+    }
+
+    m_BeforeXYZ[0] = ptlinedata2025[index].tVecData.xyz[0];
+    m_BeforeXYZ[1] = ptlinedata2025[index].tVecData.xyz[1];
+    m_BeforeXYZ[2] = ptlinedata2025[index].tVecData.xyz[2];
+    m_BeforeLineNo = ptlinedata2025[index].lineNo;
+
+    return fg;
 }
 
 

@@ -96,6 +96,7 @@ namespace VecApp
 
         private void Click_CancelBtn(object sender, RoutedEventArgs e)
         {
+            CSH.Grp02.ArmSetCancel(); // C++へキャンセルボタンが押されたことを通知(2026.2.6yori)
             Parent.CurrentPanel = Panel.None; // プローブ設定画面非表示(2025.7.17yori) // Content = null;から変更(2025.8.16yori)
 
             // 下記の例は削除する予定(2025.7.17yori)

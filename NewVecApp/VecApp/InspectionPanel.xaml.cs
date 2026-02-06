@@ -125,6 +125,7 @@ namespace VecApp
 
         private void Click_CloseBtn(object sender, RoutedEventArgs e)
         {
+            CSH.Grp02.ArmSetCancel(); // C++へキャンセルボタンが押されたことを通知(2026.2.6yori)
             Parent.CurrentPanel = Panel.None; // 追加(2025.7.31yori)
         }
 
