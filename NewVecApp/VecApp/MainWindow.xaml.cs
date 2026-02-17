@@ -11,6 +11,8 @@ using System.Printing;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,7 +87,7 @@ namespace VecApp
             this.WindowState = System.Windows.WindowState.Minimized;
 
             // メインウィンドウの状態変更を監視(2026.2.5yori)
-            this.StateChanged += MainWindow_StateChanged;
+            //this.StateChanged += MainWindow_StateChanged; // コメントアウト、FullMoonが使用できるよう最小化しない。(2026.2.13yori)
 
             this.DataContext = new MainWindowViewModel();
 
@@ -301,7 +303,10 @@ namespace VecApp
             }
             else if (msg == UsrMsg.WM_SubWnd01_Close)
             {
-                if (m_SubWnd01 != null) m_SubWnd01.Hide(); // 追加(2025.6.5yori)
+                if (m_SubWnd01 != null && m_SubWnd01.IsVisible) // 二重で非表示しない。(2026.2.16yori)
+                {
+                    m_SubWnd01.Hide(); // 追加(2025.6.5yori)
+                }
             }
             else if (msg == UsrMsg.WM_SubWnd02_Close)
             {
@@ -508,12 +513,12 @@ namespace VecApp
             SubWnd01ViewModel.IsBtn02Enabled = true;
             SubWnd01ViewModel.IsBtn03Enabled = true;
             SubWnd01ViewModel.IsBtn04Enabled = false; // Beak Masterで0軸イニシャライズは不要なため、無効化
-            SubWnd01ViewModel.IsBtn05Enabled = true;
+            SubWnd01ViewModel.IsBtn05Enabled = false; // アプリ単体動作は作成中のため、モード切替は押せないようにする。(2026.2.13yori)
             SubWnd01ViewModel.Btn01Opacity = 1.0;
             SubWnd01ViewModel.Btn02Opacity = 1.0;
             SubWnd01ViewModel.Btn03Opacity = 1.0;
             SubWnd01ViewModel.Btn04Opacity = 0.25; // Beak Masterで0軸イニシャライズは不要なため、半透明化
-            SubWnd01ViewModel.Btn05Opacity = 1.0;
+            SubWnd01ViewModel.Btn05Opacity = 0.25; // アプリ単体動作は作成中のため、半透明化(2026.2.13yori)
         }
 
 		/// <summary>
@@ -961,6 +966,5 @@ namespace VecApp
                 m_PrgressBar.Hide();
             }
         }
-
     }
 }

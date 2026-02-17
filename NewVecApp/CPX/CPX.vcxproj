@@ -72,6 +72,7 @@
       </ModuleDefinitionFile>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command> xcopy /D /Y /I $(OutDir)$(TargetName).dll ..\_exec\$(Configuration)\
@@ -110,6 +111,7 @@
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <Version>
       </Version>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command> xcopy /D /Y /I $(OutDir)$(TargetName).dll ..\_exec\$(Configuration)\
@@ -138,7 +140,6 @@
     <ClInclude Include="Grp02.h" />
     <ClInclude Include="Grp03.h" />
     <ClInclude Include="HwCtrl.h" />
-    <ClInclude Include="PowerPlanRAII.h" />
     <ClInclude Include="ProgBar.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SharedMemory.h" />
@@ -175,7 +176,6 @@
     <ClCompile Include="Grp02.cpp" />
     <ClCompile Include="Grp03.cpp" />
     <ClCompile Include="HwCtrl.cpp" />
-    <ClCompile Include="PowerPlanRAII.cpp" />
     <ClCompile Include="ProgBar.cpp" />
     <ClCompile Include="UsrMsg.cpp" />
     <ClCompile Include="UsrMsgBox.cpp" />

@@ -224,11 +224,16 @@ int Grp01::Cmd08()
 {
     int ret = 0;
 
-    WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE);
+    //WaitForSingleObject(HwCtrl::hSEMA_VSEQ, INFINITE); // コメントアウト(2026.2.16yori)
 
     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_CAN; // イニシャライズキャンセル(2025.10.28yori)
 
-    ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
+    while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::INITIALIZE_CAN) // イニシャライズキャンセル状態になるまで待機(2026.2.16yori)
+    {
+        Sleep(100);
+    }
+
+    //ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL); // コメントアウト(2026.2.16yori)
 
     return (ret);
 }

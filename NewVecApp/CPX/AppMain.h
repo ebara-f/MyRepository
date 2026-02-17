@@ -45,6 +45,6 @@ public:
     static void DisableAllPowerThrottling();
 
     static int TestLplRecvMesBox(); // 共有メモリ受信テスト関数(2025.12.28yori)
+
+    static HRESULT SetAllowUsersAll(LPCTSTR strPath); // Usersにフルコントロールのアクセス許可する関数(2026.2.16yori)
 };
-
-

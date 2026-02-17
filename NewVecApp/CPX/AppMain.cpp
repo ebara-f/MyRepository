@@ -27,7 +27,6 @@
 #include "UsrMsgBox.h"  // 2025.11.12 add eba
 #include "ProgBar.h"  // 2025.11.18 add eba
 #include "CalibComm.h"
-#include "PowerPlanRAII.h" // 追加(2025.12..27yori)
 
 //// メモリーリーク特定(2026.2.6yori)
 #ifdef _DEBUG
@@ -35,6 +34,10 @@
 #include <crtdbg.h>
 #endif
 ////
+
+#include <Aclapi.h> // 追加(2026.2.16yori)
+#include <sddl.h> // 追加(2026.2.16yori)
+
 
 //// 追加(2025.5.15yori)
 //------------------------------
@@ -122,6 +125,10 @@ int AppMain::Init()
     #ifdef _DEBUG
         //_CrtSetBreakAlloc(123); // デバッグ出力ウィンドウに表示されたDetected memory leaks!の{   }の番号を入力
     #endif
+
+    // C:\ProgramData\KosakalabのUsersにフルコントロールのアクセス許可する。(2026.2.16yori)
+    // 作成中のため、コメントアウト(2026.2.16yori)
+    //SetAllowUsersAll(TEXT("C:\\ProgramData\\Kosakalab"));
 
     // スレッド開始
     std::thread  Thread( &AppMain::ThreadProc );
@@ -987,6 +994,105 @@ int AppMain::TestLplRecvMesBox()
 
 /***********************************************************************
 
+    Usersにフルコントロールのアクセス許可する関数
+    2026.2.16yori
+
+***********************************************************************/
+
+HRESULT AppMain::SetAllowUsersAll(LPCTSTR strPath)
+{
+    if (strPath == NULL || strPath[0] == TEXT('\0'))
+        return E_INVALIDARG;
+
+    HRESULT hr = S_OK;
+    DWORD dwRes;
+
+    PSECURITY_DESCRIPTOR pSD = NULL;
+    PACL pOldDacl = NULL;
+    PACL pNewDacl = NULL;
+    PSID pSid = NULL;
+
+    EXPLICIT_ACCESS ea = {};
+
+    //--------------------------------
+    // 既存DACL取得
+    //--------------------------------
+    dwRes = GetNamedSecurityInfo(
+        (LPTSTR)strPath,
+        SE_FILE_OBJECT,
+        DACL_SECURITY_INFORMATION,
+        NULL,
+        NULL,
+        &pOldDacl,
+        NULL,
+        &pSD);
+
+    if (dwRes != ERROR_SUCCESS)
+        return HRESULT_FROM_WIN32(dwRes);
+
+    //--------------------------------
+    // Users SID作成
+    //--------------------------------
+    DWORD sidSize = SECURITY_MAX_SID_SIZE;
+    pSid = LocalAlloc(LMEM_FIXED, sidSize);
+
+    if (!CreateWellKnownSid(
+        WinBuiltinUsersSid,
+        NULL,
+        pSid,
+        &sidSize))
+    {
+        hr = HRESULT_FROM_WIN32(GetLastError());
+        goto Cleanup;
+    }
+
+    //--------------------------------
+    // ACE設定
+    //--------------------------------
+    ea.grfAccessPermissions = GENERIC_ALL;
+    ea.grfAccessMode = GRANT_ACCESS;
+    ea.grfInheritance = OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE;
+    ea.Trustee.TrusteeForm = TRUSTEE_IS_SID;
+    ea.Trustee.TrusteeType = TRUSTEE_IS_GROUP;
+    ea.Trustee.ptstrName = (LPTSTR)pSid;
+
+    //--------------------------------
+    // ACL生成
+    //--------------------------------
+    dwRes = SetEntriesInAcl(1, &ea, pOldDacl, &pNewDacl);
+    if (dwRes != ERROR_SUCCESS)
+    {
+        hr = HRESULT_FROM_WIN32(dwRes);
+        goto Cleanup;
+    }
+
+    //--------------------------------
+    // DACL適用
+    //--------------------------------
+    dwRes = SetNamedSecurityInfo(
+        (LPTSTR)strPath,
+        SE_FILE_OBJECT,
+        DACL_SECURITY_INFORMATION,
+        NULL,
+        NULL,
+        pNewDacl,
+        NULL);
+
+    if (dwRes != ERROR_SUCCESS)
+        hr = HRESULT_FROM_WIN32(dwRes);
+
+Cleanup:
+    if (pSid) LocalFree(pSid);
+    if (pNewDacl) LocalFree(pNewDacl);
+    if (pSD) LocalFree(pSD);
+
+    return hr;
+}
+
+
+
+/***********************************************************************
+
     スレッド処理
     PolyWorksからのメッセージ受信
     PolyWorksへ有接触データ送信
@@ -1621,7 +1727,7 @@ void AppMain::ThreadProc()
             if (ret == 0)
             {
                 // アプリから接続した場合は、PolyWorksへデータ送信しない。(2025.6.10yori)
-                if (HwCtrl::m_b_Button_ConnectFlag == false) // FullMoonのテスト環境の場合はif文をコメントアウトする。(2025.12.22yori)
+                if (HwCtrl::m_b_Button_ConnectFlag == false) // FullMoonを使用する場合はif文をコメントアウトする。(2025.12.22yori)
                 {
                     // PolyWorksへデータ送信
                     if (HwCtrl::m_hVecCnt.m_Sts.m_enMode == VEC_MODE_PROBE && HwCtrl::m_hVecCnt.m_VecInitflag == true)
@@ -1644,7 +1750,7 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(279, 268, 4, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.5yori)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.17yori)
                 HwCtrl::Func04(); // 有接触切断
                 if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.5yori)
                 {

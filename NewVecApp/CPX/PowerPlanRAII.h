@@ -1,25 +1,23 @@
-// ChatGpt生成コード(2025.12.27yori)
+// ChatGpt生成コード(2026.2.15yori)
 #pragma once
 #include <windows.h>
 #include <powrprof.h>
 
 #pragma comment(lib, "PowrProf.lib")
 
-// ---------- GUID extern宣言のみ（実体はcppへ）----------
 extern const GUID GUID_HIGH_PERFORMANCE;
-extern const GUID GUID_ULTIMATE_PERFORMANCE;
-extern const GUID GUID_PROCESSOR_PERF_ENERGY_PREF;
+extern const GUID GUID_BALANCED;
+extern const GUID GUID_POWER_SAVER;
 
-// ---------- RAIIクラス宣言 ----------
-class PowerPlanRAII
+class PowerPlanGUID
 {
-private:
-    GUID originalPlan{};
-    bool restored = false;
-
 public:
-    PowerPlanRAII(bool useUltimate = true);
-    ~PowerPlanRAII();
+    PowerPlanGUID(const GUID& target);
+    ~PowerPlanGUID();
 
-    void Restore();
+    bool Changed() const { return m_changed; }
+
+private:
+    GUID m_original{};
+    bool m_changed = false;
 };

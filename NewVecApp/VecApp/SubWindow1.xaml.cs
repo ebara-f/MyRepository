@@ -40,14 +40,15 @@ namespace VecApp
         public _0AxisInitializeViewModel _0AxisInitializeValue = new _0AxisInitializeViewModel(); // 変更(2025.10.2yori)
 
         //// ×ボタンを非表示にするたの追加コード(2026.2.6yori)
-        [DllImport("user32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        // FullMoonを使用した場合に×ボタンが押せるようコメントアウト(2026.2.13yori)
+        //[DllImport("user32.dll")]
+        //private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        //[DllImport("user32.dll")]
+        //private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        private const int GWL_STYLE = -16;
-        private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
+        //private const int GWL_STYLE = -16;
+        //private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
         ////
 
         public SubWindow1()
@@ -59,7 +60,8 @@ namespace VecApp
             //m_hWnd = new WindowInteropHelper(this).EnsureHandle(); // 削除予定(2025.7.28yori)
 
             // ×ボタンを非表示にする。(2026.2.6yori)
-            HideCloseButton();
+            // FullMoonを使用した場合に×ボタンが押せるようコメントアウト(2026.2.13yori)
+            //HideCloseButton();
 
             // Beak Masterで0軸イニシャライズは不要なため、無効化(2025.12.18yori)
             SubWindow1_ViewModel vm = (SubWindow1_ViewModel)DataContext;
@@ -73,8 +75,12 @@ namespace VecApp
         /// </summary>
         protected virtual void Terminate(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (this.CurrentPanel == Panel.Initialize) CSH.Grp01.Cmd08(); // イニシャライズをキャンセルする場合は、切断する。(2026.2.16yori)
+
+            if (this.CurrentPanel == Panel.SensorConnection) CSH.Grp01.SensorConnectionPanelCancelButton(); //スキャナ接続手順のキャンセルボタンが押されたことをPolyWorks側に知らせる。(2026.2.16yori)
+
             // 2025.09.04  Modify by GeomLab
-            if ( m_AllowClose == false ) {
+            if ( m_AllowClose == false ){
                 e.Cancel = true;
                 this.CurrentPanel = Panel.None; // 再度、SubWindowを表示したときに前に表示していた画面を表示しないようにする。(2025.8.12yori)
                 this.Hide();
@@ -199,13 +205,14 @@ namespace VecApp
         }
 
         // ×ボタンを消す処理を追加(2026.2.6yori)
-        private void HideCloseButton()
-        {
-            IntPtr hWnd = new WindowInteropHelper(this).EnsureHandle();
+        // FullMoonを使用した場合に×ボタンが押せるようコメントアウト(2026.2.13yori)
+        //private void HideCloseButton()
+        //{
+        //    IntPtr hWnd = new WindowInteropHelper(this).EnsureHandle();
 
-            int style = GetWindowLong(hWnd, GWL_STYLE);
-            style &= ~WS_SYSMENU; // システムメニューを外す
-            SetWindowLong(hWnd, GWL_STYLE, style);
-        }
+        //    int style = GetWindowLong(hWnd, GWL_STYLE);
+        //    style &= ~WS_SYSMENU; // システムメニューを外す
+        //    SetWindowLong(hWnd, GWL_STYLE, style);
+        //}
     }
 }
