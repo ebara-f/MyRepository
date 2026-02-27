@@ -142,6 +142,7 @@
     <ClInclude Include="HwCtrl.h" />
     <ClInclude Include="ProgBar.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="SharedMemory.h" />
     <ClInclude Include="UsrMsg.h" />
     <ClInclude Include="UsrMsgBox.h" />
@@ -180,6 +181,9 @@
     <ClCompile Include="UsrMsg.cpp" />
     <ClCompile Include="UsrMsgBox.cpp" />
     <ClCompile Include="VecCnt.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CPX.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

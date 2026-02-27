@@ -969,6 +969,7 @@
   </data>
   <data name="String279" xml:space="preserve">
     <value>アーム側で通信エラーが発生しました。
+再接続を行います。
 アームから音が鳴るのを確認してから
 「OK」ボタンを押してください。</value>
   </data>

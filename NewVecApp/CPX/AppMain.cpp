@@ -126,9 +126,9 @@ int AppMain::Init()
         //_CrtSetBreakAlloc(123); // デバッグ出力ウィンドウに表示されたDetected memory leaks!の{   }の番号を入力
     #endif
 
-    // C:\ProgramData\KosakalabのUsersにフルコントロールのアクセス許可する。(2026.2.16yori)
-    // 作成中のため、コメントアウト(2026.2.16yori)
-    //SetAllowUsersAll(TEXT("C:\\ProgramData\\Kosakalab"));
+    // ユーザーアカウント制御のレベルは、C#側VecAppのapp.manifestに管理者権限が必要であるコートを追加している。(2026.2.17yori)
+    // C:\ProgramData\KosakalabのUsersにフルコントロールのアクセス許可する。(2026.2.17yori)
+    SetAllowUsersAll(TEXT("C:\\ProgramData\\Kosakalab"));
 
     // スレッド開始
     std::thread  Thread( &AppMain::ThreadProc );
@@ -1300,9 +1300,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
                 HwCtrl::Func04(); // 有接触切断
-                if (resultMsg == 6)
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1358,8 +1358,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1405,8 +1406,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                if (resultMsg == 6)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1434,8 +1436,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1458,8 +1461,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                if (resultMsg == 6)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1490,8 +1494,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                if (resultMsg == 6)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1522,8 +1527,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1590,8 +1596,9 @@ void AppMain::ThreadProc()
             else if (ret == -1)
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                if (resultMsg == 6)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1654,8 +1661,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1680,8 +1688,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1715,6 +1724,7 @@ void AppMain::ThreadProc()
             break;
 
         case VEC_STEP_SEQ::ARM_SET_CMP: // アーム設定完了(2026.2.6yori)
+            if (HwCtrl::Func09() == 0) HwCtrl::m_ProbeIdBeforeScanner = HwCtrl::m_hVecCnt.m_Sts.m_iProbeId; // 非接触モードへ変更する前のプローブID取得、追加漏れ(2026.2.18yori)
             UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close); // SubWindow2を閉じる。(2026.2.6yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
             HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。

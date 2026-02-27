@@ -11,7 +11,11 @@
 #include    "CPX.h"
 //// 追加(2025.5.15yori)
 #include "../Lib/LplQue/LplQue.h" 
-#pragma comment(lib, "../Lib/LplQue/LplQue.lib")
+#ifdef _DEBUG // リンクするlibをDebugとReleaseに分ける。(2026.2.18yori)
+#pragma comment(lib, "../Lib/LplQue/debug64/LplQue.lib")
+#else
+#pragma comment(lib, "../Lib/LplQue/release64/LplQue.lib")
+#endif
 //#include "../Lib/PSControl/TdsData.h" // ->2025.9.3 commonへ移動 eba
 //#pragma comment(lib, "../Lib/PSControl/PSControl.lib")    // ->2025.9.3 commonへ移動 eba
 // PSControl.dllとTdsLibrary.dllはリリース版を配置すること

@@ -969,6 +969,7 @@ Please wait.</value>
   </data>
   <data name="String279" xml:space="preserve">
     <value>A communication error occurred on the arm side.
+Attempt to reconnect.
 Please wait until the arm makes a sound,
 then press the “OK” button.</value>
   </data>

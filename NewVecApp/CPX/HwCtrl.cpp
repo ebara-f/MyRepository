@@ -3486,6 +3486,7 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                     ttb[1] = ttb_old[1] + ptCalibResult->tArmParam.dArmAddTilt[1];
                     ttb[2] = ttb_old[2] + ptCalibResult->tArmParam.dArmAddTilt[2];
                     m_hVecCnt.VecSetScannerPara(ofb[0], ofb[1], ofb[2], ttb[0], ttb[1], ttb[2]);
+                    WriteParaISO(); // TEST@ISOでパラメータ保存漏れ(2026.2.19yori)
                     m_ScanShotNo = 0;
                     *m_ptCalibResult = *ptCalibResult; // 追加(2025.12.10yori)
                     m_MaxMin[0] = maxx - minx; // 追加(2025.12.10yori)
@@ -3543,6 +3544,7 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                     ttb[1] = ttb_old[1];
                     ttb[2] = ttb_old[2];
                     m_hVecCnt.VecSetScannerPara(ofb[0], ofb[1], ofb[2], ttb[0], ttb[1], ttb[2]);
+                    WriteParaISO(); // TEST@ISOでパラメータ保存漏れ(2026.2.19yori)
                     m_ScanShotNo = 0;
                 }
                 else
