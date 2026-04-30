@@ -10,6 +10,17 @@ namespace VecApp
 {
     public partial class DlgPrgBar3 : Window, IDisposable
     {
+        //// ×ボタンを非表示にするたの追加コード(2026.2.6yori)
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
+        ////
+
         /// <summary>
         /// ウィンドウハンドル
         /// </summary>
@@ -30,17 +41,6 @@ namespace VecApp
         /// Close を許可するか（false の間は Close が要求されても Hide に置換）
         /// </summary>
         private bool m_IsRunning;
-
-        //// ×ボタンを非表示にするたの追加コード(2026.2.6yori)
-        [DllImport("user32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-        private const int GWL_STYLE = -16;
-        private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
-        ////
 
         /// <summary>
         /// コンストラクタ

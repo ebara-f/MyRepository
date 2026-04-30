@@ -126,9 +126,9 @@ int AppMain::Init()
         //_CrtSetBreakAlloc(123); // デバッグ出力ウィンドウに表示されたDetected memory leaks!の{   }の番号を入力
     #endif
 
-    // C:\ProgramData\KosakalabのUsersにフルコントロールのアクセス許可する。(2026.2.16yori)
-    // 作成中のため、コメントアウト(2026.2.16yori)
-    //SetAllowUsersAll(TEXT("C:\\ProgramData\\Kosakalab"));
+    // ユーザーアカウント制御のレベルは、C#側VecAppのapp.manifestに管理者権限が必要であるコートを追加している。(2026.2.17yori)
+    // C:\ProgramData\KosakalabのUsersにフルコントロールのアクセス許可する。(2026.2.17yori)
+    SetAllowUsersAll(TEXT("C:\\ProgramData\\Kosakalab"));
 
     // スレッド開始
     std::thread  Thread( &AppMain::ThreadProc );
@@ -215,82 +215,95 @@ int AppMain::UpDateData01(STATUS01* sts)
     int ret = 0; // 追加(2025.6.4yori)
     wchar_t probe_name[21][32], stylus_angle[21][32], probe_type[21][32]; // 追加(2025.8.28yori) // プローブ種類追加(2025.10.31yori)
 
-    // ステータスチェック(2025.6.4yori)
-    ret = HwCtrl::Func09();
-    if (ret == 0)
+    // 再イニシャライズの場合はステータス要求関数を既にコールしているため、コールしない。(2026.4.8yori)
+    if (HwCtrl::m_hVecCnt.m_Sts.m_GetMode == VEC_MODE::VEC_MODE_RE_INIT)
     {
-        sts->mode = HwCtrl::m_hVecCnt.m_Sts.m_GetMode; // モード(2025.6.4yori)
-        sts->connect_fg = HwCtrl::m_hVecCnt.m_connectflag; // 接続状態(2025.6.4yori)
         sts->init_fg = HwCtrl::m_hVecCnt.m_Sts.m_iInitFlg; // イニシャライズ終了フラグ(2025.6.4yori)
         for (i = 0; i < 7; i++)
         {
             sts->init_sts[i] = HwCtrl::m_hVecCnt.m_Sts.m_iInitSts[i]; // 各軸のイニシャライズ状態(2025.7.11yori)
         }
         sts->no0_fg = HwCtrl::m_hVecCnt.m_Sts.m_No0Fg; // 0軸有無(2025.7.15yori)
-        sts->probe_id = HwCtrl::m_hVecCnt.m_Sts.m_iProbeId; // プローブID(2025.6.11yori)
-        sts->dia = HwCtrl::m_hVecCnt.m_Sts.m_dia; // スタイラス直径(2025.6.11yori)
     }
- 
-    // アーム暖機、温度変化チェック(2025.6.4yori)
-    ret = HwCtrl::Func22();
-    if (ret == 0)
+    else
     {
-        sts->warm_fg = HwCtrl::m_hVecCnt.m_Sts.m_Warm;
-    }
-
-    // プローブ情報取得(2025.7.24yori)
-    // Func52へ引数追加に伴う変更(2025.8.28yori)
-    HwCtrl::Func52(probe_name, stylus_angle, probe_type);
-
-    for (int i = 0; i < 21; i++)
-    {
-        // wcstombs_s を使って変換(2025.8.28yori)
-        size_t converted = 0; // 変換されたバイト数を格納する変数
-        errno_t err; // エラーコードを格納する変数
-        err = wcstombs_s(&converted, sts->probe_name[i], sizeof(sts->probe_name[i]), probe_name[i], _TRUNCATE);
-
-        sts->stylus_angle[i] = _wtof(stylus_angle[i]);
-        sts->probe_type[i] = _wtoi(probe_type[i]); // プローブ種類(2025.10.31yori)
-    }
-
-    // アーム内温度取得(2025.6.4yori)
-    ret = HwCtrl::Func24();
-    if (ret == 0)
-    {
-        for (i = 0; i < 7; i++)
+        // ステータス要求(2025.6.4yori)
+        ret = HwCtrl::Func09();
+        if (ret == 0)
         {
-            sts->tempature[i] = HwCtrl::m_hVecCnt.m_Sts.m_Tmp[i];
-        }
-    }
-
-    // キャリブ温度取得(2025.6.18yori)
-    ret = HwCtrl::Func30();
-    if (ret == 0)
-    {
-        for (i = 0; i < 7; i++)
-        {
-            sts->cal_tempature[i] = HwCtrl::m_hVecCnt.m_Sts.m_CalTmp[i];
-        }
-    }
-
-    //// アーム型式取得(2025.6.16yori)
-    HwCtrl::Func26();
-    strcpy_s(sts->arm_model, 16, HwCtrl::m_hVecCnt.m_Sts.m_ArmModel); //sprintf_s→strcpy_sへ変更(2025.8.30yori)
-
-    //// ネットワーク設定取得(2025.6.18yori)
-    char adress[4][8], subnet[4][8], port[4]; // IPアドレス、サブネットマスクを4つに分割(2025.8.15yori)
-//    ret = HwCtrl::Func31(adress, subnet, port); // 2025.9.30 この関数バグあり、メモリ壊しています！！！！ memo eba
-    if (ret == 0)
-    {
-        for (i = 0; i < 4; i++)
-        {
-            for (j = 0; j < 8; j++)
+            sts->mode = HwCtrl::m_hVecCnt.m_Sts.m_GetMode; // モード(2025.6.4yori)
+            sts->connect_fg = HwCtrl::m_hVecCnt.m_connectflag; // 接続状態(2025.6.4yori)
+            sts->init_fg = HwCtrl::m_hVecCnt.m_Sts.m_iInitFlg; // イニシャライズ終了フラグ(2025.6.4yori)
+            for (i = 0; i < 7; i++)
             {
-                sts->address[i][j] = adress[i][j];
-                sts->subnet[i][j] = subnet[i][j];
+                sts->init_sts[i] = HwCtrl::m_hVecCnt.m_Sts.m_iInitSts[i]; // 各軸のイニシャライズ状態(2025.7.11yori)
             }
- 
-            sts->port[i] = port[i];
+            sts->no0_fg = HwCtrl::m_hVecCnt.m_Sts.m_No0Fg; // 0軸有無(2025.7.15yori)
+            sts->probe_id = HwCtrl::m_hVecCnt.m_Sts.m_iProbeId; // プローブID(2025.6.11yori)
+            sts->dia = HwCtrl::m_hVecCnt.m_Sts.m_dia; // スタイラス直径(2025.6.11yori)
+        }
+
+        // アーム暖機、温度変化チェック(2025.6.4yori)
+        ret = HwCtrl::Func22();
+        if (ret == 0)
+        {
+            sts->warm_fg = HwCtrl::m_hVecCnt.m_Sts.m_Warm;
+        }
+
+        // プローブ情報取得(2025.7.24yori)
+        // Func52へ引数追加に伴う変更(2025.8.28yori)
+        HwCtrl::Func52(probe_name, stylus_angle, probe_type);
+
+        for (int i = 0; i < 21; i++)
+        {
+            // wcstombs_s を使って変換(2025.8.28yori)
+            size_t converted = 0; // 変換されたバイト数を格納する変数
+            errno_t err; // エラーコードを格納する変数
+            err = wcstombs_s(&converted, sts->probe_name[i], sizeof(sts->probe_name[i]), probe_name[i], _TRUNCATE);
+
+            sts->stylus_angle[i] = _wtof(stylus_angle[i]);
+            sts->probe_type[i] = _wtoi(probe_type[i]); // プローブ種類(2025.10.31yori)
+        }
+
+        // アーム内温度取得(2025.6.4yori)
+        ret = HwCtrl::Func24();
+        if (ret == 0)
+        {
+            for (i = 0; i < 7; i++)
+            {
+                sts->tempature[i] = HwCtrl::m_hVecCnt.m_Sts.m_Tmp[i];
+            }
+        }
+
+        // キャリブ温度取得(2025.6.18yori)
+        ret = HwCtrl::Func30();
+        if (ret == 0)
+        {
+            for (i = 0; i < 7; i++)
+            {
+                sts->cal_tempature[i] = HwCtrl::m_hVecCnt.m_Sts.m_CalTmp[i];
+            }
+        }
+
+        //// アーム型式取得(2025.6.16yori)
+        HwCtrl::Func26();
+        strcpy_s(sts->arm_model, 16, HwCtrl::m_hVecCnt.m_Sts.m_ArmModel); //sprintf_s→strcpy_sへ変更(2025.8.30yori)
+
+        //// ネットワーク設定取得(2025.6.18yori)
+        char adress[4][8], subnet[4][8], port[4]; // IPアドレス、サブネットマスクを4つに分割(2025.8.15yori)
+        //    ret = HwCtrl::Func31(adress, subnet, port); // 2025.9.30 この関数バグあり、メモリ壊しています！！！！ memo eba
+        if (ret == 0)
+        {
+            for (i = 0; i < 4; i++)
+            {
+                for (j = 0; j < 8; j++)
+                {
+                    sts->address[i][j] = adress[i][j];
+                    sts->subnet[i][j] = subnet[i][j];
+                }
+
+                sts->port[i] = port[i];
+            }
         }
     }
 
@@ -880,6 +893,19 @@ int AppMain::ContactInspectionPanelMesCallBack()
 
 /***********************************************************************
 
+    関節リミット状態を取得
+    2026.4.19yori
+
+***********************************************************************/
+int  AppMain::JointLimitAlarm(int* limitfg)
+{
+    *limitfg = HwCtrl::m_LimFg;
+
+    return(0);
+}
+
+/***********************************************************************
+
     電力スロットリングを無効化(CPU処理速度)
     2025.12.26yori
 
@@ -1122,7 +1148,9 @@ void AppMain::ThreadProc()
     VecCtEx VecData; // スキャナ側のベクトロンデータ(スキャナデータ変換用データ)(2025.12.2yori)
     //int w_cnt = 0; // デバッグ(2025.12.28yori)
     //int r_cnt = 0; // デバッグ2025.12.28yori)
-    //char text[256]; // デバッグ(2026.1.12yori) 
+    //char text[256]; // デバッグ(2026.1.12yori)
+    int mask = 2 | 8 | 16 | 32 | 64; // 関節リミット判定用(2026.4.14yori)
+    BOOL LimitDlgShowFg = FALSE; // 追加(2026.4.14yori) TRUE:表示されている。FALSE:閉じている。
 
     while( 1 )
     {
@@ -1281,7 +1309,7 @@ void AppMain::ThreadProc()
                 if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_FAILURE); // 接続に失敗したことをPolyWorks側に知らせる(2025.6.9yori)
                 
                 // 接続エラー
-                ProgBar::CallBackHide();     // test eba
+                //ProgBar::CallBackHide();     // test eba // ProgBar::CallBackShow(1);未使用のためコメントアウト(2026.4.20yori)
                 resultMsg = UsrMsgBox::CallBack(269, 268, 0, 16);
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::START;
             }
@@ -1300,9 +1328,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
                 HwCtrl::Func04(); // 有接触切断
-                if (resultMsg == 6)
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1358,8 +1386,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1374,14 +1403,31 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::INITIALIZE_ING:
             ret = HwCtrl::Func09(); // ステータスチェック
-            if (ret == 0 && HwCtrl::m_hVecCnt.m_VecInitflag) // 初期化が完了したら
+            if (ret == 0)
             {
-                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_CMP;
-            }
-            else
-            {
+                if (HwCtrl::m_hVecCnt.m_VecInitflag == 1) // 初期化が完了したら
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::INITIALIZE_CMP;
+                }
+
                 // 終わるまで繰り返す
                 UsrMsg::CallBack(UsrMsg::WM_InitPanel_Update); // 追加(2025.7.11yori)
+            }
+            else // 追加(2026.4.9yori)
+            {
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16);
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
+                UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Panel_Hide); // SubWindow1パネル非表示
+                UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1を閉じる。
             }
             break;
 
@@ -1405,8 +1451,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                if (resultMsg == 6)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1434,8 +1481,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1458,8 +1506,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                if (resultMsg == 6)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1490,8 +1539,9 @@ void AppMain::ThreadProc()
             else
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                if (resultMsg == 6)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1522,8 +1572,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1590,8 +1641,9 @@ void AppMain::ThreadProc()
             else if (ret == -1)
             {
                 // 通信エラー
-                resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                if (resultMsg == 6)
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                 {
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                 }
@@ -1637,6 +1689,24 @@ void AppMain::ThreadProc()
                     HwCtrl::m_ScannerAlignmentScannerFlag = true; // 追加(2025.12.18yori)
                 }
             }
+            else if (ret != 0) // 追加(2026.4.6yori)
+            {
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16);
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
+                UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Panel_Hide); // SubWindow2パネル非表示(2026.4.6yori)
+                UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close); // SubWindow2を閉じる。
+                HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。
+                break;
+            }
             break;
 
         case VEC_STEP_SEQ::ARM_SELFCHECK_REQ: // 有接触自己診断(2025.6.11yori)
@@ -1654,8 +1724,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1680,8 +1751,9 @@ void AppMain::ThreadProc()
                 else
                 {
                     // 通信エラー
-                    resultMsg = UsrMsgBox::CallBack(270, 268, 4, 16);
-                    if (resultMsg == 6)
+                    resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16); // ボタンをYesNo = 4→OK = 0へ変更(2026.2.18yori)
+                    HwCtrl::Func04(); // 有接触切断
+                    if (resultMsg == 1) // Yes = 6→OK = 1へ変更(2026.2.18yori)
                     {
                         HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
                     }
@@ -1710,11 +1782,30 @@ void AppMain::ThreadProc()
             //// IDの変更があった場合、C#側にステータス更新要求を送る。(2025.9.8yori)
             HwCtrl::pbid_chg_old_fg = PosiData.pbid_chg_fg;
             ret = HwCtrl::Func05(&PosiData);
+            if (ret != 0) // 追加(2026.4.6yori)
+            {
+                // 通信エラー
+                resultMsg = UsrMsgBox::CallBack(279, 268, 0, 16);
+                HwCtrl::Func04(); // 有接触切断
+                if (resultMsg == 1)
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_REQ;
+                }
+                else
+                {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;
+                }
+                UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Panel_Hide); // SubWindow2パネル非表示(2026.4.6yori)
+                UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close); // SubWindow2を閉じる。
+                HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。
+                break;
+            }
             if(PosiData.pbid_chg_fg != HwCtrl::pbid_chg_old_fg) UsrMsg::CallBack(UsrMsg::WM_UpdateData1);
             ////
             break;
 
         case VEC_STEP_SEQ::ARM_SET_CMP: // アーム設定完了(2026.2.6yori)
+            if (HwCtrl::Func09() == 0) HwCtrl::m_ProbeIdBeforeScanner = HwCtrl::m_hVecCnt.m_Sts.m_iProbeId; // 非接触モードへ変更する前のプローブID取得、追加漏れ(2026.2.18yori)
             UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close); // SubWindow2を閉じる。(2026.2.6yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
             HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。
@@ -1729,10 +1820,25 @@ void AppMain::ThreadProc()
                 // アプリから接続した場合は、PolyWorksへデータ送信しない。(2025.6.10yori)
                 if (HwCtrl::m_b_Button_ConnectFlag == false) // FullMoonを使用する場合はif文をコメントアウトする。(2025.12.22yori)
                 {
-                    // PolyWorksへデータ送信
-                    if (HwCtrl::m_hVecCnt.m_Sts.m_enMode == VEC_MODE_PROBE && HwCtrl::m_hVecCnt.m_VecInitflag == true)
+                    if ((((int)PosiData.LimFg) & mask) != 0) // No.1,3,4,5,6関節のどれか一つでもリミット角度を超えている場合
                     {
-                        HwCtrl::Func11(PosiData);
+                        HwCtrl::m_LimFg = (int)PosiData.LimFg; // 追加(2026.4.15yori)
+                        UsrMsg::CallBack(UsrMsg::WM_DlgMI_Show); // 関節リミット画面表示
+                        LimitDlgShowFg = TRUE;
+                    }
+                    else
+                    {
+                        // PolyWorksへデータ送信
+                        if (HwCtrl::m_hVecCnt.m_Sts.m_enMode == VEC_MODE_PROBE && HwCtrl::m_hVecCnt.m_VecInitflag == true)
+                        {
+                            HwCtrl::Func11(PosiData);
+                        }
+
+                        if(LimitDlgShowFg == TRUE)
+                        {
+                            UsrMsg::CallBack(UsrMsg::WM_DlgMI_Close); // 関節リミット画面非表示
+                            LimitDlgShowFg = FALSE;
+                        }
                     }
 
                     // プローブID変更があった場合(2025.10.2yori)

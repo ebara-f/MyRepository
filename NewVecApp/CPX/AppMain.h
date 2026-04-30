@@ -36,6 +36,7 @@ public:
     static int  UpDateData04_Default(THRESHOLD* sts, int id); // 追加(2025.8.1yori) // id追加(2025.9.22yori)
     static int  UpDateData05_Default(GAUGE* ga); // 追加(2025.8.9yori)
     static int  ContactInspectionPanelMesCallBack(); // 2025.9.2 add eba
+    static int  JointLimitAlarm(int* limitfg); // 追加(2026.4.17yori)
 
     static void ThreadProc();
 

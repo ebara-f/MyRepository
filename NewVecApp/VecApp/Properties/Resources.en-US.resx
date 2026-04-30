@@ -188,7 +188,7 @@ meshing</value>
     <value>ID：</value>
   </data>
   <data name="String120" xml:space="preserve">
-    <value>display</value>
+    <value>Display</value>
   </data>
   <data name="String121" xml:space="preserve">
     <value>Sensitivity</value>
@@ -690,9 +690,6 @@ meshing</value>
   <data name="String193" xml:space="preserve">
     <value>Parameter initialization</value>
   </data>
-  <data name="String194" xml:space="preserve">
-    <value>Display</value>
-  </data>
   <data name="String196" xml:space="preserve">
     <value>Non-contact pre-work inspection</value>
   </data>
@@ -964,6 +961,8 @@ Please wait.</value>
   </data>
   <data name="String279" xml:space="preserve">
     <value>A communication error occurred on the arm side.
+Check the connections of the LAN and power cables.
+Attempt to reconnect.
 Please wait until the arm makes a sound,
 then press the “OK” button.</value>
   </data>
@@ -996,5 +995,8 @@ then press the “OK” button.</value>
   </data>
   <data name="String289" xml:space="preserve">
     <value>No.2 joint angle error</value>
+  </data>
+  <data name="String194" xml:space="preserve">
+    <value>Joint limit alarm</value>
   </data>
 </root>

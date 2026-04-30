@@ -119,7 +119,8 @@ int CVecCnt::VecOpen(int time_out, char* ptDir)
 		{
 			m_connectflag = true; //this->削除(2025.5.15yori)
 		}
-		else {
+		else
+		{
 			ret_code = (int)VEC_RET_CODE::RET_CODE__DO_NOT;		// エラー
 		}
 	}
@@ -1068,7 +1069,7 @@ int CVecCnt::VecFunc_DataRequestEx(VecDtEx* PosiData,int iDataSize)
 	}
 	else
 	{
-		ret = Vec_DataRequestEx(m_VecHandle, iDataSize, PosiData, &data_no);
+		ret = Vec_DataRequestBM(m_VecHandle, iDataSize, PosiData, &data_no); // 関節リミット情報取得できる関数へ変更(2026.4.13yori)
 	}
 
 	//	PosiData->ijk[2] *= -1;				// 大元のソースはijk[2]の極性を変更していたが 

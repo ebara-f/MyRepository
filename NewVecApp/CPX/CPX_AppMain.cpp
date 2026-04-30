@@ -257,3 +257,14 @@ int  WINAPI CPX_AppMain_TestLplRecvMesBox()
 
     return(rc);
 }
+
+
+// 追加(2026.4.19yori)
+int  WINAPI CPX_AppMain_JointLimitAlarm(int* limitfg)
+{
+    int     rc;
+
+    rc = AppMain::JointLimitAlarm(limitfg);
+
+    return(rc);
+}

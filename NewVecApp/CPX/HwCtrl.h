@@ -11,7 +11,11 @@
 #include    "CPX.h"
 //// 追加(2025.5.15yori)
 #include "../Lib/LplQue/LplQue.h" 
-#pragma comment(lib, "../Lib/LplQue/LplQue.lib")
+#ifdef _DEBUG // リンクするlibをDebugとReleaseに分ける。(2026.2.18yori)
+#pragma comment(lib, "../Lib/LplQue/debug64/LplQue.lib")
+#else
+#pragma comment(lib, "../Lib/LplQue/release64/LplQue.lib")
+#endif
 //#include "../Lib/PSControl/TdsData.h" // ->2025.9.3 commonへ移動 eba
 //#pragma comment(lib, "../Lib/PSControl/PSControl.lib")    // ->2025.9.3 commonへ移動 eba
 // PSControl.dllとTdsLibrary.dllはリリース版を配置すること
@@ -126,6 +130,7 @@ public:
     static bool	m_ScannerAlignmentScannerFlag; // 非接触点検キャリブレーション非接触フラグ、true:点検キャリブ中、false：true以外(通常測定中)(2025.12.18yori)
     static bool	m_ScannerAlignmentProbeFlag; // 非接触点検キャリブレーション有接触フラグ、true:点検キャリブ中、false：true以外(通常測定中)(2025.12.18yori)
     static int m_Type; // 点検、キャリブレーションの種類(2025.12.5yori)
+    static int m_LimFg; // 関節リミット軸表示機能(2026.4.15yori)
 
     static int	m_ProbeIdBeforeScanner; // 非接触へ切り替える前のプローブID(2025.11.20yori)
 

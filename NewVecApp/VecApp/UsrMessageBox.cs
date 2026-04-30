@@ -167,12 +167,5 @@ namespace VecApp
            
             //return (int)MessageBox.Show(text, caption, (MessageBoxButton)button, (MessageBoxImage)icon);
         }
-
-
-
-
-
-
-
     }
 }

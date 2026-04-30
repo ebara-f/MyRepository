@@ -60,6 +60,7 @@ bool            HwCtrl::m_ScannerSettingCloseFlag = false; // 追加(2025.11.11y
 bool            HwCtrl::m_ScannerAlignmentScannerFlag = false; // 追加(2025.12.5yori)
 bool            HwCtrl::m_ScannerAlignmentProbeFlag = false; // 追加(2025.12.17yori)
 int             HwCtrl::m_Type = 0; // 点検、キャリブレーションの種類(2025.12.5yori)
+int             HwCtrl::m_LimFg = 0; // 関節リミット軸表示機能(2026.4.15yori)
 int             HwCtrl::m_ProbeIdBeforeScanner = 2; // 追加(2025.11.20yori)
 unsigned short  HwCtrl::m_BrightSlice[5] = { 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0 }; // 輝度スライス(2025.8.25yori)
 unsigned short  HwCtrl::m_SensSlice[5] = { 0x0CCC, 0x04B0, 0x0CCC, 0x0CCC, 0x0CCC }; // 感度スライス(2025.8.25yori)
@@ -3486,6 +3487,7 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                     ttb[1] = ttb_old[1] + ptCalibResult->tArmParam.dArmAddTilt[1];
                     ttb[2] = ttb_old[2] + ptCalibResult->tArmParam.dArmAddTilt[2];
                     m_hVecCnt.VecSetScannerPara(ofb[0], ofb[1], ofb[2], ttb[0], ttb[1], ttb[2]);
+                    WriteParaISO(); // TEST@ISOでパラメータ保存漏れ(2026.2.19yori)
                     m_ScanShotNo = 0;
                     *m_ptCalibResult = *ptCalibResult; // 追加(2025.12.10yori)
                     m_MaxMin[0] = maxx - minx; // 追加(2025.12.10yori)
@@ -3543,6 +3545,7 @@ void HwCtrl::CalibCheckAndCalcu(CalibResult* ptCalibResult, ChkScnResult* ptChkR
                     ttb[1] = ttb_old[1];
                     ttb[2] = ttb_old[2];
                     m_hVecCnt.VecSetScannerPara(ofb[0], ofb[1], ofb[2], ttb[0], ttb[1], ttb[2]);
+                    WriteParaISO(); // TEST@ISOでパラメータ保存漏れ(2026.2.19yori)
                     m_ScanShotNo = 0;
                 }
                 else

@@ -4,19 +4,21 @@
 #include <list> //追加(2025.5.15yori)
 #include <array> //追加(2025.5.15yori)
 #include "Windows.h"
-#include "../Lib/veccom/veccom.h"
 //----------------------------------
 // link Library
 //----------------------------------
-#ifdef _WIN64
-#pragma comment(lib, "../Lib/veccom/veccom.lib")
-#endif
-
-#include "../Lib/PSControl/TdsData.h"	// 2025.9.3 eba
-#pragma comment(lib, "../Lib/PSControl/PSControl.lib")	// 2025.9.3 eba
-
+#include "../Lib/veccom/veccom.h"
 #include "../Lib/VecCalib/VecCalPolyPgin.h" // 2025.9.3 eba
-#pragma comment(lib, "../Lib/VecCalib/VecCalPolyPgin.lib") // 2025.9.3 eba
+#include "../Lib/PSControl/TdsData.h"	// 2025.9.3 eba
+#ifdef _DEBUG // リンクするlibをDebugとReleaseに分ける。(2026.2.18yori)
+#pragma comment(lib, "../Lib/veccom/debug64/veccom.lib")
+#pragma comment(lib, "../Lib/VecCalib/debug64/VecCalPolyPgin.lib") // 2025.9.3 eba
+#pragma comment(lib, "../Lib/PSControl/release64/PSControl.lib")	// 2025.9.3 eba // リリース版を使う。(2026.2.18yori)
+#else
+#pragma comment(lib, "../Lib/veccom/release64/veccom.lib")
+#pragma comment(lib, "../Lib/VecCalib/release64/VecCalPolyPgin.lib")
+#pragma comment(lib, "../Lib/PSControl/release64/PSControl.lib")
+#endif
 
 #include <imagehlp.h> // フォルダ作成用で追加(2025.10.7yori)
 #pragma comment(lib, "imagehlp.lib") // フォルダ作成用で追加(2025.10.7yori)

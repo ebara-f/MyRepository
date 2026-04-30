@@ -12,7 +12,7 @@ using System.Windows.Media;
 namespace VecApp
 {
 	/// <summary>
-	/// Dlg01のViewModel
+	/// DlgHistoryのViewModel
 	/// </summary>
 	public partial class DlgHistoryViewModel : INotifyPropertyChanged
     {

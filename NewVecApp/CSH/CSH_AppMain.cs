@@ -7,8 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -348,6 +350,9 @@ namespace CSH
         [DllImport("CPX.dll")]
         public extern static int CPX_AppMain_TestLplRecvMesBox(); // 追加(2025.12.28yori)
 
+        [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
+        public extern static int CPX_AppMain_JointLimitAlarm(out int limitfg); // 追加(2026.4.19yori)
+
         #endregion
 
         /// <summary>
@@ -489,6 +494,12 @@ namespace CSH
         static public int TestLplRecvMesBox()
         {
             return CPX_AppMain_TestLplRecvMesBox();
+        }
+
+        // 追加(2026.4.19yori)
+        static public int JointLimitAlarm(out int limitfg)
+        {
+            return CPX_AppMain_JointLimitAlarm(out limitfg);
         }
     }
 }

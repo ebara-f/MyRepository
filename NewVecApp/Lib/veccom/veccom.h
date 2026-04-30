@@ -4,8 +4,6 @@
 // ソースファイルがこのファイルを含んでいる他のプロジェクトは、 
 // VECCOM_API 関数を DLL からインポートされたと見なすのに対し、この DLL は、このマクロで定義された
 // シンボルをエクスポートされたと見なします。
-#pragma once
-
 #ifdef VECCOM_EXPORTS
 #define VECCOM_API __declspec(dllexport)
 #else
@@ -65,6 +63,7 @@
 
 #define			GposLen		50
 #define			GetCntLen		86
+#define			GposBMLen	58	// 2026.4.13 追加
 #define			GposV8Len	59	// 2021.11.25 更新
 #define			GetCntV8Len	95	// 2021.11.25 更新
 
@@ -103,6 +102,8 @@ typedef struct	// 2012.8.27
 	int		pbid_chg_fg;	// 1で変更有(2021.6.10)
 
 	int		some_err_fg;	// !=0でエラー有(2021.11.25)
+
+	char 	LimFg; // 関節リミット軸表示機能(2026.4.13)
 
 } VecDtEx;
 
@@ -248,4 +249,5 @@ VECCOM_API int Vec_DataRequestV8(VEC_HANDLE vecHandle, int bufSize, VecDtEx *vec
 VECCOM_API int Vec_CntRequestV8(VEC_HANDLE vecHandle, int bufSize, VecCtEx2 *vecCntData, int *dataNo); // TdsData.hで同じ構造体が定義されているため、VecCtEx→ VecCtEx2へ変更(2025.6.9yori)
 // 2021.8.11
 VECCOM_API int Vec_StatusRequestV8(VEC_HANDLE vecHandle, VecSt *vecStatus);
-
+// 2026.4.13
+VECCOM_API int Vec_DataRequestBM(VEC_HANDLE vecHandle, int bufSize, VecDtEx* vecData, int* dataNo);

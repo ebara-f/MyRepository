@@ -693,9 +693,6 @@
     <value>パラメータ
 初期化</value>
   </data>
-  <data name="String194" xml:space="preserve">
-    <value>表示</value>
-  </data>
   <data name="String196" xml:space="preserve">
     <value>非接触始業前点検</value>
   </data>
@@ -969,6 +966,8 @@
   </data>
   <data name="String279" xml:space="preserve">
     <value>アーム側で通信エラーが発生しました。
+LAN、電源ケーブルの接続を確認してください。
+再接続を行います。
 アームから音が鳴るのを確認してから
 「OK」ボタンを押してください。</value>
   </data>
@@ -1001,5 +1000,8 @@
   </data>
   <data name="String289" xml:space="preserve">
     <value>No.2関節角度エラー</value>
+  </data>
+  <data name="String194" xml:space="preserve">
+    <value>関節リミットアラーム</value>
   </data>
 </root>

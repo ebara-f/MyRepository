@@ -72,6 +72,7 @@ namespace VecApp
         private DlgPrgBar2 m_DlgPrgBar2 = null;	// 追加(2025.7.30yori)
         private DlgPrgBar3 m_DlgPrgBar3 = null;	// 追加(2025.7.31yori)
         private static PrgressBar m_PrgressBar = null;  // 2025.11.14 add eba
+        private DlgMI m_DlgMI = null;// 追加(2026.4.14yori)
 
         // スタイルを変更するためのインデックス(2025.11.19yori)
         private const int GWL_STYLE = -16;
@@ -83,11 +84,13 @@ namespace VecApp
 		{
 			InitializeComponent();
 
-            // メインウィンドウ起動時に最小化する。(2025.11.19yori)
+            // メインウィンドウ起動時に最小化する。(2025.11.19yori) 
+            // コメントアウト、App.xaml.csで起動時に非表示＋トレイ常駐(2026.4.1yori)
+            // FullMoonでアプリの最小化と復元を仕様するため、コメントアウト解除(2026.4.6yori)
             this.WindowState = System.Windows.WindowState.Minimized;
 
             // メインウィンドウの状態変更を監視(2026.2.5yori)
-            //this.StateChanged += MainWindow_StateChanged; // コメントアウト、FullMoonが使用できるよう最小化しない。(2026.2.13yori)
+            //this.StateChanged += MainWindow_StateChanged; // コメントアウト、FullMoonが使用できるよう常に最小化しない。(2026.2.13yori)
 
             this.DataContext = new MainWindowViewModel();
 
@@ -123,6 +126,7 @@ namespace VecApp
             //
             m_DlgPrgBar3 = new DlgPrgBar3(); // 追加(2025.7.31yori) 2025.8.29 これがあるとプロセスが残る
             m_PrgressBar = new PrgressBar(); // 2025.11.14 add eba
+            m_DlgMI = new DlgMI(); // 追加(2026.4.14yori)
 
             // コールバック関数のセット
             CSH.ErrMsg.SetCB( ShowErr );  // エラー表示
@@ -203,6 +207,16 @@ namespace VecApp
                 m_PrgressBar.Close();
             }
 
+            if (m_DlgMI != null) // 追加(2026.4.14yori)
+            {
+                m_DlgMI.m_AllowClose = true;
+                m_DlgMI.Dispose();
+                m_DlgMI.Close();
+            }
+
+            // アプリ(タスクトレイにある場合も)完全終了(2026.4.2yori)
+            // コメントアウト(2026.4.6yori)
+            //((App)Application.Current).ExitApplication();
         }
 
         // メッセージループを記述したメソッド
@@ -488,6 +502,19 @@ namespace VecApp
                     // ContentがScannerAlignmentPanelであればキャストしてアクセスする
                     (Content as ScannerAlignmentPanel).ScannerAlignmentPanelSetup();
                 }
+            }
+            else if (msg == UsrMsg.WM_SubWnd02_Panel_Hide)
+            {
+                m_SubWnd02.MainContent.Content = null; // SubWnd02のパネル非表示(2026.4.6yori)
+            }
+            else if (msg == UsrMsg.WM_DlgMI_Show)
+            {
+                CmdDlgMI(); // 関節リミット画面表示(2026.4.14yori)
+                m_DlgMI.JointLimitAlarmShow(); // 関節リミット番号表示(2026.4.14yori)
+            }
+            else if (msg == UsrMsg.WM_DlgMI_Close)
+            {
+                m_DlgMI.Hide();// 関節リミット画面非表示(2026.4.14yori)
             }
 
             return IntPtr.Zero;
@@ -805,6 +832,28 @@ namespace VecApp
                 // SetForegroundWindowの代わりにTopmostを使用する。(2025.12.20yori)
                 m_DlgPrgBar3.Topmost = true;  // 一時的に最前面にする。
                 m_DlgPrgBar3.Activate();      // ウィンドウをアクティブ化
+            }
+        }
+
+
+        /// <summary>
+        /// DlgMIの表示(2026.4.14yori)
+        /// </summary>
+        private void CmdDlgMI()
+        {
+            if (m_DlgMI == null) return;
+
+            if (m_DlgMI.IsVisible == false)
+            {
+                m_DlgMI.Owner = Application.Current.MainWindow;
+                m_DlgMI.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                // モーダレスダイアログとして表示
+                m_DlgMI.Show();
+
+                // Window のアクティブ化
+                m_DlgMI.Topmost = true;  // 一時的に最前面にする。
+                m_DlgMI.Activate();      // ウィンドウをアクティブ化
             }
         }
 

@@ -80,4 +80,9 @@ public:
     const static int WM_ScannerAlignmentPanel_Show = WM_USER + 46; // 追加(2025.12.5yori)
     const static int WM_ScannerAlignmentPanel_Setup = WM_USER + 47; // 追加(2025.12.5yori)
     const static int WM_ScannerAlignmentPanel_ReultCallBack = WM_USER + 48; // 追加(2025.12.9yori)
+
+    const static int WM_SubWnd02_Panel_Hide = WM_USER + 49;   // 追加(2026.4.6yori)
+
+    const static int WM_DlgMI_Show = WM_USER + 50; // 関節リミット画面表示(2026.6.14yori)
+    const static int WM_DlgMI_Close = WM_USER + 51; // 関節リミット画面非表示(2026.6.14yori)
 };

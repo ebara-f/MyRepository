@@ -774,8 +774,9 @@
                 <Button Content="{x:Static res:Resources.String193}" Margin="30,0,0,0" Click="Click_ParameterInitializationBtn"
                         Style="{StaticResource PanelButton2Style}" Width="120" Height="60" IsEnabled="False" Opacity="0.25" FontSize="20"/>
             </StackPanel>
+            <!-- String194→String120変更(2026.4.2yori) -->
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
-                <Button Content="{x:Static res:Resources.String194}" Margin="5,0,0,0" Click="Click_DisplayBtn"
+                <Button Content="{x:Static res:Resources.String120}" Margin="5,0,0,0" Click="Click_DisplayBtn"
                         Style="{StaticResource PanelButton2Style}" Width="120" Height="60" Visibility="Hidden"/>
                 <Button Content="{x:Static res:Resources.String64}" Margin="30,0,0,0" Click="Click_CloseBtn"
                         Style="{StaticResource PanelButton2Style}" Width="120" Height="60" FontSize="20"/>

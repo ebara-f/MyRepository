@@ -1,21 +1,66 @@
-﻿<Window x:Class="VecApp.DlgMI"
+﻿<!-- xmlns:res="clr-namespace:VecApp.Properties"追加(2026.4.11yori)-->
+<!-- Height="300" Width="250"→Height="690" Width="800"(2026.4.14yori) -->
+<!-- InspectionPanel.xamlのコードを移植(2026.4.14yori) -->
+<!-- Title="DlgMI"→Title="Beak Master Plug-in SoftWare"(2026.4.14yori)-->
+<!-- Loaded="Window_Loaded"追加(2026.4.14yori)-->
+<Window x:Class="VecApp.DlgMI"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VecApp"
         mc:Ignorable="d"
-        Title="DlgMI" Height="300" Width="250">
-    <Grid Background="LightGray">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
-        </Grid.RowDefinitions>
-        <Grid>
-            <Image Source="/Image/No.5_!.png" Width="200" Height="200"  />
-        </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Margin="4,0" Width="200" Height="25" Content="閉じる" Click="Click_CloseBtn" Background="DarkGray" Foreground="Black"/>
-        </StackPanel>
+        Loaded="Window_Loaded"
+        xmlns:res="clr-namespace:VecApp.Properties"
+        Title="Beak Master Plug-in SoftWare" Height="620" Width="800">
+    <Grid>
+        <Border Background="#2C3E50" Padding="20">
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
+
+                <TextBlock Text="{x:Static res:Resources.String194}"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Margin="0,0,0,10"/>
+
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="10" Height="500">
+                    <StackPanel>
+                        <Grid Height="470" Background="#DDD" >
+                            <Image Source="Image/init_V7.png"
+                                 Width="800" Height="470"
+                                 Stretch="Uniform"
+                                 Canvas.Left="0"
+                                 Canvas.Top="0"
+                                 Canvas.ZIndex="5"/>
+
+                            <ItemsControl ItemsSource="{Binding Marks}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="ContentPresenter">
+                                        <Setter Property="Canvas.Left" Value="{Binding X}" />
+                                        <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Text}"
+                                           Visibility="{Binding Visibility}"
+                                           FontSize="40"
+                                           FontWeight="Bold"
+                                           Foreground="Red"
+                                           Canvas.ZIndex="10"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
