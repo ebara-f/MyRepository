@@ -1004,4 +1004,13 @@ LAN、電源ケーブルの接続を確認してください。
   <data name="String194" xml:space="preserve">
     <value>関節リミットアラーム</value>
   </data>
+  <data name="String290" xml:space="preserve">
+    <value>K-CMMは既に起動しています。</value>
+  </data>
+  <data name="String291" xml:space="preserve">
+    <value>情報</value>
+  </data>
+  <data name="String292" xml:space="preserve">
+    <value>終了</value>
+  </data>
 </root>

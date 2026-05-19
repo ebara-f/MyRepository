@@ -74,8 +74,7 @@ namespace VecApp
         private static PrgressBar m_PrgressBar = null;  // 2025.11.14 add eba
         private DlgMI m_DlgMI = null;// 追加(2026.4.14yori)
 
-        // スタイルを変更するためのインデックス(2025.11.19yori)
-        private const int GWL_STYLE = -16;
+        private const int GWL_STYLE = -16; // スタイルを変更するためのインデックス(2025.11.19yori)
 
         /// <summary>
         /// 初期化処理
@@ -84,9 +83,7 @@ namespace VecApp
 		{
 			InitializeComponent();
 
-            // メインウィンドウ起動時に最小化する。(2025.11.19yori) 
-            // コメントアウト、App.xaml.csで起動時に非表示＋トレイ常駐(2026.4.1yori)
-            // FullMoonでアプリの最小化と復元を仕様するため、コメントアウト解除(2026.4.6yori)
+            // メインウィンドウ起動時に最小化する。(2025.11.19yori)
             this.WindowState = System.Windows.WindowState.Minimized;
 
             // メインウィンドウの状態変更を監視(2026.2.5yori)
@@ -213,10 +210,6 @@ namespace VecApp
                 m_DlgMI.Dispose();
                 m_DlgMI.Close();
             }
-
-            // アプリ(タスクトレイにある場合も)完全終了(2026.4.2yori)
-            // コメントアウト(2026.4.6yori)
-            //((App)Application.Current).ExitApplication();
         }
 
         // メッセージループを記述したメソッド
@@ -324,7 +317,10 @@ namespace VecApp
             }
             else if (msg == UsrMsg.WM_SubWnd02_Close)
             {
-                if (m_SubWnd02 != null) m_SubWnd02.Hide(); // 追加(2025.12.2yori)
+                if (m_SubWnd02 != null && m_SubWnd02.IsVisible) // 二重で非表示しない。(2026.5.7yori)
+                {
+                    m_SubWnd02.Hide(); // 追加(2025.12.2yori)
+                }
             }
             else if (msg == UsrMsg.WM_SubWnd03_Close)
             {
@@ -477,15 +473,27 @@ namespace VecApp
             }
             else if (msg == UsrMsg.WM_MainWnd_OtherApp_Connected) // 追加(2025.11.19yori)
             {
-                MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
-                vm.IsBtnEnabled = false;
-                vm.BtnOpacity = 0.25;
+                // vm.IsBtnEnabled = false;、vm.BtnOpacity = 0.25;から下記へ変更(2026.5.14yori)
+                // コメントアウト(2026.5.14yori)
+                //MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+                //vm.IsBtn01Enabled = false;
+                //vm.IsBtn02Enabled = false;
+                //vm.IsBtn03Enabled = false;
+                //vm.Btn01Opacity = 0.25;
+                //vm.Btn02Opacity = 0.25;
+                //vm.Btn03Opacity = 0.25;
             }
             else if (msg == UsrMsg.WM_MainWnd_OtherApp_Disconnected) // 追加(2025.11.19yori)
             {
-                MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
-                vm.IsBtnEnabled = true;
-                vm.BtnOpacity = 1.0;
+                // vm.IsBtnEnabled = true;、vm.BtnOpacity = 1.0;から下記へ変更(2026.5.14yori)
+                // コメントアウト(2026.5.14yori)
+                //MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+                //vm.IsBtn01Enabled = true;
+                //vm.IsBtn02Enabled = true;
+                //vm.IsBtn03Enabled = true;
+                //vm.Btn01Opacity = 1.0;
+                //vm.Btn02Opacity = 1.0;
+                //vm.Btn03Opacity = 1.0;
             }
             else if (msg == UsrMsg.WM_ScannerAlignmentPanel_Show) // 追加(2025.12.5yori)
             {
@@ -854,6 +862,7 @@ namespace VecApp
                 // Window のアクティブ化
                 m_DlgMI.Topmost = true;  // 一時的に最前面にする。
                 m_DlgMI.Activate();      // ウィンドウをアクティブ化
+                m_DlgMI.Topmost = false; // 元に戻す。(追加漏れ、追加しないと最前面に表示されない場合がある。2026.5.11yori)
             }
         }
 

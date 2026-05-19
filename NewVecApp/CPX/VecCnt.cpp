@@ -1069,7 +1069,15 @@ int CVecCnt::VecFunc_DataRequestEx(VecDtEx* PosiData,int iDataSize)
 	}
 	else
 	{
-		ret = Vec_DataRequestBM(m_VecHandle, iDataSize, PosiData, &data_no); // 関節リミット情報取得できる関数へ変更(2026.4.13yori)
+		if ((m_Sts.m_Model == MODEL_V7M || m_Sts.m_Model == MODEL_V7L) && (stoi(m_Sts.m_Ver.substr(6, 6)) >= 260430)) // バージョンの場合分け(2026.5.14yori)
+		{
+			ret = Vec_DataRequestBM(m_VecHandle, iDataSize, PosiData, &data_no); // 関節リミット情報取得できる関数へ変更(2026.4.13yori)
+		}
+		else
+		{
+			ret = Vec_DataRequestEx(m_VecHandle, iDataSize, PosiData, &data_no);
+			PosiData->LimFg = '\0';
+		}
 	}
 
 	//	PosiData->ijk[2] *= -1;				// 大元のソースはijk[2]の極性を変更していたが 

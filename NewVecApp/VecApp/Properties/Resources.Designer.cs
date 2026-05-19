@@ -1982,6 +1982,33 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   K-CMMは既に起動しています。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String290 {
+            get {
+                return ResourceManager.GetString("String290", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   情報 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String291 {
+            get {
+                return ResourceManager.GetString("String291", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   終了 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String292 {
+            get {
+                return ResourceManager.GetString("String292", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   スキャナ接続手順 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String3 {

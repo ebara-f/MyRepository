@@ -200,23 +200,9 @@ namespace VecApp
 
         }
 
-        // ボタン2、3の有効無効を設定する。(2025.11.19yori)
-        private bool _isBtnEnabled = false; // アプリ単体動作は作成中のため、初期状態は無効(2025.12.26)
-        public bool IsBtnEnabled
-        {
-            get { return _isBtnEnabled; }
-            set
-            {
-                if (_isBtnEnabled != value)
-                {
-                    _isBtnEnabled = value;
-                    OnPropertyChanged(nameof(IsBtnEnabled));
-                }
-            }
-        }
-
-        // ボタン1の有効無効を設定する。上記より分離した。(2026.2.13yori)
-        private bool _isBtn01Enabled = false;
+        // ボタン1の有効無効を設定する。(2026.2.13yori)
+        // 有効(2026.5.14yori)
+        private bool _isBtn01Enabled = true;
         public bool IsBtn01Enabled
         {
             get { return _isBtn01Enabled; }
@@ -230,23 +216,39 @@ namespace VecApp
             }
         }
 
-        // ボタン2、3の不透明度を設定する。(2025.11.19yori)
-        private double _btnOpacity = 0.25; // アプリ単体動作は作成中のため、初期値は半透明(2025.12.26)
-        public double BtnOpacity
+        // ボタン2の有効無効を設定する。(2026.5.14yori)
+        private bool _isBtn02Enabled = true;
+        public bool IsBtn02Enabled
         {
-            get => _btnOpacity;
+            get { return _isBtn02Enabled; }
             set
             {
-                if (_btnOpacity != value)
+                if (_isBtn02Enabled != value)
                 {
-                    _btnOpacity = value;
-                    OnPropertyChanged(nameof(BtnOpacity));
+                    _isBtn02Enabled = value;
+                    OnPropertyChanged(nameof(IsBtn02Enabled));
+                }
+            }
+        }
+
+        // ボタン3の有効無効を設定する。(2026.5.14yori)
+        private bool _isBtn03Enabled = false;
+        public bool IsBtn03Enabled
+        {
+            get { return _isBtn03Enabled; }
+            set
+            {
+                if (_isBtn03Enabled != value)
+                {
+                    _isBtn03Enabled = value;
+                    OnPropertyChanged(nameof(IsBtn03Enabled));
                 }
             }
         }
 
         // ボタン1の不透明度を設定する。上記より分離した。(2026.2.13yori)
-        private double _btn01Opacity = 0.25;
+        // _btn01Opacity = 0.25→1.0(2026.5.14yori)
+        private double _btn01Opacity = 1.0;
         public double Btn01Opacity
         {
             get => _btn01Opacity;
@@ -256,6 +258,36 @@ namespace VecApp
                 {
                     _btn01Opacity = value;
                     OnPropertyChanged(nameof(Btn01Opacity));
+                }
+            }
+        }
+
+        // ボタン2の不透明度を設定する。(2026.5.14yori)
+        private double _btn02Opacity = 1.0;
+        public double Btn02Opacity
+        {
+            get => _btn02Opacity;
+            set
+            {
+                if (_btn02Opacity != value)
+                {
+                    _btn02Opacity = value;
+                    OnPropertyChanged(nameof(Btn02Opacity));
+                }
+            }
+        }
+
+        // ボタン3の不透明度を設定する。(2026.5.14yori)
+        private double _btn03Opacity = 0.25;
+        public double Btn03Opacity
+        {
+            get => _btn03Opacity;
+            set
+            {
+                if (_btn03Opacity != value)
+                {
+                    _btn03Opacity = value;
+                    OnPropertyChanged(nameof(Btn03Opacity));
                 }
             }
         }

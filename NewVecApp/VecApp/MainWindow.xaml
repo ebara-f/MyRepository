@@ -22,9 +22,11 @@
         </Grid.ColumnDefinitions>
         <!-- Btn01、Btn02、Btn03バインディング追加(2025.11.19yori) -->
         <!-- 接続のIsEnabled="{Binding IsBtnEnabled}" Opacity="{Binding BtnOpacity}"から下記へ変更(2026.2.13yori) -->
+        <!-- 設定(有)のIsEnabled="{Binding IsBtnEnabled}" Opacity="{Binding BtnOpacity}"から下記へ変更(2026.5.14yori) -->
+        <!-- 設定(非)のIsEnabled="{Binding IsBtnEnabled}" Opacity="{Binding BtnOpacity}"から下記へ変更(2026.5.14yori) -->
         <Button Content="{x:Static res:Resources.String220}" Height="35" Margin="10,10,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn01" FontSize="20" IsEnabled="{Binding IsBtn01Enabled}" Opacity="{Binding Btn01Opacity}"/>
-        <Button Content="{x:Static res:Resources.String228}" Height="35" Margin="10,55,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn02" FontSize="20" IsEnabled="{Binding IsBtnEnabled}" Opacity="{Binding BtnOpacity}"/>
-        <Button Content="{x:Static res:Resources.String229}" Height="35" Margin="10,100,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn03" FontSize="20" IsEnabled="{Binding IsBtnEnabled}" Opacity="{Binding BtnOpacity}"/>
+        <Button Content="{x:Static res:Resources.String228}" Height="35" Margin="10,55,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn02" FontSize="20" IsEnabled="{Binding IsBtn02Enabled}" Opacity="{Binding Btn02Opacity}"/>
+        <Button Content="{x:Static res:Resources.String229}" Height="35" Margin="10,100,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Btn03" FontSize="20" IsEnabled="{Binding IsBtn03Enabled}" Opacity="{Binding BtnOpacity}"/>
         <Button Content="{x:Static res:Resources.String64}" Height="35" Margin="10,145,5,0" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Click="Click_Close" FontSize="20"/>
         <!-- TextBox未使用のため、非表示(2025.11.19yori) -->
         <TextBox Name="ValA" Grid.Row="0" Grid.Column="1" Height="30" Width="60" Margin="10,12,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Text="{Binding A,UpdateSourceTrigger=Explicit}"  Background="LightGray"  Foreground="Black" FontSize="20" Visibility="Hidden"/>

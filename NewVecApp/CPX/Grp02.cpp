@@ -720,10 +720,21 @@ int Grp02::ArmSetCancel()
 {
     int ret = 0;
 
-    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_CMP; // アーム設定完了
-    while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::ARM_SET_CMP) // アーム設定完了状態になるまで待機
+    if (HwCtrl::m_hVecCnt.m_connectflag) // 接続の場合(2026.5.14yori)
     {
-        Sleep(100);
+        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::ARM_SET_CMP; // アーム設定完了
+        while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::ARM_SET_CMP) // アーム設定完了状態になるまで待機
+        {
+            Sleep(100);
+        }
+    }
+    else // 未接続の場合(2026.5.14yori)
+    {
+        HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::START; // 開始状態
+        while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::START) // 開始状態になるまで待機
+        {
+            Sleep(100);
+        }
     }
 
     return (ret);

@@ -1004,4 +1004,13 @@ then press the “OK” button.</value>
   <data name="String194" xml:space="preserve">
     <value>Joint limit alarm</value>
   </data>
+  <data name="String290" xml:space="preserve">
+    <value>K-CMM is already running.</value>
+  </data>
+  <data name="String291" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="String292" xml:space="preserve">
+    <value>Exit</value>
+  </data>
 </root>

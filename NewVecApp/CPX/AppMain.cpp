@@ -96,7 +96,7 @@ int AppMain::Init()
 
     m_ThreadBreak = false;
 
-    LplInitialIFCommon(); // 追加(2025.5.15yori) // 終了時に「例外がスローされました」のメッセージが表示される(2025.5.15yori)
+    LplInitialIFCommon(); // 追加(2025.5.15yori) // 終了時に「例外がスローされました」のメッセージが表示されるバグ修正(2025.5.15yori)
     HwCtrl::hSEMA = CreateSemaphore(NULL, 1, 1, SEMAPHORE_NAME); //追加(2025.5.15yori)
     HwCtrl::hSEMA_VSEQ = CreateSemaphore(NULL, 1, 1, SEMAPHORE_VEC_STEP_SEQ_NAME); // 2025.5.27 add eba
 
@@ -147,6 +147,32 @@ int AppMain::Init()
 
 int AppMain::Term()
 {
+    if (HwCtrl::m_hVecCnt.m_connectflag == true) // 有接触切断処理未実施の場合(2026.5.8yori)
+    {
+        if (!HwCtrl::m_b_Button_ConnectFlag) // アプリから接続していない場合(2026.5.11yori)
+        {
+            HwCtrl::AppCommandSend(APP_SEND_CMD::UNEXPECTED_DISCONNECION); // K-CMMからPolyWorksの切断ボタンを押した状態(アイコンも含む)にするコマンド
+        }
+        else
+        {
+            HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_REQ;
+        }
+
+        // 開始時刻
+        ULONGLONG startTime = GetTickCount64();
+
+        while (HwCtrl::m_VecStepSeq != VEC_STEP_SEQ::FINISH)
+        {
+            // 10秒タイムアウト
+            if (GetTickCount64() - startTime >= 10000)
+            {
+                // タイムアウト処理
+                break;
+            }
+
+            Sleep(100);
+        }
+    }
     m_ThreadBreak = true;
     CloseHandle(HwCtrl::hSEMA); //追加(2025.5.15yori)
     CloseHandle(HwCtrl::hSEMA_VSEQ);    // 2025.5.27 add eba
@@ -1467,7 +1493,8 @@ void AppMain::ThreadProc()
             if (!HwCtrl::m_b_Button_ConnectFlag) // アプリから接続していない場合
             {
                 HwCtrl::AppCommandSend(APP_SEND_CMD::UNEXPECTED_DISCONNECION); // PolyWorksを切断状態する。
-                HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_REQ;
+                // 上記のコマンドをPolyWorksへ送信すると、DISCONNECTコマンドが送信されるため、下記不要、削除予定(2026.5.8yori)
+                //HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_REQ;
                 UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Close); // SubWindow1閉じる 2025.6.5yori
             }
             else
@@ -1816,9 +1843,11 @@ void AppMain::ThreadProc()
             // 測定中に異常があった場合のエラー処理をちゃんとすること 2025.5.27 memo eba
             if (ret == 0)
             {
-                // アプリから接続した場合は、PolyWorksへデータ送信しない。(2025.6.10yori)
-                if (HwCtrl::m_b_Button_ConnectFlag == false) // FullMoonを使用する場合はif文をコメントアウトする。(2025.12.22yori)
-                {
+                // アプリ単体から接続した場合は、PolyWorksへデータ送信しない。(2025.6.10yori)
+                // FullMoonを使用する場合はif文をコメントアウトする。(2025.12.22yori)
+                // コメントアウト(2026.5.14yori)
+                //if (HwCtrl::m_b_Button_ConnectFlag == false)
+                //{
                     if ((((int)PosiData.LimFg) & mask) != 0) // No.1,3,4,5,6関節のどれか一つでもリミット角度を超えている場合
                     {
                         HwCtrl::m_LimFg = (int)PosiData.LimFg; // 追加(2026.4.15yori)
@@ -1850,7 +1879,7 @@ void AppMain::ThreadProc()
                             UsrMsg::CallBack(UsrMsg::WM_MainWnd_Btn01); // 接続メニュー表示
                         }
                     }
-                }
+                //}
             }
             else
             {
@@ -2117,6 +2146,7 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::DISCONNECT_CMP:
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;    // 2025.7.2 eba add
+            UsrMsg::CallBack(UsrMsg::WM_MainWnd_Close); // 切断完了したら、K-CMMを閉じて終了(2026.5.8yori)
             break;
 
         default:

@@ -57,14 +57,15 @@ namespace VecApp
         public ScannerAlignmentViewModel ScannerAlignmentValue = new ScannerAlignmentViewModel();
 
         //// ×ボタンを非表示にするたの追加コード(2026.2.6yori)
-        [DllImport("user32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        // SubWindows2を開いて何もしないで閉じる場合があるため、×ボタンが押せるようコメントアウト(2026.5.4yori)
+        //[DllImport("user32.dll")]
+        //private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        //[DllImport("user32.dll")]
+        //private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        private const int GWL_STYLE = -16;
-        private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
+        //private const int GWL_STYLE = -16;
+        //private const int WS_SYSMENU = 0x00080000; // システムメニュー（×ボタン含む）
         ////
 
         public SubWindow2()
@@ -72,7 +73,8 @@ namespace VecApp
             InitializeComponent();
 
             // ×ボタンを非表示にする。(2026.2.6yori)
-            HideCloseButton();
+            // SubWindows2を開いて何もしないで閉じる場合があるため、×ボタンが押せるようコメントアウト(2026.5.4yori)
+            //HideCloseButton();
         }
 
         public void Cmd01() // 追加(2025.6.11yori)
@@ -196,7 +198,8 @@ namespace VecApp
         {
             // 2025.09.04  Modify by GeomLab
             if ( m_AllowClose == false ) {
-                CSH.Grp02.Cmd11();  // 追加(2025.9.1yori)
+                //CSH.Grp02.Cmd11();  // 追加(2025.9.1yori) // 下記へ変更(2026.5.7yori)
+                CSH.Grp02.ArmSetCancel(); // C++へキャンセルボタンが押されたことを通知(2026.5.7yori)
                 e.Cancel = true;
                 this.CurrentPanel = Panel.None;
                 this.Hide();
@@ -204,13 +207,14 @@ namespace VecApp
         }
 
         // ×ボタンを消す処理を追加(2026.2.6yori)
-        private void HideCloseButton()
-        {
-            IntPtr hWnd = new WindowInteropHelper(this).EnsureHandle();
+        // SubWindows2を開いて何もしないで閉じる場合があるため、×ボタンが押せるようコメントアウト(2026.5.4yori)
+        //private void HideCloseButton()
+        //{
+        //    IntPtr hWnd = new WindowInteropHelper(this).EnsureHandle();
 
-            int style = GetWindowLong(hWnd, GWL_STYLE);
-            style &= ~WS_SYSMENU; // システムメニューを外す
-            SetWindowLong(hWnd, GWL_STYLE, style);
-        }
+        //    int style = GetWindowLong(hWnd, GWL_STYLE);
+        //    style &= ~WS_SYSMENU; // システムメニューを外す
+        //    SetWindowLong(hWnd, GWL_STYLE, style);
+        //}
     }
 }

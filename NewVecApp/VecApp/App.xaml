@@ -1,11 +1,12 @@
 ﻿<!--StartupUri="MainWindow.xaml"追加(2026.4.6yori)-->
 <!--ShutdownMode="OnExplicitShutdown"コメントアウト(2026.4.6yori)-->
+<!--StartupUri="MainWindow.xaml"多重起動防止のため、コメントアウト(2026.5.15yori)-->
 <Application x:Class="VecApp.App"
              x:Name="VecApp"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:VecApp"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:VecApp">
+    <!--StartupUri="MainWindow.xaml">-->
     <!--ShutdownMode="OnExplicitShutdown">-->
 
     <Application.Resources>
