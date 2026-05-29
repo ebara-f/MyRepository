@@ -243,4 +243,14 @@ public:
      
     // シーケンス制御関数
     static VEC_STEP_SEQ m_VecStepSeq;    // 2025.5.27 add eba
+
+
+    // 親プロセスexe＋PID判定関数(2026.5.27yori)
+public:
+    static bool IsParentProcessTarget(const std::wstring& targetExe);
+
+private:
+    static DWORD GetParentProcessId(DWORD pid);
+    static std::wstring GetProcessNameByPid(DWORD pid);
+    //
 };

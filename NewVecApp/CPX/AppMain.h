@@ -15,6 +15,8 @@ class AppMain
 public:
     static HANDLE  m_hThread;
     static bool    m_ThreadBreak;
+    static bool    m_TrayFg; // 追加(2026.5.20yori)
+    static bool    m_TermFg; // 追加(2026.5.28yori)
 
 public:
     static int  Init();
@@ -37,6 +39,7 @@ public:
     static int  UpDateData05_Default(GAUGE* ga); // 追加(2025.8.9yori)
     static int  ContactInspectionPanelMesCallBack(); // 2025.9.2 add eba
     static int  JointLimitAlarm(int* limitfg); // 追加(2026.4.17yori)
+    static int  MainWindowStatus(bool* traymodefg); // 追加(2026.5.20yori)
 
     static void ThreadProc();
 
@@ -44,6 +47,7 @@ public:
     static void DisablePowerThrottling();
     static void DisablePowerThrottlingIgnoreTimerResolution();
     static void DisableAllPowerThrottling();
+    //
 
     static int TestLplRecvMesBox(); // 共有メモリ受信テスト関数(2025.12.28yori)
 

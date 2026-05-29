@@ -1,63 +1,10 @@
 #include <windows.h>
-#include <shellapi.h>
 #include <tlhelp32.h>
 #include <string>
 #include <ShlObj.h>
+#include <vector>
 
-#pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "shell32.lib")
-
-// ============================================================
-// 管理者権限チェック
-// ============================================================
-bool IsRunAsAdmin()
-{
-    BOOL isAdmin = FALSE;
-
-    SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
-
-    PSID adminGroup = nullptr;
-
-    if (AllocateAndInitializeSid(
-        &NtAuthority,
-        2,
-        SECURITY_BUILTIN_DOMAIN_RID,
-        DOMAIN_ALIAS_RID_ADMINS,
-        0, 0, 0, 0, 0, 0,
-        &adminGroup))
-    {
-        CheckTokenMembership(
-            nullptr,
-            adminGroup,
-            &isAdmin);
-
-        FreeSid(adminGroup);
-    }
-
-    return isAdmin == TRUE;
-}
-
-// ============================================================
-// 自身を管理者再起動
-// ============================================================
-void RelaunchAsAdmin()
-{
-    wchar_t exePath[MAX_PATH] = {};
-
-    GetModuleFileNameW(
-        nullptr,
-        exePath,
-        MAX_PATH);
-
-    SHELLEXECUTEINFOW sei = {};
-
-    sei.cbSize = sizeof(sei);
-    sei.lpVerb = L"runas";
-    sei.lpFile = exePath;
-    sei.nShow = SW_HIDE;
-
-    ShellExecuteExW(&sei);
-}
 
 // ============================================================
 // プロセス存在確認
@@ -96,30 +43,6 @@ bool IsProcessRunning(const std::wstring& exeName)
 }
 
 // ============================================================
-// EXEフォルダ取得
-// ============================================================
-std::wstring GetExeDirectory()
-{
-    wchar_t path[MAX_PATH] = {};
-
-    GetModuleFileNameW(
-        nullptr,
-        path,
-        MAX_PATH);
-
-    std::wstring dir = path;
-
-    size_t pos = dir.find_last_of(L"\\");
-
-    if (pos != std::wstring::npos)
-    {
-        dir = dir.substr(0, pos);
-    }
-
-    return dir;
-}
-
-// ============================================================
 // ini読み込み
 // ============================================================
 std::wstring ReadIni(const wchar_t* key)
@@ -151,117 +74,43 @@ std::wstring ReadIni(const wchar_t* key)
 }
 
 // ============================================================
-// 管理者起動
+// 標準ユーザー権限で起動
 // ============================================================
-bool LaunchAdmin(
+bool LaunchProcess(
     const std::wstring& exe,
     const std::wstring& args)
 {
-    SHELLEXECUTEINFOW sei = {};
-
-    sei.cbSize = sizeof(sei);
-    sei.lpVerb = L"runas";
-    sei.lpFile = exe.c_str();
-    sei.lpParameters = args.c_str();
-    sei.nShow = SW_MINIMIZE;
-
-    return ShellExecuteExW(&sei);
-}
-
-// ============================================================
-// Explorer.exe の Token 取得
-// ============================================================
-HANDLE GetExplorerToken()
-{
-    HWND hwnd = GetShellWindow();
-
-    if (!hwnd)
-        return nullptr;
-
-    DWORD pid = 0;
-
-    GetWindowThreadProcessId(hwnd, &pid);
-
-    if (pid == 0)
-        return nullptr;
-
-    HANDLE hProcess =
-        OpenProcess(
-            PROCESS_QUERY_INFORMATION,
-            FALSE,
-            pid);
-
-    if (!hProcess)
-        return nullptr;
-
-    HANDLE hToken = nullptr;
-
-    if (!OpenProcessToken(
-        hProcess,
-        TOKEN_DUPLICATE |
-        TOKEN_ASSIGN_PRIMARY |
-        TOKEN_QUERY,
-        &hToken))
-    {
-        CloseHandle(hProcess);
-        return nullptr;
-    }
-
-    CloseHandle(hProcess);
-
-    HANDLE hPrimaryToken = nullptr;
-
-    if (!DuplicateTokenEx(
-        hToken,
-        MAXIMUM_ALLOWED,
-        nullptr,
-        SecurityImpersonation,
-        TokenPrimary,
-        &hPrimaryToken))
-    {
-        CloseHandle(hToken);
-        return nullptr;
-    }
-
-    CloseHandle(hToken);
-
-    return hPrimaryToken;
-}
-
-// ============================================================
-// 完全通常ユーザー権限起動
-// ============================================================
-bool LaunchAsStandardUser(
-    const std::wstring& exe)
-{
-    HANDLE hToken =
-        GetExplorerToken();
-
-    if (!hToken)
-        return false;
-
     STARTUPINFOW si = {};
     PROCESS_INFORMATION pi = {};
 
     si.cb = sizeof(si);
 
-    wchar_t cmdLine[1024] = {};
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_MINIMIZE;
 
-    wcscpy_s(cmdLine, exe.c_str());
+    // コマンドライン作成
+    std::wstring cmdLine =
+        L"\"" + exe + L"\" " + args;
+
+    // CreateProcessW は writable buffer 必須
+    std::vector<wchar_t> buffer(
+        cmdLine.begin(),
+        cmdLine.end());
+
+    buffer.push_back(L'\0');
 
     BOOL result =
-        CreateProcessWithTokenW(
-            hToken,
-            LOGON_WITH_PROFILE,
+        CreateProcessW(
             nullptr,
-            cmdLine,
-            CREATE_NEW_CONSOLE,
+            buffer.data(),
+            nullptr,
+            nullptr,
+            FALSE,
+            0,
             nullptr,
             nullptr,
             &si,
             &pi);
-
-    CloseHandle(hToken);
 
     if (result)
     {
@@ -282,7 +131,7 @@ int WINAPI WinMain(
     int)
 {
     // ========================================================
-    // Mutex
+    // 多重起動防止
     // ========================================================
     HANDLE hMutex =
         CreateMutexW(
@@ -292,15 +141,6 @@ int WINAPI WinMain(
 
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        return 0;
-    }
-
-    // ========================================================
-    // 管理者昇格
-    // ========================================================
-    if (!IsRunAsAdmin())
-    {
-        RelaunchAsAdmin();
         return 0;
     }
 
@@ -321,7 +161,7 @@ int WINAPI WinMain(
     // ========================================================
     if (!IsProcessRunning(L"K-CMM.exe"))
     {
-        LaunchAdmin(
+        LaunchProcess(
             myApp,
             myArgs);
     }
@@ -331,7 +171,9 @@ int WINAPI WinMain(
     // ========================================================
     if (!IsProcessRunning(L"iminspect.exe"))
     {
-        LaunchAsStandardUser(otherApp);
+        LaunchProcess(
+            otherApp,
+            L"");
     }
 
     // ========================================================

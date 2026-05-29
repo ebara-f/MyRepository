@@ -77,6 +77,8 @@ enum APP_CMD {
 
 HANDLE    AppMain::m_hThread      = NULL;
 bool      AppMain::m_ThreadBreak  = false;
+bool      AppMain::m_TrayFg = false; // 追加(2026.5.20yori
+bool      AppMain::m_TermFg = false; // 追加(2026.5.28yori
 
 
 
@@ -127,7 +129,8 @@ int AppMain::Init()
 
     // ユーザーアカウント制御のレベルは、C#側VecAppのapp.manifestに管理者権限が必要であるコートを追加している。(2026.2.17yori)
     // C:\ProgramData\KosakalabのUsersにフルコントロールのアクセス許可する。(2026.2.17yori)
-    SetAllowUsersAll(TEXT("C:\\ProgramData\\Kosakalab"));
+    // インストーラで設定するため、コメントアウト(2026.5.24yori)
+    //SetAllowUsersAll(TEXT("C:\\ProgramData\\Kosakalab"));
 
     // スレッド開始
     std::thread  Thread( &AppMain::ThreadProc );
@@ -147,6 +150,8 @@ int AppMain::Init()
 
 int AppMain::Term()
 {
+    m_TermFg = true; // 追加(2026.5.28yori
+
     if (HwCtrl::m_hVecCnt.m_connectflag == true) // 有接触切断処理未実施の場合(2026.5.8yori)
     {
         if (!HwCtrl::m_b_Button_ConnectFlag) // アプリから接続していない場合(2026.5.11yori)
@@ -174,6 +179,7 @@ int AppMain::Term()
         }
     }
     m_ThreadBreak = true;
+    m_TrayFg = false; // 追加(2026.5.20yori
     CloseHandle(HwCtrl::hSEMA); //追加(2025.5.15yori)
     CloseHandle(HwCtrl::hSEMA_VSEQ);    // 2025.5.27 add eba
     LplTerminateALL(); // 追加(2025.5.15yori)
@@ -931,6 +937,18 @@ int  AppMain::JointLimitAlarm(int* limitfg)
 
 /***********************************************************************
 
+    メインウィンドウの状態
+    2026.5.20yori
+
+***********************************************************************/
+int  AppMain::MainWindowStatus(bool* traymodefg)
+{
+    m_TrayFg = traymodefg;
+    return(0);
+}
+
+/***********************************************************************
+
     電力スロットリングを無効化(CPU処理速度)
     2025.12.26yori
 
@@ -1328,6 +1346,10 @@ void AppMain::ThreadProc()
                     HwCtrl::AppCommandSend(APP_SEND_CMD::CONNECT_SUCCESS); // 接続に成功したことをPolyWorks側に知らせる(2025.6.9yori)
                     //UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Connected); // C#側にPolyWorks側から接続したことを知らせる。(2025.11.19yori) // アプリ単体動作は作成中のため、最初から接続、設定ボタンを押せないようにする。(2025.12.26yori)
                 }
+                else
+                {
+                    UsrMsg::CallBack(UsrMsg::WM_Connection_Completed); // C#側に接続完了通知(2026.5.28yori)
+                }
             }
             else
             {
@@ -1458,6 +1480,7 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::INITIALIZE_CMP:
             ret = HwCtrl::Func08();   // 有接触モードへ変更
+            ret = HwCtrl::Func09();   // ステータス要求(現在のモード取得、有接触モードでプローブ情報取得できていない不具合修正)(2026.5.28yori)
             if (ret == 0)
             {
                 if (!HwCtrl::m_b_Button_ConnectFlag) // アプリから接続した場合は、下記を実行しない。(2025.6.10yori)
@@ -1469,6 +1492,7 @@ void AppMain::ThreadProc()
                 else
                 {
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Panel_Hide); // イニシャライズ画面非表示(2025.7.14yori)
+                    UsrMsg::CallBack(UsrMsg::WM_Initialize_Completed); // C#側にイニシャライズ完了通知(2026.5.28yori)
                 }
 
                 HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
@@ -1856,7 +1880,7 @@ void AppMain::ThreadProc()
                     }
                     else
                     {
-                        // PolyWorksへデータ送信
+                        // PolyWorks、FullMoonへデータ送信
                         if (HwCtrl::m_hVecCnt.m_Sts.m_enMode == VEC_MODE_PROBE && HwCtrl::m_hVecCnt.m_VecInitflag == true)
                         {
                             HwCtrl::Func11(PosiData);
@@ -2131,6 +2155,7 @@ void AppMain::ThreadProc()
                         HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_SUCCESS); // 切断に成功したことをPolyWorks側に知らせる(2025.6.9yori)
                         //UsrMsg::CallBack(UsrMsg::WM_MainWnd_OtherApp_Disconnected); // C#側にPolyWorks側から切断したことを知らせる。(2025.11.19yori) // アプリ単体動作は作成中のため、最初から接続、設定ボタンを押せないようにする。(2025.12.26yori)
                     }
+
                     HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::DISCONNECT_CMP;
                 }
                 else
@@ -2146,7 +2171,17 @@ void AppMain::ThreadProc()
 
         case VEC_STEP_SEQ::DISCONNECT_CMP:
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::FINISH;    // 2025.7.2 eba add
-            UsrMsg::CallBack(UsrMsg::WM_MainWnd_Close); // 切断完了したら、K-CMMを閉じて終了(2026.5.8yori)
+            // 切断完了したら、K-CMMを閉じて終了(2026.5.8yori)
+            // トレイモードのときはK-CMMを閉じない。(2026.5.20yori)
+            if (!m_TrayFg)
+            {
+                //UsrMsg::CallBack(UsrMsg::WM_MainWnd_Close); // テストでコメントアウト(2026.5.25yori)
+            }
+
+            if(m_TermFg == false) // MainWindowの閉じるまたは×ボタンを押した場合(m_TermFg == true)は、メッセージを送らない。(20265.28yori)
+            {
+                UsrMsg::CallBack(UsrMsg::WM_Disconnection_Completed); // C#側に切断完了通知(20265.28yori)
+            }
             break;
 
         default:

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
@@ -44,14 +45,49 @@ namespace VecApp
 		[DllImport("user32.dll")]
 		private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
+        //// 最小化ボタンのみ表示するための追加コード(2026.5.28yori)
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        [DllImport("user32.dll")]
+        private static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
+        ////
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
             const int GWL_STYLE = -16;
-            const int WS_SYSMENU = 0x00080000;
+            const int WS_MINIMIZEBOX = 0x00020000; // 最小化ボタン(2026.5.28yori)
+            const int WS_MAXIMIZEBOX = 0x00010000; // 最大化ボタン(2026.5.28yori)
+            const int WS_SYSMENU = 0x00080000; // 閉じるボタンを含むシステムメニュー
+
+            // ウィンドウハンドル取得
+            var hwnd = new WindowInteropHelper((Window)sender).Handle;
 
             //SYSMENUを非表示にする
-            var hwnd = new WindowInteropHelper((Window)sender).Handle;
             //SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU); // 2025.4.22 eba del // 最小化、閉じるボタン有効にするため、コメントアウト(2025.11.19yori)
+
+            //// 最小化ボタンのみ表示するための追加コード(2026.5.28yori)
+            // 現在のスタイル取得
+            int style = GetWindowLong(hwnd, GWL_STYLE);
+
+            // 最小化ボタンを有効
+            style |= WS_MINIMIZEBOX;
+
+            // 最大化ボタンを無効
+            style &= ~WS_MAXIMIZEBOX;
+
+            // 閉じるボタンを無効化
+            // ※ WS_SYSMENU を消すと最小化ボタンも消えるため、メニュー項目だけ無効化する。
+            SetWindowLong(hwnd, GWL_STYLE, style);
+
+            // 閉じるメニューを無効化
+            IntPtr hMenu = GetSystemMenu(hwnd, false);
+            const uint SC_CLOSE = 0xF060;
+            const uint MF_BYCOMMAND = 0x00000000;
+            const uint MF_GRAYED = 0x00000001;
+
+            EnableMenuItem(hMenu, SC_CLOSE, MF_BYCOMMAND | MF_GRAYED);
+            ////
         }
 
         #endregion
@@ -524,6 +560,34 @@ namespace VecApp
             {
                 m_DlgMI.Hide();// 関節リミット画面非表示(2026.4.14yori)
             }
+            else if (msg == UsrMsg.WM_Connection_Completed) // 追加(2026.5.28yori)
+            {
+                // SubWindow1のボタン有効化(2026.5.28yori)
+                SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
+                m_SubWnd01.DataContext = SubWnd01ViewModel;
+                SubWnd01ViewModel.IsBtn03Enabled = true; // イニシャライズ
+                SubWnd01ViewModel.Btn03Opacity = 1.0; // イニシャライズ
+            }
+            else if (msg == UsrMsg.WM_Initialize_Completed) // 追加(2026.5.28yori)
+            {
+                // MainWindowのボタン有効化(2026.5.28yori)
+                MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+                vm.IsBtn02Enabled = true; // 有接触設定
+                vm.Btn02Opacity = 1.0; // 有接触設定
+            }
+            else if (msg == UsrMsg.WM_Disconnection_Completed) // 追加(2026.5.28yori)
+            {
+                // SubWindow1のボタン無効化(2026.5.28yori)
+                SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
+                m_SubWnd01.DataContext = SubWnd01ViewModel;
+                SubWnd01ViewModel.IsBtn03Enabled = false; // イニシャライズ
+                SubWnd01ViewModel.Btn03Opacity = 0.25; // イニシャライズ
+
+                // MainWindowのボタン無効化(2026.5.28yori)
+                MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+                vm.IsBtn02Enabled = false; // 有接触設定
+                vm.Btn02Opacity = 0.25; // 有接触設定
+            }
 
             return IntPtr.Zero;
         }
@@ -546,12 +610,12 @@ namespace VecApp
             m_SubWnd01.DataContext = SubWnd01ViewModel;
             SubWnd01ViewModel.IsBtn01Enabled = true;
             SubWnd01ViewModel.IsBtn02Enabled = true;
-            SubWnd01ViewModel.IsBtn03Enabled = true;
+            //SubWnd01ViewModel.IsBtn03Enabled = true; // 接続状態で判断するため、コメントアウト(2026.5.28yori)
             SubWnd01ViewModel.IsBtn04Enabled = false; // Beak Masterで0軸イニシャライズは不要なため、無効化
             SubWnd01ViewModel.IsBtn05Enabled = false; // アプリ単体動作は作成中のため、モード切替は押せないようにする。(2026.2.13yori)
             SubWnd01ViewModel.Btn01Opacity = 1.0;
             SubWnd01ViewModel.Btn02Opacity = 1.0;
-            SubWnd01ViewModel.Btn03Opacity = 1.0;
+            //SubWnd01ViewModel.Btn03Opacity = 1.0; // 接続状態で判断するため、コメントアウト(2026.5.28yori)
             SubWnd01ViewModel.Btn04Opacity = 0.25; // Beak Masterで0軸イニシャライズは不要なため、半透明化
             SubWnd01ViewModel.Btn05Opacity = 0.25; // アプリ単体動作は作成中のため、半透明化(2026.2.13yori)
         }

@@ -353,6 +353,9 @@ namespace CSH
         [DllImport("CPX.dll", CharSet = CharSet.Unicode)]
         public extern static int CPX_AppMain_JointLimitAlarm(out int limitfg); // 追加(2026.4.19yori)
 
+        [DllImport("CPX.dll")]
+        public extern static int CPX_AppMain_MainWindowStatus(bool traymodefg); // 追加(2026.5.20yori)
+
         #endregion
 
         /// <summary>
@@ -500,6 +503,12 @@ namespace CSH
         static public int JointLimitAlarm(out int limitfg)
         {
             return CPX_AppMain_JointLimitAlarm(out limitfg);
+        }
+
+        // 追加(2026.5.20yori)
+        static public int MainWindowStatus(bool traymodefg)
+        {
+            return CPX_AppMain_MainWindowStatus(traymodefg);
         }
     }
 }

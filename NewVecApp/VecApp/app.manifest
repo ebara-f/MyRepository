@@ -16,7 +16,8 @@
             アプリケーションが下位互換性を保つためにこの仮想化を要求する場合、この要素を
             削除します。
         -->
-        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+		  <!--requireAdministrator(管理者権限を要求)から下記へ変更(2026.5.24yori) -->
+		  <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
       </requestedPrivileges>
     </security>
   </trustInfo>

@@ -12,6 +12,7 @@
 ////
 
 #include "UsrMsg.h"
+#include <tlhelp32.h> // プロセスID取得用で追加(2026.5.27yori)
 
 /***********************************************************************
 
@@ -2434,8 +2435,17 @@ int HwCtrl::SendPolyworksMessage(int TID, int Leng, char SBuf[])
 
     while (LplSendMesBoxBuffferEmpty(TID) != 0)
     {
+        // FullMoonが終了している場合、データ送信しない。(2026.5.27yori)
+        if (m_b_Button_ConnectFlag == true && IsParentProcessTarget(L"AmlSDI.exe") == false)
+        {
+            goto job_exit;
+        }
+
         DWORD dwTime = timeGetTime() - StartTime;
-        if (dwTime > 10000) goto job_exit;// time out
+        if (dwTime > 10000)
+        {
+            goto job_exit;// time out
+        }
     }
 
     WaitForSingleObject(hSEMA, INFINITE);
@@ -5469,4 +5479,105 @@ void HwCtrl::ProbeResit(int psid, const TCHAR* probename, int probetype)
 
     WritePrivateProfileString(id, TEXT("OffsetProbName"), probename, PROBE_SET_INI);
     WritePrivateProfileString(id, TEXT("OffsetProbTyp"), type, PROBE_SET_INI);
+}
+
+
+
+/***********************************************************************
+
+    指定PIDの親プロセスIDを取得する。
+    pid : 対象プロセスID
+    return : 親プロセスID(見つからない場合は0)
+    2026.5.27yori
+
+***********************************************************************/
+DWORD HwCtrl::GetParentProcessId(DWORD pid)
+{
+    DWORD parentPid = 0;
+
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hSnapshot == INVALID_HANDLE_VALUE)
+        return 0;
+
+    PROCESSENTRY32 pe;
+    pe.dwSize = sizeof(PROCESSENTRY32);
+
+    if (Process32First(hSnapshot, &pe))
+    {
+        do
+        {
+            if (pe.th32ProcessID == pid)
+            {
+                parentPid = pe.th32ParentProcessID;
+                break;
+            }
+        } while (Process32Next(hSnapshot, &pe));
+    }
+
+    CloseHandle(hSnapshot);
+    return parentPid;
+}
+
+
+
+/***********************************************************************
+
+    PIDからプロセスの実行ファイル名(exe名)を取得する。
+    pid : 対象プロセスID
+    return : exe名(見つからない場合は空文字)
+    2026.5.27yori
+
+***********************************************************************/
+std::wstring HwCtrl::GetProcessNameByPid(DWORD pid)
+{
+    std::wstring name;
+
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hSnapshot == INVALID_HANDLE_VALUE)
+        return L"";
+
+    PROCESSENTRY32 pe;
+    pe.dwSize = sizeof(PROCESSENTRY32);
+
+    if (Process32First(hSnapshot, &pe))
+    {
+        do
+        {
+            if (pe.th32ProcessID == pid)
+            {
+                name = pe.szExeFile;
+                break;
+            }
+        } while (Process32Next(hSnapshot, &pe));
+    }
+
+    CloseHandle(hSnapshot);
+    return name;
+}
+
+/***********************************************************************
+
+    親プロセスが指定exeかどうかを判定する。
+    targetExe : 判定対象のexe名（例: L"Launcher.exe"）
+    return : true = 一致 / false = 不一致
+    2026.5.27yori
+
+***********************************************************************/
+bool HwCtrl::IsParentProcessTarget(const std::wstring& targetExe)
+{
+    DWORD selfPid = GetCurrentProcessId(); // 自プロセスID取得
+    DWORD parentPid = GetParentProcessId(selfPid); // 親PID取得
+
+    if (parentPid == 0)
+        return false;
+
+    std::wstring parentExe = GetProcessNameByPid(parentPid); // 親exe取得
+
+    // exe名を大文字小文字無視で比較
+    if (_wcsicmp(parentExe.c_str(), targetExe.c_str()) == 0)
+    {
+        return true;
+    }
+
+    return false;
 }

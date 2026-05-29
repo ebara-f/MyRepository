@@ -259,12 +259,25 @@ int  WINAPI CPX_AppMain_TestLplRecvMesBox()
 }
 
 
+
 // 追加(2026.4.19yori)
 int  WINAPI CPX_AppMain_JointLimitAlarm(int* limitfg)
 {
     int     rc;
 
     rc = AppMain::JointLimitAlarm(limitfg);
+
+    return(rc);
+}
+
+
+
+// 追加(2026.5.20yori)
+int  WINAPI CPX_AppMain_MainWindowStatus(bool* traymodefg)
+{
+    int     rc;
+
+    rc = AppMain::MainWindowStatus(traymodefg);
 
     return(rc);
 }

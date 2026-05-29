@@ -110,7 +110,7 @@ namespace VecApp
         }
 
         // イニシャライズボタンの有効無効を設定する。(2025.11.20yori)
-        private bool _isBtn03Enabled = true; // 初期状態は有効
+        private bool _isBtn03Enabled = false; // 初期状態を有効→無効(2026.5.28yori)
         public bool IsBtn03Enabled
         {
             get { return _isBtn03Enabled; }
@@ -125,7 +125,7 @@ namespace VecApp
         }
 
         // イニシャライズボタンの不透明度を設定する。(2025.11.20yori)
-        private double _btn03Opacity = 1.0; // デフォルトは不透明
+        private double _btn03Opacity = 0.25; // 初期状態を不透明(1.0)→半透明(0.25)(2026.5.28yori)
         public double Btn03Opacity
         {
             get => _btn03Opacity;
@@ -140,7 +140,7 @@ namespace VecApp
         }
 
         // 0軸イニシャライズボタンの有効無効を設定する。(2025.11.19yori)
-        private bool _isBtn04Enabled = true; // 初期状態は有効
+        private bool _isBtn04Enabled = false; // 初期状態は有効→無効(2026.5.28yori)
         public bool IsBtn04Enabled
         {
             get { return _isBtn04Enabled; }
@@ -155,7 +155,7 @@ namespace VecApp
         }
 
         // 0軸イニシャライズボタンの不透明度を設定する。(2025.11.19yori)
-        private double _btn04Opacity = 1.0; // デフォルトは不透明
+        private double _btn04Opacity = 0.25; // 初期状態は不透明(1.0)→半透明化(0.25)(2026.5.28yori)
         public double Btn04Opacity
         {
             get => _btn04Opacity;
@@ -170,7 +170,7 @@ namespace VecApp
         }
 
         // モード切替ボタンの不透明度を設定する。(2025.11.20yori)
-        private double _btn05Opacity = 1.0; // デフォルトは不透明
+        private double _btn05Opacity = 0.25; // 初期状態は不透明(1.0)→半透明化(0.25)(2026.5.28yori)
         public double Btn05Opacity
         {
             get => _btn05Opacity;
@@ -185,7 +185,7 @@ namespace VecApp
         }
 
         // モード切替ボタンの有効無効を設定する。(2025.11.20yori)
-        private bool _isBtn05Enabled = true; // 初期状態は有効
+        private bool _isBtn05Enabled = false; // 初期状態は有効→無効(2026.5.28yori)
 
         public bool IsBtn05Enabled
         {

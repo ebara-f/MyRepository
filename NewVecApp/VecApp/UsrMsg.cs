@@ -107,5 +107,9 @@ namespace VecApp
 
         public const int WM_DlgMI_Show = WM_USER + 50; // 関節リミット画面表示(2026.4.14yori)
         public const int WM_DlgMI_Close = WM_USER + 51; // 関節リミット画面非表示(2026.4.14yori)
+
+        public const int WM_Connection_Completed = WM_USER + 52; // 接続完了(2026.5.28yori)
+        public const int WM_Disconnection_Completed = WM_USER + 53; // 切断完了(2026.5.28yori)
+        public const int WM_Initialize_Completed = WM_USER + 54; // 接続完了(2026.5.28yori)
     }
 }
