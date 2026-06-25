@@ -47,7 +47,8 @@
                                 <TextBlock Text="{x:Static res:Resources.String13}" Foreground="White" FontSize="20" Margin="0,0,0,10" Background="Gray"/>
                                 <StackPanel Orientation="Horizontal" Margin="15,0,0,20">
                                     <TextBlock Text="{x:Static res:Resources.String14}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
-                                    <ComboBox ItemsSource="{Binding BallItems}" SelectedIndex="{Binding BallIndex}" Width="100" FontSize="20" Margin="10,0,0,0" SelectionChanged="ComboBox_SelectionChanged"/>
+                                    <!-- ComboBoxの有効無効のバインディング追加(2026.6.3yori) -->
+                                    <ComboBox ItemsSource="{Binding BallItems}" SelectedIndex="{Binding BallIndex}" Width="100" FontSize="20" Margin="10,0,0,0" SelectionChanged="ComboBox_SelectionChanged" IsEnabled="{Binding IsBallComboBoxEnabled}"/>
                                 </StackPanel>
                                 <!-- Height="69"→Height="90"へ変更(2025.10.27yori) -->
                                 <Border Background="#DDD" Margin="40,0,0,0" CornerRadius="6"
@@ -59,9 +60,11 @@
                                 </Border>
                                 <StackPanel Orientation="Horizontal" Margin="90,10,0,20">
                                     <TextBlock Text="{x:Static res:Resources.String15}" Foreground="White" FontSize="20" VerticalAlignment="Center"/>
-                                    <!-- x:Name="Dia"追加(2025.9.8yori) -->
-                                    <TextBox x:Name="Dia" Text="{Binding Diameter}" Width="70" FontSize="20" Margin="10,0,0,0"
-                                         VerticalContentAlignment="Center" Background="Black" Foreground="White"/>
+                                    <!-- TextBoxのx:Name="Dia"追加(2025.9.8yori) -->
+                                    <!-- TextBoxの有効無効のバインディング追加(2026.6.3yori) -->
+                                    <!-- TextBoxのx:Name="Dia"削除(2025.6.3yori) -->
+                                    <TextBox Text="{Binding Diameter}" Width="70" FontSize="20" Margin="10,0,0,0"
+                                         VerticalContentAlignment="Center" Background="Black" Foreground="White" IsEnabled="{Binding IsDiaTextBoxEnabled}"/>
                                     <TextBlock Text="mm" Foreground="White" FontSize="20"
                                            VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 </StackPanel>

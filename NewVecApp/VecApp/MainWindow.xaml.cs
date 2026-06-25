@@ -574,6 +574,15 @@ namespace VecApp
                 MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
                 vm.IsBtn02Enabled = true; // 有接触設定
                 vm.Btn02Opacity = 1.0; // 有接触設定
+
+                // SubWindow2のボタン無効化(2026.6.3yori)
+                SubWindow2_ViewModel SubWnd02ViewModel = new SubWindow2_ViewModel();
+                m_SubWnd02.DataContext = SubWnd02ViewModel;
+                SubWnd02ViewModel.IsBtn03Enabled = false; // キャリブレーション
+                SubWnd02ViewModel.Btn03Opacity = 0.25; // キャリブレーション
+
+                m_SubWnd02.ProbeSettingValue.IsBallComboBoxEnabled = false; // スタイラスボール有無選択不可(2026.6.3yori)
+                m_SubWnd02.ProbeSettingValue.IsDiaEnable = false; // スライス直径設定無効(2026.6.3yori)
             }
             else if (msg == UsrMsg.WM_Disconnection_Completed) // 追加(2026.5.28yori)
             {
@@ -917,8 +926,13 @@ namespace VecApp
 
             if (m_DlgMI.IsVisible == false)
             {
-                m_DlgMI.Owner = Application.Current.MainWindow;
-                m_DlgMI.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                // MainWindowの中央にダイアログを表示する場合
+                // コメントアウト(2026.6.4yori)
+                //m_DlgMI.Owner = Application.Current.MainWindow;
+                //m_DlgMI.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                // 画面中央にダイアログを表示する場合(2026.6.4yori)
+                m_DlgMI.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
                 // モーダレスダイアログとして表示
                 m_DlgMI.Show();

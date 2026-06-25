@@ -2160,7 +2160,9 @@ void AppMain::ThreadProc()
                 }
                 else
                 {
-                    if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_FAILURE); // 切断に失敗したことをPolyWorks側に知らせる(2025.6.9yori)
+                    // 切断に失敗したことをPolyWorks側に知らせる(2025.6.9yori)
+                    // PolyWorks側で未処理のため、コメントアウト(2026.6.5yori)
+                    //if (!HwCtrl::m_b_Button_ConnectFlag) HwCtrl::AppCommandSend(APP_SEND_CMD::DISCONNECT_FAILURE);
                 }
             }
             else

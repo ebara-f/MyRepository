@@ -77,14 +77,22 @@ namespace VecApp
             // プローブ設定画面からプローブ情報を取得し、アームへ送る。(2025.7.18yori)
             // CSH.Grp02.Cmd07関数に引数追加(2025.9.8yori)
             // スタイラスなしの場合は、直径=0mmに設定する。(2025.9.8yori)
-            if (this.ViewModel.BallIndex == 0)
+            if (this.ViewModel.IsDiaEnable == true) // PolyWorksの場合(2026.6.3yori)
             {
-                CSH.Grp02.Cmd07(int.Parse(this.ViewModel.Id), 0);
+                if (this.ViewModel.BallIndex == 0)
+                {
+                    CSH.Grp02.Cmd07(int.Parse(this.ViewModel.Id), 0.0);
+                }
+                else
+                {
+                    CSH.Grp02.Cmd07(int.Parse(this.ViewModel.Id), double.Parse(this.ViewModel.Diameter));
+                }
             }
-            else
+            else // FullMoonを仕様する場合はスタイラス直径=6.0mmに固定(2026.6.3yori)
             {
-                CSH.Grp02.Cmd07(int.Parse(this.ViewModel.Id), double.Parse(this.ViewModel.Diameter));
+                CSH.Grp02.Cmd07(int.Parse(this.ViewModel.Id), 6.0);
             }
+
             Parent.CurrentPanel = Panel.None; // プローブ設定画面非表示(2025.7.17yori) // Content = null;から変更(2025.8.16yori)
 
             // 下記の例は削除する予定(2025.7.17yori)
@@ -114,7 +122,9 @@ namespace VecApp
             { 
                 case 0:
                     this.ViewModel.BallImage = "Image/VST28-0.1.PNG";
-                    Dia.IsEnabled = false; // スタイラスなしの場合、ComboBoxを選択できないよう無効化する。(2025.9.8yori)
+                    // スタイラスなしの場合、ComboBoxを選択できないよう無効化する。(2025.9.8yori)
+                    // Dia.IsEnabledからthis.ViewModel.IsDiaTextBoxEnabledへ変更(2026.6.3yori)
+                    this.ViewModel.IsDiaTextBoxEnabled = false;
                     this.ViewModel.Diameter = "0.00"; // スタイラスなしの場合、直径=0.00mmと表示する。(2025.9.8yori)
                     break;
                 case 1:
@@ -123,7 +133,16 @@ namespace VecApp
                     CSH.AppMain.UpDateData01(out sts);
                     if (sts.arm_model == "VAR800M" || sts.arm_model == "VAR800L") this.ViewModel.BallImage = "Image/BallProbe.PNG";
                     if (sts.arm_model == "VAR700M" || sts.arm_model == "VAR700L") this.ViewModel.BallImage = "Image/VST29-φ6.PNG";
-                    Dia.IsEnabled = true; // スタイラスありの場合、ComboBoxを選択できるよう有効化する。(2025.9.8yori)
+                    // スタイラスありの場合、ComboBoxを選択できるよう有効化する。(2025.9.8yori)
+                    // Dia.IsEnabledからthis.ViewModel.IsDiaTextBoxEnabledへ変更(2026.6.3yori)
+                    if (this.ViewModel.IsDiaEnable == true)
+                    {
+                        this.ViewModel.IsDiaTextBoxEnabled = true;
+                    }
+                    else // K-CMMから接続した場合は、スタイラス直径を変更できないようにする。(2026.6.3yori)
+                    {
+                        this.ViewModel.IsDiaTextBoxEnabled = false;
+                    }
                     this.ViewModel.Diameter = sts.dia.ToString("F2"); // 追加(2025.10.27yori)
                     break;
                 default:

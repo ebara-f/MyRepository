@@ -31,6 +31,8 @@ namespace VecApp
 
         private string _probeImage;
 
+        public bool IsDiaEnable { get; set; } = true; // 追加(2026.6.3yori)
+
         public ProbeSettingViewModel()
         {
             BallItems = new ObservableCollection<string> { Resources.String212, Resources.String213 }; // 修正(2025.12.14)
@@ -135,6 +137,32 @@ namespace VecApp
                     _probeImage = value;
                     OnPropertyChanged(nameof(ProbeImage));
                 }
+            }
+        }
+
+        private bool _isBallComboBoxEnabled = true; // 追加(2026.6.3yori)
+
+        // ComboBoxの有効/無効を制御するプロパティ(2026.6.3yori)
+        public bool IsBallComboBoxEnabled
+        {
+            get => _isBallComboBoxEnabled;
+            set
+            {
+                _isBallComboBoxEnabled = value;
+                OnPropertyChanged(nameof(IsBallComboBoxEnabled));
+            }
+        }
+
+        private bool _isDiaTextBoxEnabled; // 追加(2026.6.3yori)
+
+        // ComboBoxの有効/無効を制御するプロパティ(2026.6.3yori)
+        public bool IsDiaTextBoxEnabled
+        {
+            get => _isDiaTextBoxEnabled;
+            set
+            {
+                _isDiaTextBoxEnabled = value;
+                OnPropertyChanged(nameof(IsDiaTextBoxEnabled));
             }
         }
 

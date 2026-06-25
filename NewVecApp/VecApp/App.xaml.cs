@@ -44,10 +44,11 @@ namespace VecApp
             // 既に起動済み
             if (!createdNew)
             {
-                System.Windows.MessageBox.Show(VecApp.Properties.Resources.String290,
-                                VecApp.Properties.Resources.String291,
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
+                // 「K-CMM is already running.」のメッセージは表示しない。(2026.6.14yori)
+                //System.Windows.MessageBox.Show(VecApp.Properties.Resources.String290,
+                //                VecApp.Properties.Resources.String291,
+                //                MessageBoxButton.OK,
+                //                MessageBoxImage.Information);
 
                 Shutdown();
                 return;
@@ -56,6 +57,7 @@ namespace VecApp
 
             // tray 引数確認(2026.5.19yori)
             bool trayMode = e.Args.Any(arg => arg.Equals("tray", StringComparison.OrdinalIgnoreCase));
+            //bool trayMode = true; // 常にトレイモードで起動(2026.6.12yori)
             CSH.AppMain.MainWindowStatus(trayMode); // C++にトレイモードの状態を渡す。(2026.5.20yori)
 
             // MainWindow生成(2026.5.20yori)
@@ -77,6 +79,9 @@ namespace VecApp
                 MainWindow = mainWindow;
                 mainWindow.Show();
             }
+
+            // 起動完了通知(2026.6.19yori)
+            SignalStartupCompleted();
         }
 
 
@@ -149,6 +154,23 @@ namespace VecApp
             mutex?.Dispose();
 
             base.OnExit(e);
+        }
+
+        // 起動完了通知(2026.6.19yori)
+        private void SignalStartupCompleted()
+        {
+            try
+            {
+                using (EventWaitHandle readyEvent =
+                    EventWaitHandle.OpenExisting(
+                        @"Global\KCMM_READY"))
+                {
+                    readyEvent.Set();
+                }
+            }
+            catch
+            {
+            }
         }
     }
 }
