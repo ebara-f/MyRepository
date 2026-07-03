@@ -112,6 +112,8 @@ namespace VecApp
 
         private const int GWL_STYLE = -16; // スタイルを変更するためのインデックス(2025.11.19yori)
 
+        private bool m_IsConnected = false; // 接続状態(2026..6.26yori)
+
         /// <summary>
         /// 初期化処理
         /// </summary>
@@ -120,7 +122,7 @@ namespace VecApp
 			InitializeComponent();
 
             // メインウィンドウ起動時に最小化する。(2025.11.19yori)
-            this.WindowState = System.Windows.WindowState.Minimized;
+            //this.WindowState = System.Windows.WindowState.Minimized; // コメントアウト、GeomMeasureで起動直後に接続ボタンを押せるようにする。(2026.7.2yori)
 
             // メインウィンドウの状態変更を監視(2026.2.5yori)
             //this.StateChanged += MainWindow_StateChanged; // コメントアウト、FullMoonが使用できるよう常に最小化しない。(2026.2.13yori)
@@ -251,21 +253,21 @@ namespace VecApp
         // メッセージループを記述したメソッド
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg == UsrMsg.WM_MainWnd_Close)
+            if (msg == UsrMsg.WM_MainWnd_Close) // 閉じる
             {
                 Close();
             }
-            else if (msg == UsrMsg.WM_MainWnd_Btn01)
+            else if (msg == UsrMsg.WM_MainWnd_Btn01) // 接続
             {
                 //CmdDlg01();		// 2025.4.23 eba del
                 CmdSubWnd01();  // 2025.4.23 eba add
             }
-            else if (msg == UsrMsg.WM_MainWnd_Btn02)
+            else if (msg == UsrMsg.WM_MainWnd_Btn02) // 設定(有)
             {
                 //CmdDlg02();		// 2025.4.23 eba del
                 CmdSubWnd02();  // 2025.4.23 eba add
             }
-            else if (msg == UsrMsg.WM_MainWnd_Btn03)
+            else if (msg == UsrMsg.WM_MainWnd_Btn03) // 設定(非)
             {
                 //CmdDlg03();		// 2025.4.23 eba del
                  CmdSubWnd03();  // 2025.4.23 eba add
@@ -321,6 +323,7 @@ namespace VecApp
                 SubWnd01ViewModel.Btn03Opacity = 0.25; // イニシャライズ
                 SubWnd01ViewModel.Btn04Opacity = 0.25; // 0軸イニシャライズ
                 SubWnd01ViewModel.Btn05Opacity = 0.25; // モード切替
+
                 m_SubWnd01.CurrentPanel = Panel.Initialize; // イニシャライズ画面表示(2025.7.18yori) // 変更(2025.7.28yori)
             }
             else if (msg == UsrMsg.WM_SubWnd01_Btn04)
@@ -565,8 +568,11 @@ namespace VecApp
                 // SubWindow1のボタン有効化(2026.5.28yori)
                 SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
                 m_SubWnd01.DataContext = SubWnd01ViewModel;
+                SubWnd01ViewModel.IsBtn02Enabled = true; // 切断(2026.6.28yori)
+                SubWnd01ViewModel.Btn02Opacity = 1.0; // 切断(2026.6.28yori)
                 SubWnd01ViewModel.IsBtn03Enabled = true; // イニシャライズ
                 SubWnd01ViewModel.Btn03Opacity = 1.0; // イニシャライズ
+                m_IsConnected = true; // 追加(2026.6.26yori)
             }
             else if (msg == UsrMsg.WM_Initialize_Completed) // 追加(2026.5.28yori)
             {
@@ -589,6 +595,8 @@ namespace VecApp
                 // SubWindow1のボタン無効化(2026.5.28yori)
                 SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
                 m_SubWnd01.DataContext = SubWnd01ViewModel;
+                SubWnd01ViewModel.IsBtn02Enabled = false; // 切断(2026.6.28yori)
+                SubWnd01ViewModel.Btn02Opacity = 0.25; // 切断(2026.6.28yori)
                 SubWnd01ViewModel.IsBtn03Enabled = false; // イニシャライズ
                 SubWnd01ViewModel.Btn03Opacity = 0.25; // イニシャライズ
 
@@ -596,6 +604,8 @@ namespace VecApp
                 MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
                 vm.IsBtn02Enabled = false; // 有接触設定
                 vm.Btn02Opacity = 0.25; // 有接触設定
+
+                m_IsConnected = false; // 追加(2026.6.26yori)
             }
 
             return IntPtr.Zero;
@@ -606,27 +616,43 @@ namespace VecApp
 		/// </summary>
 		private void Click_Btn01(object sender, RoutedEventArgs e)
 		{
-			// ダイアログ表示
+            // SubWindow1のボタン有効化(2025.12.18yori)
+            SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
+            m_SubWnd01.DataContext = SubWnd01ViewModel;
+            SubWnd01ViewModel.IsBtn01Enabled = true;
+            if (m_IsConnected == true) // 接続状態追加(2026.6.28yori)
+            {
+                SubWnd01ViewModel.IsBtn02Enabled = true;
+                SubWnd01ViewModel.IsBtn03Enabled = true;
+            }
+            else
+            {
+                SubWnd01ViewModel.IsBtn02Enabled = false;
+                SubWnd01ViewModel.IsBtn03Enabled = false;
+            }
+            SubWnd01ViewModel.IsBtn04Enabled = false; // Beak Masterで0軸イニシャライズは不要なため、無効化
+            SubWnd01ViewModel.IsBtn05Enabled = false; // アプリ単体動作は作成中のため、モード切替は押せないようにする。(2026.2.13yori)
+            SubWnd01ViewModel.Btn01Opacity = 1.0;
+            if (m_IsConnected == true) // 接続状態追加(2026.6.28yori)
+            {
+                SubWnd01ViewModel.Btn02Opacity = 1.0;
+                SubWnd01ViewModel.Btn03Opacity = 1.0;
+            }
+            else
+            {
+                SubWnd01ViewModel.Btn02Opacity = 0.25;
+                SubWnd01ViewModel.Btn03Opacity = 0.25;
+            }
+            SubWnd01ViewModel.Btn04Opacity = 0.25; // Beak Masterで0軸イニシャライズは不要なため、半透明化
+            SubWnd01ViewModel.Btn05Opacity = 0.25; // アプリ単体動作は作成中のため、半透明化(2026.2.13yori)
+			
+            // ダイアログ表示
 			//CmdDlg01();	// 2025.4.23 eba del
 			CmdSubWnd01();  // 2025.4.23 eba add
             m_SubWnd03.ApiScanValue.IsButtonEnabled = true; // アプリ側から接続した場合にスキャナのスタートとリセットボタンを押せるようにする。(2025.9.3yori)
             m_SubWnd03.ApiScanValue.ButtonOpacity = 1.0; // 追加(2025.11.20yori)
 
             //UpdateData1();	// 2025.5.22 test eba
-
-            // SubWindow1のボタン有効化(2025.12.18yori)
-            SubWindow1_ViewModel SubWnd01ViewModel = new SubWindow1_ViewModel();
-            m_SubWnd01.DataContext = SubWnd01ViewModel;
-            SubWnd01ViewModel.IsBtn01Enabled = true;
-            SubWnd01ViewModel.IsBtn02Enabled = true;
-            //SubWnd01ViewModel.IsBtn03Enabled = true; // 接続状態で判断するため、コメントアウト(2026.5.28yori)
-            SubWnd01ViewModel.IsBtn04Enabled = false; // Beak Masterで0軸イニシャライズは不要なため、無効化
-            SubWnd01ViewModel.IsBtn05Enabled = false; // アプリ単体動作は作成中のため、モード切替は押せないようにする。(2026.2.13yori)
-            SubWnd01ViewModel.Btn01Opacity = 1.0;
-            SubWnd01ViewModel.Btn02Opacity = 1.0;
-            //SubWnd01ViewModel.Btn03Opacity = 1.0; // 接続状態で判断するため、コメントアウト(2026.5.28yori)
-            SubWnd01ViewModel.Btn04Opacity = 0.25; // Beak Masterで0軸イニシャライズは不要なため、半透明化
-            SubWnd01ViewModel.Btn05Opacity = 0.25; // アプリ単体動作は作成中のため、半透明化(2026.2.13yori)
         }
 
 		/// <summary>

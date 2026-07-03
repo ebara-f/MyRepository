@@ -1491,6 +1491,10 @@ void AppMain::ThreadProc()
                 }
                 else
                 {
+                    if (HwCtrl::IsParentProcessTarget(L"AmlSDI.exe") == true)
+                    {
+                        ret = HwCtrl::Func12(); // GeomMeasureからK-CMMを起動して接続した場合、測定音OFFにする。(2026.7.2yori)
+                    }
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Panel_Hide); // イニシャライズ画面非表示(2025.7.14yori)
                     UsrMsg::CallBack(UsrMsg::WM_Initialize_Completed); // C#側にイニシャライズ完了通知(2026.5.28yori)
                 }
@@ -1526,6 +1530,7 @@ void AppMain::ThreadProc()
                 ret = HwCtrl::Func08(); // 有接触モードへ変更
                 if (ret == 0)
                 {
+                    HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::CONNECT_CMP; // 追加漏れ(2026.7.1yori)
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Panel_Hide); // イニシャライズ画面非表示
                 }
                 else
@@ -1847,7 +1852,10 @@ void AppMain::ThreadProc()
                 }
                 UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Panel_Hide); // SubWindow2パネル非表示(2026.4.6yori)
                 UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close); // SubWindow2を閉じる。
-                HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。
+                if (!HwCtrl::m_b_Button_ConnectFlag) // 追加(2026.7.1yori)
+                {
+                    HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。
+                }
                 break;
             }
             if(PosiData.pbid_chg_fg != HwCtrl::pbid_chg_old_fg) UsrMsg::CallBack(UsrMsg::WM_UpdateData1);
@@ -1858,7 +1866,10 @@ void AppMain::ThreadProc()
             if (HwCtrl::Func09() == 0) HwCtrl::m_ProbeIdBeforeScanner = HwCtrl::m_hVecCnt.m_Sts.m_iProbeId; // 非接触モードへ変更する前のプローブID取得、追加漏れ(2026.2.18yori)
             UsrMsg::CallBack(UsrMsg::WM_SubWnd02_Close); // SubWindow2を閉じる。(2026.2.6yori)
             HwCtrl::m_VecStepSeq = VEC_STEP_SEQ::MEAS_IDLE;
-            HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。
+            if (!HwCtrl::m_b_Button_ConnectFlag) // 追加(2026.7.1yori)
+            {
+                HwCtrl::AppCommandSend(APP_SEND_CMD::MENU_CLOSED); // 有接触設定メニューが閉じられたことをPolyWorks側に知らせる。
+            }
             break;
 
         case VEC_STEP_SEQ::MEAS_IDLE:
@@ -2145,7 +2156,7 @@ void AppMain::ThreadProc()
         case VEC_STEP_SEQ::DISCONNECT_REQ:
             if (HwCtrl::m_hVecCnt.m_connectflag == true) // 接続している場合を追加、PolyWorksを再起動したときに再接続できるようにする。(2025.12.31yori)
             {
-                ret = HwCtrl::Func08();   // 有接触モードへ変更
+                ret = HwCtrl::Func08(); // 有接触モードへ変更
                 ret |= HwCtrl::Func13(); // 有接触測定音ON
                 ret |= HwCtrl::Func04(); // 有接触切断
                 if (ret == 0)

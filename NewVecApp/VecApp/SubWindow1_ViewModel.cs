@@ -80,7 +80,7 @@ namespace VecApp
         }
 
         // 切断ボタンの有効無効を設定する。(2025.11.20yori)
-        private bool _isBtn02Enabled = true; // 初期状態は有効
+        private bool _isBtn02Enabled = false; // 初期状態を有効→無効(2026.6.28yori)
         public bool IsBtn02Enabled
         {
             get { return _isBtn02Enabled; }
@@ -95,7 +95,7 @@ namespace VecApp
         }
 
         // 切断ボタンの不透明度を設定する。(2025.11.20yori)
-        private double _btn02Opacity = 1.0; // デフォルトは不透明
+        private double _btn02Opacity = 0.25; // 初期状態を不透明(1.0)→半透明(0.25)(2026.6.28yori)
         public double Btn02Opacity
         {
             get => _btn02Opacity;
