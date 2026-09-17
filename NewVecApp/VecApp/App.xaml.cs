@@ -25,17 +25,33 @@ namespace VecApp
         {
             base.OnStartup(e);
 
-            VecApp.Properties.Settings.Default.UICulture = "jp-JP";
-            //VecApp.Properties.Settings.Default.Save();
+            // K-CMM起動時にINIファイルから言語設定を読み込んで、言語を切り替える。(2026.8.6yori)
+            string iniPath = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                "KosakaLab",
+                "Kosaka CMM",
+                "Inifiles",
+                "K-CMM.ini");
 
-            string cultureName = VecApp.Properties.Settings.Default.UICulture;
-            if (string.IsNullOrEmpty(cultureName))
+            IniFile ini = new IniFile(iniPath);
+
+            string cultureName = ini.Read("General", "Language", "en-US");
+
+            switch (cultureName)
             {
-                cultureName = "en-US"; // デフォルト 英語
+                case "ja-JP":
+                case "en-US":
+                case "zh-CN":
+                    break;
+
+                default:
+                    cultureName = "en-US";
+                    break;
             }
 
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(cultureName);
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); // 英語に変更(2025.12.14yori)
+            CultureInfo culture = new CultureInfo(cultureName);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
 
             //// 多重起動防止のため、追加(2026.5.15yori)
             bool createdNew;

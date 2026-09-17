@@ -142,7 +142,7 @@ namespace VecApp
                 Name = Resources.String122,
                 UIType = "LuminosityMask",
                 Options2 = new ObservableCollection<string> { Resources.String123, Resources.String124, Resources.String125, Resources.String126 },
-                SelectedOption2 = Resources.String125
+                SelectedOption2 = Resources.String123 // String125→String123(2026.9.1yori)
             };
             parent2.Children.Add(new TreeItem
             {
@@ -153,6 +153,8 @@ namespace VecApp
                 InputText33 = "0",
                 PlotModel1 = CreatePlotModel1(),
                 PlotModel2 = CreatePlotModel2(),
+                SlideSwitchValue10 = 65535, // 追加(2026.9.1yori)
+                SlideSwitchValue11 = 0, // 追加(2026.9.1yori)
             });
             items.Add(parent2);
 
@@ -201,6 +203,12 @@ namespace VecApp
             {
                 UIType = "LuminanceSlice",
                 IsChecked7 = true,
+                InputText12 = "24528", // 追加(2026.8.8yori)
+                InputText13 = "24528", // 追加(2026.8.8yori)
+                InputText14 = "24528", // 追加(2026.8.8yori)
+                InputText15 = "24528", // 追加(2026.8.8yori)
+                InputText16 = "24528", // 追加(2026.8.8yori)
+                InputText17 = "24528", // 追加(2026.8.8yori)
             });
             items.Add(parent5);
 
@@ -209,6 +217,12 @@ namespace VecApp
             {
                 UIType = "SensitivitySlice",
                 IsChecked9 = true,
+                InputText18 = "3276", // 追加(2026.8.8yori)
+                InputText19 = "1200", // 追加(2026.8.8yori)
+                InputText20 = "3276", // 追加(2026.8.8yori)
+                InputText21 = "3276", // 追加(2026.8.8yori)
+                InputText22 = "3276", // 追加(2026.8.8yori)
+                InputText23 = "3276", // 追加(2026.8.8yori)
             });
             items.Add(parent6);
 
@@ -237,6 +251,7 @@ namespace VecApp
                 UIType = "AngleMask",
                 SlideSwitchValue8 = 0,
                 SlideText8 = Resources.String143,
+                InputText25 = "70.0", // 追加(2026.8.8yori)
             });
             items.Add(parent9);
 
@@ -264,7 +279,7 @@ namespace VecApp
             {
                 UIType = "Memo",
             });
-            items.Add(parent12);
+            //items.Add(parent12); // 未作成のため、コメントアウトし、ツリーに追加しない。(2026.8.31yori)
 
             return items;
         }
@@ -397,6 +412,85 @@ namespace VecApp
         public ObservableCollection<string> Options2 { get; set; }
         public string SelectedOption2 { get; set; }
 
+        // 追加(2026.9.1yori)
+        private int _optionIndex2;
+        public int OptionIndex2
+        {
+            get => _optionIndex2;
+            set
+            {
+                if (_optionIndex2 != value)
+                {
+                    _optionIndex2 = value;
+                    OnPropertyChanged(nameof(OptionIndex2));
+                }
+            }
+        }
+
+        // TextBlock1の不透明度を設定する。(2026.9.1yori)
+        private double _textBlock1Opacity = 0.25; // デフォルトは不透明度：0.25
+
+        public double TextBlock1Opacity
+        {
+            get { return _textBlock1Opacity; }
+            set
+            {
+                if (_textBlock1Opacity != value)
+                {
+                    _textBlock1Opacity = value;
+                    OnPropertyChanged(nameof(TextBlock1Opacity));
+                }
+            }
+        }
+
+        // TextBlock2の不透明度を設定する。(2026.9.1yori)
+        private double _textBlock2Opacity = 0.25; // デフォルトは不透明度：0.25
+
+        public double TextBlock2Opacity
+        {
+            get { return _textBlock2Opacity; }
+            set
+            {
+                if (_textBlock2Opacity != value)
+                {
+                    _textBlock2Opacity = value;
+                    OnPropertyChanged(nameof(TextBlock2Opacity));
+                }
+            }
+        }
+
+        // TextBoxの有効無効を設定する。(2026.9.1yori)
+        private bool _isTextBox1Enabled = false; // 初期状態は無効
+
+        public bool IsTextBox1Enabled
+        {
+            get { return _isTextBox1Enabled; }
+            set
+            {
+                if (_isTextBox1Enabled != value)
+                {
+                    _isTextBox1Enabled = value;
+                    OnPropertyChanged(nameof(IsTextBox1Enabled));
+                }
+            }
+        }
+
+        // PlotView1の不透明度を設定する。(2026.9.1yori)
+        private double _plotView1Opacity = 0.25; // デフォルトは不透明度：0.25
+
+        public double PlotView1Opacity
+        {
+            get { return _plotView1Opacity; }
+            set
+            {
+                if (_plotView1Opacity != value)
+                {
+                    _plotView1Opacity = value;
+                    OnPropertyChanged(nameof(PlotView1Opacity));
+                }
+            }
+        }
+
         //距離マスク
         public string XName { get; set; }
         public string YName { get; set; }
@@ -460,6 +554,18 @@ namespace VecApp
                     _isChecked1 = value;
                     OnPropertyChanged(nameof(IsChecked1));
                 }
+
+                // チェックの有無監視(2026.8.6yori)
+                if (_isChecked1)
+                {
+                    // チェックされた
+                    IsText1Enabled = true;
+                }
+                else
+                {
+                    // チェックが外れた
+                    IsText1Enabled = false;
+                }
             }
         }
 
@@ -473,6 +579,18 @@ namespace VecApp
                 {
                     _isChecked2 = value;
                     OnPropertyChanged(nameof(IsChecked2));
+                }
+
+                // チェックの有無監視(2026.8.6yori)
+                if (_isChecked2)
+                {
+                    // チェックされた
+                    IsText2Enabled = true;
+                }
+                else
+                {
+                    // チェックが外れた
+                    IsText2Enabled = false;
                 }
             }
         }
@@ -516,6 +634,18 @@ namespace VecApp
                     _isChecked5 = value;
                     OnPropertyChanged(nameof(IsChecked5));
                 }
+
+                // チェックの有無監視(2026.8.6yori)
+                if (_isChecked5)
+                {
+                    // チェックされた
+                    IsText5Enabled = true;
+                }
+                else
+                {
+                    // チェックが外れた
+                    IsText5Enabled = false;
+                }
             }
         }
 
@@ -529,6 +659,18 @@ namespace VecApp
                 {
                     _isChecked6 = value;
                     OnPropertyChanged(nameof(IsChecked6));
+                }
+
+                // チェックの有無監視(2026.8.6yori)
+                if (_isChecked6)
+                {
+                    // チェックされた
+                    IsText6Enabled = true;
+                }
+                else
+                {
+                    // チェックが外れた
+                    IsText6Enabled = false;
                 }
             }
         }
@@ -617,23 +759,135 @@ namespace VecApp
             }
         }
 
-        //// 追加(2025.8.26yori)
-        // CheckBoxの有効無効を設定する。
-        private bool _isCheckBoxEnabled = false; // 初期状態は無効
 
-        public bool IsCheckBoxEnabled
+        // CheckBoxの有効無効を設定する。(2025.8.26yori)
+        // CheckBoxを識別する。(2026.8.6yori)
+        private bool _isCheckBox1Enabled = false; // 初期状態は無効
+
+        public bool IsCheckBox1Enabled
         {
-            get { return _isCheckBoxEnabled; }
+            get { return _isCheckBox1Enabled; }
             set
             {
-                if (_isCheckBoxEnabled != value)
+                if (_isCheckBox1Enabled != value)
                 {
-                    _isCheckBoxEnabled = value;
-                    OnPropertyChanged(nameof(IsCheckBoxEnabled));
+                    _isCheckBox1Enabled = value;
+                    OnPropertyChanged(nameof(IsCheckBox1Enabled));
                 }
             }
         }
-        ////
+
+        // CheckBoxを識別する。(2026.8.6yori)
+        private bool _isCheckBox2Enabled = false; // 初期状態は無効
+
+        public bool IsCheckBox2Enabled
+        {
+            get { return _isCheckBox2Enabled; }
+            set
+            {
+                if (_isCheckBox2Enabled != value)
+                {
+                    _isCheckBox2Enabled = value;
+                    OnPropertyChanged(nameof(IsCheckBox2Enabled));
+                }
+            }
+        }
+
+        // CheckBoxを識別する。(2026.8.6yori)
+        private bool _isCheckBox5Enabled = false; // 初期状態は無効
+
+        public bool IsCheckBox5Enabled
+        {
+            get { return _isCheckBox5Enabled; }
+            set
+            {
+                if (_isCheckBox5Enabled != value)
+                {
+                    _isCheckBox5Enabled = value;
+                    OnPropertyChanged(nameof(IsCheckBox5Enabled));
+                }
+            }
+        }
+
+        // CheckBoxを識別する。(2026.8.6yori)
+        private bool _isCheckBox6Enabled = false; // 初期状態は無効
+
+        public bool IsCheckBox6Enabled
+        {
+            get { return _isCheckBox6Enabled; }
+            set
+            {
+                if (_isCheckBox6Enabled != value)
+                {
+                    _isCheckBox6Enabled = value;
+                    OnPropertyChanged(nameof(IsCheckBox6Enabled));
+                }
+            }
+        }
+
+        // TextBox1の有効無効を設定する。(2026.8.6yori)
+        private bool _isText1Enabled = false; // 初期状態は無効
+
+        public bool IsText1Enabled
+        {
+            get { return _isText1Enabled; }
+            set
+            {
+                if (_isText1Enabled != value)
+                {
+                    _isText1Enabled = value;
+                    OnPropertyChanged(nameof(IsText1Enabled));
+                }
+            }
+        }
+
+        // TextBox2の有効無効を設定する。(2026.8.6yori)
+        private bool _isText2Enabled = false; // 初期状態は無効
+
+        public bool IsText2Enabled
+        {
+            get { return _isText2Enabled; }
+            set
+            {
+                if (_isText2Enabled != value)
+                {
+                    _isText2Enabled = value;
+                    OnPropertyChanged(nameof(IsText2Enabled));
+                }
+            }
+        }
+
+        // TextBox5の有効無効を設定する。(2026.8.6yori)
+        private bool _isText5Enabled = false; // 初期状態は無効
+
+        public bool IsText5Enabled
+        {
+            get { return _isText5Enabled; }
+            set
+            {
+                if (_isText5Enabled != value)
+                {
+                    _isText5Enabled = value;
+                    OnPropertyChanged(nameof(IsText5Enabled));
+                }
+            }
+        }
+
+        // TextBox1の有効無効を設定する。(2026.8.6yori)
+        private bool _isText6Enabled = false; // 初期状態は無効
+
+        public bool IsText6Enabled
+        {
+            get { return _isText6Enabled; }
+            set
+            {
+                if (_isText6Enabled != value)
+                {
+                    _isText6Enabled = value;
+                    OnPropertyChanged(nameof(IsText6Enabled));
+                }
+            }
+        }
 
         //点群補正/フィルタ
         private int _slideSwitch1;
@@ -1079,11 +1333,18 @@ namespace VecApp
             get => _isChecked7;
             set
             {
-                if (_isChecked7 != value)
+                // 両方のラジオボタンが無効になる不具合修正(2026.8.27yori)
+                if (_isChecked7 == value)
+                    return;
+
+                _isChecked7 = value;
+
+                if (value)
                 {
-                    _isChecked7 = value;
-                    OnPropertyChanged(nameof(IsChecked7));
+                    IsChecked8 = false;
                 }
+
+                OnPropertyChanged(nameof(IsChecked7));
             }
         }
 
@@ -1093,11 +1354,18 @@ namespace VecApp
             get => _isChecked8;
             set
             {
-                if (_isChecked8 != value)
+                // 両方のラジオボタンが無効になる不具合修正(2026.8.27yori)
+                if (_isChecked8 == value)
+                    return;
+
+                _isChecked8 = value;
+
+                if (value)
                 {
-                    _isChecked8 = value;
-                    OnPropertyChanged(nameof(IsChecked8));
+                    IsChecked7 = false;
                 }
+
+                OnPropertyChanged(nameof(IsChecked8));
             }
         }
 
@@ -1206,11 +1474,18 @@ namespace VecApp
             get => _isChecked9;
             set
             {
-                if (_isChecked9 != value)
+                // 両方のラジオボタンが無効になる不具合修正(2026.8.27yori)
+                if (_isChecked9 == value)
+                    return;
+
+                _isChecked9 = value;
+
+                if (value)
                 {
-                    _isChecked9 = value;
-                    OnPropertyChanged(nameof(IsChecked9));
+                    IsChecked10 = false;
                 }
+
+                OnPropertyChanged(nameof(IsChecked9));
             }
         }
 
@@ -1220,11 +1495,18 @@ namespace VecApp
             get => _isChecked10;
             set
             {
-                if (_isChecked10 != value)
+                // 両方のラジオボタンが無効になる不具合修正(2026.8.27yori)
+                if (_isChecked10 == value)
+                    return;
+
+                _isChecked10 = value;
+
+                if (value)
                 {
-                    _isChecked10 = value;
-                    OnPropertyChanged(nameof(IsChecked10));
+                    IsChecked9 = false;
                 }
+
+                OnPropertyChanged(nameof(IsChecked10));
             }
         }
 
@@ -1352,6 +1634,22 @@ namespace VecApp
                 {
                     _inputText25 = value;
                     OnPropertyChanged(nameof(InputText25));
+                }
+            }
+        }
+
+        // TextBoxの有効無効を設定する。(2026.8.6yori)
+        private bool _isAngleMaskEnabled = false; // 初期状態は無効
+
+        public bool IsAngleMaskEnabled
+        {
+            get { return _isAngleMaskEnabled; }
+            set
+            {
+                if (_isAngleMaskEnabled != value)
+                {
+                    _isAngleMaskEnabled = value;
+                    OnPropertyChanged(nameof(IsAngleMaskEnabled));
                 }
             }
         }
@@ -1667,6 +1965,9 @@ namespace VecApp
             get => _slideSwitch10;
             set
             {
+                // SlideSwitchValue11を下回らない。(2026.9.1yori)
+                value = Math.Max(value, _slideSwitch11);
+
                 if (_slideSwitch10 != value)
                 {
                     _slideSwitch10 = value;
@@ -1683,12 +1984,31 @@ namespace VecApp
             get => _slideSwitch11;
             set
             {
+                // SlideSwitchValue10を超えない。(2026.9.1yori)
+                value = Math.Min(value, _slideSwitch10);
+
                 if (_slideSwitch11 != value)
                 {
                     _slideSwitch11 = value;
                     OnPropertyChanged(nameof(SlideSwitchValue11));
                     InputText33 = value.ToString();
                     UpdatePlotRange();
+                }
+            }
+        }
+
+        // Sliderの有効無効を設定する。(2026.9.1yori)
+        private bool _isSliderEnabled = false; // 初期状態は無効
+
+        public bool IsSliderEnabled
+        {
+            get { return _isSliderEnabled; }
+            set
+            {
+                if (_isSliderEnabled != value)
+                {
+                    _isSliderEnabled = value;
+                    OnPropertyChanged(nameof(IsSliderEnabled));
                 }
             }
         }
@@ -1729,13 +2049,14 @@ namespace VecApp
             }
 
             // PlotModel2 の範囲を更新
-            if (ApiScanViewModel.BarSeries != null)
-            {
-                ApiScanViewModel.BarSeries.Points.Clear();
-                ApiScanViewModel.BarSeries.Points.AddRange(ApiScanViewModel.AllPoints.Where(p => p.X >= min && p.X <= max));
+            // PolyWorksでは点群後処理不可のためグラフ表示しない。コメントアウト(2026.9.1yori)
+            //if (ApiScanViewModel.BarSeries != null)
+            //{
+            //    ApiScanViewModel.BarSeries.Points.Clear();
+            //    ApiScanViewModel.BarSeries.Points.AddRange(ApiScanViewModel.AllPoints.Where(p => p.X >= min && p.X <= max));
 
-                PlotModel2.InvalidatePlot(true);
-            }
+            //    PlotModel2.InvalidatePlot(true);
+            //}
 
         }
 

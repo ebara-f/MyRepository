@@ -16,6 +16,18 @@
 
 /***********************************************************************
 
+    グローバル変数(2026.9.8yori)
+
+***********************************************************************/
+
+KSK_PFSCANPNT ScanPoint[MAX_ONELINEDATA]{}; // フィルタ用のスキャン点列(2026.9.10yori) // scanpoint→ScanPoint(2026.9.15yori)
+KSK_PFSCANLINEP ScanLine{}; // フィルタ用のスキャンライン(2026.9.11yori) // scanline→ScanLine(2026.9.15yori)
+KSK_PFSCANLINE ScanLineArray[MAX_LINEDATA]{}; // フィルタ用のスキャンライン配列(2026.9.17yori)
+PGT_VEC DirScan[MAX_LINEDATA]{}; // スキャン方向(2026.9.17yori) 
+
+
+/***********************************************************************
+
     スタティック変数(2025.5.15yori)
 
 ***********************************************************************/
@@ -63,10 +75,6 @@ bool            HwCtrl::m_ScannerAlignmentProbeFlag = false; // 追加(2025.12.1
 int             HwCtrl::m_Type = 0; // 点検、キャリブレーションの種類(2025.12.5yori)
 int             HwCtrl::m_LimFg = 0; // 関節リミット軸表示機能(2026.4.15yori)
 int             HwCtrl::m_ProbeIdBeforeScanner = 2; // 追加(2025.11.20yori)
-unsigned short  HwCtrl::m_BrightSlice[5] = { 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0, 0x5FD0 }; // 輝度スライス(2025.8.25yori)
-unsigned short  HwCtrl::m_SensSlice[5] = { 0x0CCC, 0x04B0, 0x0CCC, 0x0CCC, 0x0CCC }; // 感度スライス(2025.8.25yori)
-double          HwCtrl::m_Angle = 70.0; // 角度マスク(2025.8.25yori)
-int             HwCtrl::m_Edge = 3; // エッジマスク(2025.8.25yori)
 DWORD           HwCtrl::m_Address = 0xC0A801C8; // スキャナのIPアドレス初期値「192.168.10.200(0xC0A80AC8)」、一時的にIPアドレスを「192.168.1.200(0xC0A801C8)」へ変更(2025.6.19yori)
 DWORD           HwCtrl::m_Subnet = 0xFFFFFF00; // スキャナのサブネットマスク初期値「255.255.255.0」(2025.6.19yori)
 DWORD           HwCtrl::m_Gateway = 0xC0A80A01; // スキャナのデフォルトゲートウェイ初期値「192.168.10.1」(2025.6.19yori)
@@ -85,12 +93,17 @@ CalibResult*    HwCtrl::m_ptCalibResult = NULL; // 非接触キャリブ結果(2
 double          HwCtrl::m_MaxMin[3] = { 0.0, 0.0, 0.0 }; // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
 double          HwCtrl::m_BeforeXYZ[3] = { 0.0, 0.0, 0.0 };// スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
 bool            HwCtrl::m_isFirst = true; // 追加(2026.1.10yori)
+bool            HwCtrl::m_isFirstPointNo = true; // スキャンポイント数カウント用(2026.9.10yori)
 int             HwCtrl::m_BeforeLineNo = 0; // 追加(2026.2.2yori)
 //double          HwCtrl::m_Afterdist2 = 0.0;  // デバッグ(2026.1.12yori)
 //unsigned int    HwCtrl::gDistHist[11] = { 0 };//test 2026.01.12 t.kanamura
 int             HwCtrl::dist_count = 0; // 追加(2026.1.12yori)
 int             HwCtrl::m_JudgeCount = 0;
 int             HwCtrl::m_ArmLineNo = 0; // スキャナの座標値と合成するアームラインNo(デバッグ用)(2026.1.26yori)
+int             HwCtrl::m_BrightMaskUpperLimit = 65535; // 輝度マスク上限値(2026.9.2yori)
+int             HwCtrl::m_BrightMaskLowerLimit = 0; // 輝度マスク下限値(2026.9.2yori)
+long            HwCtrl::m_ParallelCount = 0; // 平行補正用ラインカウント(2026.9.16yori)
+long            HwCtrl::m_TiltedSURFCount = 0; // 面傾斜部の点の除去用ラインカウント(2026.9.17yori)
 
 /***********************************************************************
 
@@ -463,6 +476,12 @@ int HwCtrl::Func15()
     int sens = TDS_SIMPLESENS_0; // Normal(2025.11.25yori)
     int power = TDS_GUIDEPOWER_1; // 中(2025.11.25yori)
     int interp = TDS_INTERPOLATIONX_NONE; // 補間なし(2025.11.25yori)
+    PulsZMask mask; // 追加(2026.8.5yori)
+    int angle_enable = 1; // 角度マスク有効無効(2026.8.5yori)
+    double angle = 70.0; // 追加(2026.8.5yori)
+    int two_peak = TDS_2PEAK_MASK_ENABLE; // 2ピークマスク有効(2026.8.5yori)
+    int edge_num = 3; // 追加(2026.8.5yori)
+    Status02 sts;  // 追加(2026.8.28yori)
 
     // INIファイルを出力するフォルダーのパスを設定
     TdsVecSetIniFilePath("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles");
@@ -491,15 +510,28 @@ int HwCtrl::Func15()
         bFg = TdsVecBufferClear(); // スキャナバッファクリア
         if ( bFg )
         {
-            GetIniScanPara(&mode, &power, &interp); // INIファイルに保存された測定モード取得(2025.11.25yori)
-            GetIniScanSens(&sens); // INIファイルに保存された測定モード取得(2025.11.25yori)
-            Func61(mode); // TDS_MEASMODE_EからINIファイルに保存されたパラメータに変更(2025.11.25yori)
+            // INIファイルに保存された測定モード取得(2025.11.25yori)
+            // 距離マスク追加(2026.8.5yori)
+            // 輝度スライス追加(2026.8.5yori)
+            // 感度スライス追加(2026.8.5yori)
+            // 角度マスク追加(2026.8.5yori)
+            // 2ピークマスク追加(2026.8.5yori)
+            // エッジマスクの点数追加(2026.8.5yori)
+            //GetIniScanPara(&mode, &power, &interp, &mask, bright_slice, sens_slice, &angle, &two_peak, &edge_num); // 後ほど削除予定(2026.8.28yori)
+            GetIniScanPara2(&sts, &mask); // 追加(2026.8.28yori)
+            GetIniScanSens(&sens); // INIファイルに保存された感度取得(2025.11.25yori)
+            GetIniScanAngleMaskEnable(&angle_enable); // INIファイルに保存された角度マスク有効無効取得(2026.8.5yori)
+            Func61(sts.mode); // TDS_MEASMODE_EからINIファイルに保存されたパラメータに変更(2025.11.25yori) // 引数変更(2026.8.28yori)
             Func62(sens); // 感度をINIファイルに保存されたパラメータに変更(2025.11.25yori)
-            Func63(power); // ガイドレーザーパワーをINIファイルに保存されたパラメータに変更(2025.11.25yori)
-            Func64(interp); // TDS_INTERPOLATIONX_NONEからINIファイルに保存されたパラメータに変更(2025.11.25yori)
-            //int     iXSize = 0; // 不要？削除予定(2025.11.25yori)
-            //double	dXPitch = 0.0; // 不要？削除予定(2025.11.25yori)
-            //int		iMeasMode = Func34(); // 変更(2025.8.12yori) // 不要？削除予定(2025.11.25yori)
+            Func63(sts.power); // ガイドレーザーパワーをINIファイルに保存されたパラメータに変更(2025.11.25yori) // 引数変更(2026.8.28yori)
+            Func64(sts.xpitch_onoff); // TDS_INTERPOLATIONX_NONEからINIファイルに保存されたパラメータに変更(2025.11.25yori) // 引数変更(2026.8.28yori)
+            SetZMaskEnable(sts.dist_onoff); // 距離マスク有効無効設定(2026.8.30)
+            Func65(&mask); // 距離マスク(2026.3.29yori) // 引数追加(2026.8.6yori) // 引数変更(2026.8.28yori)
+            Func66(sts.bright_slice); //輝度スライス(2026.8.5yori) // 引数変更(2026.8.28yori)
+            Func67(sts.sens_slice); // 感度スライス(2026.8.5yori) // 引数変更(2026.8.28yori)
+            Func68(sts.angle_mask_deg); // 角度マスクの角度をINIファイルに保存されたパラメータに変更(2026.8.5yori)
+            Func69(sts.two_peak); // 2ピークマスクの設定をINIファイルに保存されたパラメータに変更(2026.8.5yori) // 引数変更(2026.8.28yori)
+            Func70(sts.edge); // エッジマスクの点数をINIファイルに保存されたパラメータに変更(2026.8.5yori) // 引数変更(2026.8.28yori)
 
             if (m_ScannerAlignmentScannerFlag == true) // 点検キャリブレーションの場合(2025.12.18yori)
             {
@@ -1311,15 +1343,15 @@ void HwCtrl::Func35(int use[5], char name[5][50])
     コマンド36
     距離マスクパラメータの取得
     追加(2025.6.20yori)
+    引数追加(2026.8.6yori)
 
 ***********************************************************************/
 
-BOOL HwCtrl::Func36()
+BOOL HwCtrl::Func36(PulsZMask* mask)
 {
     BOOL fg = FALSE;
-    m_ptZMask = new PulsZMask;
 
-    fg = TdsVecZMaskGet(0, m_ptZMask);
+    fg = TdsVecZMaskGet(0, mask);
 
     return fg;
 }
@@ -1940,7 +1972,7 @@ BOOL HwCtrl::Func61(int scanmode)
     コマンド62
     感度変更
     追加(2025.8.21yori)
-    感度取得関数が無いため、直前で変更した感度をINIファイルに保存(2025.11.25yori))
+    感度取得関数が無いため、直前で変更した感度をINIファイルに保存(2025.11.25yori)
 
 ***********************************************************************/
 
@@ -1998,17 +2030,16 @@ BOOL HwCtrl::Func64(int pitch)
 
     コマンド65
     距離マスクの設定
-    追加(2025.8.24yori)
+    関数追加(2025.8.24yori)
+    引数追加に伴う変更(2026.8.6yori)
 
 ***********************************************************************/
 
-BOOL HwCtrl::Func65()
+BOOL HwCtrl::Func65(PulsZMask* mask)
 {
     BOOL fg = FALSE;
 
-    fg = TdsVecZMaskSet(0, m_ptZMask);
-
-    delete m_ptZMask;
+    fg = TdsVecZMaskSet(0, mask);
 
     return fg;
 }
@@ -2020,17 +2051,18 @@ BOOL HwCtrl::Func65()
     コマンド66
     輝度スライスの設定
     追加(2025.8.25yori)
+    引数追加(2026.8.5yori)
 
 ***********************************************************************/
 
-BOOL HwCtrl::Func66()
+BOOL HwCtrl::Func66(unsigned short bright_slice[5])
 {
     int i;
     BOOL fg = FALSE;
     
     for (i = 0; i < 5; i++)
     {
-        fg = TdsVecSetBrightSliceLevel(i, m_BrightSlice[i]);
+        fg = TdsVecSetBrightSliceLevel(i, bright_slice[i]);
         fg |= ScannerSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
         if (fg == FALSE)
         {
@@ -2048,17 +2080,18 @@ BOOL HwCtrl::Func66()
     コマンド67
     感度スライスの設定
     追加(2025.8.24yori)
+    引数追加(2026.8.5yori)
 
 ***********************************************************************/
 
-BOOL HwCtrl::Func67()
+BOOL HwCtrl::Func67(unsigned short sens_slice[5])
 {
     int i;
     BOOL fg = FALSE;
 
     for (i = 0; i < 5; i++)
     {
-        fg = TdsVecSetDataMinSliceLevel(i, m_SensSlice[i]);
+        fg = TdsVecSetDataMinSliceLevel(i, sens_slice[i]);
         fg |= ScannerSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
         if (fg == FALSE)
         {
@@ -2076,14 +2109,16 @@ BOOL HwCtrl::Func67()
     コマンド68
     角度マスクの設定
     追加(2025.8.25yori)
+    引数追加(2026.8.5yori)
+    TdsVecGetAngleMask→TdsVecSetAngleMask修正(2026.8.31yori)
 
 ***********************************************************************/
 
-BOOL HwCtrl::Func68()
+BOOL HwCtrl::Func68(double angle)
 {
     BOOL fg = FALSE;
 
-    fg = TdsVecGetAngleMask(&m_Angle);
+    fg = TdsVecSetAngleMask(angle);
 
     return fg;
 }
@@ -2115,14 +2150,15 @@ BOOL HwCtrl::Func69(int twopeak)
     コマンド70
     エッジマスクの設定
     追加(2025.8.25yori)
+    引数追加(2026.8.5yori)
 
 ***********************************************************************/
 
-BOOL HwCtrl::Func70()
+BOOL HwCtrl::Func70(int edge)
 {
     BOOL fg = FALSE;
 
-    fg = TdsVecSetEdgeMask(m_Edge, 5); // エッジと判断する中空点数の初期値：5
+    fg = TdsVecSetEdgeMask(edge, 5); // エッジと判断する中空点数の初期値：5
     fg |= ScannerSetMeasType(TDS_MEASTYPE_NORMAL); // 追加(2025.8.26yori)
 
     return fg;
@@ -2267,19 +2303,38 @@ int HwCtrl::Func75()
 BOOL HwCtrl::Func76()
 {
     BOOL fg = FALSE;
-    int sens;  // 追加(2025.11.25yori)
-    int power; // 追加(2025.11.25yori)
-    int interp; // 追加(2025.11.25yori)
+    PulsZMask mask; // 追加(2026.8.6yori)
+    int serch_mask; // 追加(2026.8.6yori)
+    STATUS02 sts; // 追加(2026.8.28yori)
 
     if (iScannerConnect == 1) // スキャナが接続されている場合(2026.1.23yori)
     {
-        GetIniScanSens(&sens); // 感度取得(2025.11.25yori)
-        Func39(&power); // ガイドレーザーのパワーを取得(2025.11.25yori)
-        Func40(&interp); // X点間補間の設定を取得(2025.11.25yori)
-        WriteIniScanPara(Func34(), power, interp); // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
+        sts.mode = Func34(); // 追加(2026.8.28yori)
+        Func39(&sts.power); // ガイドレーザーのパワーを取得(2025.11.25yori) // 引数変更(2026.8.28yori)
+        Func40(&sts.xpitch_onoff); // X点間補間の設定を取得(2025.11.25yori) // 引数変更(2026.8.28yori)
+        GetZMaskEnable(&sts.dist_onoff); // 距離マスク有効無効取得(2026.8.30)
+        Func36(&mask); // 距離マスクの設定を取得(2026.8.6yori)
+        GetIniBrightSliceEnable(&sts.bright_slice_std_enable, &sts.bright_slice_adv_enable);// 輝度スライスの有効無効取得(2026.8.29yori)
+        GetIniSensSliceEnable(&sts.sens_slice_std_enable, &sts.sens_slice_adv_enable);// 感度スライスの有効無効取得(2026.8.29yori)
+        Func37(sts.bright_slice); // 輝度スライスの設定を取得(2026.8.10yori) // 引数変更(2026.8.28yori)
+        Func38(sts.sens_slice); // 感度スライスの設定を取得(2026.8.10yori) // 引数変更(2026.8.28yori)
+        Func41(&sts.angle_mask_deg); // 角度マスクの角度を取得(2026.8.6yori) // 引数変更(2026.8.28yori)
+        Func42(&sts.two_peak); // 2ピークマスクの設定を取得(2026.8.6yori) // 引数変更(2026.8.28yori)
+        Func43(&sts.edge, &serch_mask); // エッジマスクの設定を取得(2026.8.6yori) // 引数変更(2026.8.28yori)
+        // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
+        // 距離マスク変更(2026.8.6yori)
+        // 輝度スライス追加(2026.8.6yori)
+        // 感度スライス追加(2026.8.6yori)
+        // 角度マスクの追加(2026.8.6yori)
+        // 2ピークマスクの追加(2026.8.6yori)
+        // エッジマスクの点数追加(2026.8.6yori)
+        //WriteIniScanPara(Func34(), power, interp, mask, bright_slice, sens_slice, angle, two_peak, edge_num); // 後で削除予定(2026.8.28yori)
+        WriteIniScanPara2(&sts, &mask); // 追加(2026.8.28yori)
         fg = TdsVecScannerPowerOff();
         TdsVecMeasExit();
         fg |= WritePrivateProfileString(TEXT("Buzzer"), TEXT("0"), TEXT("1"), TEXT("C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\TDSUser.ini"));
+        // スキャンラインフリー(2026.9.16yori)
+        kskPF_FreeScanLine(&ScanLine);
     }
 
     return fg;
@@ -2295,18 +2350,246 @@ BOOL HwCtrl::Func76()
 
 ***********************************************************************/
 
-void HwCtrl::GetIniScanPara(int* mode, int* power, int* interp)
+void HwCtrl::GetIniScanPara(int* mode, int* power, int* interp, PulsZMask* mask, unsigned short bright_slice[5], unsigned short sens_slice[5], double* angle_mask_deg, int* two_peak, int* edge_num)
 {
-    wchar_t wc_para[8];
-    GetPrivateProfileString(TEXT("PARA"), TEXT("mode"), TEXT("4"), wc_para, 8, SCANNER_PARA_INI);
+    // 8→32へ変更(2026.8.5yori)
+    wchar_t wc_para[32];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("mode"), TEXT("4"), wc_para, 32, SCANNER_PARA_INI);
     WritePrivateProfileString(TEXT("PARA"), TEXT("mode"), wc_para, SCANNER_PARA_INI);
     *mode = _wtoi(wc_para);
-    GetPrivateProfileString(TEXT("PARA"), TEXT("power"), TEXT("1"), wc_para, 8, SCANNER_PARA_INI);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("power"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
     WritePrivateProfileString(TEXT("PARA"), TEXT("power"), wc_para, SCANNER_PARA_INI);
     *power = _wtoi(wc_para);
-    GetPrivateProfileString(TEXT("PARA"), TEXT("interp"), TEXT("0"), wc_para, 8, SCANNER_PARA_INI);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("interp"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
     WritePrivateProfileString(TEXT("PARA"), TEXT("interp"), wc_para, SCANNER_PARA_INI);
     *interp = _wtoi(wc_para);
+    // 距離マスク追加(2026.8.5yori)
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            for (int k = 0; k < 2; k++)
+            {
+                wchar_t dist_mask_use[32] = L"distance_mask_use";
+                wchar_t dist_mask_data[32] = L"distance_mask_data";
+                wchar_t no[8];
+                swprintf(no, 8, L"%d%d%d", i, j, k);
+                wcsncat_s(dist_mask_use, no, sizeof(dist_mask_use));
+                wcsncat_s(dist_mask_data, no, sizeof(dist_mask_data));
+                GetPrivateProfileString(TEXT("PARA"), dist_mask_use, TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+                WritePrivateProfileString(TEXT("PARA"), dist_mask_use, wc_para, SCANNER_PARA_INI);
+                mask->use[i][j][k] = _wtoi(wc_para);
+                GetPrivateProfileString(TEXT("PARA"), dist_mask_data, TEXT("0.0"), wc_para, 32, SCANNER_PARA_INI);
+                WritePrivateProfileString(TEXT("PARA"), dist_mask_data, wc_para, SCANNER_PARA_INI);
+                mask->data[i][j][k] = _wtof(wc_para);
+            }
+        }
+    }
+    // 輝度スライス追加(2026.8.5yori)
+    // 0x5FD0→24528(2026.8.10yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_0"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_0"), wc_para, SCANNER_PARA_INI);
+    bright_slice[0] = _wtoi(wc_para);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_1"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_1"), wc_para, SCANNER_PARA_INI);
+    bright_slice[1] = _wtoi(wc_para);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_2"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_2"), wc_para, SCANNER_PARA_INI);
+    bright_slice[2] = _wtoi(wc_para);
+    //bright_slice_3追加(2026.8.10yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_3"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_3"), wc_para, SCANNER_PARA_INI);
+    bright_slice[3] = _wtoi(wc_para);
+    //bright_slice_4追加(2026.8.10yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_4"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_4"), wc_para, SCANNER_PARA_INI);
+    bright_slice[4] = _wtoi(wc_para);
+    // 感度スライス追加(2026.8.5yori)
+    // 0x0CCC→3276(2026.8.10yori)
+    // 0x04B0→1200(2026.8.10yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_0"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_0"), wc_para, SCANNER_PARA_INI);
+    sens_slice[0] = _wtoi(wc_para);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_1"), TEXT("1200"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_1"), wc_para, SCANNER_PARA_INI);
+    sens_slice[1] = _wtoi(wc_para);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_2"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_2"), wc_para, SCANNER_PARA_INI);
+    sens_slice[2] = _wtoi(wc_para);
+    //sens_slice_3追加(2026.8.10yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_3"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_3"), wc_para, SCANNER_PARA_INI);
+    sens_slice[3] = _wtoi(wc_para);
+    //sens_slice_4追加(2026.8.10yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_4"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_4"), wc_para, SCANNER_PARA_INI);
+    sens_slice[4] = _wtoi(wc_para);
+    // 角度マスク角度追加(2026.8.5yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("angle_mask_deg"), TEXT("70.0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("angle_mask_deg"), wc_para, SCANNER_PARA_INI);
+    *angle_mask_deg = _wtof(wc_para);
+    // 2ピークマスク設定追加(2026.8.5yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("two_peak"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("two_peak"), wc_para, SCANNER_PARA_INI);
+    *two_peak = _wtoi(wc_para);
+    // エッジマスク点数追加(2026.8.5yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("edge_num"), TEXT("3"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("edge_num"), wc_para, SCANNER_PARA_INI);
+    *edge_num = _wtoi(wc_para);
+}
+
+
+
+/***********************************************************************
+
+    GetIniScanPara2
+    INIファイルからスキャナのパラメータを取得する。
+    追加(2026.8.28yori)
+
+***********************************************************************/
+
+void HwCtrl::GetIniScanPara2(STATUS02* sts, PulsZMask* mask)
+{
+    // 8→32へ変更(2026.8.5yori)
+    wchar_t wc_para[32];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("mode"), TEXT("4"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("mode"), wc_para, SCANNER_PARA_INI);
+    sts->mode = _wtoi(wc_para);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("power"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("power"), wc_para, SCANNER_PARA_INI);
+    sts->power = _wtoi(wc_para);
+    GetPrivateProfileString(TEXT("PARA"), TEXT("interp"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("interp"), wc_para, SCANNER_PARA_INI);
+    sts->xpitch_onoff = _wtoi(wc_para);
+    // 距離マスクONOFF(2026.8.31yri)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("distance_mask_onoff"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("distance_mask_onoff"), wc_para, SCANNER_PARA_INI);
+    sts->dist_onoff = _wtoi(wc_para);
+    // 距離マスク追加(2026.8.5yori)
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            for (int k = 0; k < 2; k++)
+            {
+                wchar_t dist_mask_use[32] = L"distance_mask_use";
+                wchar_t dist_mask_data[32] = L"distance_mask_data";
+                wchar_t no[8];
+                swprintf(no, 8, L"%d%d%d", i, j, k);
+                wcsncat_s(dist_mask_use, no, sizeof(dist_mask_use));
+                wcsncat_s(dist_mask_data, no, sizeof(dist_mask_data));
+                GetPrivateProfileString(TEXT("PARA"), dist_mask_use, TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+                WritePrivateProfileString(TEXT("PARA"), dist_mask_use, wc_para, SCANNER_PARA_INI);
+                mask->use[i][j][k] = _wtoi(wc_para);
+                GetPrivateProfileString(TEXT("PARA"), dist_mask_data, TEXT("0.0"), wc_para, 32, SCANNER_PARA_INI);
+                WritePrivateProfileString(TEXT("PARA"), dist_mask_data, wc_para, SCANNER_PARA_INI);
+                mask->data[i][j][k] = _wtof(wc_para);
+            }
+        }
+    }
+    // 輝度スライス追加(2026.8.5yori)
+    // 0x5FD0→24528(2026.8.10yori)
+    // スタンダードとアドバンスを区別(2026.8.29yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std_enable"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std_enable"), wc_para, SCANNER_PARA_INI);
+    sts->bright_slice_std_enable = _wtoi(wc_para);
+    if (sts->bright_slice_std_enable == 1)
+    {
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std0"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std0"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[0] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std1"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std1"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[1] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std2"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std2"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[2] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std3"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std3"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[3] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std4"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std4"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[4] = _wtoi(wc_para);
+    }
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv_enable"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv_enable"), wc_para, SCANNER_PARA_INI);
+    sts->bright_slice_std_enable = _wtoi(wc_para);
+    if (sts->bright_slice_std_enable == 1)
+    {
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv0"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv0"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[0] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv1"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv1"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[1] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv2"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv2"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[2] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv3"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv3"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[3] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv4"), TEXT("24528"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv4"), wc_para, SCANNER_PARA_INI);
+        sts->bright_slice[4] = _wtoi(wc_para);
+    }
+    // 感度スライス追加(2026.8.5yori)
+    // 0x0CCC→3276(2026.8.10yori)
+    // 0x04B0→1200(2026.8.10yori)
+    // スタンダードとアドバンスを区別(2026.8.29yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std_enable"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std_enable"), wc_para, SCANNER_PARA_INI);
+    sts->bright_slice_std_enable = _wtoi(wc_para);
+    if (sts->bright_slice_std_enable == 1)
+    {
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std0"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std0"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[0] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std1"), TEXT("1200"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std1"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[1] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std2"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std2"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[2] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std3"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std3"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[3] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std4"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std4"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[4] = _wtoi(wc_para);
+    }
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv_enable"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv_enable"), wc_para, SCANNER_PARA_INI);
+    sts->bright_slice_std_enable = _wtoi(wc_para);
+    if (sts->bright_slice_std_enable == 1)
+    {
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv0"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv0"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[0] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv1"), TEXT("1200"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv1"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[1] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv2"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv2"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[2] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv3"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv3"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[3] = _wtoi(wc_para);
+        GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv4"), TEXT("3276"), wc_para, 32, SCANNER_PARA_INI);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv4"), wc_para, SCANNER_PARA_INI);
+        sts->sens_slice[4] = _wtoi(wc_para);
+    }
+    // 角度マスク角度追加(2026.8.5yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("angle_mask_deg"), TEXT("70.0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("angle_mask_deg"), wc_para, SCANNER_PARA_INI);
+    sts->angle_mask_deg = _wtof(wc_para);
+    // 2ピークマスク設定追加(2026.8.5yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("two_peak"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("two_peak"), wc_para, SCANNER_PARA_INI);
+    sts->two_peak = _wtoi(wc_para);
+    // エッジマスク点数追加(2026.8.5yori)
+    GetPrivateProfileString(TEXT("PARA"), TEXT("edge_num"), TEXT("3"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("edge_num"), wc_para, SCANNER_PARA_INI);
+    sts->edge = _wtoi(wc_para);
 }
 
 
@@ -2321,10 +2604,153 @@ void HwCtrl::GetIniScanPara(int* mode, int* power, int* interp)
 
 void HwCtrl::GetIniScanSens(int* sens)
 {
-    wchar_t wc_para[8];
-    GetPrivateProfileString(TEXT("PARA"), TEXT("sens"), TEXT("0"), wc_para, 8, SCANNER_PARA_INI);
+    // 8→32へ変更(2026.8.6yori)
+    wchar_t wc_para[32];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
     WritePrivateProfileString(TEXT("PARA"), TEXT("sens"), wc_para, SCANNER_PARA_INI);
     *sens = _wtoi(wc_para);
+}
+
+
+
+/***********************************************************************
+
+    GetIniBrightMaskSetting
+    INIファイルから輝度マスク設定を取得する。
+    追加(2026.9.2yori)
+
+***********************************************************************/
+
+void HwCtrl::GetIniBrightMaskSetting(int* bright_mask_select, int* bright_mask_upper_limit, int* bright_mask_lower_limit)
+{
+    // 8→32へ変更(2026.8.6yori)
+    wchar_t wc_para[32];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_mask_select"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_mask_select"), wc_para, SCANNER_PARA_INI);
+    *bright_mask_select = _wtoi(wc_para);
+
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_mask_upper_limit"), TEXT("65535"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_mask_upper_limit"), wc_para, SCANNER_PARA_INI);
+    *bright_mask_upper_limit = _wtoi(wc_para);
+
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_mask_lower_limit"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_mask_lower_limit"), wc_para, SCANNER_PARA_INI);
+    *bright_mask_lower_limit = _wtoi(wc_para);
+}
+
+
+
+/***********************************************************************
+
+    GetIniBrightSliceEnable
+    INIファイルからスキャナの輝度スライス有効無効を取得する。
+    追加(2026.8.29yori)
+
+***********************************************************************/
+
+void HwCtrl::GetIniBrightSliceEnable(int* bright_slice_std_enable, int* bright_slice_adv_enable)
+{
+    wchar_t wc_para[32];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std_enable"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std_enable"), wc_para, SCANNER_PARA_INI);
+    *bright_slice_std_enable = _wtoi(wc_para);
+
+    GetPrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv_enable"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv_enable"), wc_para, SCANNER_PARA_INI);
+    *bright_slice_adv_enable = _wtoi(wc_para);
+}
+
+
+
+/***********************************************************************
+
+    GetIniSensSliceEnable
+    INIファイルからスキャナの輝度スライス有効無効を取得する。
+    追加(2026.8.29yori)
+
+***********************************************************************/
+
+void HwCtrl::GetIniSensSliceEnable(int* sens_slice_std_enable, int* sens_slice_adv_enable)
+{
+    wchar_t wc_para[32];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std_enable"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std_enable"), wc_para, SCANNER_PARA_INI);
+    *sens_slice_std_enable = _wtoi(wc_para);
+
+    GetPrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv_enable"), TEXT("0"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv_enable"), wc_para, SCANNER_PARA_INI);
+    *sens_slice_adv_enable = _wtoi(wc_para);
+}
+
+
+
+/***********************************************************************
+
+    GetIniScanAngleMaskEnable
+    INIファイルからスキャナの角度マスク有効無効を取得する。
+    追加(2026.8.5yori)
+    angle_mask_enable→angle_mask_onoff(2026.8.31yori)
+
+***********************************************************************/
+
+void HwCtrl::GetIniScanAngleMaskEnable(int* angle_mask_onoff)
+{
+    wchar_t wc_para[32];
+    GetPrivateProfileString(TEXT("PARA"), TEXT("angle_mask_onoff"), TEXT("1"), wc_para, 32, SCANNER_PARA_INI);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("angle_mask_onoff"), wc_para, SCANNER_PARA_INI);
+    *angle_mask_onoff = _wtoi(wc_para);
+}
+
+
+
+/***********************************************************************
+
+    SetZMaskEnable
+    距離マスクの有効/無効を設定する。
+    追加(2026.8.30yori)
+
+***********************************************************************/
+
+void HwCtrl::SetZMaskEnable(int dist_onoff)
+{
+    BOOL enable;
+
+    if (dist_onoff == 1)
+    {
+        enable = TRUE;
+    }
+    else
+    {
+        enable = FALSE;
+    }
+
+    TdsVecSetZMaskEnable(enable);
+}
+
+
+
+/***********************************************************************
+
+    GetZMaskEnable
+    距離マスクの有効/無効を取得する。
+    追加(2026.8.30yori)
+
+***********************************************************************/
+
+void HwCtrl::GetZMaskEnable(int* dist_onoff)
+{
+    BOOL enable;
+
+    TdsVecGetZMaskEnable(&enable);
+
+    if (enable == TRUE)
+    {
+        *dist_onoff = 1;
+    }
+    else
+    {
+        *dist_onoff = 0;
+    }
 }
 
 
@@ -2337,15 +2763,175 @@ void HwCtrl::GetIniScanSens(int* sens)
 
 ***********************************************************************/
 
-void HwCtrl::WriteIniScanPara(int mode, int power, int interp)
+void HwCtrl::WriteIniScanPara(int mode, int power, int interp, PulsZMask mask, unsigned short bright_slice[5], unsigned short sens_slice[5], double angle_mask_deg, int two_peak, int edge_num)
 {
-    wchar_t wc_para[8];
-    swprintf(wc_para, 8, L"%d", mode);
+    // 8→32へ変更(2026.8.6yori)
+    wchar_t wc_para[32];
+    swprintf(wc_para, 32, L"%d", mode);
     WritePrivateProfileString(TEXT("PARA"), TEXT("mode"), wc_para, SCANNER_PARA_INI);
-    swprintf(wc_para, 8, L"%d", power);
+    swprintf(wc_para, 32, L"%d", power);
     WritePrivateProfileString(TEXT("PARA"), TEXT("power"), wc_para, SCANNER_PARA_INI);
-    swprintf(wc_para, 8, L"%d", interp);
+    swprintf(wc_para, 32, L"%d", interp);
     WritePrivateProfileString(TEXT("PARA"), TEXT("interp"), wc_para, SCANNER_PARA_INI);
+    // 距離マスク追加(2026.8.6yori)
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            for (int k = 0; k < 2; k++)
+            {
+                wchar_t dist_mask_use[32] = L"distance_mask_use";
+                wchar_t dist_mask_data[32] = L"distance_mask_data";
+                wchar_t no[8];
+                swprintf(no, 8, L"%d%d%d", i, j, k);
+                wcsncat_s(dist_mask_use, no, sizeof(dist_mask_use));
+                wcsncat_s(dist_mask_data, no, sizeof(dist_mask_data));
+                swprintf(wc_para, 32, L"%d", mask.use[i][j][k]);
+                WritePrivateProfileString(TEXT("PARA"), dist_mask_use, wc_para, SCANNER_PARA_INI);
+                swprintf(wc_para, 32, L"%.1f", mask.data[i][j][k]);
+                WritePrivateProfileString(TEXT("PARA"), dist_mask_data, wc_para, SCANNER_PARA_INI);
+            }
+        }
+    }
+    // 輝度スライス追加(2026.8.6yori)
+    swprintf(wc_para, 32, L"%d", bright_slice[0]);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_0"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", bright_slice[1]);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_1"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", bright_slice[2]);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_2"), wc_para, SCANNER_PARA_INI);
+    // bright_slice_3追加(2026.8.10yori)
+    swprintf(wc_para, 32, L"%d", bright_slice[3]);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_3"), wc_para, SCANNER_PARA_INI);
+    // bright_slice_4追加(2026.8.10yori)
+    swprintf(wc_para, 32, L"%d", bright_slice[4]);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_4"), wc_para, SCANNER_PARA_INI);
+    // 感度スライス追加(2026.8.6yori)
+    swprintf(wc_para, 32, L"%d", sens_slice[0]);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_0"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", sens_slice[1]);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_1"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", sens_slice[2]);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_2"), wc_para, SCANNER_PARA_INI);
+    // 角度マスク角度追加(2026.8.6yori)
+    swprintf(wc_para, 32, L"%.1f", angle_mask_deg);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("angle_mask_deg"), wc_para, SCANNER_PARA_INI);
+    // 2ピークマスク設定追加(2026.8.6yori)
+    swprintf(wc_para, 32, L"%d", two_peak);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("two_peak"), wc_para, SCANNER_PARA_INI);
+    // エッジマスク点数追加(2026.8.6yori)
+    swprintf(wc_para, 32, L"%d", edge_num);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("edge_num"), wc_para, SCANNER_PARA_INI);
+}
+
+
+
+/***********************************************************************
+
+    WriteIniScanPara2
+    INIファイルにスキャナのパラメータを書き込む。
+    追加(2026.8.28yori)
+
+***********************************************************************/
+
+void HwCtrl::WriteIniScanPara2(STATUS02* sts, PulsZMask* mask)
+{
+    // 8→32へ変更(2026.8.6yori)
+    wchar_t wc_para[32];
+    swprintf(wc_para, 32, L"%d", sts->mode);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("mode"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", sts->power);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("power"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", sts->xpitch_onoff);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("interp"), wc_para, SCANNER_PARA_INI);
+    // 距離マスクONOFF(2026.8.30yori)
+    swprintf(wc_para, 32, L"%d", sts->dist_onoff);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("distance_mask_onoff"), wc_para, SCANNER_PARA_INI);
+    // 距離マスク追加(2026.8.6yori)
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            for (int k = 0; k < 2; k++)
+            {
+                wchar_t dist_mask_use[32] = L"distance_mask_use";
+                wchar_t dist_mask_data[32] = L"distance_mask_data";
+                wchar_t no[8];
+                swprintf(no, 8, L"%d%d%d", i, j, k);
+                wcsncat_s(dist_mask_use, no, sizeof(dist_mask_use));
+                wcsncat_s(dist_mask_data, no, sizeof(dist_mask_data));
+                swprintf(wc_para, 32, L"%d", mask->use[i][j][k]);
+                WritePrivateProfileString(TEXT("PARA"), dist_mask_use, wc_para, SCANNER_PARA_INI);
+                swprintf(wc_para, 32, L"%.1f", mask->data[i][j][k]);
+                WritePrivateProfileString(TEXT("PARA"), dist_mask_data, wc_para, SCANNER_PARA_INI);
+            }
+        }
+    }
+    // 輝度スライス追加(2026.8.6yori)
+    // スタンダードとアドバンスを区別(2026.8.29yori)
+    if (sts->bright_slice_std_enable == 1)
+    {
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[0]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std0"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[1]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std1"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[2]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std2"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[3]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std3"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[4]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std4"), wc_para, SCANNER_PARA_INI);
+    }
+    if (sts->bright_slice_adv_enable == 1)
+    {
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[0]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv0"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[1]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv1"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[2]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv2"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[3]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv3"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->bright_slice[4]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv4"), wc_para, SCANNER_PARA_INI);
+    }
+    // 感度スライス追加(2026.8.6yori)
+    // スタンダードとアドバンスを区別(2026.8.29yori)
+    if (sts->sens_slice_std_enable == 1)
+    {
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[0]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std0"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[1]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std1"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[2]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std2"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[3]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std3"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[4]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std4"), wc_para, SCANNER_PARA_INI);
+    }
+    if (sts->sens_slice_adv_enable == 1)
+    {
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[0]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv0"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[1]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv1"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[2]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv2"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[3]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv3"), wc_para, SCANNER_PARA_INI);
+        swprintf(wc_para, 32, L"%d", sts->sens_slice[4]);
+        WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv4"), wc_para, SCANNER_PARA_INI);
+    }
+    // 角度マスク角度追加(2026.8.6yori)
+    swprintf(wc_para, 32, L"%.1f", sts->angle_mask_deg);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("angle_mask_deg"), wc_para, SCANNER_PARA_INI);
+    // 2ピークマスク設定追加(2026.8.6yori)
+    swprintf(wc_para, 32, L"%d", sts->two_peak);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("two_peak"), wc_para, SCANNER_PARA_INI);
+    // エッジマスク点数追加(2026.8.6yori)
+    swprintf(wc_para, 32, L"%d", sts->edge);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("edge_num"), wc_para, SCANNER_PARA_INI);
 }
 
 
@@ -2360,9 +2946,87 @@ void HwCtrl::WriteIniScanPara(int mode, int power, int interp)
 
 void HwCtrl::WriteIniScanSens(int sens)
 {
-    wchar_t wc_para[8];
-    swprintf(wc_para, 8, L"%d", sens);
+    // 8→32へ変更(2026.8.6yori)
+    wchar_t wc_para[32];
+    swprintf(wc_para, 32, L"%d", sens);
     WritePrivateProfileString(TEXT("PARA"), TEXT("sens"), wc_para, SCANNER_PARA_INI);
+}
+
+
+
+/***********************************************************************
+
+    WriteIniBrightSliceEnable
+    INIファイルにスキャナの輝度スライス有効無効を書き込む。
+    追加(2026.8.29yori)
+
+***********************************************************************/
+
+void HwCtrl::WriteIniBrightSliceEnable(int bright_slice_std_enable, int bright_slice_adv_enable)
+{
+    wchar_t wc_para[32];
+    swprintf(wc_para, 32, L"%d", bright_slice_std_enable);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_std_enable"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", bright_slice_adv_enable);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_slice_adv_enable"), wc_para, SCANNER_PARA_INI);
+}
+
+
+
+/***********************************************************************
+
+    WriteIniSensSliceEnable
+    INIファイルにスキャナの感度スライス有効無効を書き込む。
+    追加(2026.8.29yori)
+
+***********************************************************************/
+
+void HwCtrl::WriteIniSensSliceEnable(int sens_slice_std_enable, int sens_slice_adv_enable)
+{
+    wchar_t wc_para[32];
+    swprintf(wc_para, 32, L"%d", sens_slice_std_enable);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_std_enable"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", sens_slice_adv_enable);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("sens_slice_adv_enable"), wc_para, SCANNER_PARA_INI);
+}
+
+
+
+/***********************************************************************
+
+    WriteIniScanAngleMaskEnable
+    INIファイルにスキャナの角度マスク有効無効を書き込む。
+    追加(2026.8.6yori)
+    angle_mask_enable→angle_mask_onoff(2026.8.31yori)
+
+***********************************************************************/
+
+void HwCtrl::WriteIniScanAngleMaskEnable(int angle_mask_onoff)
+{
+    wchar_t wc_para[32];
+    swprintf(wc_para, 32, L"%d", angle_mask_onoff);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("angle_mask_onoff"), wc_para, SCANNER_PARA_INI);
+}
+
+
+
+/***********************************************************************
+
+    WriteIniBrightMaskSetting
+    INIファイルに輝度マスクの設定を書き込む。
+    追加(2026.9.2yori)
+
+***********************************************************************/
+
+void HwCtrl::WriteIniBrightMaskSetting(int bright_mask_select, int bright_mask_upper_limit, int bright_mask_lower_limit)
+{
+    wchar_t wc_para[32];
+    swprintf(wc_para, 32, L"%d", bright_mask_select);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_mask_select"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", bright_mask_upper_limit);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_mask_upper_limit"), wc_para, SCANNER_PARA_INI);
+    swprintf(wc_para, 32, L"%d", bright_mask_lower_limit);
+    WritePrivateProfileString(TEXT("PARA"), TEXT("bright_mask_lower_limit"), wc_para, SCANNER_PARA_INI);
 }
 
 
@@ -3185,7 +3849,8 @@ int HwCtrl::OneDataSamplingandTransfer(bool transFg, int* pErrorCode)
         ++m_LineNo;
         ConvertVecTranceData(&PosiData, &VecData);						//構造体の内容がことなるため変換が必要
 
-        TranceSts = GetandSendScannerLineData(&VecData, transFg);		// この関数内でScanerデータ取得あり transFg-trueでpolyworksにデータ転送 false dummyscan用
+        //TranceSts = GetandSendScannerLineData(&VecData, transFg);		// この関数内でScanerデータ取得あり transFg-trueでpolyworksにデータ転送 false dummyscan用
+        TranceSts = GetandSendScannerLineData2(&VecData, transFg);		// 上記関数コメントアウト、GetandSendScannerLineDataに点群補正/フィルタ機能追加(2026.9.17yori)
         if (!TranceSts)
         {
             // 1次バッファ ptstatus[] 256がいっぱいになっているときエラー表示 その先のQueがいっぱいかそのまた先のPolyworksメモリマップドファイルを読み出してもらいえない
@@ -3328,6 +3993,7 @@ job_exit:
 //}
 
 
+
 /***********************************************************************
 
     ベクトロンとスキャナデータを合成→1ラインデータ作成→PolyWorksへ1ライン送信
@@ -3343,6 +4009,122 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
     int iRec = 0;
     int index = 0;
     int iRecQue = 0;
+
+    ptlinedata2025 = new OneLineData2;
+
+    WaitForSingleObject(hSEMA, INFINITE);
+
+    ptlinedata2025->tVecData = *pVecData; // ベクトロンデータのセット
+
+    // 実装検討中のため、重複ラインチェックは行わない。(2026.1.13yori)
+    //if (m_bmeasfg == false) {
+    //    bCheckSameLineFg = false;
+    //}
+    //else {
+    //    bCheckSameLineFg = SendLineDataCheckSameLine(index); // 前後ラインが近い距離にある重複ラインチェック(2026.1.10yori)
+    //}
+
+    memset(ptlinedata2025->tPulsData, 0, sizeof(PulsData) * 3500); // ゼロクリア追加(2021.11.15yori)
+
+    // ポインタ位置チェック作成中のため、コメントアウト(2025.9.3yori)
+    //if (m_PointerCheckFg == true && m_bmeasfg == true && m_PointerCheckLineNo == 1) // ポインタ位置チェックの場合は最初の1ライン目の測定データで評価する(2025.7.4yori)
+    //{
+    //    TdsVecGetLocalData(pVecData->no1, ptlinedata2025->tPulsData, m_iXSize, &iDataNum); // 1ライン分のスキャナローカルデータを取得
+    //    for (int i = 0; i < iDataNum; i++) // 作成途中(2025.7.4yori)
+    //    {
+    //        m_PointerCheckScanData += ptlinedata2025->tPulsData[i].dataZ;
+    //    }
+    //    m_PointerCheckScanData = m_PointerCheckScanData / iDataNum; // 平均距離計算
+    //    m_PointerCheckLineNo++;
+    //}
+    //else
+    //{
+
+    iRec = TdsVecAndMeas(&(ptlinedata2025->tVecData), (ptlinedata2025->tPulsData), m_iXSize, &iDataNum); // ベクトロンとスキャンデータ合成
+    ptlinedata2025->lineNo = (int)pVecData->no1;
+    ptlinedata2025->iDataNum_Rec = iRec;
+    ptlinedata2025->iDataNum = iDataNum;
+    ptlinedata2025->bMeasDataFg = m_bmeasfg;
+    ptlinedata2025->bButtonFg = m_bbuttonfg; // 追加(2025.11.5yori)
+
+    if (m_b_Button_ConnectFlag == false && m_ScannerAlignmentScannerFlag == false)  // アプリから接続した、非接触点検、キャリブレーションの場合は、PolyWorksへデータを送信しない。(2025.12.8yori)
+    {
+        // 実装検討中のため、重複ラインチェックは行わない。(2026.1.13yori)
+        //if (bCheckSameLineFg)
+        //{
+        //    ptlinedata2025->iSendDataNo = 0;
+        //}
+        //else
+        //{
+        ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
+        //}
+
+        if (m_bmeasfg == true && ptlinedata2025->iSendDataNo != 0)
+        {
+            // データ飛びチェック(2026.1.8yori)
+            if (SendLineDataCheckDiffPoint(index)) // データ飛び(スキャナ側)のラインはPolyWorksへ送信しない。(2026.1.8yori)
+            {
+                ptlinedata2025->iSendDataNo = 0;
+            }
+        }
+
+        // ダミースキャンは、レーザーが照射されている部分のみ座標値を取得される。(コメント追加2025.5.15yori)
+        // ダミースキャンは、奇数Noが有効な座標値、偶数Noが無効な座標値が取得される。(コメント追加2025.5.15yori)
+        if (ptlinedata2025->iSendDataNo != 0) // 有効データ数を構造体へ追加(2021.12.1yori)
+        {
+            int isize = sizeof(OneLineData2);  // 転送データ数(バイト)：196216 // sizeofで確認(2025.5.15yori)
+            iRecQue = LplSendMesBox(NONCONTACT_DATA, isize, (char*)(ptlinedata2025));  // (2025.5.15yori)
+            // Queに積めたかどうか
+            if (iRecQue != 0)
+            {
+                // 0以外の戻りはない
+            }
+            bCheckFg = true;
+        }
+        else // すべて無効の場合はデータを積まないで戻る
+        {
+            //bCheckFg = false; // コメントアウト(2025.5.15yori)
+        }
+    }
+
+    ReleaseSemaphore(hSEMA, 1, NULL);
+
+    delete ptlinedata2025;
+
+    return bCheckFg;
+}
+
+
+
+/***********************************************************************
+
+    GetandSendScannerLineDataに点群補正/フィルタ機能追加
+    追加(2026.9.15yori)
+
+***********************************************************************/
+
+bool HwCtrl::GetandSendScannerLineData2(const VecRet* pVecData, bool tranceFg)
+{
+    bool bCheckFg = true;
+    //bool bCheckSameLineFg = true; // 実装検討中のため、重複ラインチェックフラグコメントアウト(2026.1.13yori)
+    int	iDataNum = 0;
+    int iRec = 0;
+    int index = 0;
+    int iRecQue = 0;
+    bool bFuncFg = false;
+    double hole_dist = 100000.0; // 穴とみなす距離 // 現実的に無い距離(100000.0)を入力して穴とみなさない(2026.9.15yori)
+    long thin_npnt = 0; // 間引き点数(2026.9.15yori)
+    long removeF = 0; // 削除フラグ(2026.9.15yori)
+    long remove_npnt = 10, alive_npnt = 2;// 端部の削除点数、穴近傍の除去しない点数(2026.9.16yori)
+    double line_fittol = 0.0; // ラインの平行補正の近似トレランス(2026.9.16yori)
+    long num_samplepnts = 5; // 局所直線近似の点数(2026.9.16yori)
+    double tilted_line_degree = 45.0; // ライン傾斜角度(度)(2026.9.16yori)
+    double threshold_pitch = 0.01; // 両点間距離(2026.9.16yori)
+    double displaced_degree = 1.0; // 折れ角度(度)(2026.9.15yori)
+    long part_npnt = 11; // 近似点数(2026.9.16yori)
+    double threshold_std = 0.030, dRatio_NGp = 0.020; // 誤差の標準偏差、NG割合(2026.9.16yori)
+    double surf_fittol = 0.0; // 面の近似トレランス(2026.9.17yori)
+    double tilted_surf_degree = 45.0; // 面傾斜角度(度)(2026.9.17yori)
 
     ptlinedata2025 = new OneLineData2;
 
@@ -3390,7 +4172,151 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
         //}
         //else
         //{
-            ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori)
+            //ptlinedata2025->iSendDataNo = SendLineDataCheck2(index); // 無効データ処理を行う(2021.12.1yori) // 輝度マスク追加(2026.9.2yori)
+            // フィルタ処理前の不定値、無効点、穴認識処理関数(2026.9.15yori)
+            bFuncFg = PF_CreateScanLine(index, hole_dist, &ScanLine);
+            if (bFuncFg == false)
+            {
+                goto SKIP;
+            }
+            // 点群の間引き(2026.9.15yori)
+            bFuncFg = PF_ThinOutScanLine(thin_npnt, ScanLine);
+            if (bFuncFg == false)
+            {
+                goto SKIP;
+            }
+            // スキャンラインのremoveFを初期化(2026.9.16yori)
+            //bFuncFg = PF_InitializeRemFlagScanLine(removeF, ScanLine);
+            //if (bFuncFg == false)
+            //{
+            //    goto SKIP;
+            //}
+            // ライン端の点群の除去(2026.9.16yori)
+            //if (m_bmeasfg == true)
+            //{
+            //    bFuncFg = PF_RemoveEndPntsScanLine(remove_npnt, alive_npnt, ScanLine);
+            //    if (bFuncFg == false)
+            //    {
+            //        goto SKIP;
+            //    }
+            //}
+            // ラインの平行補正(2026.9.17yori)
+            /*if (m_bmeasfg == true)
+            {
+                if (m_ParallelCount == 0)
+                {
+                    ScanLineArray[m_AligParallelCount] = *ScanLine;
+                    m_ParallelCount++;
+                }
+                else if (m_ParallelCount == 1)
+                {
+                    ScanLineArray[m_ParallelCount] = *ScanLine;
+                    m_ParallelCount++;
+                    goto SKIP;
+                }
+                else
+                {
+                    ScanLineArray[m_ParallelCount] = *ScanLine;
+                    bFuncFg = PF_AlignPntsInParallelScanLine(line_fittol,
+                        &ScanLineArray[m_ParallelCount - 2],
+                        &ScanLineArray[m_ParallelCount - 1],
+                        &ScanLineArray[m_ParallelCount],
+                        &ScanLine);
+                    m_ParallelCount++;
+                    if (m_ParallelCount == MAX_LINEDATA - 1)
+                    {
+                        m_ParallelCount = 0;
+                    }
+                    if (bFuncFg == false)
+                    {
+                        goto SKIP;
+                    }
+                }
+            }*/
+            // ライン傾斜部の点の除去(2026.9.16yori)
+            //if (m_bmeasfg == true)
+            //{
+            //    DirScan[0].veccod[0] = ptlinedata2025[index].tVecData.ijk[0];
+            //    DirScan[0].veccod[1] = ptlinedata2025[index].tVecData.ijk[1];
+            //    DirScan[0].veccod[2] = ptlinedata2025[index].tVecData.ijk[2];
+            //    bFuncFg = PF_RemoveTiltedPntsScanLine(num_samplepnts, tilted_line_degree, DirScan[0], ScanLine);
+            //    if (bFuncFg == false)
+            //    {
+            //        goto SKIP;
+            //    }
+            //}
+            // 間延び点の除去(2026.9.16yori)
+            //if (m_bmeasfg == true)
+            //{
+            //    PF_RemoveAbnormalPitchPntsScanLine(threshold_pitch, ScanLine);
+            //    if (bFuncFg == false)
+            //    {
+            //        goto SKIP;
+            //    }
+            //}
+            // ライン上の折れ位置の点の除去(2026.9.15yori)
+            //if (m_bmeasfg == true)
+            //{
+            //    bFuncFg = PF_RemoveDisplacedPntsScanLine(displaced_degree, ScanLine);
+            //    if (bFuncFg == false)
+            //    {
+            //        goto SKIP;
+            //    }
+            //}
+            // ラインのノイズ過多判定(2026.9.16yori)
+            //if (m_bmeasfg == true)
+            //{
+            //    bFuncFg = PF_CalcNoiseRatioScanLine(part_npnt, threshold_std, ScanLine, &dRatio_NGp);
+            //    if (bFuncFg == false || dRatio_NGp > 0.020)
+            //    {
+            //        goto SKIP;
+            //    }
+            //}
+            // 面傾斜部の点の除去、遅延するため実装しないこと(2026.9.17yori)
+            /*if (m_bmeasfg == true)
+            {
+                if (m_TiltedSURFCount == 0)
+                {
+                    ScanLineArray[m_TiltedSURFCount] = *ScanLine;
+                    DirScan[m_TiltedSURFCount].veccod[0] = ptlinedata2025[index].tVecData.ijk[0];
+                    DirScan[m_TiltedSURFCount].veccod[1] = ptlinedata2025[index].tVecData.ijk[1];
+                    DirScan[m_TiltedSURFCount].veccod[2] = ptlinedata2025[index].tVecData.ijk[2];
+                    m_TiltedSURFCount++;
+                    goto SKIP;
+                }
+                else if (m_TiltedSURFCount == 1)
+                {
+                    ScanLineArray[m_TiltedSURFCount] = *ScanLine;
+                    DirScan[m_TiltedSURFCount].veccod[0] = ptlinedata2025[index].tVecData.ijk[0];
+                    DirScan[m_TiltedSURFCount].veccod[1] = ptlinedata2025[index].tVecData.ijk[1];
+                    DirScan[m_TiltedSURFCount].veccod[2] = ptlinedata2025[index].tVecData.ijk[2];
+                    m_TiltedSURFCount++;
+                    goto SKIP;
+                }
+                else
+                {
+                    ScanLineArray[m_TiltedSURFCount] = *ScanLine;
+                    DirScan[m_TiltedSURFCount].veccod[0] = ptlinedata2025[index].tVecData.ijk[0];
+                    DirScan[m_TiltedSURFCount].veccod[1] = ptlinedata2025[index].tVecData.ijk[1];
+                    DirScan[m_TiltedSURFCount].veccod[2] = ptlinedata2025[index].tVecData.ijk[2];
+                    bFuncFg = PF_RemoveTiltedPntsScanLineSURF(surf_fittol, tilted_surf_degree, DirScan[m_TiltedSURFCount -1],
+                        &ScanLineArray[m_TiltedSURFCount - 2],
+                        &ScanLineArray[m_TiltedSURFCount - 1],
+                        &ScanLineArray[m_TiltedSURFCount],
+                        &ScanLine);
+                    m_TiltedSURFCount++;
+                    if (m_TiltedSURFCount == MAX_LINEDATA - 1)
+                    {
+                        m_TiltedSURFCount = 0;
+                    }
+                    if (bFuncFg == false)
+                    {
+                        goto SKIP;
+                    }
+                }
+            }*/
+            // フィルタ処理後にPolyWorksへ送信するスキャンラインデータ(2026.9.15yori)
+            ptlinedata2025->iSendDataNo = PF_ScanLineData(index, ScanLine);
         //}
 
             if (m_bmeasfg == true && ptlinedata2025->iSendDataNo != 0)
@@ -3420,6 +4346,8 @@ bool HwCtrl::GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg)
             //bCheckFg = false; // コメントアウト(2025.5.15yori)
         }
     }
+
+SKIP: // 追加(2026.9.15yori)
 
     ReleaseSemaphore(hSEMA, 1, NULL);
 
@@ -3816,25 +4744,29 @@ void HwCtrl::Memory_ResetCounter()
     戻り値 0：転送データなし その他：転送データ数
     移植(2025.5.15yori)
     不定値、-nan(ind)、inf追加(2026.1.8yori)
+    輝度マスク追加(2026.9.2yori)
 
 ***********************************************************************/
 
 int HwCtrl::SendLineDataCheck2(int index)
 {
     int transferCnt = 0;
-    
+
     int iXSize = ptlinedata2025[index].iDataNum; //スキャンデータ数
 
     for (int i = 0; i < iXSize; ++i)
     {
-
         // 999999.0 の時、無効データとして取得しない。
         if (ptlinedata2025[index].tPulsData[i].dataX < INVALID_CHECK &&
             ptlinedata2025[index].tPulsData[i].dataY < INVALID_CHECK &&
             ptlinedata2025[index].tPulsData[i].dataZ < INVALID_CHECK)
         {
-            //有効データ
-            ptlinedata2025[index].tPulsData[transferCnt++] = ptlinedata2025[index].tPulsData[i]; //先頭詰めにする
+            // 輝度マスク(2026.9.2yori)
+            if (ptlinedata2025[index].tPulsData[i].dataR >= m_BrightMaskLowerLimit && ptlinedata2025[index].tPulsData[i].dataR <= m_BrightMaskUpperLimit)
+            {
+                // 有効データ
+                ptlinedata2025[index].tPulsData[transferCnt++] = ptlinedata2025[index].tPulsData[i]; //先頭詰めにする
+            }
         }
 
         // -nan(ind)、infの場合、無効データとして取得しない。データ飛びによるノイズデータ対策(2026.1.8yori)
@@ -3850,6 +4782,454 @@ int HwCtrl::SendLineDataCheck2(int index)
     }
 
     return transferCnt;	// (transferCnt != 0) // 転送データあり
+}
+
+
+
+/***********************************************************************
+
+    不定値、無効点、穴認識処理関数
+    フィルタ処理前に行うこと
+    戻り値：true 有効点あり、false 有効点なし
+    2026.9.15yori
+
+***********************************************************************/
+bool HwCtrl::PF_CreateScanLine(int index, double hole_dist, KSK_PFSCANLINEP* new_scanlinep)
+{
+    int validCnt = 0; // 有効点数
+    int iXSize = ptlinedata2025[index].iDataNum; //スキャンデータ数
+    KSK_PFSCANPNT* pKSK_PFSCANPNT = ScanPoint; // スキャン点列
+    KSK_PFSCANLINEP new_scanline = NULL; // スキャンライン
+    long frc = 0; // 関数の戻り値
+
+    // 入力チェック
+    if (iXSize <= 0)
+    {
+        return false;
+    }
+
+    if (pKSK_PFSCANPNT == nullptr)
+    {
+        return false;
+    }
+
+    // スキャンポイント作成
+    for (int i = 0; i < iXSize; i++)
+    {
+        // 不定値(-nan(ind)、inf)の場合
+        if (isnan(ptlinedata2025[index].tPulsData[i].dataX) == true ||
+            isnan(ptlinedata2025[index].tPulsData[i].dataY) == true ||
+            isnan(ptlinedata2025[index].tPulsData[i].dataZ) == true ||
+            isinf(ptlinedata2025[index].tPulsData[i].dataX) == true ||
+            isinf(ptlinedata2025[index].tPulsData[i].dataY) == true ||
+            isinf(ptlinedata2025[index].tPulsData[i].dataZ) == true)
+        {
+            return false;
+        }
+
+        // スキャンデータの1ポイント(X,Y,Z)の値(入力)
+        pKSK_PFSCANPNT[i].pnt.veccod[0] = ptlinedata2025[index].tPulsData[i].dataX;
+        pKSK_PFSCANPNT[i].pnt.veccod[1] = ptlinedata2025[index].tPulsData[i].dataY;
+        pKSK_PFSCANPNT[i].pnt.veccod[2] = ptlinedata2025[index].tPulsData[i].dataZ;
+
+        // スキャンポイントNo
+        if (m_isFirstPointNo == true)
+        {
+            pKSK_PFSCANPNT[i].orig_idx = 0;
+            m_isFirstPointNo = false;
+        }
+        else
+        {
+            pKSK_PFSCANPNT[i].orig_idx++;
+        }
+
+        // スキャンラインNo
+        pKSK_PFSCANPNT[i].orig_idx_scanline = ptlinedata2025[index].lineNo;
+
+        // フラグは毎回初期化する。
+        pKSK_PFSCANPNT[i].invalidF = 0;
+
+        // 999999.0 の時、無効データとして取得しない。
+        if (ptlinedata2025[index].tPulsData[i].dataX < INVALID_CHECK &&
+            ptlinedata2025[index].tPulsData[i].dataY < INVALID_CHECK &&
+            ptlinedata2025[index].tPulsData[i].dataZ < INVALID_CHECK)
+        {
+            // 無効点(穴領域)フラグ(0/1)
+            pKSK_PFSCANPNT[i].invalidF = 0;
+            validCnt++;
+        }
+        else
+        {
+            // 無効点(穴領域)フラグ(0/1)
+            pKSK_PFSCANPNT[i].invalidF = 1;
+        }
+    }
+
+    // 全てのスキャンデータが無効点の場合
+    if (validCnt == 0)
+    {
+        return false;
+    }
+
+    // スキャンライン作成
+    frc = kskPF_CreateScanLine(iXSize, pKSK_PFSCANPNT, hole_dist, &new_scanline); // スキャン点列からスキャンライン生成
+
+    // 関数エラー処理
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    // サブライン数チェック
+    if (new_scanline->num_subline <= 0)
+    {
+        return false;
+    }
+
+    // スキャンラインID
+    new_scanline->scanlineID = ptlinedata2025[index].lineNo;
+
+    // 関数の変数に作成したスキャンラインを入力
+    *new_scanlinep = new_scanline;
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    スキャンラインのremoveFを初期化
+    戻り値：true 正常終了、false エラー
+    2026.9.16yori
+
+***********************************************************************/
+
+bool HwCtrl::PF_InitializeRemFlagScanLine(long removeF, KSK_PFSCANLINEP new_scanline)
+{
+    long frc = 0; // 関数の戻り値
+    frc = kskPF_InitializeRemFlagScanLine(removeF, new_scanline);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    点群の間引き
+    戻り値：true 有効点あり、false 有効点なし
+    2026.9.15yori
+
+***********************************************************************/
+
+bool HwCtrl::PF_ThinOutScanLine(long thin_npnt, KSK_PFSCANLINEP new_scanline)
+{
+    long frc = 0; // 関数の戻り値
+
+    frc = kskPF_ThinOutScanLine(thin_npnt, new_scanline);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    // フィルタ後のサブライン数チェック
+    if (new_scanline->num_subline <= 0)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    ライン端の点群の除去
+    戻り値：true 有効点あり、false 有効点なし
+    2026.9.16yori
+
+***********************************************************************/
+
+bool HwCtrl::PF_RemoveEndPntsScanLine(long remove_npnt, long alive_npnt, KSK_PFSCANLINEP new_scanline)
+{
+    long frc = 0; // 関数の戻り値
+
+    frc = kskPF_RemoveEndPntsScanLine(remove_npnt, alive_npnt, new_scanline);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    // フィルタ後のサブライン数チェック
+    if (new_scanline->num_subline <= 0)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    ラインの平行補正
+    戻り値：true 有効点あり、false 有効点なし
+    2026.9.16yori
+
+***********************************************************************/
+
+bool HwCtrl::PF_AlignPntsInParallelScanLine(
+    double fittol,
+    KSK_PFSCANLINEP orig_scanline0,
+    KSK_PFSCANLINEP orig_scanline1,
+    KSK_PFSCANLINEP orig_scanline2,
+    KSK_PFSCANLINEP* aligned_scanline1p
+)
+{
+    long frc = 0; // 関数の戻り値
+    KSK_PFSCANLINEP aligned_scanline = NULL; // 平行補正されたスキャンライン
+
+    frc = kskPF_AlignPntsInParallelScanLine(fittol, orig_scanline0, orig_scanline1, orig_scanline2, &aligned_scanline);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    // フィルタ後のサブライン数チェック
+    if (aligned_scanline->num_subline <= 0)
+    {
+        return false;
+    }
+
+    // 関数の変数に平行補正されたスキャンラインを入力
+    *aligned_scanline1p = aligned_scanline;
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    ライン傾斜部の点の除去
+    戻り値：true 有効点あり、false 有効点なし
+    2026.9.16yori
+
+***********************************************************************/
+
+bool HwCtrl::PF_RemoveTiltedPntsScanLine(long num_samplepnts, double degree, PGT_VEC vecDirScan, KSK_PFSCANLINEP new_scanline)
+{
+    long frc = 0; // 関数の戻り値
+    double radian = 0.0;
+    radian = degree * PI / 180.0;
+
+    frc = kskPF_RemoveTiltedPntsScanLine(num_samplepnts, radian, vecDirScan, new_scanline);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    // フィルタ後のサブライン数チェック
+    if (new_scanline->num_subline <= 0)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    間延び点の除去
+    戻り値：true 有効点あり、false 有効点なし
+    2026.9.16yori
+
+***********************************************************************/
+
+bool HwCtrl::PF_RemoveAbnormalPitchPntsScanLine(double threshold_pitch, KSK_PFSCANLINEP new_scanline)
+{
+    long frc = 0; // 関数の戻り値
+
+    frc = kskPF_RemoveAbnormalPitchPntsScanLine(threshold_pitch, new_scanline);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    // フィルタ後のサブライン数チェック
+    if (new_scanline->num_subline <= 0)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    ライン上の折れ位置の点の除去
+    戻り値：true 有効点あり、false 有効点なし
+    2026.9.15yori
+
+***********************************************************************/
+bool HwCtrl::PF_RemoveDisplacedPntsScanLine(double degree, KSK_PFSCANLINEP new_scanline)
+{
+    long frc = 0; // 関数の戻り値
+    double radian = 0.0;
+    radian = degree * PI / 180.0;
+    frc = kskPF_RemoveDisplacedPntsScanLine(radian, new_scanline);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    // フィルタ後のサブライン数チェック
+    if (new_scanline->num_subline <= 0)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    面傾斜部の点の除去
+    戻り値：true 有効点あり、false 有効点なし
+    2026.9.17yori
+
+***********************************************************************/
+
+bool HwCtrl::PF_RemoveTiltedPntsScanLineSURF(
+    double fittol,
+    double dThresholdAngle,
+    PGT_VEC vecDirScan,
+    KSK_PFSCANLINEP orig_scanline0,
+    KSK_PFSCANLINEP orig_scanline1,
+    KSK_PFSCANLINEP orig_scanline2,
+    KSK_PFSCANLINEP* adjust_scanline1p
+)
+{
+    long frc = 0; // 関数の戻り値
+    KSK_PFSCANLINEP adjust_scanline = NULL; // 面傾斜部の点が削除されたスキャンライン
+
+    frc = kskPF_RemoveTiltedPntsScanLineSURF(fittol, dThresholdAngle, vecDirScan, orig_scanline0, orig_scanline1, orig_scanline2, &adjust_scanline);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    // フィルタ後のサブライン数チェック
+    if (adjust_scanline->num_subline <= 0)
+    {
+        return false;
+    }
+
+    // 関数の変数に面傾斜部の点が削除されたスキャンラインを入力
+    *adjust_scanline1p = adjust_scanline;
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    ラインのノイズの過多判定
+    戻り値：true 正常終了、false エラー
+    2026.9.16yori
+
+***********************************************************************/
+bool HwCtrl::PF_CalcNoiseRatioScanLine(long part_npnt, double threshold_std, KSK_PFSCANLINEP new_scanline, double* dRatio_NGp)
+{
+    long frc = 0; // 関数の戻り値
+    frc = kskPF_CalcNoiseRatioScanLine(part_npnt, threshold_std, new_scanline, dRatio_NGp);
+
+    if (frc != 0)
+    {
+        kskPF_ErrPrint(FILTER_ERRLOG_TXT);
+        kskPF_ErrClear();
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/***********************************************************************
+
+    フィルタ処理後にPolyWorksへ送信するスキャンラインデータ
+    戻り値：送信点数
+    2026.9.15yori
+
+***********************************************************************/
+
+int HwCtrl::PF_ScanLineData(int index, KSK_PFSCANLINEP new_scanline)
+{
+    int transferCnt = 0;
+    long i,j;
+
+    for (i = 0; i < new_scanline->num_subline; i++)
+    {
+        // 1サブラインのポイント数チェック
+        if (new_scanline->ary_subline[i]->num_scanpnt <= 0)
+        {
+            continue;
+        }
+
+        for (j = 0; j < new_scanline->ary_subline[i]->num_scanpnt; j++)
+        {
+            ptlinedata2025[index].tPulsData[transferCnt].dataX = new_scanline->ary_subline[i]->ary_scanpnt[j].pnt.veccod[0];
+
+            ptlinedata2025[index].tPulsData[transferCnt].dataY = new_scanline->ary_subline[i]->ary_scanpnt[j].pnt.veccod[1];
+
+            ptlinedata2025[index].tPulsData[transferCnt].dataZ = new_scanline->ary_subline[i]->ary_scanpnt[j].pnt.veccod[2];
+
+            transferCnt++;
+        }
+    }
+
+    return transferCnt;
 }
 
 
@@ -3890,6 +5270,7 @@ bool HwCtrl::SendLineDataCheckDiffPoint(int index)
 
     return false;
 }
+
 
 
 /***********************************************************************
@@ -5554,6 +6935,8 @@ std::wstring HwCtrl::GetProcessNameByPid(DWORD pid)
     CloseHandle(hSnapshot);
     return name;
 }
+
+
 
 /***********************************************************************
 

@@ -82,13 +82,22 @@ typedef struct Status02
     int sens_use[5]; // 感度の有効無効(2025.6.23yori)
     char sens_name[5][50]; // 感度名称(2025.6.23yori)
     int sens; // 感度(2025.11.25yori)
+    int bright_mask_select; // 輝度マスク選択(0:なし、1:手動、2:自動(1パッチ毎)、3:自動(スタート毎))(2026.9.2yori)
+    int bright_mask_upper_limit; // 輝度マスク上限値(2026.9.2yori)
+    int bright_mask_lower_limit; // 輝度マスク下限値(2026.9.2yori)
+    int	dist_onoff; // 距離マスクオンオフ(202.8.30yori)
     int	dist_use[6][3][2]; // 距離マスク使用の有無(1=使用する/0=使用しない)(2025.6.20yori)
     double dist_data[6][3][2]; // 距離マスク設定値(2025.6.20yori)
-    unsigned short brightslice[5]; // 輝度スライス(2025.6.20yori)
+    int bright_slice_std_enable; // 輝度スライス標準の有効無効(2026.8.29yori)
+    int bright_slice_adv_enable; // 輝度スライスアドバンスの有効無効(2026.8.29yori)
+    unsigned short bright_slice[5]; // 輝度スライス(2025.6.20yori) // _追加で変数名変更(2026.8.28yori)
+    int sens_slice_std_enable; // 感度スライス標準の有効無効(2026.8.29yori)
+    int sens_slice_adv_enable; // 感度スライスアドバンスの有効無効(2026.8.29yori)
     unsigned short sens_slice[5]; // 感度スライス(2025.6.20yori)
     int power; // ガイドレーザーパワー(2025.6.23yori)
     int xpitch_onoff; // 補間(2025.6.23yori)
-    double angle; // 角度マスク(2025.6.23yori)
+    int angle_mask_onoff; // 角度マスク有効無効(2026.8.6yori) // angle_mask_enable→angle_mask_onoff(2026.8.31yori)
+    double angle_mask_deg; // 角度マスク(2025.6.23yori) // angle→angle_mask_deg(2026.8.6yori)
     int two_peak; // 2ピークマスク(2025.6.23yori)
     int edge; // エッジマスク(2025.6.23yori)
     int edge_default[3][6]; // エッジマスク初期値(2025.8.27yori)
@@ -176,7 +185,6 @@ typedef struct Gauge
 
 } GAUGE;
 
-
 // プローブ点検判定フラグ
 typedef struct
 {
@@ -203,7 +211,6 @@ typedef struct
 
 } CALIB_JUDGE_CK_FG;
 
-
 // キャリブデータの位置、ボールから離れたかのチェックを知らせるフラグ 2025.9.24 add eba
 typedef struct
 {
@@ -212,7 +219,6 @@ typedef struct
 
     
 } CALIB_POS_ERR_FG;
-
 
 // キャリブレーション関連のデータ受け渡し要構造体 2025.9.3 eba
 typedef struct CalibSettingParamter
@@ -243,7 +249,6 @@ typedef struct CalibSettingParamter
 
 } CALIB_MSEBOX;
 
-
 // 非接触点検キャリブレーション関連のデータ受け渡し用構造体(2025.12.10yori)
 typedef struct CalibScannerSettingParamter
 {
@@ -265,7 +270,6 @@ typedef struct CalibScannerSettingParamter
     int MesString;
 
 } CALIB_SCANNER_MSEBOX;
-
 
 CPX_DECLSPEC void WINAPI CPX_ErrMsg_SetCB( ER_CBFUNC );
 CPX_DECLSPEC int  WINAPI CPX_ErrMsg_GetMsg( int, TCHAR*&, int );
@@ -369,16 +373,20 @@ CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd06(int); // 追加(2025.8.12yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd07(int); // 追加(2025.8.21yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd08(int); // 追加(2025.8.21yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd09(int); // 追加(2025.8.21yori)
-CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd10(); // 追加(2025.8.25yori)
-CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd11(); // 追加(2025.8.25yori)
-CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd12(); // 追加(2025.8.25yori)
-CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd13(); // 追加(2025.8.25yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd10(STATUS02*); // 追加(2025.8.25yori) //引数追加(2026.8.7yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd11(unsigned short*); // 追加(2025.8.25yori) //引数追加(2026.8.5yori) // 引数に*追加(2026.8.18yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd12(unsigned short*); // 追加(2025.8.25yori) //引数追加(2026.8.5yori) // 引数に*追加(2026.8.18yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd13(int, double); // 追加(2025.8.25yori) //引数追加(2026.8.5yori) //引数追加(2026.8.31yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd14(int); // 追加(2025.8.25yori)
-CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd15(); // 追加(2025.8.25yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd15(int); // 追加(2025.8.25yori) //引数追加(2026.8.5yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd16(); // 追加(2025.8.27yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd17(); // 追加(2025.8.27yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_Cmd18(); // 追加(2025.11.11yori)
 CPX_DECLSPEC int  WINAPI CPX_Grp03_ScannerAlignmentPanelFullCalStartBtn(); // 追加(2025.12.8yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_SetDistMaskEnable(bool*); // 追加(2026.8.12yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_SetBrightSliceLevel(STATUS02*); // 追加(2026.8.29yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_SetSensSliceLevel(STATUS02*); // 追加(2026.8.29yori)
+CPX_DECLSPEC int  WINAPI CPX_Grp03_SetBrightMaskSetting(STATUS02*); // 追加(2026.9.2yori)
 
 #ifdef __cplusplus
 }

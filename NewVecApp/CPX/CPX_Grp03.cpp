@@ -174,14 +174,15 @@ int WINAPI CPX_Grp03_Cmd09(int xpitch)
 
     Cmd10
     追加(2025.8.23yori)
+    引数追加(2026.8.7yori)
 
 ***********************************************************************/
 
-int WINAPI CPX_Grp03_Cmd10()
+int WINAPI CPX_Grp03_Cmd10(STATUS02* sts)
 {
     int     rc;
 
-    rc = Grp03::Cmd10();
+    rc = Grp03::Cmd10(sts);
 
     return(rc);
 }
@@ -192,14 +193,16 @@ int WINAPI CPX_Grp03_Cmd10()
 
     Cmd11
     追加(2025.8.24yori)
+    引数追加(2026.8.5yori)
+    unsigned short bright_slice[5]→unsigned short* bright_slice(2026.8.18yori)
 
 ***********************************************************************/
 
-int WINAPI CPX_Grp03_Cmd11()
+int WINAPI CPX_Grp03_Cmd11(unsigned short* bright_slice)
 {
     int     rc;
 
-    rc = Grp03::Cmd11();
+    rc = Grp03::Cmd11(bright_slice);
 
     return(rc);
 }
@@ -210,14 +213,16 @@ int WINAPI CPX_Grp03_Cmd11()
 
     Cmd12
     追加(2025.8.24yori)
+    引数追加(2026.8.5yori)
+    unsigned short sens_slice[5]→unsigned short* sens_slice(2026.8.18yori)
 
 ***********************************************************************/
 
-int WINAPI CPX_Grp03_Cmd12()
+int WINAPI CPX_Grp03_Cmd12(unsigned short* sens_slice)
 {
     int     rc;
 
-    rc = Grp03::Cmd12();
+    rc = Grp03::Cmd12(sens_slice);
 
     return(rc);
 }
@@ -228,14 +233,16 @@ int WINAPI CPX_Grp03_Cmd12()
 
     Cmd13
     追加(2025.8.24yori)
+    引数追加(2026.8.5yori)
+    引数追加(2026.8.31yori)
 
 ***********************************************************************/
 
-int WINAPI CPX_Grp03_Cmd13()
+int WINAPI CPX_Grp03_Cmd13(int angle_mask_onoff, double angle)
 {
     int     rc;
 
-    rc = Grp03::Cmd13();
+    rc = Grp03::Cmd13(angle_mask_onoff, angle);
 
     return(rc);
 }
@@ -264,14 +271,15 @@ int WINAPI CPX_Grp03_Cmd14(int twopeak)
 
     Cmd15
     追加(2025.8.25yori)
+    引数追加(2026.8.5yori)
 
 ***********************************************************************/
 
-int WINAPI CPX_Grp03_Cmd15()
+int WINAPI CPX_Grp03_Cmd15(int edge)
 {
     int     rc;
 
-    rc = Grp03::Cmd15();
+    rc = Grp03::Cmd15(edge);
 
     return(rc);
 }
@@ -344,6 +352,78 @@ int WINAPI CPX_Grp03_ScannerAlignmentPanelFullCalStartBtn()
     int     rc;
 
     rc = Grp03::ScannerAlignmentPanelFullCalStartBtn();
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
+    CPX_Grp03_SetDistMaskEnable
+    2026.8.12yori
+
+***********************************************************************/
+
+int WINAPI CPX_Grp03_SetDistMaskEnable(bool* maskfg)
+{
+    int     rc;
+
+    rc = Grp03::SetDistMaskEnable(maskfg);
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
+    CPX_Grp03_SetBrightSliceLevel
+    追加(2026.8.29yori)
+
+***********************************************************************/
+
+int WINAPI CPX_Grp03_SetBrightSliceLevel(STATUS02* sts)
+{
+    int     rc;
+
+    rc = Grp03::SetBrightSliceLevel(sts);
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
+    CPX_Grp03_SetSensSliceLevel
+    追加(2026.8.29yori)
+
+***********************************************************************/
+
+int WINAPI CPX_Grp03_SetSensSliceLevel(STATUS02* sts)
+{
+    int     rc;
+
+    rc = Grp03::SetSensSliceLevel(sts);
+
+    return(rc);
+}
+
+
+
+/***********************************************************************
+
+    CPX_Grp03_SetBrightMaskSetting
+    追加(2026.9.2yori)
+
+***********************************************************************/
+
+int WINAPI CPX_Grp03_SetBrightMaskSetting(STATUS02* sts)
+{
+    int     rc;
+
+    rc = Grp03::SetBrightMaskSetting(sts);
 
     return(rc);
 }

@@ -31,6 +31,8 @@
 #define SCANNER_PARA_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\scanpara.ini" // 追加(2025.11.25yori)
 #define NETWORK_SET_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\networkset.ini" // 追加(2025.11.26yori)
 #define VECCOM_INI L"C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Inifiles\\veccom.ini" // 追加(2025.11.26yori)
+#define PI 3.1415926535897932384626434// 追加(2026.9.13yori)
+#define FILTER_ERRLOG_TXT "C:\\ProgramData\\Kosakalab\\Kosaka CMM\\Log\\FilterErrLog.txt" // 追加(2026.9.14yori)
 
 class HwCtrl
 {
@@ -71,7 +73,7 @@ public:
     static void Func33(char adress[4][8], char subnet[4][8], char gateway[4][8], char dns[4][8]); // 追加(2025.6.19yori) // 引数を2次元配列へ変更(2025.8.17yori)
     static int Func34(); // 追加(2025.6.20yori)
     static void Func35(int[5], char[5][50]); // 追加(2025.6.23yori)
-    static BOOL Func36(); // 追加(2025.6.20yori)
+    static BOOL Func36(PulsZMask* mask); // 追加(2025.6.20yori) // 引数追加(2026.8.6yori)
     static BOOL Func37(unsigned short val[5]); // 追加(2025.6.20yori)
     static BOOL Func38(unsigned short val[5]); // 追加(2025.6.20yori)
     static void Func39(int*); // 追加(2025.6.23yori)
@@ -100,22 +102,48 @@ public:
     static BOOL Func62(int sens); // 追加(2025.8.21yori)
     static BOOL Func63(int power); // 追加(2025.8.21yori)
     static BOOL Func64(int pitch); // 追加(2025.8.21yori)
-    static BOOL Func65(); // 追加(2025.8.23yori)
-    static BOOL Func66(); // 追加(2025.8.24yori)
-    static BOOL Func67(); // 追加(2025.8.24yori)
-    static BOOL Func68(); // 追加(2025.8.24yori)
+    static BOOL Func65(PulsZMask* mask); // 追加(2025.8.23yori) // 引数追加(2026.8.5yori)
+    static BOOL Func66(unsigned short bright_slice[5]); // 追加(2025.8.24yori) // 引数追加(2026.8.5yori)
+    static BOOL Func67(unsigned short sens_slice[5]); // 追加(2025.8.24yori) // 引数追加(2026.8.5yori)
+    static BOOL Func68(double angle); // 追加(2025.8.24yori) // 引数追加(2026.8.5yori)
     static BOOL Func69(int twopeak); // 追加(2025.8.25yori)
-    static BOOL Func70(); // 追加(2025.8.25yori)
+    static BOOL Func70(int edge); // 追加(2025.8.25yori) // 引数追加(2026.8.5yori)
     static BOOL Func71(); // 追加(2025.8.27yori)
     static BOOL Func72(int edge_default[3][6], int serch_mask_default[3][6]); // 追加(2025.8.27yori)
     static int Func73(); // 追加(2025.8.28yori)
     static int Func74(const TCHAR* armmodel); // 追加(2025.8.31yori)
     static int Func75(); // 追加(2025.9.1yori)
     static BOOL Func76(); // 追加(2025.9.3yori)
-    static void GetIniScanPara(int* mode, int* power, int* interp); // 追加(2025.11.25yori)
+    // INIファイルに保存された測定モード取得(2025.11.25yori)
+    // 距離マスク追加(2026.8.5yori)
+    // 輝度スライス追加(2026.8.5yori)
+    // 感度スライス追加(2026.8.5yori)
+    // 角度マスク追加(2026.8.5yori)
+    // 2ピークマスク追加(2026.8.5yori)
+    // エッジマスクの点数追加(2026.8.5yori)
+    static void GetIniScanPara(int* mode, int* power, int* interp, PulsZMask* mask, unsigned short bright_slice[5], unsigned short sens_slice[5], double* angle_mask_deg, int* two_peak, int* edge_num);
+    static void GetIniScanPara2(STATUS02* sts, PulsZMask* mask); // GetIniScanParaの引数を構造体へ変更(2026.8.28yori)
     static void GetIniScanSens(int* sens); // 追加(2025.11.25yori)
-    static void WriteIniScanPara(int mode, int power, int interp); // 追加(2025.11.25yori)
+    static void GetIniBrightMaskSetting(int* bright_mask_select, int* bright_mask_upper_limit, int* bright_mask_lower_limit); // 追加(2026.9.2yori)
+    static void GetIniBrightSliceEnable(int* bright_slice_std_enable, int* bright_slice_adv_enable); // 追加(2026.8.29yori)
+    static void GetIniSensSliceEnable(int* sens_slice_std_enable, int* sens_slice_adv_enable); // 追加(2026.8.29yori)
+    static void GetIniScanAngleMaskEnable(int* angle_maske_enable); // 追加(2026.8.5yori)
+    static void SetZMaskEnable(int dist_onoff); // 追加(2026.8.30yori)
+    static void GetZMaskEnable(int* dist_onoff); // 追加(2026.8.30yori)
+    // INIファイルにスキャナのパラメータ書き込み(2025.11.25yori)
+    // 距離マスク追加(2026.8.5yori)
+    // 輝度スライス追加(2026.8.5yori)
+    // 感度スライス追加(2026.8.5yori)
+    // 角度マスク追加(2026.8.5yori)
+    // 2ピークマスク追加(2026.8.5yori)
+    // エッジマスクの点数追加(2026.8.5yori)
+    static void WriteIniScanPara(int mode, int power, int interp, PulsZMask mask, unsigned short bright_slice[5], unsigned short sens_slice[5], double angle_mask_deg, int two_peak, int edge_num);
+    static void WriteIniScanPara2(STATUS02* sts, PulsZMask* mask); // WriteIniScanParaの引数を構造体へ変更(2026.8.28yori)
     static void WriteIniScanSens(int sens); // 追加(2025.11.25yori)
+    static void WriteIniBrightSliceEnable(int bright_slice_std_enable, int bright_slice_adv_enable); //追加(2026.8.29yori)
+    static void WriteIniSensSliceEnable(int sens_slice_std_enable, int sens_slice_adv_enable); //追加(2026.8.29yori)
+    static void WriteIniScanAngleMaskEnable(int angle_maske_enable); // 追加(2026.8.6yori)
+    static void WriteIniBrightMaskSetting(int bright_mask_select, int bright_mask_upper_limit, int bright_mask_lower_limit); // 追加(2026.9.2yori)
     static CVecCnt m_hVecCnt;
 
     static int pbid_chg_old_fg; // プローブID の変更があったことを知らせる一つ前のフラグ(2025.9.8yori)
@@ -169,10 +197,6 @@ public:
     static bool PostureCheckFg;                     // 非接触点検キャリブ中姿勢チェックフラグ(2026.2.4yori)
     static int ScannerErrorCode;                    // スキャナエラーコード(2026.2.4yori)
     static const double INVALID_CHECK;              // 無効値判断値 (無効値は999999.0 floatデータのため
-    static unsigned short m_BrightSlice[5];         // 輝度スライス(2025.8.25yori)
-    static unsigned short m_SensSlice[5];           // 感度スライス(2025.8.25yori)
-    static double m_Angle;                          // 角度マスク(2025.8.25yori)
-    static int m_Edge;                              // エッジマスク(2025.8.25yori)
     static DWORD m_Address;                         // スキャナのIPアドレス(2025.6.18yori)
     static DWORD m_Subnet;                          // スキャナのサブネットマスク(2025.6.18yori)
     static DWORD m_Gateway;                         // スキャナのデフォルトゲートウェイ(2025.6.18yori)
@@ -191,12 +215,15 @@ public:
     static double m_MaxMin[3];                      // 非接触キャリブ結果：4球中心座標値の最大-最小(2025.12.10yori)
     static double m_BeforeXYZ[3];                   // スキャナと合成する一つ前のアームの座標値(2026.1.10yori)
     static bool m_isFirst;                          // 追加(2026.1.10yori)
+    static bool m_isFirstPointNo;                   // スキャンポイント数カウント用(2026.9.10yori)
     static int m_BeforeLineNo;                      // 追加(2026.2.2yori)
     //static double m_Afterdist2;                   // デバッグ(2026.1.12yori)
     //static unsigned int gDistHist[11];// test 2026.01.12 t.kanamura
     static int dist_count; // 追加(2026.1.12yori)
     static int m_JudgeCount;
     static int m_ArmLineNo; // スキャナの座標値と合成するアームラインNo(デバッグ用)(2026.1.26yori)
+    static int m_BrightMaskUpperLimit; // 輝度マスク上限値(2026.9.2yori)
+    static int m_BrightMaskLowerLimit; // 輝度マスク下限値(2026.9.2yori)
 
     static int GetVecDataEx(VecDtEx* PosiData);
     static int GetMeasTopData();
@@ -204,6 +231,7 @@ public:
     static int OneDataSamplingandTransfer(bool transFg, int* pErrorCode);
     //static bool GetandStoreScannerLineData(const VecRet* pVecData, bool tranceFg); // コメントアウト(2025.5.15yori)
     static bool GetandSendScannerLineData(const VecRet* pVecData, bool tranceFg);
+    static bool GetandSendScannerLineData2(const VecRet* pVecData, bool tranceFg); // GetandSendScannerLineDataに点群補正/フィルタ機能追加(2026.9.15yori)
     static void ConvertVecTranceData(const VecDtEx* pGetData, VecRet* pVecData); // 構造体の内容がことなるため変換が必要
     static void ConvertVecCtExTranceData(const VecDtEx* pGetData, VecCtEx* pVecData); // 構造体の内容がことなるため変換が必要(2025.12.2)
     static void SetTds1stPosition(const VecDtEx* pGetData);
@@ -217,6 +245,7 @@ public:
     static bool SendLineDataCheckDiffLine(int index); // ライン飛びチェック(2026.2.2yori)
     static void FileOutput(int iScanDataNo); // Debug用、スキャンデータファイル出力(2025.8.5yori) // 引数追加(2026.1.7yori)
     static void FileOutput2(int iScanDataNo, VecDtEx PosiData); // Debug用、アームとスキャンデータファイル出力(2026.1.8yori) // 引数変更、直接アームの座標値とijk取得(2026.1.26yori)
+    
     // プローブ登録(2025.10.31yori)
     static void ProbeResit(int psid, const TCHAR* probename, int probetype);
 
@@ -244,6 +273,20 @@ public:
     // シーケンス制御関数
     static VEC_STEP_SEQ m_VecStepSeq;    // 2025.5.27 add eba
 
+    // ポイント(点群)フィルタ用関数(2026.9.17yori)
+    static bool PF_CreateScanLine(int index, double hole_dist, KSK_PFSCANLINEP* new_scanlinep);
+    static bool PF_InitializeRemFlagScanLine(long removeF, KSK_PFSCANLINEP new_scanline);
+    static bool PF_ThinOutScanLine(long thin_npnt, KSK_PFSCANLINEP new_scanline);
+    static bool PF_RemoveEndPntsScanLine(long remove_npnt, long alive_npnt, KSK_PFSCANLINEP new_scanline);
+    static bool PF_AlignPntsInParallelScanLine(double fittol, KSK_PFSCANLINEP orig_scanline0, KSK_PFSCANLINEP orig_scanline1, KSK_PFSCANLINEP orig_scanline2, KSK_PFSCANLINEP* aligned_scanline1p);
+    static bool PF_RemoveTiltedPntsScanLine(long num_samplepnts, double degree, PGT_VEC vecDirScan, KSK_PFSCANLINEP new_scanline);
+    static bool PF_RemoveAbnormalPitchPntsScanLine(double threshold_pitch, KSK_PFSCANLINEP new_scanline);
+    static bool PF_RemoveDisplacedPntsScanLine(double degree, KSK_PFSCANLINEP new_scanline);
+    static bool PF_CalcNoiseRatioScanLine(long part_npnt, double threshold_std, KSK_PFSCANLINEP new_scanline, double* dRatio_NGp);
+    static bool PF_RemoveTiltedPntsScanLineSURF(double fittol, double dThresholdAngle, PGT_VEC vecDirScan, KSK_PFSCANLINEP orig_scanline0, KSK_PFSCANLINEP orig_scanline1, KSK_PFSCANLINEP orig_scanline2, KSK_PFSCANLINEP* adjust_scanline1p);
+    static int PF_ScanLineData(int index, KSK_PFSCANLINEP new_scanline);
+    static long m_ParallelCount; // 平行補正用ラインカウント(2026.9.16yori)
+    static long m_TiltedSURFCount; // 面傾斜部の点の除去用ラインカウント(2026.9.17yori)
 
     // 親プロセスexe＋PID判定関数(2026.5.27yori)
 public:

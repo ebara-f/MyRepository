@@ -64,6 +64,22 @@ namespace VecApp
                 Item1.OptionIndex1 = sts.sens; // Item1.SelectedOption = "Normal";からスキャナに設定されている感度を表示する。(2025.11.25yori)
             }
 
+            // 輝度マスク(2026.9.2yori)
+            var Item = this.ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "LuminosityMask");
+            if (Item?.OptionIndex2 != null)
+            {
+                Item.OptionIndex2 = sts.bright_mask_select;
+                var Item0 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                if (Item0?.InputText32 != null)
+                {
+                    Item0.InputText32 = sts.bright_mask_upper_limit.ToString();
+                }
+                if (Item0?.InputText33 != null)
+                {
+                    Item0.InputText33 = sts.bright_mask_lower_limit.ToString();
+                }
+            }
+
             // 距離マスク(2025.8.22yori) // Item4→Item3へ変更(ViewModelの番号と合わせる。)(2025.8.26yori)
             var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
             if (Item3?.IsChecked1 != null) // 追加(2025.8.26yori)
@@ -71,8 +87,22 @@ namespace VecApp
                 switch (sts.mode)
                 {
                     case 0:
-                        if (sts.use[0] == 1) Item3.IsChecked1 = true;
-                        if (sts.use[1] == 1) Item3.IsChecked2 = true;
+                        if (sts.use[0] == 1)
+                        {
+                            Item3.IsChecked1 = true;
+                        }
+                        else
+                        {
+                            //Item3.IsChecked1 = false;
+                        }
+                        if (sts.use[1] == 1)
+                        {
+                            Item3.IsChecked2 = true;
+                        }
+                        else
+                        {
+                            //Item3.IsChecked2 = false;
+                        }
                         if (sts.use[2] == 1) Item3.IsChecked3 = true;
                         if (sts.use[3] == 1) Item3.IsChecked4 = true;
                         if (sts.use[4] == 1) Item3.IsChecked5 = true;
@@ -161,14 +191,44 @@ namespace VecApp
             var parent3 = this.ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "DistanceMask1");
             if (parent3?.SlideSwitchValue != null) // 追加(2025.8.26yori)
             {
+                parent3.SlideSwitchValue = sts.dist_onoff; // 追加(2025.8.30yori)
                 if (parent3.SlideSwitchValue == 0)
                 {
-                    Item3.IsCheckBoxEnabled = false; // 距離マスクがOFFなら各(左右遠近)CheckBoxを無効にする。(2025.8.26yori)
+                    // 距離マスクがOFFなら各(左右遠近)CheckBoxを無効にする。(2025.8.26yori)
+                    // CheckBoxを識別する。(2026.8.6yori)
+                    Item3.IsCheckBox1Enabled = false;
+                    Item3.IsCheckBox2Enabled = false;
+                    Item3.IsCheckBox5Enabled = false;
+                    Item3.IsCheckBox6Enabled = false;
                 }
             }
 
             // 輝度スライス(2025.8.23yori)
-            var Item5 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
+            var Item5 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");           
+            // スタンダードのラジオボタンの有効無効を設定する。(2026.8.29yori)
+            if (Item5?.IsChecked7 != null)
+            {
+                if (sts.bright_slice_std_enable == 1)
+                {
+                    Item5.IsChecked7 = true;
+                }
+                else
+                {
+                    Item5.IsChecked7 = false;
+                }
+            }
+            // アドバンスのラジオボタンの有効無効を設定する。(2026.8.29yori)
+            if (Item5?.IsChecked8 != null)
+            {
+                if (sts.bright_slice_adv_enable == 1)
+                {
+                    Item5.IsChecked8 = true;
+                }
+                else
+                {
+                    Item5.IsChecked8 = false;
+                }
+            }
             if (Item5?.InputText12 != null) // 追加(2025.8.26yori)
             {
                 // スタンダード
@@ -176,13 +236,37 @@ namespace VecApp
                 Item5.InputText13 = "24528";
                 Item5.InputText14 = "24528";
                 // アドバンス
-                Item5.InputText15 = sts.brightslice[0].ToString();
-                Item5.InputText16 = sts.brightslice[1].ToString();
-                Item5.InputText17 = sts.brightslice[2].ToString();
+                Item5.InputText15 = sts.bright_slice[0].ToString();
+                Item5.InputText16 = sts.bright_slice[1].ToString();
+                Item5.InputText17 = sts.bright_slice[2].ToString();
             }
 
             // 感度スライス(2025.8.23yori)
             var Item6 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "SensitivitySlice");
+            // スタンダードのラジオボタンの有効無効を設定する。(2026.8.29yori)
+            if (Item5?.IsChecked9 != null)
+            {
+                if (sts.bright_slice_std_enable == 1)
+                {
+                    Item5.IsChecked9 = true;
+                }
+                else
+                {
+                    Item5.IsChecked9 = false;
+                }
+            }
+            // アドバンスのラジオボタンの有効無効を設定する。(2026.8.29yori)
+            if (Item5?.IsChecked10 != null)
+            {
+                if (sts.bright_slice_adv_enable == 1)
+                {
+                    Item5.IsChecked10 = true;
+                }
+                else
+                {
+                    Item5.IsChecked10 = false;
+                }
+            }
             if (Item6?.InputText18 != null) // 追加(2025.8.26yori)
             {
                 // スタンダード
@@ -217,9 +301,23 @@ namespace VecApp
 
             // 角度マスク(2025.8.24yori)
             var Item9 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
+            if (Item9?.SlideSwitchValue8 != null) // 追加(2025.8.31yori)
+            {
+                Item9.SlideSwitchValue8 = sts.angle_mask_onoff;
+                if (Item9.SlideSwitchValue8 == 1)
+                {
+                    Item9.IsAngleMaskEnabled = true;
+                    Item9.SlideText8 = VecApp.Properties.Resources.String144;
+                }
+                else
+                {
+                    Item9.IsAngleMaskEnabled = false;
+                    Item9.SlideText8 = VecApp.Properties.Resources.String143;
+                }
+            }
             if (Item9?.InputText25 != null) // 追加(2025.8.26yori)
             {
-                Item9.InputText25 = sts.angle.ToString("F1");
+                Item9.InputText25 = sts.angle_mask_deg.ToString("F1"); // angle→angle_mask_deg(2026.8.6yori)
             }
 
             // 2ピークマスク(2028.8.25yori)
@@ -368,8 +466,8 @@ namespace VecApp
                                 default:
                                     break;
                             }
-                            CSH.AppMain.UpDateData02_Write(in sts);
-                            CSH.Grp03.Cmd10();
+
+                            CSH.Grp03.Cmd10(in sts); // 引数追加に伴う変更(2026.8.7yori)
                         }
                     }
                 }
@@ -378,11 +476,13 @@ namespace VecApp
                 var Item5 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
                 if (Item5?.InputText15 != null) // 追加(2025.8.26yori)
                 {
-                    sts.brightslice[0] = ushort.Parse(Item5.InputText15);
-                    sts.brightslice[1] = ushort.Parse(Item5.InputText16);
-                    sts.brightslice[2] = ushort.Parse(Item5.InputText17);
-                    CSH.AppMain.UpDateData02_Write(in sts);
-                    if (Item5.IsChecked8 == true) CSH.Grp03.Cmd11();
+                    sts.bright_slice[0] = ushort.Parse(Item5.InputText15);
+                    sts.bright_slice[1] = ushort.Parse(Item5.InputText16);
+                    sts.bright_slice[2] = ushort.Parse(Item5.InputText17);
+                    if (Item5.IsChecked8 == true)
+                    {
+                        CSH.Grp03.Cmd11(sts.bright_slice); // 引数追加に伴う変更(2026.8.6yori)
+                    }
                 }
 
                 // 感度スライス(2025.8.24yori)
@@ -392,26 +492,27 @@ namespace VecApp
                     sts.sens_slice[0] = ushort.Parse(Item6.InputText21);
                     sts.sens_slice[1] = ushort.Parse(Item6.InputText22);
                     sts.sens_slice[2] = ushort.Parse(Item6.InputText23);
-                    CSH.AppMain.UpDateData02_Write(in sts);
-                    if (Item6.IsChecked10 == true) CSH.Grp03.Cmd12();
+                    if (Item6.IsChecked10 == true)
+                    {
+                        CSH.Grp03.Cmd12(sts.sens_slice); // 引数追加に伴う変更(2026.8.6yori)
+                    }
                 }
 
                 // 角度マスク(2025.8.24yori)
                 var Item9 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
                 if (Item9?.InputText25 != null) // 追加(2025.8.26yori)
                 {
-                    sts.angle = double.Parse(Item9.InputText25);
-                    CSH.AppMain.UpDateData02_Write(in sts);
-                    if (Item9.SlideSwitchValue8 == 1) CSH.Grp03.Cmd13();
+                    if (Item9.SlideSwitchValue8 == 1)
+                    {
+                        CSH.Grp03.Cmd13(Item9.SlideSwitchValue8, double.Parse(Item9.InputText25)); // 引数追加に伴う変更(2026.8.6yori) // 引数追加(2026.8.31yori)
+                    }
                 }
 
                 // エッジマスク(2028.8.25yori)
                 var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
                 if (Item11?.InputText26 != null) // 追加(2025.8.26yori)
                 {
-                    sts.edge = int.Parse(Item11.InputText26);
-                    CSH.AppMain.UpDateData02_Write(in sts);
-                    CSH.Grp03.Cmd15();
+                    CSH.Grp03.Cmd15(int.Parse(Item11.InputText26)); // 引数追加に伴う変更(2026.8.6yori)
                 }
                 
                 CSH.Grp03.Cmd01(); // スキャンスタート
@@ -552,6 +653,508 @@ namespace VecApp
         }
         private void Click_CloseBtn(object sender, RoutedEventArgs e)
         {
+            Status02 sts = new Status02(); // 追加(2026.8.6yori)
+            CSH.AppMain.UpDateData02(out sts); // 追加(2026.8.7yori)
+
+            // 輝度マスク(2026.9.2yori)
+            var Item = this.ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "LuminosityMask");
+            if (Item?.OptionIndex2 != null)
+            {
+                switch (Item.OptionIndex2)
+                {
+                    case 0: // なし
+                        var Item0 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                        if (Item0?.InputText32 != null)
+                        {
+                            sts.bright_mask_upper_limit = 65535;
+                        }
+                        if (Item0?.InputText33 != null)
+                        {
+                            sts.bright_mask_lower_limit = 0;
+                        }
+                        sts.bright_mask_select = 0;
+                        CSH.Grp03.SetBrightMaskSetting(sts);
+                        break;
+                    case 1: // 手動
+                        var Item1 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                        if (Item1?.InputText32 != null)
+                        {
+                            sts.bright_mask_upper_limit = int.Parse(Item1.InputText32);
+                        }
+                        if (Item1?.InputText33 != null)
+                        {
+                            sts.bright_mask_lower_limit = int.Parse(Item1.InputText33);
+                        }
+                        sts.bright_mask_select = 1;
+                        CSH.Grp03.SetBrightMaskSetting(sts);
+                        break;
+                    case 2: // 自動(1パッチ毎)
+                        var Item2 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                        if (Item2?.InputText32 != null)
+                        {
+                            sts.bright_mask_upper_limit = int.Parse(Item2.InputText32);
+                        }
+                        if (Item2?.InputText33 != null)
+                        {
+                            sts.bright_mask_lower_limit = int.Parse(Item2.InputText33);
+                        }
+                        sts.bright_mask_select = 2;
+                        CSH.Grp03.SetBrightMaskSetting(sts);
+                        break;
+                    case 3: // 自動(スタート毎)
+                        var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                        if (Item3?.InputText32 != null)
+                        {
+                            sts.bright_mask_upper_limit = int.Parse(Item3.InputText32);
+                        }
+                        if (Item3?.InputText33 != null)
+                        {
+                            sts.bright_mask_lower_limit = int.Parse(Item3.InputText33);
+                        }
+                        sts.bright_mask_select = 3;
+                        CSH.Grp03.SetBrightMaskSetting(sts);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // 距離マスク(2026.8.8yori)
+            var parent3 = this.ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "DistanceMask1");
+            if (parent3?.SlideSwitchValue != null)
+            {
+                if (parent3.SlideSwitchValue == 1) // 距離マスクがオンの場合
+                {
+                    var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
+                    if (Item3?.IsChecked1 != null)
+                    {
+                        switch (sts.mode)
+                        {
+                            case 0:
+                                if (Item3.IsChecked1 == true)
+                                {
+                                    sts.use[0] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[0] = 0;
+                                }
+                                if (Item3.IsChecked2 == true)
+                                {
+                                    sts.use[1] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[1] = 0;
+                                }
+                                if (Item3.IsChecked3 == true)
+                                {
+                                    sts.use[2] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[2] = 0;
+                                }
+                                if (Item3.IsChecked4 == true)
+                                {
+                                    sts.use[3] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[3] = 0;
+                                }
+                                if (Item3.IsChecked5 == true)
+                                {
+                                    sts.use[4] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[4] = 0;
+                                }
+                                if (Item3.IsChecked6 == true)
+                                {
+                                    sts.use[5] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[5] = 0;
+                                }
+                                sts.data[0] = double.Parse(Item3.InputText1);
+                                sts.data[1] = double.Parse(Item3.InputText2);
+                                sts.data[2] = double.Parse(Item3.InputText3);
+                                sts.data[3] = double.Parse(Item3.InputText4);
+                                sts.data[4] = double.Parse(Item3.InputText5);
+                                sts.data[5] = double.Parse(Item3.InputText6);
+                                break;
+                            case 1:
+                                if (Item3.IsChecked1 == true)
+                                {
+                                    sts.use[6] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[6] = 0;
+                                }
+                                if (Item3.IsChecked2 == true)
+                                {
+                                    sts.use[7] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[7] = 0;
+                                }
+                                if (Item3.IsChecked3 == true)
+                                {
+                                    sts.use[8] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[8] = 0;
+                                }
+                                if (Item3.IsChecked4 == true)
+                                {
+                                    sts.use[9] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[9] = 0;
+                                }
+                                if (Item3.IsChecked5 == true)
+                                {
+                                    sts.use[10] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[10] = 0;
+                                }
+                                if (Item3.IsChecked6 == true)
+                                {
+                                    sts.use[11] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[11] = 0;
+                                }
+                                sts.data[6] = double.Parse(Item3.InputText1);
+                                sts.data[7] = double.Parse(Item3.InputText2);
+                                sts.data[8] = double.Parse(Item3.InputText3);
+                                sts.data[9] = double.Parse(Item3.InputText4);
+                                sts.data[10] = double.Parse(Item3.InputText5);
+                                sts.data[11] = double.Parse(Item3.InputText6);
+                                break;
+                            case 2:
+                                if (Item3.IsChecked1 == true)
+                                {
+                                    sts.use[12] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[12] = 0;
+                                }
+                                if (Item3.IsChecked2 == true)
+                                {
+                                    sts.use[13] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[13] = 0;
+                                }
+                                if (Item3.IsChecked3 == true)
+                                {
+                                    sts.use[14] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[14] = 0;
+                                }
+                                if (Item3.IsChecked4 == true)
+                                {
+                                    sts.use[15] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[15] = 0;
+                                }
+                                if (Item3.IsChecked5 == true)
+                                {
+                                    sts.use[16] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[16] = 0;
+                                }
+                                if (Item3.IsChecked6 == true)
+                                {
+                                    sts.use[17] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[17] = 0;
+                                }
+                                sts.data[12] = double.Parse(Item3.InputText1);
+                                sts.data[13] = double.Parse(Item3.InputText2);
+                                sts.data[14] = double.Parse(Item3.InputText3);
+                                sts.data[15] = double.Parse(Item3.InputText4);
+                                sts.data[16] = double.Parse(Item3.InputText5);
+                                sts.data[17] = double.Parse(Item3.InputText6);
+                                break;
+                            case 3:
+                                if (Item3.IsChecked1 == true)
+                                {
+                                    sts.use[18] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[18] = 0;
+                                }
+                                if (Item3.IsChecked2 == true)
+                                {
+                                    sts.use[19] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[19] = 0;
+                                }
+                                if (Item3.IsChecked3 == true)
+                                {
+                                    sts.use[20] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[20] = 0;
+                                }
+                                if (Item3.IsChecked4 == true)
+                                {
+                                    sts.use[21] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[21] = 0;
+                                }
+                                if (Item3.IsChecked5 == true)
+                                {
+                                    sts.use[22] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[22] = 0;
+                                }
+                                if (Item3.IsChecked6 == true)
+                                {
+                                    sts.use[23] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[23] = 0;
+                                }
+                                sts.data[18] = double.Parse(Item3.InputText1);
+                                sts.data[19] = double.Parse(Item3.InputText2);
+                                sts.data[20] = double.Parse(Item3.InputText3);
+                                sts.data[21] = double.Parse(Item3.InputText4);
+                                sts.data[22] = double.Parse(Item3.InputText5);
+                                sts.data[23] = double.Parse(Item3.InputText6);
+                                break;
+                            case 4:
+                                if (Item3.IsChecked1 == true)
+                                {
+                                    sts.use[24] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[24] = 0;
+                                }
+                                if (Item3.IsChecked2 == true)
+                                {
+                                    sts.use[25] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[25] = 0;
+                                }
+                                if (Item3.IsChecked3 == true)
+                                {
+                                    sts.use[26] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[26] = 0;
+                                }
+                                if (Item3.IsChecked4 == true)
+                                {
+                                    sts.use[27] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[27] = 0;
+                                }
+                                if (Item3.IsChecked5 == true)
+                                {
+                                    sts.use[28] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[28] = 0;
+                                }
+                                if (Item3.IsChecked6 == true)
+                                {
+                                    sts.use[29] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[29] = 0;
+                                }
+                                sts.data[24] = double.Parse(Item3.InputText1);
+                                sts.data[25] = double.Parse(Item3.InputText2);
+                                sts.data[26] = double.Parse(Item3.InputText3);
+                                sts.data[27] = double.Parse(Item3.InputText4);
+                                sts.data[28] = double.Parse(Item3.InputText5);
+                                sts.data[29] = double.Parse(Item3.InputText6);
+                                break;
+                            case 5:
+                                if (Item3.IsChecked1 == true)
+                                {
+                                    sts.use[30] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[30] = 0;
+                                }
+                                if (Item3.IsChecked2 == true)
+                                {
+                                    sts.use[31] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[31] = 0;
+                                }
+                                if (Item3.IsChecked3 == true)
+                                {
+                                    sts.use[32] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[32] = 0;
+                                }
+                                if (Item3.IsChecked4 == true)
+                                {
+                                    sts.use[33] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[33] = 0;
+                                }
+                                if (Item3.IsChecked5 == true)
+                                {
+                                    sts.use[34] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[34] = 0;
+                                }
+                                if (Item3.IsChecked6 == true)
+                                {
+                                    sts.use[35] = 1;
+                                }
+                                else
+                                {
+                                    sts.use[35] = 0;
+                                }
+                                sts.data[30] = double.Parse(Item3.InputText1);
+                                sts.data[31] = double.Parse(Item3.InputText2);
+                                sts.data[32] = double.Parse(Item3.InputText3);
+                                sts.data[33] = double.Parse(Item3.InputText4);
+                                sts.data[34] = double.Parse(Item3.InputText5);
+                                sts.data[35] = double.Parse(Item3.InputText6);
+                                break;
+                            default:
+                                break;
+                        }
+
+                        CSH.Grp03.Cmd10(in sts);
+                        CSH.Grp03.SetDistMaskEnable(true); // 追加(2026.8.12yori)
+                    }
+                }
+                else // 距離マスクがOFFの場合
+                {
+                    CSH.Grp03.SetDistMaskEnable(false);
+                }
+            }
+
+            // 輝度スライス(2026.8.6yori)
+            var Item5 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminanceSlice");
+            if (Item5?.InputText15 != null)
+            {
+                // 標準(2026.8.27yori)
+                if (Item5.IsChecked7 == true)
+                {
+                    sts.bright_slice_std_enable = 1; // 追加(2026.8.29yori)
+                    sts.bright_slice_adv_enable = 0; // 追加(2026.8.29yori)
+                    sts.bright_slice[0] = ushort.Parse(Item5.InputText12);
+                    sts.bright_slice[1] = ushort.Parse(Item5.InputText13);
+                    sts.bright_slice[2] = ushort.Parse(Item5.InputText14);
+                    CSH.Grp03.SetBrightSliceLevel(sts); // 引数を構造体へ変更(2026.8.29yori)
+                }
+
+                // アドバンス
+                if (Item5.IsChecked8 == true)
+                {
+                    sts.bright_slice_std_enable = 0; // 追加(2026.8.29yori)
+                    sts.bright_slice_adv_enable = 1; // 追加(2026.8.29yori)
+                    sts.bright_slice[0] = ushort.Parse(Item5.InputText15);
+                    sts.bright_slice[1] = ushort.Parse(Item5.InputText16);
+                    sts.bright_slice[2] = ushort.Parse(Item5.InputText17);
+                    CSH.Grp03.SetBrightSliceLevel(sts); // 引数を構造体へ変更(2026.8.29yori)
+                }
+            }
+
+            // 感度スライス(2026.8.6yori)
+            var Item6 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "SensitivitySlice");
+            if (Item6?.InputText21 != null)
+            {
+                // 標準(2026.8.27yori)
+                if (Item6.IsChecked9 == true)
+                {
+                    sts.sens_slice_std_enable = 1; // 追加(2026.8.29yori)
+                    sts.sens_slice_adv_enable = 0; // 追加(2026.8.29yori)
+                    sts.sens_slice[0] = ushort.Parse(Item6.InputText18);
+                    sts.sens_slice[1] = ushort.Parse(Item6.InputText19);
+                    sts.sens_slice[2] = ushort.Parse(Item6.InputText20);
+                    CSH.Grp03.SetSensSliceLevel(sts); // 引数を構造体へ変更(2026.8.29yori)
+                }
+
+                // アドバンス
+                if (Item6.IsChecked10 == true)
+                {
+                    sts.sens_slice_std_enable = 0; // 追加(2026.8.29yori)
+                    sts.sens_slice_adv_enable = 1; // 追加(2026.8.29yori)
+                    sts.sens_slice[0] = ushort.Parse(Item6.InputText21);
+                    sts.sens_slice[1] = ushort.Parse(Item6.InputText22);
+                    sts.sens_slice[2] = ushort.Parse(Item6.InputText23);
+                    CSH.Grp03.SetSensSliceLevel(sts); // 引数を構造体へ変更(2026.8.29yori)
+                }
+            }
+
+            // 角度マスク(2026.8.6yori)
+            var Item9 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
+            if (Item9?.InputText25 != null)
+            {
+                if (Item9.SlideSwitchValue8 == 1)
+                {
+                    CSH.Grp03.Cmd13(Item9.SlideSwitchValue8, double.Parse(Item9.InputText25)); // 引数追加(2026.8.31yori)
+                }
+                else
+                {
+                    CSH.Grp03.Cmd13(Item9.SlideSwitchValue8, 90.0); // 追加(2026.8.31yori)
+                }
+            }
+
+            // エッジマスク(2026.8.6yori)
+            var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
+            if (Item11?.InputText26 != null)
+            {
+                CSH.Grp03.Cmd15(int.Parse(Item11.InputText26));
+            }
+
             Parent.CurrentPanel = Panel.None; // 追加(2025.8.21yori)
             CSH.Grp03.Cmd18(); // SubWindow3非表示(2025.11.11yori)
         }
@@ -564,20 +1167,78 @@ namespace VecApp
                 {
                     treeItem.SlideSwitch = true;
                     // 距離マスクがONなら各(左右遠近)CheckBoxを有効にする。(2025.8.26yori)
+                    // CheckBoxを識別する。(2026.8.6yori)
                     var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
-                    if (Item3?.IsCheckBoxEnabled != null)
+                    if (Item3?.IsCheckBox1Enabled != null)
                     {
-                        Item3.IsCheckBoxEnabled = true;
+                        Item3.IsCheckBox1Enabled = true;
+                    }
+                    if (Item3?.IsCheckBox2Enabled != null)
+                    {
+                        Item3.IsCheckBox2Enabled = true;
+                    }
+                    if (Item3?.IsCheckBox5Enabled != null)
+                    {
+                        Item3.IsCheckBox5Enabled = true;
+                    }
+                    if (Item3?.IsCheckBox6Enabled != null)
+                    {
+                        Item3.IsCheckBox6Enabled = true;
+                    }
+                    if (Item3?.IsText1Enabled != null) // 追加(2026.8.12yori)
+                    {
+                        Item3.IsText1Enabled = true;
+                    }
+                    if (Item3?.IsText2Enabled != null) // 追加(2026.8.12yori)
+                    {
+                        Item3.IsText2Enabled = true;
+                    }
+                    if (Item3?.IsText5Enabled != null) // 追加(2026.8.12yori)
+                    {
+                        Item3.IsText5Enabled = true;
+                    }
+                    if (Item3?.IsText6Enabled != null) // 追加(2026.8.12yori)
+                    {
+                        Item3.IsText6Enabled = true;
                     }
                 }
                 else
                 {
                     treeItem.SlideSwitch = false;
                     // 距離マスクがOFFなら各(左右遠近)CheckBoxを無効にする。(2025.8.26yori)
+                    // CheckBoxを識別する。(2026.8.6yori)
                     var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
-                    if (Item3?.IsCheckBoxEnabled != null)
+                    if (Item3?.IsCheckBox1Enabled != null)
                     {
-                        Item3.IsCheckBoxEnabled = false;
+                        Item3.IsCheckBox1Enabled = false;
+                    }
+                    if (Item3?.IsCheckBox2Enabled != null)
+                    {
+                        Item3.IsCheckBox2Enabled = false;
+                    }
+                    if (Item3?.IsCheckBox5Enabled != null)
+                    {
+                        Item3.IsCheckBox5Enabled = false;
+                    }
+                    if (Item3?.IsCheckBox6Enabled != null)
+                    {
+                        Item3.IsCheckBox6Enabled = false;
+                    }
+                    if (Item3?.IsText1Enabled != null) // 追加(2026.8.12yori)
+                    {
+                        Item3.IsText1Enabled = false;
+                    }
+                    if (Item3?.IsText2Enabled != null) // 追加(2026.8.12yori)
+                    {
+                        Item3.IsText2Enabled = false;
+                    }
+                    if (Item3?.IsText5Enabled != null) // 追加(2026.8.12yori)
+                    {
+                        Item3.IsText5Enabled = false;
+                    }
+                    if (Item3?.IsText6Enabled != null) // 追加(2026.8.12yori)
+                    {
+                        Item3.IsText6Enabled = false;
                     }
                 }
 
@@ -655,13 +1316,26 @@ namespace VecApp
                     this.ViewModel.ApiScanText = Math.Round(sts.pitch[0], 3, MidpointRounding.AwayFromZero).ToString("F3"); // 四捨五入されるようsts.pitch[0].ToString("F3")から修正(2026.1.28yori)
                 }
 
+                // 角度マスク
                 if (treeItem.SlideSwitch8)
                 {
                     treeItem.SlideSwitch8 = true;
+                    // 角度マスクONの場合、TextBoxを編集できるよう有効化する。(2026.8.31yori)
+                    var Item9 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
+                    if (Item9?.InputText25 != null)
+                    {
+                        Item9.IsAngleMaskEnabled = true;
+                    }
                 }
                 else
                 {
                     treeItem.SlideSwitch8 = false;
+                    // 角度マスクOFFの場合、TextBoxを編集できないよう無効化する。(2026.8.6yori)
+                    var Item9 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "AngleMask");
+                    if (Item9?.InputText25 != null)
+                    {
+                        Item9.IsAngleMaskEnabled = false;
+                    }
                 }
 
                 if (treeItem.SlideSwitch9)
@@ -683,6 +1357,352 @@ namespace VecApp
             CSH.AppMain.UpDateData02(out sts);
             // 点間ピッチは計測モードによって異なるため、画面表示を変更する。(2025.11.6yori)
             this.ViewModel.ApiScanText = Math.Round(sts.pitch[0], 3, MidpointRounding.AwayFromZero).ToString("F3"); // 四捨五入されるようsts.pitch[0].ToString("F3")から修正(2026.1.28yori)
+            // 距離マスクは計測モードによって異なるため、画面表示を変更する。(2026.8.8yori)
+            var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "DistanceMask2");
+            if (Item3?.IsChecked1 != null)
+            {
+                switch (sts.mode)
+                {
+                    case 0:
+                        if (sts.use[0] == 1)
+                        {
+                            Item3.IsChecked1 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked1 = false;
+                        }
+                        if (sts.use[1] == 1)
+                        {
+                            Item3.IsChecked2 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked2 = false;
+                        }
+                        if (sts.use[2] == 1)
+                        {
+                            Item3.IsChecked3 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked3 = false;
+                        }
+                        if (sts.use[3] == 1)
+                        {
+                            Item3.IsChecked4 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked4 = false;
+                        }
+                        if (sts.use[4] == 1)
+                        {
+                            Item3.IsChecked5 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked5 = false;
+                        }
+                        if (sts.use[5] == 1)
+                        {
+                            Item3.IsChecked6 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked6 = false;
+                        }
+                        Item3.InputText1 = sts.data[0].ToString("F1");
+                        Item3.InputText2 = sts.data[1].ToString("F1");
+                        Item3.InputText3 = sts.data[2].ToString("F1");
+                        Item3.InputText4 = sts.data[3].ToString("F1");
+                        Item3.InputText5 = sts.data[4].ToString("F1");
+                        Item3.InputText6 = sts.data[5].ToString("F1");
+                        break;
+                    case 1:
+                        if (sts.use[6] == 1)
+                        {
+                            Item3.IsChecked1 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked1 = false;
+                        }
+                        if (sts.use[7] == 1)
+                        {
+                            Item3.IsChecked2 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked2 = false;
+                        }
+                        if (sts.use[8] == 1)
+                        {
+                            Item3.IsChecked3 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked3 = false;
+                        }
+                        if (sts.use[9] == 1)
+                        {
+                            Item3.IsChecked4 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked4 = false;
+                        }
+                        if (sts.use[10] == 1)
+                        {
+                            Item3.IsChecked5 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked5 = false;
+                        }
+                        if (sts.use[11] == 1)
+                        {
+                            Item3.IsChecked6 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked6 = false;
+                        }
+                        Item3.InputText1 = sts.data[6].ToString("F1");
+                        Item3.InputText2 = sts.data[7].ToString("F1");
+                        Item3.InputText3 = sts.data[8].ToString("F1");
+                        Item3.InputText4 = sts.data[9].ToString("F1");
+                        Item3.InputText5 = sts.data[10].ToString("F1");
+                        Item3.InputText6 = sts.data[11].ToString("F1");
+                        break;
+                    case 2:
+                        if (sts.use[12] == 1)
+                        {
+                            Item3.IsChecked1 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked1 = false;
+                        }
+                        if (sts.use[13] == 1)
+                        {
+                            Item3.IsChecked2 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked2 = false;
+                        }
+                        if (sts.use[14] == 1)
+                        {
+                            Item3.IsChecked3 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked3 = false;
+                        }
+                        if (sts.use[15] == 1)
+                        {
+                            Item3.IsChecked4 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked4 = false;
+                        }
+                        if (sts.use[16] == 1)
+                        {
+                            Item3.IsChecked5 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked5 = false;
+                        }
+                        if (sts.use[17] == 1)
+                        {
+                            Item3.IsChecked6 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked6 = false;
+                        }
+                        Item3.InputText1 = sts.data[12].ToString("F1");
+                        Item3.InputText2 = sts.data[13].ToString("F1");
+                        Item3.InputText3 = sts.data[14].ToString("F1");
+                        Item3.InputText4 = sts.data[15].ToString("F1");
+                        Item3.InputText5 = sts.data[16].ToString("F1");
+                        Item3.InputText6 = sts.data[17].ToString("F1");
+                        break;
+                    case 3:
+                        if (sts.use[18] == 1)
+                        {
+                            Item3.IsChecked1 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked1 = false;
+                        }
+                        if (sts.use[19] == 1)
+                        {
+                            Item3.IsChecked2 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked2 = false;
+                        }
+                        if (sts.use[20] == 1)
+                        {
+                            Item3.IsChecked3 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked3 = false;
+                        }
+                        if (sts.use[21] == 1)
+                        {
+                            Item3.IsChecked4 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked4 = false;
+                        }
+                        if (sts.use[22] == 1)
+                        {
+                            Item3.IsChecked5 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked5 = false;
+                        }
+                        if (sts.use[23] == 1)
+                        {
+                            Item3.IsChecked6 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked6 = false;
+                        }
+                        Item3.InputText1 = sts.data[18].ToString("F1");
+                        Item3.InputText2 = sts.data[19].ToString("F1");
+                        Item3.InputText3 = sts.data[20].ToString("F1");
+                        Item3.InputText4 = sts.data[21].ToString("F1");
+                        Item3.InputText5 = sts.data[22].ToString("F1");
+                        Item3.InputText6 = sts.data[23].ToString("F1");
+                        break;
+                    case 4:
+                        if (sts.use[24] == 1)
+                        {
+                            Item3.IsChecked1 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked1 = false;
+                        }
+                        if (sts.use[25] == 1)
+                        {
+                            Item3.IsChecked2 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked2 = false;
+                        }
+                        if (sts.use[26] == 1)
+                        {
+                            Item3.IsChecked3 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked3 = false;
+                        }
+                        if (sts.use[27] == 1)
+                        {
+                            Item3.IsChecked4 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked4 = false;
+                        }
+                        if (sts.use[28] == 1)
+                        {
+                            Item3.IsChecked5 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked5 = false;
+                        }
+                        if (sts.use[29] == 1)
+                        {
+                            Item3.IsChecked6 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked6 = false;
+                        }
+                        Item3.InputText1 = sts.data[24].ToString("F1");
+                        Item3.InputText2 = sts.data[25].ToString("F1");
+                        Item3.InputText3 = sts.data[26].ToString("F1");
+                        Item3.InputText4 = sts.data[27].ToString("F1");
+                        Item3.InputText5 = sts.data[28].ToString("F1");
+                        Item3.InputText6 = sts.data[29].ToString("F1");
+                        break;
+                    case 5:
+                        if (sts.use[30] == 1)
+                        {
+                            Item3.IsChecked1 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked1 = false;
+                        }
+                        if (sts.use[31] == 1)
+                        {
+                            Item3.IsChecked2 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked2 = false;
+                        }
+                        if (sts.use[32] == 1)
+                        {
+                            Item3.IsChecked3 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked3 = false;
+                        }
+                        if (sts.use[33] == 1)
+                        {
+                            Item3.IsChecked4 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked4 = false;
+                        }
+                        if (sts.use[34] == 1)
+                        {
+                            Item3.IsChecked5 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked5 = false;
+                        }
+                        if (sts.use[35] == 1)
+                        {
+                            Item3.IsChecked6 = true;
+                        }
+                        else
+                        {
+                            Item3.IsChecked6 = false;
+                        }
+                        Item3.InputText1 = sts.data[30].ToString("F1");
+                        Item3.InputText2 = sts.data[31].ToString("F1");
+                        Item3.InputText3 = sts.data[32].ToString("F1");
+                        Item3.InputText4 = sts.data[33].ToString("F1");
+                        Item3.InputText5 = sts.data[34].ToString("F1");
+                        Item3.InputText6 = sts.data[35].ToString("F1");
+                        break;
+                    default:
+                        break;
+                }
+            }
             // エッジマスク点数は計測モードによって異なるため、画面表示を変更する。(2025.8.27yori)
             var Item11 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "EdgeMask");
             if (Item11?.InputText26 != null)
@@ -714,6 +1734,112 @@ namespace VecApp
             if (Item11?.InputText26 != null)
             {
                 Item11.InputText26 = sts.edge.ToString();
+            }
+        }
+
+        // 輝度マスクを変更する。(2026.9.1yori)
+        private void ComboBox_SelectionChanged_LuminosityMask(object sender, SelectionChangedEventArgs e)
+        {
+            var Item = this.ViewModel.TreeItems.FirstOrDefault(x => x.UIType == "LuminosityMask");
+            if (Item?.OptionIndex2 != null)
+            {
+                switch (Item.OptionIndex2)
+                {
+                    case 0: // なし
+                        var Item0 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                        if (Item0?.TextBlock1Opacity != null)
+                        {
+                            Item0.TextBlock1Opacity = 0.25;
+                        }
+                        if (Item0?.TextBlock2Opacity != null)
+                        {
+                            Item0.TextBlock2Opacity = 0.25;
+                        }
+                        if (Item0?.IsTextBox1Enabled != null)
+                        {
+                            Item0.IsTextBox1Enabled = false;
+                        }
+                        if (Item0?.IsSliderEnabled != null)
+                        {
+                            Item0.IsSliderEnabled = false;
+                        }
+                        if (Item0?.PlotView1Opacity != null)
+                        {
+                            Item0.PlotView1Opacity = 0.25;
+                        }
+                        break;
+                    case 1: // 手動
+                        var Item1 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                        if (Item1?.TextBlock1Opacity != null)
+                        {
+                            Item1.TextBlock1Opacity = 0.25;
+                        }
+                        if (Item1?.TextBlock2Opacity != null)
+                        {
+                            Item1.TextBlock2Opacity = 1.0;
+                        }
+                        if (Item1?.IsTextBox1Enabled != null)
+                        {
+                            Item1.IsTextBox1Enabled = false;
+                        }
+                        if (Item1?.IsSliderEnabled != null)
+                        {
+                            Item1.IsSliderEnabled = true;
+                        }
+                        if (Item1?.PlotView1Opacity != null)
+                        {
+                            Item1.PlotView1Opacity = 1.0;
+                        }
+                        break;
+                    case 2: // 自動(1パッチ毎)
+                        var Item2 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                        if (Item2?.TextBlock1Opacity != null)
+                        {
+                            Item2.TextBlock1Opacity = 1.0;
+                        }
+                        if (Item2?.TextBlock2Opacity != null)
+                        {
+                            Item2.TextBlock2Opacity = 1.0;
+                        }
+                        if (Item2?.IsTextBox1Enabled != null)
+                        {
+                            Item2.IsTextBox1Enabled = true;
+                        }
+                        if (Item2?.IsSliderEnabled != null)
+                        {
+                            Item2.IsSliderEnabled = true;
+                        }
+                        if (Item2?.PlotView1Opacity != null)
+                        {
+                            Item2.PlotView1Opacity = 1.0;
+                        }
+                        break;
+                    case 3: // 自動(スタート毎)
+                        var Item3 = this.ViewModel.TreeItems.SelectMany(x => x.Children).FirstOrDefault(x => x.UIType == "LuminosityMask2");
+                        if (Item3?.TextBlock1Opacity != null)
+                        {
+                            Item3.TextBlock1Opacity = 1.0;
+                        }
+                        if (Item3?.TextBlock2Opacity != null)
+                        {
+                            Item3.TextBlock2Opacity = 1.0;
+                        }
+                        if (Item3?.IsTextBox1Enabled != null)
+                        {
+                            Item3.IsTextBox1Enabled = true;
+                        }
+                        if (Item3?.IsSliderEnabled != null)
+                        {
+                            Item3.IsSliderEnabled = true;
+                        }
+                        if (Item3?.PlotView1Opacity != null)
+                        {
+                            Item3.PlotView1Opacity = 1.0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -762,14 +1888,14 @@ namespace VecApp
                 if (item.DataContext is TreeItem treeItem)
                 {
                     // 特定のアイテムの展開を無効化
-                    if (treeItem.Name == VecApp.Properties.Resources.String122 ||   // 輝度マスク
-                        treeItem.Name == VecApp.Properties.Resources.String127 ||   // 距離マスク
-                        treeItem.Name == VecApp.Properties.Resources.String128 ||   // 点群補正/フィルタ
-                        treeItem.Name == VecApp.Properties.Resources.String129 ||   // 輝度スライス
-                        treeItem.Name == VecApp.Properties.Resources.String130 ||   // 感度スライス
-                        treeItem.Name == VecApp.Properties.Resources.String136 ||   // 角度マスク
-                        treeItem.Name == VecApp.Properties.Resources.String137 ||   // 2ピークマスク
-                        treeItem.Name == VecApp.Properties.Resources.String141 ||   // エッジマスク
+                    if (//treeItem.Name == VecApp.Properties.Resources.String122 ||   // 輝度マスク有効(2026.8.13yori)
+                        //treeItem.Name == VecApp.Properties.Resources.String127 ||   // 距離マスク有効(2026.8.6yori)
+                        //treeItem.Name == VecApp.Properties.Resources.String128 ||   // 点群補正/フィルタ有効(2026.8.6yori)
+                        //treeItem.Name == VecApp.Properties.Resources.String129 ||   // 輝度スライス有効(2026.8.6yori)
+                        //treeItem.Name == VecApp.Properties.Resources.String130 ||   // 感度スライス有効(2026.8.6yori)
+                        //treeItem.Name == VecApp.Properties.Resources.String136 ||   // 角度マスク有効(2026.8.6yori)
+                        //treeItem.Name == VecApp.Properties.Resources.String137 ||   // 2ピークマスク有効(2026.8.6yori)
+                        //treeItem.Name == VecApp.Properties.Resources.String141 ||   // エッジマスク有効(2026.8.6yori)
                         treeItem.Name == VecApp.Properties.Resources.String142)     // メモ
                     {
                         // 展開をキャンセル
@@ -780,6 +1906,12 @@ namespace VecApp
                     }
                 }
             }
+        }
+
+        // エッジマスク点数は、整数の0～6のみ入力可能にする。(2026.8.31yori)
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !e.Text.All(c => c >= '0' && c <= '6');
         }
     }
 }

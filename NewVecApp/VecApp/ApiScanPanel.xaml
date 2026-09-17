@@ -1,4 +1,4 @@
-﻿<!-- FontSize="20"へ変更 -->
+﻿<!-- FontSize="20"へ変更 --> 
 <local:PanelBase
              x:Class="VecApp.ApiScanPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -17,7 +17,8 @@
         <DataTemplate x:Key="SensitivityTemplate">
             <StackPanel Orientation="Horizontal" Margin="5">
                 <ComboBox ItemsSource="{Binding Options}"
-                          SelectedItem="{Binding SelectedOption}" SelectedIndex="{Binding OptionIndex1}" Width="300" Margin="200,0,0,0" SelectionChanged="ComboBox_SelectionChanged_Sens"/>
+                          SelectedItem="{Binding SelectedOption}" SelectedIndex="{Binding OptionIndex1}" Width="300" Margin="200,0,0,0"
+                          SelectionChanged="ComboBox_SelectionChanged_Sens"/>
             </StackPanel>
         </DataTemplate>
 
@@ -26,9 +27,11 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Name}" Foreground="White"/>
                 <!-- 輝度マスク作成中のため、ComboBox無効化(2025.11.7yori) -->
+                <!-- Margin="300→200、Width="150"→"170"、IsEnabled="True"(2026.8.14yori) -->
+                <!-- 輝度マスク有効化、SelectionChanged、SelectedIndex="{Binding OptionIndex2}"追加(2026.9.1yori) -->
                 <ComboBox ItemsSource="{Binding Options2}"
-                          SelectedItem="{Binding SelectedOption2}" Width="150" Margin="300,0,0,0"
-                          IsEnabled="False" Opacity="0.25"/>
+                          SelectedItem="{Binding SelectedOption2}" SelectedIndex="{Binding OptionIndex2}" Width="170" Margin="200,0,0,0"
+                          IsEnabled="True" Opacity="1.0" SelectionChanged="ComboBox_SelectionChanged_LuminosityMask"/>
             </StackPanel>
         </DataTemplate>
 
@@ -36,50 +39,65 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" Margin="0,5">
                     <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <!-- FontSize="12"→"14"(2026.8.15yori) -->
+                        <!-- バインドTextBlock1Opacity追加(2026.9.1yori) -->
                         <TextBlock Text="{x:Static res:Resources.String147}" 
                             Background="Gray" Foreground="White" 
                             Padding="2" FontWeight="Bold" 
-                            Width="160" TextAlignment="Left" FontSize="12" Margin="-20,0,0,0"/>
+                            Width="160" TextAlignment="Left" FontSize="14" Margin="-20,0,0,0"
+                            Opacity="{Binding TextBlock1Opacity}"/>
                         <TextBlock Text="{x:Static res:Resources.String148}" 
                             Background="Gray" Foreground="White" 
                             Padding="2" FontWeight="Bold" 
-                            Width="160" TextAlignment="Left" Margin="5,0,0,0" FontSize="12"/>
+                            Width="160" TextAlignment="Left" Margin="5,0,0,0" FontSize="14"
+                            Opacity="{Binding TextBlock1Opacity}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Text="{Binding InputText28}" Width="80" Margin="60,0,0,0" FontSize="12"/>
-                        <TextBox Text="{Binding InputText29}" Width="80" Margin="85,0,0,0" FontSize="12"/>
+                        <!-- FontSize="12"→"14"(2026.8.15yori) -->
+                        <!-- バインドIsTextBox1Enabled追加(2026.9.1yori) -->
+                        <TextBox Text="{Binding InputText28}" Width="80" Margin="60,0,0,0" FontSize="14" IsEnabled="{Binding IsTextBox1Enabled}"/>
+                        <TextBox Text="{Binding InputText29}" Width="80" Margin="85,0,0,0" FontSize="14" IsEnabled="{Binding IsTextBox1Enabled}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <!-- FontSize="12"→"14"(2026.8.15yori) -->
+                        <!-- バインドTextBlock1Opacity追加(2026.9.1yori) -->
                         <TextBlock Text="{x:Static res:Resources.String149}" 
                             Background="Gray" Foreground="White" 
                             Padding="2" FontWeight="Bold" 
-                            Width="160" TextAlignment="Left" FontSize="12" Margin="-20,0,0,0"/>
+                            Width="160" TextAlignment="Left" FontSize="14" Margin="-20,0,0,0"
+                            Opacity="{Binding TextBlock1Opacity}"/>
                         <TextBlock Text="{x:Static res:Resources.String150}" 
                             Background="Gray" Foreground="White" 
                             Padding="2" FontWeight="Bold" 
-                            Width="160" TextAlignment="Left" Margin="5,0,0,0" FontSize="12"/>
+                            Width="160" TextAlignment="Left" Margin="5,0,0,0" FontSize="14"
+                            Opacity="{Binding TextBlock1Opacity}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Text="{Binding InputText30}" Width="80" Margin="60,0,0,0" FontSize="12"/>
-                        <TextBox Text="{Binding InputText31}" Width="80" Margin="55,0,0,0" FontSize="12"/>
+                        <!-- FontSize="12"→"14"(2026.8.15yori) -->
+                        <!-- バインドIsTextBox1Enabled、TextBlock1Opacity追加(2026.9.1yori) -->
+                        <TextBox Text="{Binding InputText30}" Width="80" Margin="60,0,0,0" FontSize="14" IsEnabled="{Binding IsTextBox1Enabled}"/>
+                        <TextBox Text="{Binding InputText31}" Width="80" Margin="55,0,0,0" FontSize="14" IsEnabled="{Binding IsTextBox1Enabled}"/>
                         <TextBlock
                             Text="mm"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="10,0,0,0" FontSize="12"/>
+                            Margin="10,0,0,0" FontSize="14" Opacity="{Binding TextBlock1Opacity}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <!-- FontSize="10"→"14"(2026.8.15yori) -->
+                        <!-- PolyWorksでは点群後処理不可のためグラフ表示しない。連動を無効化(2026.9.1yori) -->
                         <TextBlock Text="{x:Static res:Resources.String151}" 
                             Background="Gray" Foreground="White" 
                             Padding="2" FontWeight="Bold" 
-                            Width="160" TextAlignment="Left" Margin="145,0,0,0" FontSize="10"/>
+                            Width="160" TextAlignment="Left" Margin="145,0,0,0" FontSize="14" Opacity="0.25"/>
                     </StackPanel>
 
+                    <!-- PolyWorksでは点群後処理不可のため、グラフ表示を無効化(2026.9.1yori) -->
                     <StackPanel Orientation="Horizontal">
                         <Slider
                             Width="80"
@@ -88,16 +106,18 @@
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue9}"
-                            Margin="200,0,0,0" FontSize="12"/>
+                            Margin="200,0,0,0" FontSize="12" IsEnabled="False" Opacity="0.25"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.15yori) -->
                         <TextBlock
                             Text="{Binding SlideText9}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="5,0,0,0" FontSize="12"/>
+                            Margin="5,0,0,0" FontSize="14" Opacity="0.25"/>
                     </StackPanel>
-                    
+
+                    <!-- バインドIsSliderEnabled追加(2026.9.1yori) -->
                     <StackPanel Orientation="Horizontal">
                         <Slider
                             Width="400"
@@ -106,9 +126,10 @@
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue10, Mode=TwoWay}"
-                            Margin="-20,10,0,5"/>
+                            Margin="-20,10,0,5" IsEnabled="{Binding IsSliderEnabled}"/>
                     </StackPanel>
-                    <oxy:PlotView x:Name="PlotView1" Model="{Binding PlotModel1}"  Height="30" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-20,0,0,0"/>
+                    <!-- バインドPlotView1Opacity追加(2026.9.1yori) -->
+                    <oxy:PlotView x:Name="PlotView1" Model="{Binding PlotModel1}"  Height="30" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-20,0,0,0" Opacity="{Binding PlotView1Opacity}"/>
                     <Slider
                             Width="400"
                             Minimum="0" Maximum="65535"
@@ -116,23 +137,25 @@
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue11, Mode=TwoWay}"
-                            Margin="-20,5,0,10"/>
-                    <oxy:PlotView x:Name="PlotView2" Model="{Binding PlotModel2}"  Height="90" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-20,0,0,0"/>
+                            Margin="-20,5,0,10" IsEnabled="{Binding IsSliderEnabled}"/>
+                    <oxy:PlotView x:Name="PlotView2" Model="{Binding PlotModel2}"  Height="90" Width="400" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-20,0,0,0" Opacity="0.25"/>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <!-- Margin="0→-20、FontSize="12"→"14"(2026.8.15yori) -->
+                        <!-- PolyWorksでは点群後処理不可のため、輝度計算値を無効化(2026.9.1yori) -->
                         <TextBlock
                             Text="{x:Static res:Resources.String152}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="0,0,0,0" FontSize="12"/>
-                        <TextBox Text="{Binding InputText36}" Width="50" Margin="10,0,0,0" FontSize="12"/>
+                            Margin="-20,0,0,0" FontSize="14" Opacity="0.25"/>
+                        <TextBox Text="{Binding InputText36}" Width="50" Margin="10,0,0,0" FontSize="14" IsEnabled="False"/>
                         <TextBlock
                             Text="{x:Static res:Resources.String153}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="140,0,0,0" FontSize="12"/>
-                        <TextBox Text="{Binding InputText37}" Width="50" Margin="10,0,0,0" FontSize="12"/>
+                            Margin="140,0,0,0" FontSize="14" Opacity="0.25"/>
+                        <TextBox Text="{Binding InputText37}" Width="50" Margin="10,0,0,0" FontSize="14" IsEnabled="False"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                         <TextBlock
@@ -140,49 +163,63 @@
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="0,0,0,0" FontSize="12"/>
-                        <TextBox Text="{Binding InputText38}" Width="50" Margin="10,0,0,0" FontSize="12"/>
+                            Margin="-20,0,0,0" FontSize="14" Opacity="0.25"/>
+                        <TextBox Text="{Binding InputText38}" Width="50" Margin="10,0,0,0" FontSize="14" IsEnabled="False"/>
                         <TextBlock
                             Text="{x:Static res:Resources.String155}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="10,0,0,0" FontSize="12"/>
-                        <TextBox Text="{Binding InputText39}" Width="50" Margin="10,0,0,0" FontSize="12"/>
+                            Margin="10,0,0,0" FontSize="14" Opacity="0.25"/>
+                        <TextBox Text="{Binding InputText39}" Width="50" Margin="10,0,0,0" FontSize="14" IsEnabled="False"/>
                         <TextBlock
                             Text="{x:Static res:Resources.String156}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="10,0,0,0" FontSize="12"/>
-                        <TextBox Text="{Binding InputText40}" Width="50" Margin="10,0,0,0" FontSize="12"/>
+                            Margin="10,0,0,0" FontSize="14" Opacity="0.25"/>
+                        <TextBox Text="{Binding InputText40}" Width="50" Margin="10,0,0,0" FontSize="14" IsEnabled="False"/>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="0,5">
-                    <Button Content="{x:Static res:Resources.String157}" Margin="0,10,0,0" 
-                            Style="{StaticResource PanelDoneButtonStyle}" Width="120" Height="40"/>
-                    <Button Content="{x:Static res:Resources.String158}" Margin="0,10,0,0" 
-                            Style="{StaticResource PanelCancelButton2Style}" Width="120" Height="40"/>
-                    <TextBlock Text="{Binding InputText32, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="-30,53,0,0" FontSize="12" Foreground="White" />
-                    <TextBlock Text="{Binding InputText33, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="-30,40,0,0" FontSize="12" Foreground="White" />
-                    <TextBlock Text="{x:Static res:Resources.String159}" 
-                            Background="Gray" Foreground="White" 
-                            Padding="2" FontWeight="Bold" 
-                            Width="80" TextAlignment="Left" Margin="-25,10,0,0" FontSize="12"/>
-                    <TextBlock
-                            Text="{x:Static res:Resources.String160}"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            VerticalAlignment="Center"
-                            Margin="10,5,0,0" FontSize="12"/>
-                    <TextBox Text="{Binding InputText34, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="-30,5,0,0" FontSize="12"/>
-                    <TextBlock
-                            Text="{x:Static res:Resources.String161}"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            VerticalAlignment="Center"
-                            Margin="10,5,0,0" FontSize="12"/>
-                    <TextBox Text="{Binding InputText35, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="-30,5,0,0" FontSize="12"/>
+                <!-- Margin="0→5(2026.8.15yori) -->
+                <!-- Button、TextBlock,TextBoxをStackPanelで分離(2026.8.16yori) -->
+                <!-- PolyWorksでは点群後処理不可のため、Button、TextBlock,TextBoxを無効化(2026.9.1yori) -->
+                <StackPanel Orientation="Vertical" Margin="5,5">
+                    <StackPanel Orientation="Vertical"  Margin="-40,0,0,0">
+                        <!-- Width="120"→"140"、FontSize="14"(2026.8.16yori) -->
+                        <Button Content="{x:Static res:Resources.String157}" Margin="0,10,0,0" 
+                                Style="{StaticResource PanelDoneButtonStyle}" Width="140" Height="40" FontSize="14" IsEnabled="False" Opacity="0.25"/>
+                        <!-- Width="120"→"140"、Height="40"→"70"、FontSize="14"(2026.8.16yori) -->
+                        <Button Content="{x:Static res:Resources.String158}" Margin="0,10,0,0" 
+                                Style="{StaticResource PanelCancelButton2Style}" Width="140" Height="70" FontSize="14" IsEnabled="False" Opacity="0.25"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical"  Margin="20,0,0,0">
+                        <!-- Margin="-30,53→56、FontSize="12"→"14"(2026.8.15yori) -->
+                        <!-- バインドTextBlock2Opacity追加(2026.9.1yori) -->
+                        <TextBlock Text="{Binding InputText32, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="-30,56,0,0" FontSize="14" Foreground="White" Opacity="{Binding TextBlock2Opacity}"/>
+                        <TextBlock Text="{Binding InputText33, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="-30,40,0,0" FontSize="14" Foreground="White" Opacity="{Binding TextBlock2Opacity}"/>
+                        <!-- FontSize="12"→"14"、Width="80"→"90"、Margin="-25→-15(2026.8.15yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String159}" 
+                                Background="Gray" Foreground="White" 
+                                Padding="2" FontWeight="Bold" 
+                                Width="90" TextAlignment="Left" Margin="-15,10,0,0" FontSize="14" Opacity="0.25"/>
+                        <!-- FontSize="12"→"14"(2026.8.15yori) -->
+                        <TextBlock
+                                Text="{x:Static res:Resources.String160}"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                Margin="10,5,0,0" FontSize="14" Opacity="0.25"/>
+                        <TextBox Text="{Binding InputText34, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="-30,5,0,0" FontSize="14" IsEnabled="False"/>
+                        <!-- FontSize="12"→"14"(2026.8.15yori) -->
+                        <TextBlock
+                                Text="{x:Static res:Resources.String161}"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                Margin="10,5,0,0" FontSize="14" Opacity="0.25"/>
+                        <TextBox Text="{Binding InputText35, UpdateSourceTrigger=PropertyChanged}" Width="80" Margin="-30,5,0,0" FontSize="14" IsEnabled="False"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
@@ -192,6 +229,8 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Name}" Foreground="White"/>
                 <!-- スライダー無効化(2025.11.7yori) -->
+                <!-- スライダー有効化(2026.8.6yori) -->
+                <!-- Margin="300→230(2026.8.14yori) -->
                 <Slider
                     Width="80"
                     Minimum="0" Maximum="1"
@@ -199,16 +238,17 @@
                     IsSnapToTickEnabled="True"
                     ValueChanged="SlideSwitch_ValueChanged"
                     Value="{Binding SlideSwitchValue}"
-                    Margin="300,10,0,0"
-                    IsEnabled="False" Opacity="0.25"/>
-                <!-- 距離マスク作成のため、TextBlock半透明化(2025.11.7yori) -->
+                    Margin="230,10,0,0"
+                    IsEnabled="True" Opacity="1.0"/>
+                <!-- 距離マスク未作成のため、TextBlock半透明化(2025.11.7yori) -->
+                <!-- TextBlock不透明化(2026.8.6yori) -->
                 <TextBlock
                     Text="{Binding SlideText}"
                     Foreground="White"
                     FontWeight="Bold"
                     VerticalAlignment="Center"
                     Margin="5,5,0,0"
-                    Opacity="0.25"/>
+                    Opacity="1.0"/>
             </StackPanel>
         </DataTemplate>
 
@@ -219,10 +259,11 @@
                         Background="Gray" Foreground="White" 
                         Padding="5" FontWeight="Bold" 
                         Width="150" TextAlignment="Center"/>
+                    <!-- Yの距離マスクは使用しないため、半透明化(2026.8.12yori) -->
                     <TextBlock Text="{Binding YName}" 
                         Background="Gray" Foreground="White" 
                         Padding="5" FontWeight="Bold" 
-                        Width="150" TextAlignment="Center" Margin="5,0,0,0"/>
+                        Width="150" TextAlignment="Center" Margin="5,0,0,0" Opacity="0.25"/>
                     <TextBlock Text="{Binding ZName}" 
                         Background="Gray" Foreground="White" 
                         Padding="5" FontWeight="Bold" 
@@ -232,28 +273,31 @@
                 <StackPanel Orientation="Vertical" Margin="0,2">
                     <StackPanel Orientation="Horizontal">
                         <!-- CheckBox有効無効バインド追加(2025.8.26yori) -->
-                        <TextBlock Text="{x:Static res:Resources.String162}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <CheckBox IsChecked="{Binding IsChecked1}" VerticalAlignment="Center" Margin="5,0" IsEnabled="{Binding IsCheckBoxEnabled}"/>
-                        <TextBox Text="{Binding InputText1}" Width="80" Margin="5,0"/>
-                        <TextBlock Text="{x:Static res:Resources.String163}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <!-- Yの距離マスクは使用しないため、無効(IsEnabled="False")にする。(2025.8.22yori) -->
-                        <CheckBox IsChecked="{Binding IsChecked3}" VerticalAlignment="Center" Margin="5,0" IsEnabled="False"/>
+                        <!-- CheckBox有効無効バインド識別(2026.8.6yori) -->
+                        <!-- TextBox有効無効バインド追加(2026.8.6yori) -->
+                        <!-- TextBlockの文字を左右下上近遠から最大、最小へ変更(2026.8.10yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String293}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <CheckBox IsChecked="{Binding IsChecked1}" VerticalAlignment="Center" Margin="5,0" IsEnabled="{Binding IsCheckBox1Enabled}"/>
+                        <TextBox Text="{Binding InputText1}" Width="80" Margin="5,0" IsEnabled="{Binding IsText1Enabled}"/>
+                        <!-- Yの距離マスクは使用しないため、無効(IsEnabled="False")にする。(2025.8.22yori)、半透明化する。(2026.8.12yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String293}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right" Opacity="0.25"/>
+                        <CheckBox IsChecked="{Binding IsChecked3}" VerticalAlignment="Center" Margin="5,0" IsEnabled="False" Opacity="0.25"/>
                         <TextBox Text="{Binding InputText3}" Width="80" Margin="5,0" IsEnabled="False"/>
-                        <TextBlock Text="{x:Static res:Resources.String164}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <CheckBox IsChecked="{Binding IsChecked5}" VerticalAlignment="Center" Margin="5,0" IsEnabled="{Binding IsCheckBoxEnabled}"/>
-                        <TextBox Text="{Binding InputText5}" Width="80" Margin="5,0"/>
+                        <TextBlock Text="{x:Static res:Resources.String293}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <CheckBox IsChecked="{Binding IsChecked5}" VerticalAlignment="Center" Margin="5,0" IsEnabled="{Binding IsCheckBox5Enabled}"/>
+                        <TextBox Text="{Binding InputText5}" Width="80" Margin="5,0" IsEnabled="{Binding IsText5Enabled}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                        <TextBlock Text="{x:Static res:Resources.String165}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <CheckBox IsChecked="{Binding IsChecked2}" VerticalAlignment="Center" Margin="5,0" IsEnabled="{Binding IsCheckBoxEnabled}"/>
-                        <TextBox Text="{Binding InputText2}" Width="80" Margin="5,0"/>
-                        <TextBlock Text="{x:Static res:Resources.String166}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <!--Yの距離マスクは使用しないため、無効(IsEnabled="False")にする。(2025.8.22yori)-->
-                        <CheckBox IsChecked="{Binding IsChecked4}" VerticalAlignment="Center" Margin="5,0" IsEnabled="False"/>
+                        <TextBlock Text="{x:Static res:Resources.String294}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <CheckBox IsChecked="{Binding IsChecked2}" VerticalAlignment="Center" Margin="5,0" IsEnabled="{Binding IsCheckBox2Enabled}"/>
+                        <TextBox Text="{Binding InputText2}" Width="80" Margin="5,0" IsEnabled="{Binding IsText2Enabled}"/>
+                        <!--Yの距離マスクは使用しないため、無効(IsEnabled="False")にする。(2025.8.22yori)、半透明化する。(2026.8.12yori)-->
+                        <TextBlock Text="{x:Static res:Resources.String294}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right" Opacity="0.25"/>
+                        <CheckBox IsChecked="{Binding IsChecked4}" VerticalAlignment="Center" Margin="5,0" IsEnabled="False" Opacity="0.25"/>
                         <TextBox Text="{Binding InputText4}" Width="80" Margin="5,0" IsEnabled="False"/>
-                        <TextBlock Text="{x:Static res:Resources.String167}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <CheckBox IsChecked="{Binding IsChecked6}" VerticalAlignment="Center" Margin="5,0" IsEnabled="{Binding IsCheckBoxEnabled}"/>
-                        <TextBox Text="{Binding InputText6}" Width="80" Margin="5,0"/>
+                        <TextBlock Text="{x:Static res:Resources.String294}" Width="40" Foreground="White" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <CheckBox IsChecked="{Binding IsChecked6}" VerticalAlignment="Center" Margin="5,0" IsEnabled="{Binding IsCheckBox6Enabled}"/>
+                        <TextBox Text="{Binding InputText6}" Width="80" Margin="5,0" IsEnabled="{Binding IsText6Enabled}"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
@@ -262,213 +306,252 @@
         <!-- 点群補正/フィルタ -->
         <DataTemplate x:Key="PointCloudCorrectionTemplate">
             <StackPanel Orientation="Vertical">
+                <!-- Margin="-70→-20、Width="500"→"520"、FontSize="14"(2026.8.14yori) -->
                 <TextBlock Text="{x:Static res:Resources.String168}" 
                         Background="Gray" Foreground="White" 
-                        Padding="2" FontWeight="Bold"  Margin="-70,10,0,0"
-                        Width="500" TextAlignment="Left" VerticalAlignment="Center"/>
+                        Padding="2" FontWeight="Bold"  Margin="-20,10,0,0"
+                        Width="520" TextAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
 
                 <StackPanel Orientation="Vertical" Margin="0,2">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static res:Resources.String169}" Width="240" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0" FontSize="10"/>
+                        <!-- FontSize="10"→"14"、"Width="240"→"250"(2026.8.14yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String169}" Width="250" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0"
+                                   FontSize="14"/>
+                        <!-- Width="80"→"50"、Margin="10→20(2026.8.14yori) -->
                         <Slider
-                            Width="80"
+                            Width="50"
                             Minimum="0" Maximum="1"
                             TickFrequency="1"
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue1}"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="12"/>
 
+                        <!-- FontSize="10"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{Binding SlideText1}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="5,10,0,0" FontSize="12"/>
+                            Margin="5,10,0,0" FontSize="14"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static res:Resources.String170}" Width="240" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0" FontSize="10"/>
+                        <!-- FontSize="10"→"14"、Width="240"→"250"(2026.8.14yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String170}" Width="250" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0"
+                                   FontSize="14"/>
+                        <!-- Width="80"→"50"、Margin="10→20(2026.8.14yori) -->
                         <Slider
-                            Width="80"
+                            Width="50"
                             Minimum="0" Maximum="1"
                             TickFrequency="1"
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue2}"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="12"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{Binding SlideText2}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="5,10,0,0" FontSize="12"/>
+                            Margin="5,10,0,0" FontSize="14"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static res:Resources.String171}" Width="240" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0" FontSize="10"/>
+                        <!-- FontSize="10"→"14"、Width="240"→"250"(2026.8.14yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String171}" Width="250" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0"
+                                   FontSize="14"/>
+                        <!-- Width="80"→"50"、Margin="10→20(2026.8.14yori) -->
                         <Slider
-                            Width="80"
+                            Width="50"
                             Minimum="0" Maximum="1"
                             TickFrequency="1"
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue3}"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="12"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{Binding SlideText3}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="5,10,0,0" FontSize="12"/>
+                            Margin="5,10,0,0" FontSize="14"/>
 
                         <TextBlock
                             Text="{x:Static res:Resources.String176}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="20,10,0,0" FontSize="14"/>
 
-                        <TextBox Text="{Binding InputText7}" Width="80" Height="20" Margin="10,10,0,0" FontSize="12"/>
+                        <TextBox Text="{Binding InputText7}" Width="80" Height="20" Margin="10,10,0,0" FontSize="14"/>
                         
                         <TextBlock
                             Text="{x:Static res:Resources.String172}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="10,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="14"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static res:Resources.String173}" Width="240" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0" FontSize="10"/>
+                        <!-- FontSize="10"→"14"、Width="240"→"250"(2026.8.14yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String173}" Width="250" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0"
+                                   FontSize="14"/>
+                        <!-- Width="80"→"50"、Margin="10→20(2026.8.14yori) -->
                         <Slider
-                            Width="80"
+                            Width="50"
                             Minimum="0" Maximum="1"
                             TickFrequency="1"
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue4}"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="12"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{Binding SlideText4}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="5,10,0,0" FontSize="12"/>
+                            Margin="5,10,0,0" FontSize="14"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{x:Static res:Resources.String174}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="20,10,0,0" FontSize="14"/>
 
-                        <TextBox Text="{Binding InputText8}" Width="80" Height="20" Margin="10,10,0,0" FontSize="12"/>
+                        <!-- FontSize="12"→"14"、Margin="10→20(2026.8.14yori) -->
+                        <TextBox Text="{Binding InputText8}" Width="80" Height="20" Margin="20,10,0,0" FontSize="14"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="mm"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="10,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="14"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static res:Resources.String175}" Width="240" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0" FontSize="10"/>
+                        <!-- FontSize="10"→"14"、Width="240"→"250"(2026.8.14yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String175}" Width="250" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0"
+                                   FontSize="14"/>
+                        <!-- Width="80"→"50"、Margin="10→20(2026.8.14yori) -->
                         <Slider
-                            Width="80"
+                            Width="50"
                             Minimum="0" Maximum="1"
                             TickFrequency="1"
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue5}"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="12"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{Binding SlideText5}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="5,10,0,0" FontSize="12"/>
+                            Margin="5,10,0,0" FontSize="14"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{x:Static res:Resources.String176}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="20,10,0,0" FontSize="14"/>
 
-                        <TextBox Text="{Binding InputText9}" Width="80" Height="20" Margin="10,10,0,0" FontSize="12"/>
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
+                        <TextBox Text="{Binding InputText9}" Width="80" Height="20" Margin="10,10,0,0" FontSize="14"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{x:Static res:Resources.String172}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="10,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="14"/>
                     </StackPanel>
                 </StackPanel>
 
+                <!-- Margin="-70→-20、Width="500"→"520"、FontSize="14"(2026.8.14yori) -->
                 <TextBlock Text="{x:Static res:Resources.String177}" 
                         Background="Gray" Foreground="White" 
-                        Padding="2" FontWeight="Bold"  Margin="-70,10,0,0"
-                        Width="500" TextAlignment="Left" VerticalAlignment="Center"/>
+                        Padding="2" FontWeight="Bold"  Margin="-20,10,0,0"
+                        Width="520" TextAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
                 <StackPanel Orientation="Vertical" Margin="0,2">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static res:Resources.String171}" Width="240" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0" FontSize="10"/>
+                        <!-- FontSize="10"→"14"、Width="240"→"250"(2026.8.14yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String171}" Width="250" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0"
+                                   FontSize="14"/>
+                        <!-- Width="80"→"50"、Margin="10→20(2026.8.14yori) -->
                         <Slider
-                            Width="80"
+                            Width="50"
                             Minimum="0" Maximum="1"
                             TickFrequency="1"
                             IsSnapToTickEnabled="True"
                             ValueChanged="SlideSwitch_ValueChanged"
                             Value="{Binding SlideSwitchValue6}"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="12"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{Binding SlideText6}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="5,10,0,0" FontSize="12"/>
+                            Margin="5,10,0,0" FontSize="14"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{x:Static res:Resources.String176}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="20,10,0,0" FontSize="12"/>
+                            Margin="20,10,0,0" FontSize="14"/>
 
-                        <TextBox Text="{Binding InputText10}" Width="80" Height="20" Margin="10,10,0,0" FontSize="12"/>
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
+                        <TextBox Text="{Binding InputText10}" Width="80" Height="20" Margin="10,10,0,0" FontSize="14"/>
 
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="{x:Static res:Resources.String172}"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="10,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="14"/>
                     </StackPanel>
                 </StackPanel>
 
+                <!-- Margin="-70→-20、Width="500"→"520"、FontSize="14"(2026.8.14yori) -->
                 <TextBlock Text="{x:Static res:Resources.String178}" 
                         Background="Gray" Foreground="White" 
-                        Padding="2" FontWeight="Bold"  Margin="-70,10,0,0"
-                        Width="500" TextAlignment="Left" VerticalAlignment="Center"/>
+                        Padding="2" FontWeight="Bold"  Margin="-20,10,0,0"
+                        Width="520" TextAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
                 <StackPanel Orientation="Vertical" Margin="0,2">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{x:Static res:Resources.String179}" Width="240" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0" FontSize="10"/>
+                        <!-- FontSize="10"→"14"、Width="240"→"250"(2026.8.14yori) -->
+                        <TextBlock Text="{x:Static res:Resources.String179}" Width="250" Foreground="White" VerticalAlignment="Center" TextAlignment="Left" Background="Gray" Padding="2" Margin="-20,10,0,0"
+                                   FontSize="14"/>
+                        <!-- Margin="177→155、FontSize="12"→"14"(2026.8.14yori) -->
+                        <TextBox Text="{Binding InputText11}" Width="80" Height="20" Margin="155,10,0,0" FontSize="14"/>
 
-                        <TextBox Text="{Binding InputText11}" Width="80" Height="20" Margin="177,10,0,0" FontSize="12"/>
-
+                        <!-- FontSize="12"→"14"(2026.8.14yori) -->
                         <TextBlock
                             Text="mm"
                             Foreground="White"
                             FontWeight="Bold"
                             VerticalAlignment="Center"
-                            Margin="10,10,0,0" FontSize="12"/>
+                            Margin="10,10,0,0" FontSize="14"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
@@ -478,10 +561,11 @@
         <DataTemplate x:Key="LuminanceSliceTemplate">
             <StackPanel Orientation="Vertical" Margin="0,5">
                 <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <!-- Margin="200→180(2026.8.15yori) -->
                     <TextBlock Text="{x:Static res:Resources.String145}" 
                         Background="Gray" Foreground="White" 
                         Padding="5" FontWeight="Bold" 
-                        Width="100" TextAlignment="Center" Margin="200,0,0,0"/>
+                        Width="100" TextAlignment="Center" Margin="180,0,0,0"/>
                     <TextBlock Text="{x:Static res:Resources.String146}" 
                         Background="Gray" Foreground="White" 
                         Padding="5" FontWeight="Bold" 
@@ -494,10 +578,11 @@
 
                 <StackPanel Orientation="Vertical" Margin="0,2">
                     <StackPanel Orientation="Horizontal">
-                        <RadioButton IsChecked="{Binding IsChecked7}"
-                             GroupName="CheckGroup1"
+                        <!-- Margin="90→70(2026.8.15yori) -->
+                        <!-- GroupName="CheckGroup1"削除(両方のラジオボタンが無効になる不具合修正)(2026.8.27yori) -->
+                        <RadioButton IsChecked="{Binding IsChecked7}"                             
                              VerticalAlignment="Center"
-                             Margin="90,0,0,0"/>
+                             Margin="70,0,0,0"/>
                         <TextBlock Text="{x:Static res:Resources.String181}" Foreground="White" VerticalAlignment="Center"/>
                         <!-- TextBoxの値を変更できないよう無効(IsEnabled="False")とする。(2025.8.23yori) -->
                         <TextBox Text="{Binding InputText12}" Width="80" Margin="35,0,0,0" IsEnabled="False"/>
@@ -505,12 +590,13 @@
                         <TextBox Text="{Binding InputText14}" Width="80" Margin="30,0,0,0" IsEnabled="False"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <!-- Margin="90→70(2026.8.15yori) -->
+                        <!-- GroupName="CheckGroup1"削除(両方のラジオボタンが無効になる不具合修正)(2026.8.27yori) -->
                         <RadioButton IsChecked="{Binding IsChecked8}"
-                             GroupName="CheckGroup1"
                              VerticalAlignment="Center"
-                             Margin="90,0,0,0"/>
+                             Margin="70,0,0,0"/>
                         <TextBlock Text="{x:Static res:Resources.String182}" Foreground="White" VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding InputText15}" Width="80" Margin="45,0,0,0"/>
+                        <TextBox Text="{Binding InputText15}" Width="80" Margin="40,0,0,0"/><!-- Margin="45→40(2026.8.13yori) -->
                         <TextBox Text="{Binding InputText16}" Width="80" Margin="30,0,0,0"/>
                         <TextBox Text="{Binding InputText17}" Width="80" Margin="30,0,0,0"/>
                     </StackPanel>
@@ -522,10 +608,11 @@
         <DataTemplate x:Key="SensitivitySliceTemplate">
             <StackPanel Orientation="Vertical" Margin="0,5">
                 <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <!-- Margin="200→180(2026.8.15yori) -->
                     <TextBlock Text="{x:Static res:Resources.String145}" 
                         Background="Gray" Foreground="White" 
                         Padding="5" FontWeight="Bold" 
-                        Width="100" TextAlignment="Center" Margin="200,0,0,0"/>
+                        Width="100" TextAlignment="Center" Margin="180,0,0,0"/>
                     <TextBlock Text="{x:Static res:Resources.String146}" 
                         Background="Gray" Foreground="White" 
                         Padding="5" FontWeight="Bold" 
@@ -539,10 +626,11 @@
                 <StackPanel Orientation="Vertical" Margin="0,2">
                     <StackPanel Orientation="Horizontal">
                         <!--  GroupName="CheckGroup1"→"CheckGroup2"へ変更(2025.8.26yori)-->
+                        <!-- Margin="90→70(2026.8.15yori) -->
+                        <!-- GroupName="CheckGroup2"削除(両方のラジオボタンが無効になる不具合修正)(2026.8.27yori) -->
                         <RadioButton IsChecked="{Binding IsChecked9}"
-                             GroupName="CheckGroup2"
                              VerticalAlignment="Center"
-                             Margin="90,0,0,0"/>
+                             Margin="70,0,0,0"/>
                         <TextBlock Text="{x:Static res:Resources.String181}" Foreground="White" VerticalAlignment="Center"/>
                         <!-- TextBoxの値を変更できないよう無効(IsEnabled="False")とする。(2025.8.23yori) -->
                         <TextBox Text="{Binding InputText18}" Width="80" Margin="35,0,0,0" IsEnabled="False"/>
@@ -551,12 +639,13 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                         <!--  GroupName="CheckGroup1"→"CheckGroup2"へ変更(2025.8.26yori)-->
+                        <!-- Margin="90→70(2026.8.15yori) -->
+                        <!-- GroupName="CheckGroup1"削除(両方のラジオボタンが無効になる不具合修正)(2026.8.27yori) -->
                         <RadioButton IsChecked="{Binding IsChecked10}"
-                             GroupName="CheckGroup2"
                              VerticalAlignment="Center"
-                             Margin="90,0,0,0"/>
+                             Margin="70,0,0,0"/>
                         <TextBlock Text="{x:Static res:Resources.String182}" Foreground="White" VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding InputText21}" Width="80" Margin="45,0,0,0"/>
+                        <TextBox Text="{Binding InputText21}" Width="80" Margin="40,0,0,0"/><!-- Margin="45→40(2026.8.13yori) -->
                         <TextBox Text="{Binding InputText22}" Width="80" Margin="30,0,0,0"/>
                         <TextBox Text="{Binding InputText23}" Width="80" Margin="30,0,0,0"/>
                     </StackPanel>
@@ -597,6 +686,7 @@
         <!-- 角度マスク -->
         <DataTemplate x:Key="AngleMaskTemplate">
             <StackPanel Orientation="Horizontal">
+                <!-- Margin="245→150(2026.8.13yori) -->
                 <Slider
                     Width="80"
                     Minimum="0" Maximum="1"
@@ -604,7 +694,7 @@
                     IsSnapToTickEnabled="True"
                     ValueChanged="SlideSwitch_ValueChanged"
                     Value="{Binding SlideSwitchValue8}"
-                    Margin="245,10,0,0"/>
+                    Margin="150,10,0,0"/>
 
                 <TextBlock
                     Text="{Binding SlideText8}"
@@ -613,21 +703,25 @@
                     VerticalAlignment="Center"
                     Margin="5,5,0,0"/>
 
+                <!-- FontSize="12"→"20"(2026.8.13yori) -->
                 <TextBlock
                     Text="{x:Static res:Resources.String176}"
                     Foreground="White"
                     FontWeight="Bold"
                     VerticalAlignment="Center"
-                    Margin="20,10,0,0" FontSize="12"/>
+                    Margin="20,10,0,0" FontSize="20"/>
 
-                <TextBox Text="{Binding InputText25}" Width="80" Height="20" Margin="10,10,0,0" FontSize="12"/>
+                <!-- IsEnabled="{Binding IsAngleMaskEnabled}追加(2026.8.6yori) -->
+                <!-- FontSize="12"→"20"、Height="20"削除(2026.8.13yori) -->
+                <TextBox Text="{Binding InputText25}" Width="80" Margin="10,10,0,0" FontSize="20" IsEnabled="{Binding IsAngleMaskEnabled}"/>
 
+                <!-- FontSize="12"→"20"(2026.8.13yori) -->
                 <TextBlock
                     Text="{x:Static res:Resources.String172}"
                     Foreground="White"
                     FontWeight="Bold"
                     VerticalAlignment="Center"
-                    Margin="10,10,0,0" FontSize="12"/>
+                    Margin="10,10,0,0" FontSize="20"/>
             </StackPanel>
         </DataTemplate>
 
@@ -635,8 +729,9 @@
         <DataTemplate x:Key="TwoPeakMaskTemplate">
             <StackPanel Orientation="Horizontal" Margin="5">
                 <!-- SelectedIndex="{Binding OptionIndex4}"追加(2025.8.25) -->
+                <!-- Width="200"→"270"、Margin="200→120(2026.8.15yori) -->
                 <ComboBox ItemsSource="{Binding Options4}"
-                          SelectedItem="{Binding SelectedOption4}" SelectedIndex="{Binding OptionIndex4}" Width="200" Height="30" Margin="200,0,20,0" VerticalAlignment="Top" SelectionChanged="ComboBox_SelectionChanged_TwoPeak"/>
+                          SelectedItem="{Binding SelectedOption4}" SelectedIndex="{Binding OptionIndex4}" Width="270" Height="30" Margin="120,0,20,0" VerticalAlignment="Top" SelectionChanged="ComboBox_SelectionChanged_TwoPeak"/>
                 <!-- 仮の画像スペース -->
                 <Image Source="{Binding ImageSource}"
                     Width="80" Height="120"
@@ -649,22 +744,28 @@
 
         <!-- エッジマスク -->
         <DataTemplate x:Key="EdgeMaskTemplate">
+            <!-- Margin="322→100(2026.8.13yori) -->
+            <!-- FontSize="12"→"20"(2026.8.13yori) -->
             <StackPanel Orientation="Horizontal">
+                <!-- Margin="100→80(2026.8.15yori) -->
                 <TextBlock
                     Text="{x:Static res:Resources.String183}"
                     Foreground="White"
                     FontWeight="Bold"
                     VerticalAlignment="Center"
-                    Margin="322,10,0,0" FontSize="12"/>
+                    Margin="80,10,0,0" FontSize="20"/>
 
-                <TextBox Text="{Binding InputText26}" Width="80" Height="20" Margin="10,10,0,0" FontSize="12"/>
+                <!-- FontSize="12"→"20"、Height="20"削除(2026.8.13yori) -->
+                <!-- 整数(0～9)のみ入力可能にする。(2026.8.31yori) -->
+                <TextBox Text="{Binding InputText26}" Width="80" Margin="10,10,0,0" FontSize="20" PreviewTextInput="TextBox_PreviewTextInput"/>
 
+                <!-- FontSize="12"→"20"(2026.8.13yori) -->
                 <TextBlock
                     Text="{x:Static res:Resources.String184}"
                     Foreground="White"
                     FontWeight="Bold"
                     VerticalAlignment="Center"
-                    Margin="10,10,0,0" FontSize="12"/>
+                    Margin="10,10,0,0" FontSize="20"/>
             </StackPanel>
         </DataTemplate>
 
@@ -786,7 +887,14 @@
         <!-- 右表示エリア -->
         <Grid Grid.Column="1" Margin="10" Visibility="{Binding IsSensorParameterVisible}" Background="#2C3E50">
             <!-- x:Name="ApiScanTree"を追加(2025.11.7yori) -->
-            <TreeView x:Name="ApiScanTree" ItemsSource="{Binding TreeItems}" Background="#2C3E50" FontSize="18" ItemContainerStyle="{StaticResource TreeViewItem}">
+            <!-- FontSize="18"→"20"(2026.8.13yori) -->
+            <!-- デザイン(UI)確認用にd:DataContext="{d:DesignInstance Type=local:ApiScanViewModel, IsDesignTimeCreatable=True}"追加(デザイン時のみ表示)(2026.8.17yori) -->
+            <TreeView x:Name="ApiScanTree" ItemsSource="{Binding TreeItems}"
+                      d:DataContext="{d:DesignInstance Type=local:ApiScanViewModel, IsDesignTimeCreatable=True}"
+                      Background="#2C3E50"
+                      FontSize="20"
+                      ItemContainerStyle="{StaticResource TreeViewItem}">
+
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:TreeItem}" ItemsSource="{Binding Children}">
                         <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource TreeItemTemplateSelector}" />

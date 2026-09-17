@@ -1013,4 +1013,10 @@ LAN、電源ケーブルの接続を確認してください。
   <data name="String292" xml:space="preserve">
     <value>終了</value>
   </data>
+  <data name="String293" xml:space="preserve">
+    <value>最大</value>
+  </data>
+  <data name="String294" xml:space="preserve">
+    <value>最小</value>
+  </data>
 </root>

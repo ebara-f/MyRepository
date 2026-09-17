@@ -10,14 +10,69 @@
 #include "../Lib/veccom/veccom.h"
 #include "../Lib/VecCalib/VecCalPolyPgin.h" // 2025.9.3 eba
 #include "../Lib/PSControl/TdsData.h"	// 2025.9.3 eba
+// 形状処理基本機能群ヘッダファイル追加(2026.9.3yori)
+#include "../Lib/PGTLib/pgt_base.h"
+#include "../Lib/PGTLib/pgt_base_const.h"
+#include "../Lib/PGTLib/pgt_base_curve.h"
+#include "../Lib/PGTLib/pgt_base_funcs.h"
+#include "../Lib/PGTLib/pgt_base_point.h"
+#include "../Lib/PGTLib/pgt_base_surface.h"
+#include "../Lib/PGTLib/pgt_base_types.h"
+#include "../Lib/PGTLib/pgt_brep.h"
+#include "../Lib/PGTLib/pgt_brep_const.h"
+#include "../Lib/PGTLib/pgt_brep_funcs.h"
+#include "../Lib/PGTLib/pgt_brep_struct.h"
+#include "../Lib/PGTLib/pgt_errutil.h"
+#include "../Lib/PGTLib/pgt_fit.h"
+#include "../Lib/PGTLib/pgt_fit_const.h"
+#include "../Lib/PGTLib/pgt_fit_funcs.h"
+#include "../Lib/PGTLib/pgt_fit_struct.h"
+#include "../Lib/PGTLib/pgt_it.h"
+#include "../Lib/PGTLib/pgt_it_const.h"
+#include "../Lib/PGTLib/pgt_it_funcs.h"
+#include "../Lib/PGTLib/pgt_it_struct.h"
+#include "../Lib/PGTLib/pgt_misc.h"
+#include "../Lib/PGTLib/pgt_misc_const.h"
+#include "../Lib/PGTLib/pgt_misc_funcs.h"
+#include "../Lib/PGTLib/pgt_misc_struct.h"
+#include "../Lib/PGTLib/pgt_plus.h"
+#include "../Lib/PGTLib/pgt_plus_funcs.h"
+#include "../Lib/PGTLib/pgt_plus_struct.h"
+#include "../Lib/PGTLib/pgt_sf.h"
+#include "../Lib/PGTLib/pgt_sf_const.h"
+#include "../Lib/PGTLib/pgt_sf_funcs.h"
+#include "../Lib/PGTLib/pgt_sf_struct.h"
+#include "../Lib/PGTLib/pgt_stl.h"
+#include "../Lib/PGTLib/pgt_stl_const.h"
+#include "../Lib/PGTLib/pgt_stl_funcs.h"
+#include "../Lib/PGTLib/pgt_stl_struct.h"
+#include "../Lib/PGTLib/pgt_tsrf.h"
+#include "../Lib/PGTLib/pgt_tsrf_const.h"
+#include "../Lib/PGTLib/pgt_tsrf_funcs.h"
+#include "../Lib/PGTLib/pgt_tsrf_struct.h"
+#include "../Lib/PGTLib/pgt_uv.h"
+#include "../Lib/PGTLib/pgt_uv_const.h"
+#include "../Lib/PGTLib/pgt_uv_funcs.h"
+#include "../Lib/PGTLib/pgt_uv_struct.h"
+#include "../Lib/PGTLib/pgt_vecmat.h"
+// 計測点群フィルタ機能ヘッダファイル追加(2026.9.3yori)
+#include "../Lib/PGTLib/ksk_PntsFilter.h"
+#include "../Lib/PGTLib/ksk_PntsFilter_const.h"
+#include "../Lib/PGTLib/ksk_PntsFilter_funcs.h"
+#include "../Lib/PGTLib/ksk_PntsFilter_struct.h"
+
 #ifdef _DEBUG // リンクするlibをDebugとReleaseに分ける。(2026.2.18yori)
 #pragma comment(lib, "../Lib/veccom/debug64/veccom.lib")
 #pragma comment(lib, "../Lib/VecCalib/debug64/VecCalPolyPgin.lib") // 2025.9.3 eba
 #pragma comment(lib, "../Lib/PSControl/release64/PSControl.lib")	// 2025.9.3 eba // リリース版を使う。(2026.2.18yori)
+#pragma comment(lib, "../Lib/PGTLib/debug64/PGTLib.lib")	// 形状処理基本機能群ライブラリ(2026.2.18yori)
+#pragma comment(lib, "../Lib/PGTLib/debug64/ksk_PntsFilter.lib")	// 計測点群フィルタ機能ライブラリ(2026.2.18yori)
 #else
 #pragma comment(lib, "../Lib/veccom/release64/veccom.lib")
 #pragma comment(lib, "../Lib/VecCalib/release64/VecCalPolyPgin.lib")
 #pragma comment(lib, "../Lib/PSControl/release64/PSControl.lib")
+#pragma comment(lib, "../Lib/PGTLib/release64/PGTLib.lib")	// 形状処理基本機能群ライブラリ(2026.2.18yori)
+#pragma comment(lib, "../Lib/PGTLib/release64/ksk_PntsFilter.lib")	// 計測点群フィルタ機能ライブラリ(2026.2.18yori)
 #endif
 
 #include <imagehlp.h> // フォルダ作成用で追加(2025.10.7yori)

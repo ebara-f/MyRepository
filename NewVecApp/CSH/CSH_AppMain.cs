@@ -152,17 +152,26 @@ namespace CSH
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 50)]
         public string sens_name4; // 感度名称(2025.6.23yori)、char→stringへ変更(2025.8.14yori)
         public int sens; // 感度(2025.11.25yori)
+        public int bright_mask_select; // 輝度マスク選択(0:なし、1:手動、2:自動(1パッチ毎)、3:自動(スタート毎))(2026.9.2yori)
+        public int bright_mask_upper_limit; // 輝度マスク上限値(2026.9.2yori)
+        public int bright_mask_lower_limit; // 輝度マスク下限値(2026.9.2yori)
+        public int dist_onoff; // 距離マスクオンオフ(202.8.30yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6 * 3 * 2)]
         public int[] use; // 距離マスク使用の有無(1=使用する/0=使用しない)(2025.6.20yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6 * 3 * 2)]
         public double[] data; // マスク設定値(2025.6.20yori)
+        public int bright_slice_std_enable; // 輝度スライス標準の有効無効(2026.8.29yori)
+        public int bright_slice_adv_enable; // 輝度スライスアドバンスの有効無効(2026.8.29yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        public ushort[] brightslice; //輝度スライス(2025.6.20yori)
+        public ushort[] bright_slice; //輝度スライス(2025.6.20yori) // _追加で変数名変更(20268.28yori)
+        public int sens_slice_std_enable; // 感度スライス標準の有効無効(2026.8.29yori)
+        public int sens_slice_adv_enable; // 感度スライスアドバンスの有効無効(2026.8.29yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
         public ushort[] sens_slice; //感度スライス(2025.6.20yori)
         public int power; // ガイドレーザーパワー(2025.6.23yori)
         public int xpitch_onoff; // 補間(2025.6.23yori)
-        public double angle; // 角度マスク(2025.6.23yori)
+        public int angle_mask_onoff; // 角度マスク有効無効(2026.8.6yori) // angle_mask_enable→angle_mask_onoff(2026.8.31yori)
+        public double angle_mask_deg; // 角度マスク(2025.6.23yori) // angle→angle_mask_deg(2026.8.6yori)
         public int two_peak; // 2ピークマスク(2025.6.23yori)
         public int edge; // エッジマスク(2025.6.23yori)
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3 * 6)]

@@ -197,14 +197,29 @@ int Grp03::Cmd09(int pitch)
 
     コマンド10
     追加(2025.8.23yori)
+    引数追加に伴う変更(2026.8.7yori)
 
 ***********************************************************************/
 
-int Grp03::Cmd10()
+int Grp03::Cmd10(STATUS02* sts)
 {
     int ret = 0;
+    int i, j, k; // 追加(2026.8.6yori)
+    PulsZMask mask; // 追加(2026.8.6yori)
 
-    HwCtrl::Func65(); // 距離マスクの設定
+    for (i = 0; i < 6; i++)
+    {
+        for (j = 0; j < 3; j++)
+        {
+            for (k = 0; k < 2; k++)
+            {
+                mask.use[i][j][k] = sts->dist_use[i][j][k];
+                mask.data[i][j][k] = sts->dist_data[i][j][k];
+            }
+        }
+    }
+
+    HwCtrl::Func65(&mask); // 距離マスクの設定
 
     return (ret);
 }
@@ -215,14 +230,15 @@ int Grp03::Cmd10()
 
     コマンド11
     追加(2025.8.24yori)
+    引数追加(2026.8.5yori)
 
 ***********************************************************************/
 
-int Grp03::Cmd11()
+int Grp03::Cmd11(unsigned short bright_slice[5])
 {
     int ret = 0;
 
-    HwCtrl::Func66(); // 輝度スライスの設定
+    HwCtrl::Func66(bright_slice); // 輝度スライスの設定
 
     return (ret);
 }
@@ -233,14 +249,15 @@ int Grp03::Cmd11()
 
     コマンド12
     追加(2025.8.24yori)
+    引数追加(2026.8.5yori)
 
 ***********************************************************************/
 
-int Grp03::Cmd12()
+int Grp03::Cmd12(unsigned short sens_slice[5])
 {
     int ret = 0;
 
-    HwCtrl::Func67(); // 感度スライスの設定
+    HwCtrl::Func67(sens_slice); // 感度スライスの設定
 
     return (ret);
 }
@@ -251,14 +268,17 @@ int Grp03::Cmd12()
 
     コマンド13
     追加(2025.8.24yori)
+    引数追加(2026.8.5yori)
+    引数追加、INIファイルに角度マスク有効無効保存(2026.8.31yori)
 
 ***********************************************************************/
 
-int Grp03::Cmd13()
+int Grp03::Cmd13(int angle_mask_onoff, double angle)
 {
     int ret = 0;
 
-    HwCtrl::Func68(); // 角度マスクの設定
+    HwCtrl::WriteIniScanAngleMaskEnable(angle_mask_onoff);
+    HwCtrl::Func68(angle); // 角度マスクの設定
 
     return (ret);
 }
@@ -287,14 +307,15 @@ int Grp03::Cmd14(int twopeak)
 
     コマンド15
     追加(2025.8.25yori)
+    引数追加(2026.8.5yori)
 
 ***********************************************************************/
 
-int Grp03::Cmd15()
+int Grp03::Cmd15(int edge)
 {
     int ret = 0;
 
-    HwCtrl::Func70(); // エッジマスクの設定
+    HwCtrl::Func70(edge); // エッジマスクの設定
 
     return (ret);
 }
@@ -372,6 +393,93 @@ int Grp03::ScannerAlignmentPanelFullCalStartBtn()
     HwCtrl::ScannerSetMeasType(TDS_MEASTYPE_CALIB_FULL);
 
     ReleaseSemaphore(HwCtrl::hSEMA_VSEQ, 1, NULL);
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    SetDistMaskEnable
+    2026.8.12yori)
+
+***********************************************************************/
+
+int Grp03::SetDistMaskEnable(bool* maskfg)
+{
+    int ret = 0;
+    bool fg = maskfg; // 追加(2026.8.18yori)
+
+    if (fg == true)
+    {
+        TdsVecSetZMaskEnable(TRUE);
+    }
+    else
+    {
+        TdsVecSetZMaskEnable(FALSE);
+    }
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    SetBrightSliceLevel
+    追加(2025.8.29yori)
+
+***********************************************************************/
+
+int Grp03::SetBrightSliceLevel(STATUS02* sts)
+{
+    int ret = 0;
+
+    // スタンダード、アドバンスの有効無効をINIファイルに保存
+    HwCtrl::WriteIniBrightSliceEnable(sts->bright_slice_std_enable, sts->bright_slice_adv_enable);
+    HwCtrl::Func66(sts->bright_slice); // 輝度スライスの設定
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    SetSensSliceLevel
+    追加(2025.8.29yori)
+
+***********************************************************************/
+
+int Grp03::SetSensSliceLevel(STATUS02* sts)
+{
+    int ret = 0;
+
+    // スタンダード、アドバンスの有効無効をINIファイルに保存
+    HwCtrl::WriteIniSensSliceEnable(sts->sens_slice_std_enable, sts->sens_slice_adv_enable);
+    HwCtrl::Func67(sts->sens_slice); // 感度スライスの設定
+
+    return (ret);
+}
+
+
+
+/***********************************************************************
+
+    SetBrightMaskSetting
+    追加(2026.9.2yori)
+
+***********************************************************************/
+
+int Grp03::SetBrightMaskSetting(STATUS02* sts)
+{
+    int ret = 0;
+
+    // 輝度マスク設定をINIファイルに保存
+    HwCtrl::WriteIniBrightMaskSetting(sts->bright_mask_select, sts->bright_mask_upper_limit, sts->bright_mask_lower_limit);
+    HwCtrl::m_BrightMaskUpperLimit = sts->bright_mask_upper_limit;
+    HwCtrl::m_BrightMaskLowerLimit = sts->bright_mask_lower_limit;
 
     return (ret);
 }

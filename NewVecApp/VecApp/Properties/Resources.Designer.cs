@@ -2009,6 +2009,24 @@ namespace VecApp.Properties {
         }
         
         /// <summary>
+        ///   最大 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String293 {
+            get {
+                return ResourceManager.GetString("String293", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   最小 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        public static string String294 {
+            get {
+                return ResourceManager.GetString("String294", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   スキャナ接続手順 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         public static string String3 {

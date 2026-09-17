@@ -95,6 +95,7 @@ namespace VecApp
                             MainContent.Content = null;
                             break;
                         case Panel.ApiScan:
+                            ApiScanValue = new ApiScanViewModel(); // SubWindow3を閉じて再度グラフ表示を開いた時に例外メッセージが表示されないよう修正(206.9.3yori)
                             MainContent.Content = new ApiScanPanel(this, ApiScanValue);
                             break;
                         case Panel.NonContactSelfJudgment:

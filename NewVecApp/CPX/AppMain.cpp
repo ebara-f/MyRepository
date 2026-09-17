@@ -424,6 +424,7 @@ int AppMain::UpDateData02(STATUS02* sts)
     BOOL fg = FALSE;
     wchar_t mode[6][32]; // 追加(2025.8.10yori)
     int i, j, k; // 追加(2025.8.11yori)
+    PulsZMask mask; // 追加(2026.8.6yori)
 
     // TDSLibarary.iniから計測モード情報取得(2025.8.10yori)
     HwCtrl::Func59(mode);
@@ -452,8 +453,12 @@ int AppMain::UpDateData02(STATUS02* sts)
     HwCtrl::Func35(sts->sens_use, sts->sens_name);
     HwCtrl::GetIniScanSens(&sts->sens); // 現在の感度取得(2025.11.25yori)
 
+    // 輝度マスク設定取得(2026.9.2yori)
+    HwCtrl::GetIniBrightMaskSetting(&sts->bright_mask_select, &sts->bright_mask_upper_limit, &sts->bright_mask_lower_limit);
+
     // 距離マスク取得
-    fg = HwCtrl::Func36();
+    HwCtrl::GetZMaskEnable(&sts->dist_onoff); // 距離マスク有効無効追加(2026.8.31yori)
+    fg = HwCtrl::Func36(&mask); // 引数追加(2026.8.6yori)
     if (fg == TRUE)
     {
         for (i = 0; i < 6; i++)
@@ -462,16 +467,21 @@ int AppMain::UpDateData02(STATUS02* sts)
             {
                 for (k = 0; k < 2; k++)
                 {
-                    sts->dist_use[i][j][k] = HwCtrl::m_ptZMask->use[i][j][k];
-                    sts->dist_data[i][j][k] = HwCtrl::m_ptZMask->data[i][j][k];
+                    sts->dist_use[i][j][k] = mask.use[i][j][k]; // HwCtrl::m_ptZMask→mask変更(2026.8.6yori)
+                    sts->dist_data[i][j][k] = mask.data[i][j][k]; // HwCtrl::m_ptZMask→mask変更(2026.8.6yori)
                 }
             }
         }
     }
-    delete HwCtrl::m_ptZMask;
+
+    // 輝度スライスの有効無効取得(2026.8.29yori)
+    HwCtrl::GetIniBrightSliceEnable(&sts->bright_slice_std_enable, &sts->bright_slice_adv_enable);
+
+    // 感度スライスの有効無効取得(2026.8.29yori)
+    HwCtrl::GetIniSensSliceEnable(&sts->sens_slice_std_enable, &sts->sens_slice_adv_enable);
 
     // 輝度スライス取得(2025.6.20yori)
-    fg = HwCtrl::Func37(sts->brightslice); // 修正(2025.8.25yori)
+    fg = HwCtrl::Func37(sts->bright_slice); // 修正(2025.8.25yori)
 
     // 感度スライス取得(2025.6.20yori)
     fg = HwCtrl::Func38(sts->sens_slice); // 修正(2025.8.25yori)
@@ -489,8 +499,11 @@ int AppMain::UpDateData02(STATUS02* sts)
         sts->pitch[i] = d_pitch * (i + 1); // HwCtrl::m_dXPitch→d_pitchへ変更(2026.1.28yori)
     }
 
+    // 角度マスク有効無効取得(2026.8.6yori)
+    HwCtrl::GetIniScanAngleMaskEnable(&sts->angle_mask_onoff); // angle_mask_enable→angle_mask_onoff(2026.8.31yori)
+
     // 角度マスク設定値取得(2025.6.23yori)
-    HwCtrl::Func41(&sts->angle);
+    HwCtrl::Func41(&sts->angle_mask_deg); // angle→angle_mask_deg(2026.8.6yori)
 
     // 2ピークマスク設定値取得(2025.6.23yori)
     HwCtrl::Func42(&sts->two_peak);
@@ -559,34 +572,22 @@ int AppMain::UpDateData01_Write(STATUS01* sts)
 
 int AppMain::UpDateData02_Write(STATUS02* sts)
 {
-    int i, j, k;
-    HwCtrl::m_ptZMask = new PulsZMask;
+    //int i, j, k; // 未使用のためコメントアウト(2026.9.16yori)
 
-    // 距離マスク(2025.8.25yori)
-    for (i = 0; i < 6; i++)
-    {
-        for (j = 0; j < 3; j++)
-        {
-            for (k = 0; k < 2; k++)
-            {
-                HwCtrl::m_ptZMask->use[i][j][k] = sts->dist_use[i][j][k];
-                HwCtrl::m_ptZMask->data[i][j][k] = sts->dist_data[i][j][k];
-            }
-        }
-    }
-
-    // 輝度、感度スライス(2025.8.25yori)
-    for (i = 0; i < 5; i++)
-    {
-        HwCtrl::m_BrightSlice[i] = sts->brightslice[i];
-        HwCtrl::m_SensSlice[i] = sts->sens_slice[i];
-    }
-
-    // 角度マスク(2025.8.25yori)
-    HwCtrl::m_Angle = sts->angle;
-
-    // エッジマスク(2025.8.25yori)
-    HwCtrl::m_Edge = sts->edge;
+    // 距離マスク未使用のためコメントアウト、使用する場合はdelete m_ptZMask;が必要(2026.8.7yori)
+    //HwCtrl::m_ptZMask = new PulsZMask;
+    //// 距離マスク(2025.8.25yori)
+    //for (i = 0; i < 6; i++)
+    //{
+    //    for (j = 0; j < 3; j++)
+    //    {
+    //        for (k = 0; k < 2; k++)
+    //        {
+    //            HwCtrl::m_ptZMask->use[i][j][k] = sts->dist_use[i][j][k];
+    //            HwCtrl::m_ptZMask->data[i][j][k] = sts->dist_data[i][j][k];
+    //        }
+    //    }
+    //}
 
     // スキャナのIPアドレス(2025.8.27yori)
     HwCtrl::m_Address = (unsigned int)(atoi(sts->address[0]) << 24) + (unsigned int)(atoi(sts->address[1]) << 16) + (unsigned int)(atoi(sts->address[2]) << 8) + (unsigned int)atoi(sts->address[3]);
@@ -1491,10 +1492,11 @@ void AppMain::ThreadProc()
                 }
                 else
                 {
-                    if (HwCtrl::IsParentProcessTarget(L"AmlSDI.exe") == true)
-                    {
-                        ret = HwCtrl::Func12(); // GeomMeasureからK-CMMを起動して接続した場合、測定音OFFにする。(2026.7.2yori)
-                    }
+                    // GeomMeasure(MeasDLL.dll)で音が遅延する問題があるため、測定音OFFにしない。(2026.7.7yori)
+                    //if (HwCtrl::IsParentProcessTarget(L"AmlSDI.exe") == true)
+                    //{
+                    //    ret = HwCtrl::Func12(); // GeomMeasureからK-CMMを起動して接続した場合、測定音OFFにする。(2026.7.2yori)
+                    //}
                     UsrMsg::CallBack(UsrMsg::WM_SubWnd01_Panel_Hide); // イニシャライズ画面非表示(2025.7.14yori)
                     UsrMsg::CallBack(UsrMsg::WM_Initialize_Completed); // C#側にイニシャライズ完了通知(2026.5.28yori)
                 }
